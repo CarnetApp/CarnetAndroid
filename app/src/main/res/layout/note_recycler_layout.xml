@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:animateLayoutChanges="true"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/blue_50"
+            />
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-8750836169783943/8818214480"
+            android:layout_gravity="left|center" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:animateLayoutChanges="true"
+        android:layout_gravity="end|bottom"
+        android:gravity="right"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/secondary_buttons"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:gravity="right"
+            android:layout_gravity="end|bottom"
+            android:layout_height="wrap_content">
+        </LinearLayout>
+        <ImageButton
+            android:id="@+id/add_button"
+
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+
+            android:layout_marginBottom="5dip"
+            android:layout_marginRight="5dip"
+            android:background="@drawable/plus_button_background_drawable"
+            android:src="@drawable/ic_input_add"/>
+    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/empty_message"
+            android:layout_gravity="center"
+            android:text="@string/empty_message"
+            android:gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </FrameLayout>
+</FrameLayout>

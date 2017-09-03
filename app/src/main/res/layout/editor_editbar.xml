@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/editbar"
+    style="@style/editor_bar"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+         >
+
+
+        <ImageButton
+            android:layout_height="@dimen/button_width"
+            android:layout_width="wrap_content"
+            android:adjustViewBounds="true"
+            android:id="@+id/clear_all"
+            android:background="@drawable/grey_ripple"
+            android:visibility="gone" />
+        <ImageButton
+            android:layout_height="@dimen/button_width"
+            android:layout_width="wrap_content"
+            android:adjustViewBounds="true"
+            android:id="@+id/print"
+            android:background="@drawable/grey_ripple"
+            android:visibility="gone" />
+        <ImageButton
+            android:layout_height="@dimen/button_width"
+            android:layout_width="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/blue_button"
+            android:scaleType="center"
+            android:src="@drawable/lc_undo"
+            android:id="@+id/undo"
+            />
+        <ImageButton
+            android:layout_height="@dimen/button_width"
+            android:layout_width="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/blue_button"
+            android:scaleType="center"
+            android:src="@drawable/lc_redo"
+            android:id="@+id/redo" />
+
+        <ImageButton
+            android:layout_height="@dimen/button_width"
+            android:layout_width="wrap_content"
+            android:src="@drawable/lc_copy"
+            android:scaleType="center"
+            android:adjustViewBounds="true"
+            android:background="@drawable/blue_button"
+            android:id="@+id/copy" />
+        <ImageButton
+            android:layout_height="@dimen/button_width"
+            android:layout_width="wrap_content"
+            android:src="@drawable/lc_paste"
+            android:scaleType="center"
+            android:adjustViewBounds="true"
+            android:background="@drawable/blue_button"
+            android:id="@+id/paste" />
+        <Button
+            android:layout_height="@dimen/button_width"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/white"
+            android:text="@string/image"
+            android:scaleType="center"
+            android:adjustViewBounds="true"
+            android:background="@drawable/blue_button"
+            android:id="@+id/image" />
+        <Button
+            android:layout_height="@dimen/button_width"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/white"
+            android:text="@string/text_zone"
+            android:scaleType="center"
+            android:adjustViewBounds="true"
+            android:background="@drawable/blue_button"
+            android:id="@+id/text_zone" />
+        <Button
+            android:layout_height="@dimen/button_width"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/white"
+            android:text="@string/statistics"
+            android:scaleType="center"
+            android:adjustViewBounds="true"
+            android:background="@drawable/blue_button"
+            android:id="@+id/statistics_button" />
+
+
+
+
+
+    </LinearLayout>
+
+</HorizontalScrollView>

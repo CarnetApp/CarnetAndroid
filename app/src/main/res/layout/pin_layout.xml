@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="300dip"
+    android:layout_gravity="center"
+    android:layout_height="wrap_content"
+android:paddingTop="30dip"
+    android:paddingBottom="30dip"
+    android:paddingLeft="10dip"
+    android:paddingRight="10dip"
+
+    android:gravity="center_horizontal">
+    <TextView
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+        android:text="PIN Required"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        ></TextView>
+
+    <TextView
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_height="wrap_content"
+        android:id="@+id/wrong_password"
+        android:text="@string/wrong_password"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible"
+        ></TextView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/linearLayout1"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12sp"
+        android:layout_gravity="center_horizontal"
+        >
+        <TextView
+            android:id="@+id/text1"
+            android:layout_weight="1"
+            style="@style/pin_tv"
+            android:layout_marginRight="2sp"
+            android:layout_marginLeft="48sp"
+            android:text="X"
+            android:layout_gravity="center"
+            ></TextView>
+        <TextView
+            android:id="@+id/text2"
+            style="@style/pin_tv"
+            android:layout_weight="1"
+            android:layout_marginRight="2sp"
+            android:layout_marginLeft="2sp"
+            ></TextView>
+        <TextView
+            android:id="@+id/text3"
+            style="@style/pin_tv"
+            android:layout_weight="1"
+            android:layout_marginRight="2sp"
+            android:layout_marginLeft="2sp"
+            ></TextView>
+        <TextView
+            android:id="@+id/text4"
+            style="@style/pin_tv"
+            android:layout_weight="1"
+            android:layout_marginRight="48sp"
+            android:layout_marginLeft="2sp"
+            ></TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:text="1"
+            android:id="@+id/button_1"
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:editable="false"
+            style="@style/pin_button"
+            android:onClick="ButtonClicked"
+            ></Button>
+        <Button
+            android:text="2"
+            android:id="@+id/button_2"
+
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:editable="false"
+            style="@style/pin_button"
+            android:onClick="ButtonClicked"
+            ></Button>
+        <Button
+            android:text="3"
+            android:id="@+id/button_3"
+
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:editable="false"
+            style="@style/pin_button"
+            android:onClick="ButtonClicked"
+            ></Button>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:text="4"
+            android:id="@+id/button_4"
+
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:editable="false"
+
+            style="@style/pin_button"
+            android:onClick="ButtonClicked"
+            ></Button>
+        <Button
+            android:text="5"
+            android:id="@+id/button_5"
+
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:editable="false"
+
+            style="@style/pin_button"
+            android:onClick="ButtonClicked"
+            ></Button>
+        <Button
+            android:text="6"
+            android:id="@+id/button_6"
+
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:editable="false"
+
+            style="@style/pin_button"
+            ></Button>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:text="7"
+            android:id="@+id/button_7"
+
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:editable="false"
+            style="@style/pin_button"
+            ></Button>
+        <Button
+            android:text="8"
+            android:id="@+id/button_8"
+
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:editable="false"
+            style="@style/pin_button"
+            ></Button>
+        <Button
+            android:text="9"
+            android:id="@+id/button_9"
+
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:editable="false"
+            style="@style/pin_button"
+            ></Button>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/linearLayout2"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:text="@android:string/cancel"
+            android:textColor="#FFFFFF"
+            android:id="@+id/button_cancel"
+            android:layout_weight="1"
+            android:editable="false"
+            style="@style/pin_button"
+            ></Button>
+        <Button
+            android:text="0"
+            android:id="@+id/button_0"
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            style="@style/pin_button"
+            android:editable="false"
+            ></Button>
+        <Button
+            android:text="←"
+            android:textColor="#FFFFFF"
+            android:id="@+id/button_back"
+            android:layout_weight="1"
+            android:editable="false"
+            style="@style/pin_button"
+            ></Button>
+    </LinearLayout>
+
+    <!--... and so on for the rest of the buttons ... -->
+</LinearLayout>

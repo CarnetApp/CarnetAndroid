@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.spisoft.quicknote.editor.FloatingWindow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/content"
+        android:layout_height="match_parent"
+        android:background="@color/blue_500"
+        android:orientation="vertical">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:id="@+id/title_bar"
+            >
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/horizontalScrollView"
+               >
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:id="@+id/button_container"
+
+                    android:layout_height="match_parent"
+                    >
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:id="@+id/option_menu_container"
+                        android:layout_height="match_parent"
+                      >
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/shadow_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/transparent_ripple"
+                        android:textColor="@android:color/white"
+                        android:text="Shadow"/>
+
+                    <Button
+                        android:id="@+id/dim_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/transparent_ripple"
+                        android:textColor="@android:color/white"
+                        android:text="Dim"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <ImageButton
+                android:layout_height="49dp"
+                android:layout_width="49dp"
+                android:adjustViewBounds="true"
+                android:id="@+id/minimize"
+                android:src="@drawable/minimize"
+                android:background="@drawable/transparent_ripple"
+                />
+
+            <ImageButton
+                android:layout_height="49dp"
+                android:layout_width="49dp"
+                android:adjustViewBounds="true"
+                android:id="@+id/close"
+                android:src="@drawable/close"
+                android:background="@drawable/transparent_ripple"
+                />
+        </LinearLayout>
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <com.spisoft.quicknote.editor.EditorView
+            android:id="@+id/editor_view"
+            android:animateLayoutChanges="true"
+            android:background="@color/blue_50"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"></com.spisoft.quicknote.editor.EditorView>
+        </FrameLayout>
+    </LinearLayout>
+</com.spisoft.quicknote.editor.FloatingWindow>

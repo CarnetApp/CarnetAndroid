@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <Button
+        android:id="@+id/format_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/transparent_ripple"
+        android:textColor="@android:color/white"
+        android:text="@string/format"/>
+    <Button
+        android:id="@+id/edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/transparent_ripple"
+        android:textColor="@android:color/white"
+        android:text="@string/edit"/>
+    <Button
+        android:id="@+id/pagebar_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/transparent_ripple"
+        android:textColor="@android:color/white"
+        android:text="@string/pages"/>
+    <Button
+        android:id="@+id/rename_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/transparent_ripple"
+        android:textColor="@android:color/white"
+        android:text="@string/rename"/>
+
+
+    <Button
+        android:id="@+id/new_note_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/transparent_ripple"
+        android:textColor="@android:color/white"
+        android:text="New"/>
+</merge>

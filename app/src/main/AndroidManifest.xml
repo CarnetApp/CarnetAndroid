@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.spisoft.quicknote">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <!-- To access Google+ APIs: -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <service android:name="com.tooleap.sdk.TooleapAppService" />
+        <service android:name=".noise.NoiseService" />
+        <service
+            android:name="com.tooleap.sdk.TooleapUIService"
+            android:exported="true"
+            android:process=":UIService">
+            <intent-filter>
+                <action android:name="com.tooleap.sdk.BIND_UI_SERVICE" />
+            </intent-filter>
+        </service>
+        <service android:name=".synchro.SynchroService"></service>
+        <service
+            android:name=".synchro.googledrive.MyDriveEventService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.drive.events.HANDLE_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".FileManagerService"
+            >
+
+        </service>
+        <receiver android:name="com.tooleap.sdk.TooleapReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.tooleap.sdk.TOOLEAP_ACTION" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".synchro.SynchroBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".HomeReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".FloatingService" />
+
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".serviceactivities.CropWrapperActivity"
+            android:label="@string/title_activity_img_picker" />
+        <activity
+            android:name=".HelpAuthorizeFloatingWindowActivity"
+            android:label="@string/title_activity_help_authorize_floating_window" />
+        <activity
+            android:name=".noise.NoiseSelector"
+            android:label="@string/title_activity_noise_selector" />
+        <activity
+            android:name=".noise.NoisePlayer"
+            android:label="@string/title_activity_noise_player" />
+        <activity
+            android:name=".synchro.googledrive.AuthorizeActivity"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".synchro.HelpActivity"
+            android:label="@string/title_activity_help"
+            android:theme="@style/AppTheme"></activity>
+    </application>
+
+</manifest>

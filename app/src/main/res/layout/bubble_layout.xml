@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+        <FrameLayout
+            android:id="@+id/main_container"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+        >
+
+        </FrameLayout>
+        <TextView
+            android:id="@+id/toast_tv"
+            android:background="@drawable/bubble_background"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_marginLeft="5dp"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:padding="10sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/secondary_container"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></LinearLayout>
+</merge>

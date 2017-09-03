@@ -1,0 +1,85 @@
+
+
+
+<!DOCTYPE html>
+<html>
+   <head>
+	   <link rel="stylesheet" type="text/css" href="getdesign.php?w=19" />
+		 <link rel="stylesheet" type="text/css" href="getdesign.php?a=302" />
+       <title>Phoenablog ! - PhoenaBlog ! </title>
+       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+       <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
+       <link rel="stylesheet" type="text/css" href="getdesign.php?a=406" /><link rel="stylesheet" type="text/css" href="getdesign.php?a=307" /><link rel="stylesheet" type="text/css" href="getdesign.php?a=2564" /><link rel="stylesheet" type="text/css" href="getdesign.php?a=3210" />	
+   
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.1.1/material.indigo-pink.min.css">
+<script defer src="https://code.getmdl.io/1.1.1/material.min.js"></script>
+   </head>
+
+   <body>
+
+<!-- Wide card with share menu button -->
+<style>
+.demo-card-wide.mdl-card {
+  width: 512px;
+}
+.demo-card-wide > .mdl-card__title {
+  color: #fff;
+  height: 70px;
+  background: url('https://www.getmdl.io//assets/demos/welcome_card.jpg') center / cover;
+}
+.demo-card-wide > .mdl-card__menu {
+  color: #fff;
+}
+</style>
+
+<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">test</h2>
+  </div>
+  <div class="mdl-card__supporting-text">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Mauris sagittis pellentesque lacus eleifend lacinia...
+  </div>
+  
+  <div class="mdl-card__menu">
+    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+      |
+    </button>
+  </div>
+  <script>var button = document.querySelector('button');
+  var dialog = document.querySelector('dialog');
+  button.addEventListener('click', function() {
+    dialog.showModal();
+    /* Or dialog.show(); to show the dialog without a backdrop. */
+  });</script>
+</div>
+<button id="show-dialog" type="button" class="mdl-button">Show Dialog</button>
+  <dialog class="mdl-dialog" id="dialog">
+    <h4 class="mdl-dialog__title">Allow data collection?</h4>
+    <div class="mdl-dialog__content">
+      <p>
+        Allowing us to collect data will let us get you the information you want faster.
+      </p>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button type="button" class="mdl-button">Agree</button>
+      <button type="button" class="mdl-button close">Disagree</button>
+    </div>
+  </dialog>
+  <script>
+    var dialog = document.querySelector('#dialog');
+    var showDialogButton = document.querySelector('#show-dialog');
+    if (! dialog.showModal) {
+      dialogPolyfill.registerDialog(dialog);
+    }
+    showDialogButton.addEventListener('click', function() {
+      dialog.showModal();
+    });
+    dialog.querySelector('.close').addEventListener('click', function() {
+      dialog.close();
+    });
+  </script>
+</body>
+
+</html>

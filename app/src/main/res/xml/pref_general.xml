@@ -1,0 +1,44 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/general_header">
+    <Preference
+        android:key="pref_root_path"
+        android:title="@string/storage_preference"
+        android:summary="@string/storage_preference_details"
+/>
+        <Preference
+            android:key="pref_google_drive"
+            android:title="@string/google_drive_preference"
+            />
+    </PreferenceCategory>
+    <CheckBoxPreference
+        android:key="pref_password_on_minimize"
+        android:defaultValue="false"
+        android:title="@string/password_on_minimize"
+        />
+    <Preference
+        android:key="pref_set_password"
+        android:title="@string/pref_set_password"
+        />
+    <Preference
+        android:key="pref_report_bug"
+        android:title="@string/report_bug_or_propose"
+        android:summary="@string/report_bug_or_propose_description"
+        />
+
+
+    <PreferenceCategory
+        android:key="paiement_header"
+        android:title="@string/paiement_header">
+
+    <Preference
+        android:key="pref_remove_ad_pay"
+        android:title="@string/remove_ad"
+        />
+        <CheckBoxPreference
+            android:key="pref_remove_ad_free"
+            android:defaultValue="false"
+            android:title="@string/remove_ad_free"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>

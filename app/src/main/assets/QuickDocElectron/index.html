@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+ 
+    <script>
+  window.jQuery = window.$ = require('jquery');
+  
+      </script>
+<link rel="stylesheet" href="browsers/design.css">
+    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <script src="browsers/note_card_view.js"></script>
+    <script src="browsers/note.js"></script>
+    <script src="browsers/file-browser.js"></script>
+    
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <!-- Material Design icon font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  </head>
+  <body>
+    <!-- The drawer is always open in large screens. The header is always shown,
+      even in small screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+                mdl-layout--fixed-header">
+      <header class="mdl-layout__header" style=" -webkit-app-region: drag;">
+        <div class="mdl-layout__header-row">
+            <span class="mdl-layout-title">QuickDoc</span>
+          <div class="mdl-layout-spacer"></div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                      mdl-textfield--floating-label mdl-textfield--align-right">
+            <label class="mdl-button mdl-js-button mdl-button--icon"
+                   for="fixed-header-drawer-exp">
+              <i class="material-icons">search</i>
+            </label>
+            <div class="mdl-textfield__expandable-holder">
+              <input class="mdl-textfield__input" type="text" name="sample"
+                     id="fixed-header-drawer-exp">
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="">Recent</a>
+          <a class="mdl-navigation__link" href="">Browser</a>
+          <a class="mdl-navigation__link" href="">Settings</a>
+        </nav>
+      </div>
+      <main class="mdl-layout__content">
+         
+        <div id="page-content" class="page-content">
+        </div>
+      </main>
+      <script>
+        function list(path){
+          var grid = document.getElementById("page-content");
+          grid.innerHTML ="";
+          var noteCardViewGrid = new NoteCardViewGrid(grid);
+   
+          noteCardViewGrid.onFolderClick(function(folder){
+            list(folder.path)
+          })
+        var notes = [];
+       
+        var fb = new FileBrowser(path);
+        fb.list(function(files){
+          for(let file of files){
+            var filename = getFilenameFromPath(file.path);
+            console.log("file "+ file.isFile)
+            if(file.isFile && filename.endsWith(".sqd")){
+              var noteTestTxt = new Note(stripExtensionFromName(filename),"content");
+              notes.push(noteTestTxt)
+            }
+            else if(!file.isFile){
+              console.log("folder")
+
+              notes.push(file)
+            }
+          }
+          noteCardViewGrid.setNotesAndFolders(notes)
+
+        });
+          
+        }
+        list('/home/phoenamandre/QuickNote')
+      
+        </script>
+    </div>
+  </body>
+</html>

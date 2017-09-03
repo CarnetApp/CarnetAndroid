@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/add_note"
+            android:textColor="@android:color/white"
+            android:padding="5dp"
+            android:layout_marginRight="5dip"
+            android:background="@drawable/bubble_background"
+            android:id="@+id/textView2" />
+
+        <ImageButton
+            android:id="@+id/add_note_button"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="5dip"
+            android:layout_marginRight="5dip"
+            android:background="@drawable/plus_button_background_drawable"
+            android:src="@drawable/ic_input_add"/>
+
+    </LinearLayout>
+<LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/add_folder"
+            android:textColor="@android:color/white"
+            android:padding="5dp"
+            android:layout_marginRight="5dip"
+            android:background="@drawable/bubble_background"
+            />
+
+        <ImageButton
+            android:id="@+id/add_folder_button"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="5dip"
+            android:layout_marginRight="5dip"
+            android:background="@drawable/plus_button_background_drawable"
+            android:src="@drawable/ic_input_add"/>
+
+    </LinearLayout>
+
+
+</merge>

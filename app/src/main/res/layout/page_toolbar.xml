@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/page_bar"
+
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:animateLayoutChanges="true"
+    android:layout_height="100dip">
+    <com.spisoft.quicknote.editor.pages.PageView
+        android:id="@+id/page_view"
+        android:layout_weight="0.5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <ImageButton
+        android:id="@+id/add_page_button"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginLeft="5dip"
+        android:background="@drawable/plus_button_background_drawable"
+        android:src="@drawable/ic_input_add"/>
+</LinearLayout>

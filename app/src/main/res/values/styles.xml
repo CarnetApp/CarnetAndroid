@@ -1,0 +1,87 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Main theme colors -->
+        <!--   your app branding color for the app bar -->
+        <item name="colorPrimary">@color/blue_500</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryDark">@color/blue_500</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/blue_400</item>
+        <item name="android:actionBarStyle">@style/GalaxyZooThemeToolbarDarkOverflow</item>
+        <item name="actionBarStyle">@style/GalaxyZooThemeToolbarDarkOverflow</item>
+        <item name="windowActionModeOverlay">true</item>
+
+    </style>
+    <!-- Base application theme. -->
+    <style name="MainActivityTheme" parent="AppTheme">
+
+    </style>
+
+    <style name="Theme.Transparent" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+
+    </style>
+
+    <style name="GalaxyZooThemeToolbarDarkOverflow" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- android:textColorPrimary is the  color of the title text
+             in the Toolbar, in the Theme.AppCompat theme:  -->
+        <item name="actionModeBackground">@color/blue_400</item>
+
+        <!-- android:textColorPrimaryInverse is the  color of the title
+             text in the Toolbar, in the Theme.AppCompat.Light theme:  -->
+        <!-- <item name="android:textColorPrimaryInverse">@color/abc_primary_text_material_light</item> -->
+
+        <!-- android:actionMenuTextColor is the color of the text of
+              action (menu) items in the Toolbar, at least in the
+              Theme.AppCompat theme.
+              For some reason, they already get the textColorPrimary
+              when running on API 21, but not on older versions of
+              Android, so this is only necessary to support older
+              Android versions.-->
+        <item name="actionMenuTextColor">@android:color/white</item>
+        <!-- android:textColorSecondary is the color of the menu
+             overflow icon (three vertical dots) -->
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:windowBackground">@color/blue_500</item>
+        <item name="android:background">@color/blue_500</item>
+        <!-- This would set the toolbar's background color,
+              but setting this also changes the popup menu's background,
+              even if we define popupTheme for our <Toolbar> -->
+        <!-- <item name="android:background">@color/color_primary</item> -->
+    </style>
+
+    <style name="pin_button">
+        <item name="android:layout_height">50sp</item>
+        <item name="android:layout_width">64sp</item>
+
+        <item name="android:background">@drawable/blue_ripple_selector</item>
+    </style>
+
+    <style name="pin_tv">
+
+        <item name="android:layout_height">32sp</item>
+        <item name="android:layout_width">48sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@color/blue_500</item>
+    </style>
+
+    <style name="editor_bar">
+        <item name="android:background">@color/blue_500</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+</resources>
