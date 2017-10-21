@@ -1,0 +1,44 @@
+pickerHueWidth = 20px
+
+.Scp
+  user-select none
+  position relative
+
+.Scp-saturation
+  position relative
+  height 100%
+  background linear-gradient(to right, #FFFFFF, #FF0000);
+  float left
+  margin-right 5px
+
+.Scp-brightness
+  width 100%
+  height 100%
+  background linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 1));
+
+.Scp-sbSelector
+  border 2px solid white
+  position absolute
+  width 14px
+  height 14px
+  background white
+  border-radius 10px
+  top -7px
+  left -7px
+  box-sizing border-box
+  z-index 10
+
+.Scp-hue
+  width pickerHueWidth
+  height 100%
+  position relative
+  float left
+  background linear-gradient(rgb(255, 0, 0) 0%, rgb(255, 0, 255) 17%, rgb(0, 0, 255) 34%, rgb(0, 255, 255) 50%, rgb(0, 255, 0) 67%, rgb(255, 255, 0) 84%, rgb(255, 0, 0) 100%)
+
+.Scp-hSelector
+  position absolute
+  background white
+  border-bottom 1px solid black
+  right -3px
+  width 10px
+  height 2px

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<script src="<!ROOTPATH>compatibility/fs.js"></script>
+
+	<script src="<!ROOTPATH>reader/libs/jquery.min.js"></script>
+
+	<script>
+		var rootpath = "<!ROOTPATH>";
+	</script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
+	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/icon.css">
+	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/material.indigo-pink.min.css">
+	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/standalone.css">
+	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/simplecolorpicker/simple-color-picker.css">
+	<script src="<!ROOTPATH>compatibility.js"></script>
+	<script>
+
+
+	</script>
+</head>
+
+<body>
+	<script>
+	if(isElectron){
+		var $ = require('jquery');
+		var jQuery = $;
+		$.mobile = require('jquery-mobile');
+		var ColorPicker = require('simple-color-picker');
+	}
+
+	</script>
+	<script src="<!ROOTPATH>reader/reader.js"></script>
+	<!--<script src="<!ROOTPATH>reader/libs/simplecolorpicker/index.js"></script>	-->
+	<script src="<!ROOTPATH>note/note-opener.js"></script>
+	<script src="<!ROOTPATH>browsers/note.js"></script>
+
+	<script src="<!ROOTPATH>browsers/file-browser.js"></script>
+	<script defer src="<!ROOTPATH>reader/assets/scripts/material.min.js"></script>
+	<script src="<!ROOTPATH>reader/assets/scripts/jquery.webkitresize.js"></script>
+	<script src="<!ROOTPATH>reader/assets/scripts/jquery-ui.min.js"></script>
+	<script src="<!ROOTPATH>reader/libs/jquery.mobile-min.js"></script>
+	<script src="<!ROOTPATH>reader/libs/jscolor.js"></script>
+	<script src="<!ROOTPATH>reader/assets/scripts/editor.js"></script>
+	<script src="<!ROOTPATH>reader/assets/scripts/standalone.js"></script>
+	<script src="<!ROOTPATH>reader/assets/scripts/Countable.js"></script>
+	<script src="<!ROOTPATH>reader/assets/scripts/jquery.ui.touch-punch.min.js"></script>
+	<script type="text/javascript">
+		function resetScreenHeight() {
+			var screen = $(window).height(),
+				header = $("#header").height() + $("#toolbars").height(),
+				content = screen - header;
+			style = window.getComputedStyle(document.getElementById("header"));
+			if (style.getPropertyValue('display') == "none")
+				content = screen;
+			$("#center").height(content);
+			$("#editor").height(content - 45);
+		}
+	</script>
+
+
+
+
+	<!-- dialogs declaration -->
+
+	<!-- <statistics> -->
+	<dialog class="mdl-dialog" id="statsdialog">
+		<h4 class="mdl-dialog__title">Statistics</h4>
+		<div class="mdl-dialog__content">
+			<p>
+				Sentences : <span class="sentences_count"></span> <br /> Words : <span class="words_count"></span> <br /> Characters
+				: <span class="characters_count"></span><br />
+			</p>
+		</div>
+		<div class="mdl-dialog__actions">
+			<button type="button" class="mdl-button ok">OK</button>
+		</div>
+	</dialog>
+
+	<!-- </statistics> -->
+
+
+	<dialog class="mdl-dialog" id="color-picker-dialog" style="padding: 0;">
+		<div class="mdl-dialog__content jscolor {valueElement:'chosen-value', onFineChange:'writer.setPickerColor(this)' , shadow:false}" id="color-picker-div" >
+		</div>
+		<div class="mdl-dialog__actions">
+			<button type="button" class="mdl-button ok">OK</button>
+		</div>
+	</dialog>
+
+	<dialog class="mdl-dialog" id="new-keyword-dialog">
+		<div class="mdl-dialog__content">
+			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+				<input class="mdl-textfield__input" type="text" id="keyword-input">
+				<label class="mdl-textfield__label" for="sample3">Keyword</label>
+			</div>
+		</div>
+		<div class="mdl-dialog__actions">
+			<button type="button" class="mdl-button ok" onclick="writer.addKeyword(document.getElementById('keyword-input').value); writer.newKeywordDialog.close(); return false;">OK</button>
+		</div>
+	</dialog>
+
+	<!--<div id="header">
+
+	<div is="spi-toolbar" id="toolBar2" class="blue500">
+
+	<img class="intLink" title="Undo" onclick="displayCountDialog();" src="assets/images/lc_undo.png" />
+	<img class="intLink" title="Redo" onclick="formatDoc('redo');" src="assets/images/lc_redo.png" />
+	<img class="intLink" title="Bold" onclick="formatDoc('bold');" src="assets/images/lc_bold.png" />
+	<img class="intLink" title="Italic" onclick="formatDoc('italic');" src="assets/images/lc_italic.png" />
+	<img class="intLink" title="Underline" onclick="formatDoc('underline');" src="assets/images/lc_underline.png" />
+	<img class="intLink" title="Underline" onclick="increaseFontSize();" src="assets/images/lc_underline.png" />
+	<img class="intLink" title="Underline" onclick="decreaseFontSize();" src="assets/images/lc_underline.png" />
+	<img class="intLink" title="Left align" onclick="formatDoc('justifyleft');" src="assets/images/lc_alignleft.png" />
+	<img class="intLink" title="Center align" onclick="formatDoc('justifycenter');" src="assets/images/lc_alignhorizontalcenter.png" />
+	<img class="intLink" title="Right align" onclick="formatDoc('justifyright');" src="assets/images/lc_alignright.png" />
+
+	<img class="intLink" title="Cut" onclick="formatDoc('cut');" src="data:image/gif;base64,R0lGODlhFgAWAIQSAB1ChBFNsRJTySJYwjljwkxwl19vj1dusYODhl6MnHmOrpqbmpGjuaezxrCztcDCxL/I18rL1P///////////////////////////////////////////////////////yH5BAEAAB8ALAAAAAAWABYAAAVu4CeOZGmeaKqubDs6TNnEbGNApNG0kbGMi5trwcA9GArXh+FAfBAw5UexUDAQESkRsfhJPwaH4YsEGAAJGisRGAQY7UCC9ZAXBB+74LGCRxIEHwAHdWooDgGJcwpxDisQBQRjIgkDCVlfmZqbmiEAOw==" />
+	<img class="intLink" title="Copy" onclick="formatDoc('copy');" src="data:image/gif;base64,R0lGODlhFgAWAIQcAB1ChBFNsTRLYyJYwjljwl9vj1iE31iGzF6MnHWX9HOdz5GjuYCl2YKl8ZOt4qezxqK63aK/9KPD+7DI3b/I17LM/MrL1MLY9NHa7OPs++bx/Pv8/f///////////////yH5BAEAAB8ALAAAAAAWABYAAAWG4CeOZGmeaKqubOum1SQ/kPVOW749BeVSus2CgrCxHptLBbOQxCSNCCaF1GUqwQbBd0JGJAyGJJiobE+LnCaDcXAaEoxhQACgNw0FQx9kP+wmaRgYFBQNeAoGihCAJQsCkJAKOhgXEw8BLQYciooHf5o7EA+kC40qBKkAAAGrpy+wsbKzIiEAOw==" />
+	<img class="intLink" title="Paste" onclick="formatDoc('paste');" src="data:image/gif;base64,R0lGODlhFgAWAIQUAD04KTRLY2tXQF9vj414WZWIbXmOrpqbmpGjudClFaezxsa0cb/I1+3YitHa7PrkIPHvbuPs+/fvrvv8/f///////////////////////////////////////////////yH5BAEAAB8ALAAAAAAWABYAAAWN4CeOZGmeaKqubGsusPvBSyFJjVDs6nJLB0khR4AkBCmfsCGBQAoCwjF5gwquVykSFbwZE+AwIBV0GhFog2EwIDchjwRiQo9E2Fx4XD5R+B0DDAEnBXBhBhN2DgwDAQFjJYVhCQYRfgoIDGiQJAWTCQMRiwwMfgicnVcAAAMOaK+bLAOrtLUyt7i5uiUhADs=" />
+
+	<img class="intLink" title="Paste" onclick="
+	Countable.once(oEditor, function (counter) {
+	  alert(counter.words)
+	});" src="data:image/gif;base64,R0lGODlhFgAWAIQUAD04KTRLY2tXQF9vj414WZWIbXmOrpqbmpGjudClFaezxsa0cb/I1+3YitHa7PrkIPHvbuPs+/fvrvv8/f///////////////////////////////////////////////yH5BAEAAB8ALAAAAAAWABYAAAWN4CeOZGmeaKqubGsusPvBSyFJjVDs6nJLB0khR4AkBCmfsCGBQAoCwjF5gwquVykSFbwZE+AwIBV0GhFog2EwIDchjwRiQo9E2Fx4XD5R+B0DDAEnBXBhBhN2DgwDAQFjJYVhCQYRfgoIDGiQJAWTCQMRiwwMfgicnVcAAAMOaK+bLAOrtLUyt7i5uiUhADs=" />
+
+	</div>
+</div>-->
+
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+mdl-layout--fixed-header">
+		<header id="header" class="mdl-layout__header">
+			<div class="mdl-layout__header-row">
+				<button id="back-arrow" class="mdl-button mdl-js-button mdl-button--icon" style="left: -15px; ">
+<i class="material-icons">arrow_back</i>
+</button>
+				<button id="format-button" class="mdl-button mdl-js-button headerbar-button">
+		Format
+</button>
+
+				<button id="back_arrow" class="mdl-button mdl-js-button headerbar-button">
+	  Edit
+</button>
+
+
+				<div class="mdl-layout-spacer"></div>
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+			mdl-textfield--floating-label mdl-textfield--align-right">
+					<label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp">
+<i class="material-icons">search</i>
+</label>
+					<div class="mdl-textfield__expandable-holder">
+						<input class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp">
+					</div>
+				</div>
+			</div>
+		</header>
+		<div class="mdl-layout__drawer">
+			<nav class="mdl-navigation">
+					<span style="text-align:center; margin:10px;"> File</span>
+					
+				<a class="mdl-navigation__link" href="">Export note</a>
+				<a class="mdl-navigation__link" href="">Rename</a>
+				<span style="text-align:center; margin:10px;"> Keywords</span>
+
+				<a class="mdl-navigation__link" href="" onclick="writer.newKeywordDialog.showModal();return false;">Add a keyword</a>
+				<span id="keywords-list">
+				</span>
+
+			</nav>
+		</div>
+		<main class="mdl-layout__content">
+			<div id="toolbars">
+				<div id="format-toolbar" class="toolbar">
+					<button onclick="writer.formatDoc('bold');" class="mdl-button mdl-js-button headerbar-button">
+					<i class="material-icons">format_bold</i>
+			  </button>
+					<button onclick="writer.formatDoc('italic');" class="mdl-button mdl-js-button headerbar-button">
+					<i class="material-icons">format_italic</i>
+			  </button>
+					<button onclick="writer.formatDoc('underline');" class="mdl-button mdl-js-button headerbar-button">
+					<i class="material-icons">format_underline</i>
+			  </button>
+
+					<button onclick="    writer.displayTextColorPicker();" class="mdl-button mdl-js-button headerbar-button">
+					<i class="material-icons">format_color_text</i>
+			  </button>
+					<button onclick="writer.displayFillColorPicker();" class="mdl-button mdl-js-button headerbar-button">
+					<i class="material-icons">format_color_fill</i>
+			  </button>
+					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.decreaseFontSize();">
+					<i class="material-icons">format_size</i>-
+			  </button>
+					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.increaseFontSize();">
+					<i class="material-icons">format_size</i>+
+			  </button>
+					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.formatDoc('justifyleft');">
+					<i class="material-icons">format_align_left</i>
+			  </button>
+					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.formatDoc('justifycenter');">
+					<i class="material-icons">format_align_center</i>
+			  </button>
+					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.formatDoc('justifyright');">
+					<i class="material-icons">format_align_right</i>
+			  </button>
+					<button class="mdl-button mdl-js-button headerbar-button">
+					<i class="material-icons">format_align_justify</i>
+			  </button>
+
+
+
+				</div>
+			</div>
+			<div id="page-content" class="page-content">
+				<div id="center" style="height:100%;padding:0px;">
+					<div id="editor" style="height:100%;overflow-y: auto;overflow-x: none;margin:0px;position: relative;">
+						<div id="text" contenteditable="true" style="height:100%;">
+							<!-- be aware that THIS will be modified in java -->
+							<!-- soft won't save note if contains donotsave345oL -->
+						</div>
+						<div id="floating">
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<script>
+			function getParameterByName(name, url) {
+				if (!url) {
+					url = window.location.href;
+				}
+				name = name.replace(/[\[\]]/g, "\\$&");
+				var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+					results = regex.exec(url);
+				if (!results) return null;
+				if (!results[2]) return '';
+				return decodeURIComponent(results[2].replace(/\+/g, " ").replace(/%2F/g, "/"));
+			}
+
+			$(window).on('resize', resetScreenHeight);
+			if(isElectron){
+			var { ipcRenderer, remote } = require('electron');
+			var main = remote.require("./main.js");
+			var win = remote.getCurrentWindow();
+			win.show()
+			main.hideMainWindow();
+		}
+			console.log("path " + getParameterByName("path"))
+			var note = new Note("", "", getParameterByName("path"), undefined)
+			var writer = new Writer(note, document);
+			console.log("extract1")
+			writer.init();
+			console.log("extract")
+			writer.extractNote();
+			resetScreenHeight();
+		</script>
+
+</body>
+</head>

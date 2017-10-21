@@ -6,9 +6,12 @@ import android.net.Uri;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.databases.RecentHelper;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -175,5 +178,66 @@ public class FileUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String readFile(String s) {
+        BufferedReader br = null;
+        FileReader fr = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            fr = new FileReader(s);
+            br = new BufferedReader(fr);
+
+            String sCurrentLine;
+
+            while ((sCurrentLine = br.readLine()) != null) {
+                sb.append(sCurrentLine+"\n");
+            }
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+        } finally {
+
+            try {
+
+                if (br != null)
+                    br.close();
+
+                if (fr != null)
+                    fr.close();
+
+            } catch (IOException ex) {
+
+                ex.printStackTrace();
+
+            }
+
+        }
+        return sb.toString();
+    }
+
+    public static void writeToFile(String s, String reader) {
+        File file= new File (s);
+        FileWriter fw = null;
+        if (!file.exists()) {
+
+            file.getParentFile().mkdirs();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            fw = new FileWriter(s,false);
+            fw.append(reader + "\n");
+            fw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

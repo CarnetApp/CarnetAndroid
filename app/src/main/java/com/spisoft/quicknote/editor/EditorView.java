@@ -7,8 +7,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
@@ -40,9 +42,11 @@ import com.spisoft.quicknote.databases.page.PageManager;
 import com.spisoft.quicknote.editor.pages.PageView;
 import com.spisoft.quicknote.editor.pages.PagesAdapter;
 import com.spisoft.quicknote.noise.NoiseService;
+import com.spisoft.quicknote.server.NewHttpProxy;
 import com.spisoft.quicknote.server.ZipReaderAndHttpProxy;
 import com.spisoft.quicknote.serviceactivities.CropWrapperActivity;
 import com.spisoft.quicknote.utils.AmbilWarnaDialog;
+import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.PictureUtils;
 import com.spisoft.quicknote.utils.SpiDebugUtils;
 import com.spisoft.quicknote.utils.ZipWriter;
@@ -53,9 +57,11 @@ import org.jsoup.Jsoup;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -138,6 +144,8 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     private final static int TOOLBAR_INT = 0;
     private final static int RENAMEBAR_INT = 0;
     private final static int PAGEBAR_INT = 0;
+    private String mRootPath;
+    private NewHttpProxy mServer2;
 
     private void rename(String stringExtra, String path) {
         mWebView.loadUrl("javascript:replace('"+StringEscapeUtils.escapeEcmaScript(stringExtra)+"','"+StringEscapeUtils.escapeEcmaScript(path)+"')");
@@ -464,8 +472,6 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
         mWebView =new MyWebView(getContext());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1);
-        params.leftMargin = getResources().getDimensionPixelSize(R.dimen.editor_horizontal_margin);
-        params.rightMargin = getResources().getDimensionPixelSize(R.dimen.editor_horizontal_margin);
 
         //params.topMargin = getResources().getDimensionPixelSize(R.dimen.editor_vertical_margin);
 
@@ -482,7 +488,71 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(getContext()), "app");
         mHasLoaded = false;
-        mWebView.loadUrl(mServer.getReaderUri());
+
+        //prepare Reader
+        //extract
+        mRootPath = NoteManager.getDontTouchFolder(getContext());
+        File dir = new File(mRootPath + "/reader");
+        if(dir.exists())
+            dir.delete();
+        dir.mkdirs();
+        copyFileOrDir("reader");
+        //copy reader to separate folder and change rootpath
+        String reader = FileUtils.readFile(mRootPath+"/reader/reader/reader.html");
+        FileUtils.writeToFile(NoteManager.getDontTouchFolder(getContext())+"/tmp/reader.html", reader.replace("<!ROOTPATH>","../reader/"));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
+
+    }
+
+
+    public void copyFileOrDir(String path) {
+        Log.d("assetdebug", "copy "+path);
+        AssetManager assetManager = getContext().getAssets();
+        String assets[] = null;
+        try {
+            assets = assetManager.list(path);
+            if (assets.length == 0) {
+                copyFile(path);
+            } else {
+                String fullPath =mRootPath + "/" + path;
+                File dir = new File(fullPath);
+                if (!dir.exists())
+                    dir.mkdirs();
+                for (int i = 0; i < assets.length; ++i) {
+                    copyFileOrDir(path + "/" + assets[i]);
+                }
+            }
+        } catch (IOException ex) {
+            Log.e("tag", "I/O Exception", ex);
+        }
+    }
+
+    private void copyFile(String filename) {
+        AssetManager assetManager = getContext().getAssets();
+
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = assetManager.open(filename);
+            String newFileName = mRootPath + "/" +filename;
+            out = new FileOutputStream(newFileName);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+        } catch (Exception e) {
+            Log.e("tag", e.getMessage());
+        }
+
     }
 
 
@@ -514,6 +584,13 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         mServer.setUri(note.path);
         mProgressLayout.setVisibility(VISIBLE);
         mNote = note;
+        try {
+            mServer2 = new NewHttpProxy(getContext());
+            mWebView.loadUrl(mServer2.getUrl("/tmp/reader.html")+"?path="+Uri.encode(mNote.path));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         mPageManager = new PageManager(note);
         mPageManager.fillPageList(mServer);
         mPageView.setPageManager(mPageManager);
@@ -603,7 +680,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
         for(View v : mToolBars){
             if(v == toShow)
-                v.setVisibility(VISIBLE);
+                v.setVisibility(GONE);
             else
                 v.setVisibility(GONE);
         }
@@ -910,7 +987,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                     };
 
     private void onNoteAndPageReady() {
-        mWebView.loadUrl("javascript:loadText('" + StringEscapeUtils.escapeEcmaScript(mNoteString) + "')");
+       // mWebView.loadUrl("javascript:loadText('" + StringEscapeUtils.escapeEcmaScript(mNoteString) + "')");
         mProgressLayout.setVisibility(GONE);
         if (!Jsoup.parse(mNoteString).text().startsWith("test" + SpiDebugUtils.testCount) && SpiDebugUtils.testCount != 0)
             Log.d("TestDebug", "ERROR " + mNoteString);

@@ -1,0 +1,80 @@
+.demo-card-wide.mdl-card {
+    width: 202px;
+    min-height:0px;
+    margin:5px;
+    cursor: pointer;
+    
+  }
+  .note-card-view :hover,
+  .folder-card-view :hover{
+    background-color:#BFBBBB;
+    -webkit-transition: background-color 250ms linear;
+    -ms-transition: background-color 250ms linear;
+    transition: background-color 250ms linear;
+  }
+  .demo-card-wide > .mdl-card__title {
+    color: black;
+    
+  }
+  .demo-card-wide > .mdl-card__menu {
+    color: #fff;
+  }
+  
+  body {
+    background: #fafafa;
+    position: relative;
+  }
+#page-content{
+  position: relative;
+  
+  margin: 0 auto;
+}
+
+#grid-container{
+  margin: 0 auto;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+  .card-title{
+    font-size: 24px;
+    
+    font-weight: 300;
+    line-height: normal;
+    color : black;
+    margin:0px;
+  }
+  .card-title:hover{
+    background: none;
+  }
+  .card-text:hover{
+    background: none;
+  }
+.mdl-layout__header{
+  -webkit-app-region: drag;
+}
+
+.mdl-layout__header .mdl-layout__drawer-button,
+.mdl-layout__header button,
+.mdl-layout__header .mdl-textfield{
+  -webkit-app-region:no-drag;
+}
+
+.folder-icon{
+  width:50px;
+}
+
+.card-more-button{
+  right:0px;
+  background: inherit !important;
+  position: absolute !important;
+}
+.keyword{
+  margin-right:3px;
+  margin-top:3px;
+  padding:3px;
+  background: #D2D2D2;
+  display: inline-block;
+}
+
