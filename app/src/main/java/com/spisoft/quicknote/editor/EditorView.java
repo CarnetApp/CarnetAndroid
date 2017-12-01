@@ -1,5 +1,7 @@
 package com.spisoft.quicknote.editor;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -14,8 +16,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.PopupMenu;
+
 import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.Log;
@@ -43,7 +44,6 @@ import com.spisoft.quicknote.databases.page.Page;
 import com.spisoft.quicknote.databases.page.PageManager;
 import com.spisoft.quicknote.editor.pages.PageView;
 import com.spisoft.quicknote.editor.pages.PagesAdapter;
-import com.spisoft.quicknote.noise.NoiseService;
 import com.spisoft.quicknote.server.NewHttpProxy;
 import com.spisoft.quicknote.server.ZipReaderAndHttpProxy;
 import com.spisoft.quicknote.serviceactivities.CropWrapperActivity;
