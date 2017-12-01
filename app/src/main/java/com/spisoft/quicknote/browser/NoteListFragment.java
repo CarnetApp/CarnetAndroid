@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
 
 /**
  * Created by alexandre on 03/02/16.
@@ -58,7 +59,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     public Handler mHandler = new Handler();
     private StaggeredGridLayoutManager mGridLayout;
     protected List<Object> mNotes;
-    private AsyncTask<List<Object>, Map.Entry<Note, Pair<String, Long>>, HashMap<Note, String>> mTextTask;
+    private AsyncTask<List<Object>, Note, HashMap<Note, String>> mTextTask;
     private Note mLastSelected;
     private BroadcastReceiver mReceiver;
     private ViewGroup mSecondaryButtonsContainer;
@@ -246,17 +247,29 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         String readText;
         List<String> keyWords;
     }
-    protected Pair<String, Boolean> read(String path, long length, int maxLines, String toFind){
-        BufferedReader br = null;
+
+
+    protected Note getNoteInfo(String path){
+        Note note = new Note (path);
+        note.setShortText(read(path, 100, 10, null).first);
+        Note.Metadata metadata = null;
+        String metadataStr = readZipEntry(mServer.getZipEntry("metadata.json"), -1,-1, null).first;
+        if(metadataStr!=null && metadataStr.length()>0){
+            metadata = Note.Metadata.fromString(metadataStr);
+        }
+        note.setMetaData(metadata);
+        return note;
+    }
+
+    protected Pair<String, Boolean> readZipEntry(ZipEntry entry, long length, int maxLines, String toFind){
         String sb = new String();
-        mServer.setUri(path);
-        path = NoteManager.getHtmlPath(0);
+        BufferedReader br = null;
 
         boolean hasFound = toFind == null;
         if(toFind!=null)
             toFind = toFind.toLowerCase();
         try {
-            br = new BufferedReader(  br = new BufferedReader(new InputStreamReader(mServer.getZipInputStream(mServer.getZipEntry(path)))));
+            br = new BufferedReader(  br = new BufferedReader(new InputStreamReader(mServer.getZipInputStream(entry))));
 
             String line = br.readLine();
             long total=0;
@@ -297,13 +310,19 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                     e.printStackTrace();
                 }
         }
-        return new Pair<>(sb, hasFound);
+        return new Pair<>(sb.toString(), hasFound);
     }
 
-    public class TextAsyncTask extends AsyncTask<List<Object>,Map.Entry<Note,Pair<String, Long>>, HashMap<Note,String>>{
+    protected Pair<String, Boolean> read(String path, long length, int maxLines, String toFind){
+        mServer.setUri(path);
+        path = NoteManager.getHtmlPath(0);
+        return readZipEntry(mServer.getZipEntry(path),length, maxLines, toFind);
+    }
 
-        protected void onProgressUpdate(Map.Entry<Note, Pair<String, Long>>... values) {
-            mNoteAdapter.setText(values[0].getKey(), values[0].getValue().first);
+    public class TextAsyncTask extends AsyncTask<List<Object>,Note, HashMap<Note,String>>{
+
+        protected void onProgressUpdate(Note... values) {
+            mNoteAdapter.setText(values[0], values[0].shortText);
         }
 
         @Override
@@ -314,29 +333,17 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             for(final Object object : notes){
                 if(!(object instanceof  Note))
                     continue;
-                final Note note = (Note) object;
+                Note note = (Note) object;
                 final File file = new File(note.path);
 
                 if(file.exists()) {
-                    final String txt = read(note.path, 100, 10, null).first;
-                    txts.put(note, txt);
+                    note= getNoteInfo(note.path);
                     note.lastModified = file.lastModified();
-                    publishProgress(new Map.Entry<Note, Pair<String, Long>>() {
-                        @Override
-                        public Note getKey() {
-                            return note;
-                        }
-
-                        @Override
-                        public Pair<String, Long> getValue() {
-                            return new Pair<String, Long>(txt, file.lastModified());
-                        }
-
-                        @Override
-                        public Pair<String, Long> setValue(Pair<String, Long> s) {
-                            return new Pair<String, Long>(txt, file.lastModified());
-                        }
-                    });
+                    if (note.mMetadata.creation_date == -1)
+                        note.mMetadata.creation_date = file.lastModified();
+                    if (note.mMetadata.last_modification_date == -1)
+                        note.mMetadata.last_modification_date = file.lastModified();
+                    publishProgress(note);
                 }
 
             }

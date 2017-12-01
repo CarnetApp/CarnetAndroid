@@ -147,7 +147,6 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
         }, 1000);
 
 
-
         return mRoot ;
     }
 
