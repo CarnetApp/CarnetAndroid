@@ -21,8 +21,7 @@ Writer.prototype.extractNote = function () {
                 }
 
                 content = data;
-                console.log(data)
-                writer.fillWriter(content)
+                writer.fillWriter(decodeURIComponent(escape(atob(content))))
             });
         }
         else {
@@ -73,7 +72,7 @@ Writer.prototype.refreshKeywords = function(){
 
 Writer.prototype.formatDoc = function (sCmd, sValue) {
     this.oEditor.focus();
-    if (validateMode()) { document.execCommand(sCmd, false, sValue); this.oEditor.focus(); }
+    document.execCommand(sCmd, false, sValue); this.oEditor.focus();
 }
 
 Writer.prototype.displayTextColorPicker = function () {
@@ -130,11 +129,7 @@ Writer.prototype.init = function () {
     this.oEditor = document.getElementById("editor");
     this.backArrow = document.getElementById("back-arrow");
     this.backArrow.addEventListener("click", function () {
-        var { ipcRenderer, remote } = require('electron');
-        var main = remote.require("./main.js");
-        var win = remote.getCurrentWindow();
-        main.displayMainWindow(win.getSize(), win.getPosition());
-        win.close()
+       Compatibility.onBackPressed();
     });
     this.toolbarManager = new ToolbarManager()
     this.toolbarManager.addToolbar(document.getElementById("format-toolbar"))
@@ -165,10 +160,10 @@ Writer.prototype.displayCountDialog = function () {
 
 
 Writer.prototype.increaseFontSize = function () {
-    surroundSelection(document.createElement('big'));
+    this.surroundSelection(document.createElement('big'));
 }
 Writer.prototype.decreaseFontSize = function () {
-    surroundSelection(document.createElement('small'));
+    this.surroundSelection(document.createElement('small'));
 }
 Writer.prototype.surroundSelection = function (element) {
     if (window.getSelection) {
@@ -256,23 +251,23 @@ var SaveNoteTask = function (writer) {
 SaveNoteTask.prototype.saveTxt = function (onEnd) {
    
     var fs = require('fs');
+    var writer = this.writer;
     console.log("saving")
-    fs.unlink(__dirname + "/reader.html", function () {
-        fs.writeFile(__dirname + '/index.html', this.writer.oEditor.innerHTML, function (err) {
+    fs.unlink("tmp/reader.html", function () {
+        fs.writeFile('tmp/index.html', writer.oEditor.innerHTML, function (err) {
             if (err) {
                 onEnd()
                 return console.log(err);
             }
-            this.writer.note.metadata.last_modification_date = Date.now();
-            console.log("saving meta  "+ this.writer.note.metadata.keywords[0])
-            fs.writeFile(__dirname + '/metadata.json', JSON.stringify(this.writer.note.metadata), function (err) {
+            writer.note.metadata.last_modification_date = Date.now();
+            console.log("saving meta  "+ writer.note.metadata.keywords[0])
+            fs.writeFile('tmp/metadata.json', JSON.stringify(writer.note.metadata), function (err) {
                 if (err) {
                     onEnd()
                     return console.log(err);
                 }
-                this.writer.oEditor.innerHTML
                 console.log("compress")
-                this.writer.noteOpener.compressFrom(__dirname, function () {
+                writer.noteOpener.compressFrom("tmp", function () {
                     console.log("compressed")
 
                     onEnd()

@@ -40,7 +40,7 @@ NoteOpener.prototype.getFullHTML = function (callback) {
       return console.log(err);
     }
     if(data.length !=0)
-    JSZip.loadAsync(data).then(function (zip) {
+    JSZip.loadAsync(data, {base64: true}).then(function (zip) {
       console.log("called "+zip)
       zip.file("index.html").async("string").then(function (content) {
         console.log("ok  ")
@@ -80,7 +80,7 @@ var Extractor = function (data, dest, opener, callback) {
 Extractor.prototype.start = function () {
   this.zip = new JSZip();
   var extractor = this;
-  this.zip.loadAsync(this.data).then(function (contents) {
+  this.zip.loadAsync(this.data, {base64: true}).then(function (contents) {
     extractor.files = Object.keys(contents.files);
     extractor.fullExtract()
   });
@@ -98,17 +98,23 @@ Extractor.prototype.fullExtract = function () {
   var extractor = this;
   console.log("extract  = " + filename)
   var file = this.zip.file(filename);
-  if (file != null) {
-    file.async('nodebuffer').then(function (content) {
+    console.log("file  = " + file)
 
+  if (file != null) {
+    file.async('base64').then(function (content) {
+
+  console.log("content  = " + content)
 
       if (content != "") {
 
         var dest = extractor.path + filename;
+        console.log("mkdir");
         mkdirp.sync(getParentFolderFromPath(dest));
-        fs.writeFileSync(dest, content);
+                console.log("mkdirok");
+
+        fs.writeFileSync(dest, content,'base64');
         if (filename == "metadata.json") {
-          extractor.opener.note.metadata = JSON.parse(content);
+          extractor.opener.note.metadata = JSON.parse(atob(content));
         }
 
       }
@@ -139,7 +145,7 @@ Compressor.prototype.start = function () {
   archive.pipe(output);
 
   archive
-    .directory(__dirname, false)
+    .directory("tmp", false)
     .finalize();
   this.callback()
 }

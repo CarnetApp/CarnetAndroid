@@ -35,7 +35,7 @@ import java.util.Stack;
 /**
  * Created by phoenamandre on 01/02/16.
  */
-public class FloatingService extends Service implements View.OnClickListener, EditorView.HideListener,FakeFragmentManager, FloatingWindow.FloatingWindowListener, BubbleLayout.OnBubbleClickListener, PinView.PasswordListener {
+public class FloatingService extends Service implements View.OnClickListener, EditorView.HideListener, FakeFragmentManager, FloatingWindow.FloatingWindowListener, BubbleLayout.OnBubbleClickListener, PinView.PasswordListener {
     private static final int LOCK_MSG = 1;
     public static final String START_MINIMIZE = "start_minimize";
     public static FloatingService sService;
@@ -52,7 +52,7 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
     private View mShadowButton;
     private BroadcastReceiver mReceiver;
     private BubbleManager mBubbleManager;
-    private Stack<FloatingFragment> mFragments ;
+    private Stack<FloatingFragment> mFragments;
     private boolean mHasPressedMinimize;
     private FrameLayout mfragmentContainer;
     private ViewGroup mOptionMenuContainer;
@@ -69,16 +69,16 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
         mFragments = new Stack<>();
         sService = this;
         LayoutInflater li = LayoutInflater.from(this);
-        image =  li.inflate(R.layout.floating_note, null);
+        image = li.inflate(R.layout.floating_note, null);
         mBubble = new BubbleLayout(this);
         mBubble.setMainBubbleView(li.inflate(R.layout.my_bubble, null));
         mBubble.setOnBubbleClickListener(this);
-        mReceiver = new BroadcastReceiver(){
+        mReceiver = new BroadcastReceiver() {
 
             @Override
             public void onReceive(Context context, Intent intent) {
                 //requestMinimize();
-                if(intent.getAction().equals(Intent.ACTION_CONFIGURATION_CHANGED))
+                if (intent.getAction().equals(Intent.ACTION_CONFIGURATION_CHANGED))
                     mBubbleManager.putNearestBoarder();
             }
         };
@@ -92,10 +92,9 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
         //image.setAlpha((float) 0.8);
         mContent = image.findViewById(R.id.content);
         mOptionMenuContainer = (ViewGroup) image.findViewById(R.id.option_menu_container);
-        mfragmentContainer = (FrameLayout)image.findViewById(R.id.fragment_container);
+        mfragmentContainer = (FrameLayout) image.findViewById(R.id.fragment_container);
 
-        mEditor = (EditorView)image.findViewById(R.id.editor_view);
-        mEditor.setFakeFragmentManager(this);
+        mEditor = (EditorView) image.findViewById(R.id.editor_view);
         mFragments.push(mEditor);
         mEditor.setHideListener(this);
         mTitleBar = image.findViewById(R.id.title_bar);
@@ -108,14 +107,14 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
         mDim = mContent.findViewById(R.id.dim_button);
         mDim.setOnClickListener(this);
         mContent.findViewById(R.id.close).setOnClickListener(this);
-        mWindowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
+        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mBubbleManager = new BubbleManager(mWindowManager, this, mBubble);
-        if(PreferenceHelper.shouldLockOnBubbleStart(this))
+        if (PreferenceHelper.shouldLockOnBubbleStart(this))
             lock();
         //startScreenshotThread();
     }
 
-    public void addFragment(FloatingFragment fragment){
+    public void addFragment(FloatingFragment fragment) {
         mfragmentContainer.removeAllViews();
         mFragments.push(fragment);
         mfragmentContainer.addView(fragment.getView());
@@ -123,7 +122,8 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
         fragment.setOptionMenu(mOptionMenuContainer);
 
     }
-    public void removeFragment(){
+
+    public void removeFragment() {
         mfragmentContainer.removeAllViews();
         mFragments.pop();
         FloatingFragment fragment = mFragments.peek();
@@ -134,17 +134,17 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
 
 
     @Override
-    public int onStartCommand(Intent intent,int flags, int startID){
+    public int onStartCommand(Intent intent, int flags, int startID) {
         int ret = super.onStartCommand(intent, flags, startID);
         mEditor.setNote((Note) intent.getSerializableExtra(NOTE));
         addFloatingView();
-        if(!intent.getBooleanExtra(START_MINIMIZE, false))
+        if (!intent.getBooleanExtra(START_MINIMIZE, false))
             invert();
         else mBubble.makeToast(getString(R.string.toast_on_minimize));
         return ret;
     }
 
-    public Note getNote(){
+    public Note getNote() {
         return mEditor.getNote();
     }
 
@@ -155,10 +155,10 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
 
 
     public void addFloatingView() {
-        if(!contains&&PreferenceManager.getDefaultSharedPreferences(this).getBoolean("", true)) {
+        if (!contains && PreferenceManager.getDefaultSharedPreferences(this).getBoolean("", true)) {
 
 
-            Intent it =  new Intent(getApplicationContext(), MainActivity.class);
+            Intent it = new Intent(getApplicationContext(), MainActivity.class);
             it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                     Intent.FLAG_ACTIVITY_SINGLE_TOP |
                     Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -197,14 +197,13 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
         image.setVisibility(image.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
 
 
-        if(image.getVisibility()==View.VISIBLE){
+        if (image.getVisibility() == View.VISIBLE) {
             mHasPressedMinimize = false;
             mBubbleManager.hide();
             paramsF.flags = 0;
             paramsF.width = WindowManager.LayoutParams.MATCH_PARENT;
             paramsF.height = WindowManager.LayoutParams.MATCH_PARENT;
-        }
-        else {
+        } else {
             mBubble.makeToast(getString(R.string.toast_on_minimize));
             mBubbleManager.show();
             paramsF.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
@@ -214,13 +213,13 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
         }
         mWindowManager.updateViewLayout(image, paramsF);
 
-        if(image.getVisibility()==View.VISIBLE)
+        if (image.getVisibility() == View.VISIBLE)
             image.requestFocus();
 
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         stopForeground(true);
         mEditor.onDestroy();
@@ -231,40 +230,39 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
     }
 
 
-
-
     private void removeView() {
-        if(contains){
+        if (contains) {
             mWindowManager.removeViewImmediate(image);
             mBubbleManager.remove();
         }
     }
-    private Handler mHandler = new Handler(){
-        public void handleMessage(Message msg){
-            if(msg.what == LOCK_MSG)
+
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            if (msg.what == LOCK_MSG)
                 lock();
         }
 
     };
 
-    public void startScreenshotThread(){
-        if(!screenshotThreadIsStarted){
+    public void startScreenshotThread() {
+        if (!screenshotThreadIsStarted) {
             screenshotThreadIsStarted = true;
             mLastCheck = System.currentTimeMillis();
-            new Thread(){
-                public void run(){
-                    while(sService!=null){
+            new Thread() {
+                public void run() {
+                    while (sService != null) {
                         try {
                             File pix = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                             File screenshots = new File(pix, "Screenshots");
 
                             File[] files = screenshots.listFiles();
-                            for (File file : files){
-                                if(file.lastModified()>=mLastCheck&&file.getName().toLowerCase().endsWith("png")){
+                            for (File file : files) {
+                                if (file.lastModified() >= mLastCheck && file.getName().toLowerCase().endsWith("png")) {
                                     long l = file.length();
                                     Thread.sleep(5000);
 
-                                    mScreenshotPath = "file://"+file.getAbsolutePath();
+                                    mScreenshotPath = "file://" + file.getAbsolutePath();
 
                                     mHandler.post(new Runnable() {
                                                       @Override
@@ -277,7 +275,7 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
                             }
 
                             screenshots = new File("/storage/sdcard1/Pictures/Screenshots");
-                            if(screenshots.exists()) {
+                            if (screenshots.exists()) {
 
                                 files = screenshots.listFiles();
                                 for (File file : files) {
@@ -312,7 +310,7 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
     }
 
     private void lock() {
-        if(isLocked)
+        if (isLocked)
             return;
         isLocked = true;
         PinView pinView = new PinView(this);
@@ -322,7 +320,7 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
 
     @Override
     public void onClick(View view) {
-        if(view == mContent.findViewById(R.id.minimize)){
+        if (view == mContent.findViewById(R.id.minimize)) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -331,14 +329,13 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
                 }
             }, 200);
 
-        }
-        else if (view ==  mDim){
-            if(image.getAlpha()==1)
+        } else if (view == mDim) {
+            if (image.getAlpha() == 1)
                 image.setAlpha((float) 0.5);
             else
                 image.setAlpha(1);
 
-        }else if (view == mContent.findViewById(R.id.close)){
+        } else if (view == mContent.findViewById(R.id.close)) {
             sendBroadcast(new Intent(NoteListFragment.ACTION_RELOAD));
             mHandler.postDelayed(new Runnable() {
                 @Override
@@ -347,10 +344,9 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
                 }
             }, 200);
 
-        }
-        else if(view==mShadowButton){
+        } else if (view == mShadowButton) {
 
-            if(image.getAlpha()==1) {
+            if (image.getAlpha() == 1) {
                 WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.WRAP_CONTENT,
                         WindowManager.LayoutParams.WRAP_CONTENT,
@@ -363,13 +359,12 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
                 ((ViewGroup) mTitleBar.getParent()).removeView(mTitleBar);
                 mWindowManager.addView(mTitleBar, params);
 
-                paramsF.flags= WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE|WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+                paramsF.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
-            }
-            else{
+            } else {
                 mWindowManager.removeViewImmediate(mTitleBar);
-                ((ViewGroup)mContent).addView(mTitleBar,0);
-                paramsF.flags= 0;
+                ((ViewGroup) mContent).addView(mTitleBar, 0);
+                paramsF.flags = 0;
             }
             view.setFocusable(true);
 
@@ -378,7 +373,7 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
             view.setClickable(true);
 
 
-            image.setAlpha(image.getAlpha()==1? (float) 0.5 :1);
+            image.setAlpha(image.getAlpha() == 1 ? (float) 0.5 : 1);
             mWindowManager.updateViewLayout(image, paramsF);
         }
     }
@@ -386,11 +381,10 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
     @Override
     public void onHide(boolean hide) {
 
-        if(hide){
+        if (hide) {
             mLastVisibility = image.getVisibility();
             image.setVisibility(View.GONE);
-        }
-        else image.setVisibility(mLastVisibility);
+        } else image.setVisibility(mLastVisibility);
     }
 
     @Override
@@ -400,9 +394,9 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
 
 
     public void requestMinimize() {
-        if(image.getVisibility()==View.VISIBLE) {
+        if (image.getVisibility() == View.VISIBLE) {
             invert();
-            if(PreferenceHelper.shouldLockOnMinimize(this)){
+            if (PreferenceHelper.shouldLockOnMinimize(this)) {
                 mHandler.removeMessages(LOCK_MSG);
                 mHandler.sendEmptyMessageDelayed(LOCK_MSG, PreferenceHelper.getLockTime(this));
             }
@@ -411,22 +405,23 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
     }
 
     public void requestRestore() {
-        if(!mHasPressedMinimize&&contains) {
+        if (!mHasPressedMinimize && contains) {
             requestMaximize();
         }
     }
+
     public void requestMaximize() {
-        if(image.getVisibility()!=View.VISIBLE&&contains) {
+        if (image.getVisibility() != View.VISIBLE && contains) {
             invert();
             mHandler.removeMessages(LOCK_MSG);
         }
     }
+
     @Override
     public void onMainBubbleClick() {
-        if(mScreenshotPath==null)
+        if (mScreenshotPath == null)
             requestMaximize();
-        else
-            mEditor.addNotReadyPic(mScreenshotPath);
+
     }
 
     @Override
@@ -446,7 +441,7 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
 
     @Override
     public void onBackPressed() {
-        if(mFragments.size()>1&&!isLocked)
+        if (mFragments.size() > 1 && !isLocked)
             removeFragment();
         else
             requestMinimize();
@@ -454,7 +449,7 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
 
     @Override
     public boolean checkPassword(String password) {
-        if(PreferenceHelper.getPassword(this).equals(password))
+        if (PreferenceHelper.getPassword(this).equals(password))
             return true;
         try {
             Thread.sleep(3000);

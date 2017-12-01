@@ -134,7 +134,6 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
         mFragments.add(mEditor);
         ViewGroup menuContainer = (ViewGroup) mRoot.findViewById(R.id.option_menu_container);
         mEditor.setOptionMenu(menuContainer);
-        mEditor.setFakeFragmentManager(this);
         ((EditorView)mRoot.findViewById(R.id.editor_view)).setHideListener(this);
         mRoot.postDelayed(new Runnable() {
             @Override
@@ -239,6 +238,7 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
     @Override
     public void onExit() {
         Log.d("exitdebug", "onExit");
+        if(getActivity()!=null)
         getActivity().onBackPressed();
     }
 
