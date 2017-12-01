@@ -559,7 +559,7 @@ var jsc = {
 			jsc.onControlPointerStart(e, target, target._jscControlName, 'touch');
 		} else {
 			if (jsc.picker && jsc.picker.owner) {
-				jsc.picker.owner.hide();
+				//jsc.picker.owner.hide();
 			}
 		}
 	},
@@ -1006,7 +1006,7 @@ var jsc = {
 		this.height = 101; // height of color palette (in px)
 		this.showOnClick = true; // whether to display the color picker when user clicks on its target element
 		this.mode = 'HSV'; // HSV | HVS | HS | HV - layout of the color picker controls
-		this.position = 'bottom'; // left | right | top | bottom - position relative to the target element
+		this.position = 'top'; // left | right | top | bottom - position relative to the target element
 		this.smartPosition = true; // automatically change picker position when there is not enough space for it
 		this.sliderSize = 16; // px
 		this.crossSize = 8; // px

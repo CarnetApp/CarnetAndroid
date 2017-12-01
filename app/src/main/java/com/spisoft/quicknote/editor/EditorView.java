@@ -438,6 +438,17 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         }
 
         @JavascriptInterface
+        public void hideProgress() {
+            Log.d(TAG, "hideProgress");
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mProgressLayout.animate().alpha(0).setDuration(500).start();
+                }
+            },500);
+        }
+
+        @JavascriptInterface
         public void zipDir(String dir, String out) {
             if (!dir.startsWith("/"))
                 dir = mRootPath + "/" + dir;
@@ -552,7 +563,6 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     };
 
     private void onNoteAndPageReady() {
-        mProgressLayout.setVisibility(GONE);
     }
 
 

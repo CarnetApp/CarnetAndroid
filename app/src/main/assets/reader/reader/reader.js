@@ -4,18 +4,22 @@ var Writer = function (note, elem) {
     this.noteOpener = new NoteOpener(note);
     this.seriesTaskExecutor = new SeriesTaskExecutor();
     this.saveNoteTask = new SaveNoteTask(this)
+    resetScreenHeight();
+    console.log("create Writer")
 
 }
 
 
 Writer.prototype.extractNote = function () {
+    console.log("Writer.prototype.extractNote")
+    
     var writer = this;
     console.log("extractNote")
     writer.noteOpener.extractTo("tmp/", function (noSuchFile) {
         console.log("done")
         if (!noSuchFile) {
             var fs = require('fs');
-            fs.readFile('tmp/index.html', function read(err, data) {
+            fs.readFile('tmp/index.html','base64', function read(err, data) {
                 if (err) {
                     throw err;
                 }
@@ -52,6 +56,8 @@ Writer.prototype.fillWriter = function (extractedHTML) {
     this.sDefTxt = this.oDoc.innerHTML;
     /*simple initialization*/
     this.oDoc.focus();
+    if(app!=undefined)
+        app.hideProgress();
     resetScreenHeight();
     this.refreshKeywords();
     //  $("#editor").webkitimageresize().webkittableresize().webkittdresize();
@@ -61,11 +67,15 @@ Writer.prototype.fillWriter = function (extractedHTML) {
 Writer.prototype.refreshKeywords = function(){
     var keywordsContainer = document.getElementById("keywords-list");
     keywordsContainer.innerHTML = "";
+    var writer = this;
     for (let word of this.note.metadata.keywords) {
         var keywordElem = document.createElement("a")
         keywordElem.classList.add("mdl-navigation__link");
         keywordElem.innerHTML = word;
         keywordsContainer.appendChild(keywordElem);
+        keywordElem.addEventListener('click', function () {
+            writer.removeKeyword(word);
+        });
         
     }
 }
@@ -178,9 +188,19 @@ Writer.prototype.surroundSelection = function (element) {
 }
 
 Writer.prototype.addKeyword = function(word){
-    this.note.metadata.keywords.push(word);
-    this.seriesTaskExecutor.addTask(this.saveNoteTask.saveTxt)
-    this.refreshKeywords();
+    if(this.note.metadata.keywords.indexOf(word) < 0 && word.length > 0){
+        this.note.metadata.keywords.push(word);
+        this.seriesTaskExecutor.addTask(this.saveNoteTask.saveTxt)
+        this.refreshKeywords();
+    }
+}
+
+Writer.prototype.removeKeyword = function(word){
+    if(this.note.metadata.keywords.indexOf(word) >= 0){
+        this.note.metadata.keywords.splice(this.note.metadata.keywords.indexOf(word),1);
+        this.seriesTaskExecutor.addTask(this.saveNoteTask.saveTxt)
+        this.refreshKeywords();
+    }
 }
 
 Writer.prototype.setColor = function (color) {

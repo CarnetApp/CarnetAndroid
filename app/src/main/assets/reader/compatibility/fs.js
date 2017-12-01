@@ -13,7 +13,11 @@ function generateUID() {
 }
 
 var callbacks = []
-FSCompatibility.readFile = function(path, callback){
+FSCompatibility.readFile = function(path, encoding, callback){
+    if( typeof encoding === 'function' ){
+        callback = encoding;
+        encoding = undefined;
+    }
     console.log("readfile comatibility");
     var uid = generateUID();
     callbacks[uid] = callback;

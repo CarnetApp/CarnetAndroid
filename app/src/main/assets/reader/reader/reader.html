@@ -206,6 +206,11 @@ mdl-layout--fixed-header">
 			</div>
 		</main>
 		<script>
+			if(loaded == undefined)
+			var loaded = false; //don't know why, loaded twice on android
+			if(!loaded){
+			console.log("loading html ");
+		
 			function getParameterByName(name, url) {
 				if (!url) {
 					url = window.location.href;
@@ -234,6 +239,8 @@ mdl-layout--fixed-header">
 			console.log("extract")
 			writer.extractNote();
 			resetScreenHeight();
+			loaded = true;
+	}
 		</script>
 
 </body>
