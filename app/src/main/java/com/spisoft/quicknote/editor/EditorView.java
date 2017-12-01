@@ -397,10 +397,27 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                      (read = in.read(content, off, content.length - off)) > 0;
                      off += read)
                     ;
+                Log.d(TAG, "result " + Base64.encodeToString(content, 0));
 
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadUrl("javascript:FSCompatibility.resultFileRead('" + callback + "',false,'" + Base64.encodeToString(content, 0) + "')");
+
+                    }
+                });
             } catch (IOException e) {
                 // Some error occured
                 e.printStackTrace();
+                Log.d(TAG, "result " + Base64.encodeToString(content, 0));
+
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadUrl("javascript:FSCompatibility.resultFileRead('" + callback + "',true,'')");
+
+                    }
+                });
             } finally {
                 if (in != null)
                     try {
@@ -408,15 +425,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                     } catch (IOException e) {
                     }
             }
-            Log.d(TAG, "result " + Base64.encodeToString(content, 0));
 
-            mWebView.post(new Runnable() {
-                @Override
-                public void run() {
-                    mWebView.loadUrl("javascript:FSCompatibility.resultFileRead('" + callback + "','" + Base64.encodeToString(content, 0) + "')");
-
-                }
-            });
         }
 
         @JavascriptInterface

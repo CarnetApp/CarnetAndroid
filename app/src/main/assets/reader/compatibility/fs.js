@@ -25,9 +25,9 @@ FSCompatibility.readFile = function(path, encoding, callback){
 
 }
 
-FSCompatibility.resultFileRead = function(callback, content){
+FSCompatibility.resultFileRead = function(callback, error, content){
     console.log("resultFileRead comatibility ok "+content);
-    callbacks[callback](false,content);
+    callbacks[callback](error,content);
 
 }
 
