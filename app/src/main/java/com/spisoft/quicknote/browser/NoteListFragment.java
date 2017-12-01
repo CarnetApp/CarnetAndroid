@@ -328,7 +328,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         @Override
         protected HashMap<Note, String> doInBackground(List<Object>... lists) {
             Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-            List<Object> notes = lists[0];
+            List<Object> notes = new ArrayList<>(lists[0]);
             HashMap<Note, String> txts = new HashMap<>();
             for(final Object object : notes){
                 if(!(object instanceof  Note))

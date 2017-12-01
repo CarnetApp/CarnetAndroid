@@ -6,7 +6,6 @@ import android.util.Log;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,7 +25,7 @@ public class RecentHelper {
 
     private static RecentHelper sRecentHelper;
     private final Context mContext;
-    private static final String RECENT_FILE_NAME = ".recent.db";
+    private static final String RECENT_FOLDER_NAME = "recentdb";
     private static final int CURRENT_VERSION=1;
 
     private RecentHelper(Context context){
@@ -41,49 +40,7 @@ public class RecentHelper {
 
 
     public void moveNote(Note note, String path){
-        File toFile = new File(path);
-        File notFile = new File(note.path);
-        boolean hasChanged = false;
-        try {
-            JSONObject jsonObj  = getJson();
-            if(jsonObj == null) {
 
-                jsonObj = new JSONObject();
-                jsonObj.put("version", CURRENT_VERSION);
-            }
-
-            JSONArray newArray = new JSONArray();
-
-            if(jsonObj.has("notes")) {
-                JSONArray array = jsonObj.getJSONArray("notes");
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    String relativePath = obj.getString("relative_path");
-                    if (relativePath.equals(getRelativePath(toFile.getAbsolutePath(), mContext))) {
-                        hasChanged = true;
-                    }
-
-                }
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    String relativePath = obj.getString("relative_path");
-
-                    if (relativePath.equals(getRelativePath(note.path, mContext)) && !hasChanged) {
-                        obj.put("relative_path", getRelativePath(toFile.getAbsolutePath(), mContext));
-
-                    }
-                    newArray.put(obj);
-
-
-                }
-            }
-            jsonObj.put("notes", newArray);
-
-            write(jsonObj.toString());
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -93,79 +50,29 @@ public class RecentHelper {
         moveNote(note, toFile.getAbsolutePath());
     }
     public void addNote(Note note){
-
         try {
-            JSONObject jsonObj  = getJson();
-            if(jsonObj == null) {
-
-                jsonObj = new JSONObject();
-                jsonObj.put("version", CURRENT_VERSION);
-            }
-
-            JSONArray newArray = new JSONArray();
-            boolean shouldAdd = true;
-            if(jsonObj.has("notes")) {
-                JSONArray array = jsonObj.getJSONArray("notes");
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    String relativePath = obj.getString("relative_path");
-
-                    if (relativePath.equals(getRelativePath(note.path, mContext)))
-                        shouldAdd = false;
-
-                }
-            }
-            if(shouldAdd)
-                newArray.put(noteToJsonObject(note));
-            if(jsonObj.has("notes")) {
-                JSONArray array = jsonObj.getJSONArray("notes");
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    String relativePath = obj.getString("relative_path");
-                    newArray.put(obj);
-                }
-            }
-
-
-
-            jsonObj.put("notes", newArray);
-            write(jsonObj.toString());
-
+            JSONObject object = getJson();
+            JSONObject noteObject = new JSONObject();
+            noteObject.put("path",getRelativePath(note.path, mContext));
+            noteObject.put("action","add");
+            noteObject.put("time",System.currentTimeMillis());
+            object.getJSONArray("data").put(noteObject);
+            write(object.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
     public void removeRecent(Note note){
         try {
-            JSONObject jsonObj  = getJson();
-            if(jsonObj == null) {
-
-                jsonObj = new JSONObject();
-                jsonObj.put("version", CURRENT_VERSION);
-            }
-            JSONArray newArray = new JSONArray();
-            Log.d("notedebug", "addNote array");
-            boolean shouldAdd = true;
-            if(jsonObj.has("notes")) {
-                JSONArray array = jsonObj.getJSONArray("notes");
-                Log.d("notedebug","has array");
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    Log.d("notedebug","has note "+obj.getString("relative_path"));
-                    String relativePath = obj.getString("relative_path");
-
-                    if (!relativePath.equals(getRelativePath(note.path, mContext)))
-                        newArray.put(obj);
-
-                }
-            }
-
-
-            jsonObj.put("notes", newArray);
-
-            write(jsonObj.toString());
-
+            JSONObject object = getJson();
+            JSONObject noteObject = new JSONObject();
+            noteObject.put("path",getRelativePath(note.path, mContext));
+            noteObject.put("action","remove");
+            noteObject.put("time",System.currentTimeMillis());
+            object.getJSONArray("data").put(noteObject);
+            write(object.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -173,42 +80,7 @@ public class RecentHelper {
 
     public void moveNote(Note note, int pos){
 
-        try {
-            JSONObject jsonObj  = getJson();
-            if(jsonObj == null) {
 
-                jsonObj = new JSONObject();
-                jsonObj.put("version", CURRENT_VERSION);
-            }
-
-            JSONArray newArray = new JSONArray();
-            Log.d("notedebug", "addNote array");
-            if(jsonObj.has("notes")) {
-                JSONArray array = jsonObj.getJSONArray("notes");
-                Log.d("notedebug","has array");
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    Log.d("notedebug","has note "+obj.getString("relative_path"));
-                    String relativePath = obj.getString("relative_path");
-                    if(i == pos)
-                        newArray.put(noteToJsonObject(note));
-                    if (!relativePath.equals(getRelativePath(note.path, mContext)))
-                        newArray.put(obj);
-
-                }
-            }
-
-
-
-
-            jsonObj.put("notes", newArray);
-            Log.d("jsondebug", jsonObj.toString());
-
-            write(jsonObj.toString());
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     private void write(String s) {
@@ -259,7 +131,7 @@ public class RecentHelper {
         return sb.toString();
     }
     private String getRecentPath() {
-        return PreferenceHelper.getRootPath(mContext)+"/"+RECENT_FILE_NAME;
+        return NoteManager.getDontTouchFolder(mContext)+"/"+ RECENT_FOLDER_NAME+"/"+PreferenceHelper.getUid(mContext);
     }
     public static String getRelativePath(String absolute, Context context){
         String path  = PreferenceHelper.getRootPath(context)+"/";
@@ -282,27 +154,26 @@ public class RecentHelper {
 
     public List<Object> getLatestNotes(int limit){
         List<Object> notes = new ArrayList<>();
-
         try {
-            final JSONObject jsonObj = getJson();
-            if(jsonObj==null)
-                return notes;
-            int version = 0;
-            version = jsonObj.getInt("version");
-            update(version);
-            JSONArray array = jsonObj.getJSONArray("notes");
-            for (int i = 0; i <array.length(); i++){
-                JSONObject obj = array.getJSONObject(i);
-
-                String relativePath = obj.getString("relative_path");
-                Log.d("jsondebug", "relativePath");
-                Note note = new Note(PreferenceHelper.getRootPath(mContext)+"/"+relativePath);
-                notes.add(note);
-
+            JSONObject object = getJson();
+            for(int i = 0; i<object.getJSONArray("data").length(); i++){
+                JSONObject obj = object.getJSONArray("data").getJSONObject(i);
+                String action = obj.getString("action");
+                String path = obj.getString("path");
+                Note note = new Note(PreferenceHelper.getRootPath(mContext)+"/"+path);
+                if(action.equals("add")){
+                    notes.remove(note);
+                    notes.add(0,note);
+                    Log.d("addingdebug","adding "+note.path);
+                }
+                else if(action.equals("remove")){
+                    notes.remove(note);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         return notes;
     }
 
@@ -311,7 +182,7 @@ public class RecentHelper {
 
         String jsonString = read();
         if(jsonString==null||jsonString.isEmpty())
-            return null;
+            jsonString = "{\"data\":[]}";
         return new JSONObject(jsonString);
     }
 
@@ -320,42 +191,6 @@ public class RecentHelper {
     }
 
     public void renameDirectory(String absolutePath, String absolutePathTo) {
-        if(!absolutePath.endsWith("/"))
-            absolutePath +="/";
-        if(!absolutePathTo.endsWith("/"))
-            absolutePathTo +="/";
-        boolean hasChanged = false;
-        try {
-            JSONObject jsonObj  = getJson();
-            if(jsonObj == null) {
 
-                jsonObj = new JSONObject();
-                jsonObj.put("version", CURRENT_VERSION);
-            }
-
-            JSONArray newArray = new JSONArray();
-
-            if(jsonObj.has("notes")) {
-                JSONArray array = jsonObj.getJSONArray("notes");
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    String relativePath = obj.getString("relative_path");
-                    String absoluteNotePath = (PreferenceHelper.getRootPath(mContext)+"/"+relativePath);
-                    if (absoluteNotePath.startsWith(absolutePath)) {
-                        absoluteNotePath = absolutePathTo+absoluteNotePath.substring(absolutePath.length());
-                        obj.put("relative_path", getRelativePath(absoluteNotePath, mContext));
-                    }
-                    newArray.put(obj);
-
-                }
-
-            }
-            jsonObj.put("notes", newArray);
-
-            write(jsonObj.toString());
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 }

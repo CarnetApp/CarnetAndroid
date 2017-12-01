@@ -22,19 +22,19 @@ import java.util.List;
 /**
  * Created by alexandre on 03/02/16.
  */
-public class RecentHelper {
+public class OldRecentHelper {
 
-    private static RecentHelper sRecentHelper;
+    private static OldRecentHelper sRecentHelper;
     private final Context mContext;
     private static final String RECENT_FILE_NAME = ".recent.db";
     private static final int CURRENT_VERSION=1;
 
-    private RecentHelper(Context context){
+    private OldRecentHelper(Context context){
         mContext = context;
     }
-    public static RecentHelper getInstance(Context context){
+    public static OldRecentHelper getInstance(Context context){
         if(sRecentHelper == null){
-            sRecentHelper = new RecentHelper(context);
+            sRecentHelper = new OldRecentHelper(context);
         }
         return sRecentHelper;
     }

@@ -6,6 +6,8 @@ import android.preference.PreferenceManager;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.utils.Utils;
 
+import java.util.UUID;
+
 /**
  * Created by alexandre on 03/02/16.
  */
@@ -18,6 +20,7 @@ public class PreferenceHelper {
     public static final String PASSWORD_ON_MINIMIZE_PREFERENCE = "pref_password_on_minimize";
     public static final String REMOVE_AD_FREE = "pref_remove_ad_free";
     public static final String NOTE_VERSION_PREF = "pref_note_version";
+    public static final String PREF_UID = "pref_uid";
 
     public static String getRootPath(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(ROOT_PATH_PREFERENCE, Utils.isDebug(context)?DEFAULT_ROOT_PATH+"Debug":DEFAULT_ROOT_PATH);
@@ -63,5 +66,14 @@ public class PreferenceHelper {
 
     public static void setCurrentNoteVersion(Context ct, int newVersion) {
         PreferenceManager.getDefaultSharedPreferences(ct).edit().putInt(NOTE_VERSION_PREF, newVersion).commit();
+    }
+
+    public static String getUid(Context context) {
+        String uid = PreferenceManager.getDefaultSharedPreferences(context).getString(PREF_UID,"");
+        if(uid.isEmpty()){
+            uid = UUID.randomUUID().toString();
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PREF_UID, uid).commit();
+        }
+        return uid;
     }
 }

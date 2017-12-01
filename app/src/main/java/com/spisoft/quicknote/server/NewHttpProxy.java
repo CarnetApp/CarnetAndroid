@@ -183,11 +183,11 @@ public class NewHttpProxy {
 					name.eng.srt
 				 */
 				if(path!=null){
-					Log.d("pathdebug","path: "+NoteManager.getDontTouchFolder(mContext)+path);
+					Log.d("pathdebug","path: "+mContext.getFilesDir().getAbsolutePath()+path);
 
 					fileMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(path));
 
-						is = new FileInputStream(NoteManager.getDontTouchFolder(mContext)+path);
+						is = new FileInputStream(mContext.getFilesDir().getAbsolutePath()+path);
 					length =is.available();
 
 				}

@@ -236,7 +236,8 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
         //prepare Reader
         //extract
-        mRootPath = NoteManager.getDontTouchFolder(getContext());
+
+        mRootPath = getContext().getFilesDir().getAbsolutePath();
         File dir = new File(mRootPath + "/reader");
         if (dir.exists())
             dir.delete();
@@ -244,7 +245,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         copyFileOrDir("reader");
         //copy reader to separate folder and change rootpath
         String reader = FileUtils.readFile(mRootPath + "/reader/reader/reader.html");
-        FileUtils.writeToFile(NoteManager.getDontTouchFolder(getContext()) + "/tmp/reader.html", reader.replace("<!ROOTPATH>", "../reader/"));
+        FileUtils.writeToFile(mRootPath + "/tmp/reader.html", reader.replace("<!ROOTPATH>", "../reader/"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true);
         }
