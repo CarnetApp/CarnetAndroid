@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.spisoft.quicknote.FloatingFragment;
 import com.spisoft.quicknote.FloatingService;
+import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.R;
 
@@ -119,7 +120,8 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        if(mRoot==null)
+        if(mRoot!=null)
+            return mRoot;
         mRoot = inflater.inflate(R.layout.floating_note, container, false);
         mRoot.findViewById(R.id.shadow_button).setVisibility(View.GONE);
         mRoot.findViewById(R.id.dim_button).setOnClickListener(this);
@@ -160,9 +162,8 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         getActivity().stopService(new Intent(getContext(), FloatingService.class));
-
+        ((MainActivity)getActivity()).lockDrawer();
     }
 
     @Override
@@ -170,6 +171,7 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
         super.onDetach();
        mEditor.onDestroy();
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+        ((MainActivity)getActivity()).unlockDrawer();
     }
 
     @Override

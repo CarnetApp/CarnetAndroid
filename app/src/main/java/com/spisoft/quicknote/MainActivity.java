@@ -186,6 +186,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }.start();
     }
+
+    public void lockDrawer(){
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    public void unlockDrawer(){
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
         mPermissionChecker.onRequestPermissionsResult(requestCode,permissions,grantResults);
