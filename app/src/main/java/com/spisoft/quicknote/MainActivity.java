@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -29,6 +30,7 @@ import com.spisoft.quicknote.browser.PasteDialog;
 import com.spisoft.quicknote.browser.PermissionChecker;
 import com.spisoft.quicknote.browser.RecentNoteListFragment;
 import com.spisoft.quicknote.browser.SearchFragment;
+import com.spisoft.quicknote.databases.DBMergerService;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.synchro.HelpActivity;
@@ -67,6 +69,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         startService(new Intent(this, SynchroService.class));
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
+        if(!DBMergerService.isJobScheduledOrRunning(this)){
+            DBMergerService.scheduleJob(this);
+        }
         mPermissionChecker = new PermissionChecker();
 
         PreferenceHelper.incrementDisplayAd(this);

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,24 +17,28 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Created by alexandre on 03/02/16.
  */
 public class RecentHelper {
-
+    private static final String TAG = "RecentHelper";
     private static RecentHelper sRecentHelper;
     private final Context mContext;
-    private static final String RECENT_FOLDER_NAME = "recentdb";
+    public static final String RECENT_FOLDER_NAME = "recentdb";
     private static final int CURRENT_VERSION=1;
+    private final String mPath;
 
-    private RecentHelper(Context context){
+    private RecentHelper(Context context, String path){
         mContext = context;
+        mPath = path;
     }
     public static RecentHelper getInstance(Context context){
         if(sRecentHelper == null){
-            sRecentHelper = new RecentHelper(context);
+            sRecentHelper = new RecentHelper(context, NoteManager.getDontTouchFolder(context)+"/"+ RECENT_FOLDER_NAME+"/"+PreferenceHelper.getUid(context));
         }
         return sRecentHelper;
     }
@@ -131,7 +136,7 @@ public class RecentHelper {
         return sb.toString();
     }
     private String getRecentPath() {
-        return NoteManager.getDontTouchFolder(mContext)+"/"+ RECENT_FOLDER_NAME+"/"+PreferenceHelper.getUid(mContext);
+        return mPath;
     }
     public static String getRelativePath(String absolute, Context context){
         String path  = PreferenceHelper.getRootPath(context)+"/";
@@ -192,5 +197,71 @@ public class RecentHelper {
 
     public void renameDirectory(String absolutePath, String absolutePathTo) {
 
+    }
+
+    public void mergeDB(String otherDBPath){
+        try {
+            JSONObject myJSON = getJson();
+            RecentHelper otherDBHelper = new RecentHelper(mContext, otherDBPath);
+            JSONObject otherDBJson = otherDBHelper.getJson();
+            for(int i = 0; i<otherDBJson.getJSONArray("data").length(); i++){
+                JSONObject obj = otherDBJson.getJSONArray("data").getJSONObject(i);
+                String action = obj.getString("action");
+                String path = obj.getString("path");
+                long time = obj.getLong("time");
+                boolean isIn = false;
+                int index = 0;
+                for(int j = 0; j<myJSON.getJSONArray("data").length(); j++){
+                    JSONObject myObj = myJSON.getJSONArray("data").getJSONObject(j);
+                    String myAction = myObj.getString("action");
+                    String myPath = myObj.getString("path");
+                    long myTime = myObj.getLong("time");
+                    if(myAction.equals(action) && myPath.equals(path) && myTime == time){
+                        isIn = true;
+                        break;
+                    }
+                    if(myTime<time){
+                        index = j;
+                    }
+                }
+              //  Log.d(TAG,"merging :"+path+" isIn ? "+isIn);
+                if(!isIn){
+                    myJSON.getJSONArray("data").put(obj);
+                }
+            }
+
+
+            //sorting
+
+            ArrayList<JSONObject> array = new ArrayList<JSONObject>();
+            for (int i = 0; i < myJSON.getJSONArray("data").length(); i++) {
+                try {
+                    array.add(myJSON.getJSONArray("data").getJSONObject(i));
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+
+            Collections.sort(array, new Comparator<JSONObject>() {
+
+                @Override
+                public int compare(JSONObject lhs, JSONObject rhs) {
+                    // TODO Auto-generated method stub
+
+                    try {
+                        return (lhs.getString("time").compareTo(rhs.getString("time")));
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                        return 0;
+                    }
+                }
+            });
+            myJSON.put("data", new JSONArray(array));
+            write(myJSON.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
