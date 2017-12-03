@@ -26,7 +26,7 @@ public class AuthorizeActivity extends AppCompatActivity {
             case DriveWrapper.RESOLVE_CONNECTION_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
 
-                    startService(new Intent(this, SynchroService.class));
+                 //   startService(new Intent(this, SynchroService.class));
 
                 }
 

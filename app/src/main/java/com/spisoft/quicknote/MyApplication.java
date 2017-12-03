@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.spisoft.sync.utils.Utils;
+
 /**
  * Created by alexandre on 22/02/16.
  */
@@ -16,5 +18,6 @@ public class MyApplication extends Application {
         super.attachBaseContext(base);
         MultiDex.install(this);
         Log.d("uiddebug",PreferenceHelper.getUid(this));
+        Utils.context = this;
     }
 }

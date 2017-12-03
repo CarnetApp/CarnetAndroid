@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             PreferenceHelper.setCurrentNoteVersion(getApplicationContext(),1);
         }
 
-        startService(new Intent(this, SynchroService.class));
+        //startService(new Intent(this, SynchroService.class));
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
         if(!DBMergerService.isJobScheduledOrRunning(this)){
             DBMergerService.scheduleJob(this);

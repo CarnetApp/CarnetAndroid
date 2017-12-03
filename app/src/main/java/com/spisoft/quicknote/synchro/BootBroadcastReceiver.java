@@ -3,7 +3,7 @@ package com.spisoft.quicknote.synchro;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
+import com.spisoft.sync.synchro.SynchroService;
 import com.spisoft.quicknote.databases.DBMergerService;
 
 /**

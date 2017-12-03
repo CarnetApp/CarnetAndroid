@@ -31,7 +31,7 @@
                 <action android:name="com.tooleap.sdk.BIND_UI_SERVICE" />
             </intent-filter>
         </service>
-        <service android:name=".synchro.SynchroService"></service>
+        <service android:name=".synchro.SynchroService" />
         <service
             android:name=".synchro.googledrive.MyDriveEventService"
             android:exported="true">
@@ -39,11 +39,8 @@
                 <action android:name="com.google.android.gms.drive.events.HANDLE_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".FileManagerService"
-            >
+        <service android:name=".FileManagerService"></service>
 
-        </service>
         <receiver android:name="com.tooleap.sdk.TooleapReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
@@ -111,6 +108,12 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE"></service>
+
+        <service android:name="com.spisoft.sync.synchro.SynchroService" />
+        <activity android:name="com.spisoft.sync.account.AccountListActivity"></activity>
+
+        <activity android:name="com.spisoft.sync.account.AccountTypeActivity"></activity>
+
     </application>
 
 </manifest>

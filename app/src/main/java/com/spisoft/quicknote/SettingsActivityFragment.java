@@ -13,6 +13,7 @@ import com.spisoft.quicknote.billingutils.BillingUtils;
 import com.spisoft.quicknote.billingutils.IsPaidCallback;
 import com.spisoft.quicknote.synchro.googledrive.AuthorizeActivity;
 import com.spisoft.quicknote.utils.PinView;
+import com.spisoft.sync.account.AccountListActivity;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -79,7 +80,7 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
             return true;
         }
         if(preference==findPreference("pref_google_drive")){
-            startActivity(new Intent(getActivity(),AuthorizeActivity.class));
+            startActivity(new Intent(getActivity(),AccountListActivity.class));
             return true;
         }else if(preference==findPreference("pref_set_password")){
             PasswordDialog dialog = new PasswordDialog();
