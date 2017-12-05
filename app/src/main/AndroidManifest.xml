@@ -107,13 +107,15 @@
             android:name=".databases.DBMergerService"
             android:enabled="true"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"></service>
-
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service android:name="com.spisoft.sync.synchro.SynchroService" />
-        <activity android:name="com.spisoft.sync.account.AccountListActivity"></activity>
 
-        <activity android:name="com.spisoft.sync.account.AccountTypeActivity"></activity>
-
+        <activity android:name="com.spisoft.sync.account.AccountListActivity" />
+        <activity android:name="com.spisoft.sync.account.AccountTypeActivity" />
+        <activity
+            android:name=".synchro.AccountConfigActivity"
+            android:label="@string/title_activity_account_config"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
