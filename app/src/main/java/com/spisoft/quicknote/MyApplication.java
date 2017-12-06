@@ -25,7 +25,7 @@ public class MyApplication extends Application {
 
         Configuration.sOnAccountSelectedListener = new Configuration.OnAccountSelectedListener() {
             @Override
-            public void onAccountSelected(long accountId, int accountType) {
+            public void onAccountSelected(int accountId, int accountType) {
                 Intent intent = new Intent(MyApplication.this, AccountConfigActivity.class);
                 intent.putExtra(AccountConfigActivity.EXTRA_ACCOUNT_ID, accountId);
                 intent.putExtra(AccountConfigActivity.EXTRA_ACCOUNT_TYPE, accountType);

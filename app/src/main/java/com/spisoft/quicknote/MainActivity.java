@@ -34,7 +34,6 @@ import com.spisoft.quicknote.databases.DBMergerService;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.synchro.HelpActivity;
-import com.spisoft.quicknote.synchro.SynchroService;
 import com.spisoft.quicknote.utils.FileLocker;
 import com.spisoft.quicknote.utils.PinView;
 
