@@ -26,11 +26,20 @@ public class MyApplication extends Application {
         Configuration.sOnAccountSelectedListener = new Configuration.OnAccountSelectedListener() {
             @Override
             public void onAccountSelected(int accountId, int accountType) {
-                Intent intent = new Intent(MyApplication.this, AccountConfigActivity.class);
-                intent.putExtra(AccountConfigActivity.EXTRA_ACCOUNT_ID, accountId);
-                intent.putExtra(AccountConfigActivity.EXTRA_ACCOUNT_TYPE, accountType);
-                startActivity(intent);
+                startAccountConfigActivity(accountId, accountType);
             }
         };
+        Configuration.sOnAccountCreatedListener = new Configuration.OnAccountCreatedListener() {
+            @Override
+            public void onAccountCreated(int accountId, int accountType) {
+                startAccountConfigActivity(accountId, accountType);
+            }
+        };
+    }
+    private void startAccountConfigActivity(int accountId, int accountType){
+        Intent intent = new Intent(MyApplication.this, AccountConfigActivity.class);
+        intent.putExtra(AccountConfigActivity.EXTRA_ACCOUNT_ID, accountId);
+        intent.putExtra(AccountConfigActivity.EXTRA_ACCOUNT_TYPE, accountType);
+        startActivity(intent);
     }
 }

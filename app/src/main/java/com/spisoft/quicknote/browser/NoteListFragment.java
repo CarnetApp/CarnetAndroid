@@ -252,7 +252,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     protected Note getNoteInfo(String path){
         Note note = new Note (path);
         note.setShortText(read(path, 100, 10, null).first);
-        Note.Metadata metadata = null;
+        Note.Metadata metadata = new Note.Metadata();
         String metadataStr = readZipEntry(mServer.getZipEntry("metadata.json"), -1,-1, null).first;
         if(metadataStr!=null && metadataStr.length()>0){
             metadata = Note.Metadata.fromString(metadataStr);

@@ -36,6 +36,7 @@ import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.synchro.HelpActivity;
 import com.spisoft.quicknote.utils.FileLocker;
 import com.spisoft.quicknote.utils.PinView;
+import com.spisoft.sync.synchro.SynchroService;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SearchView.OnQueryTextListener, PinView.PasswordListener, NoteManager.UpdaterListener {
 
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             PreferenceHelper.setCurrentNoteVersion(getApplicationContext(),1);
         }
 
-        //startService(new Intent(this, SynchroService.class));
+        startService(new Intent(this, SynchroService.class));
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
         if(!DBMergerService.isJobScheduledOrRunning(this)){
             DBMergerService.scheduleJob(this);

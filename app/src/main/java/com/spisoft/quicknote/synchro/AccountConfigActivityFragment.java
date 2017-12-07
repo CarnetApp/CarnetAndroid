@@ -1,5 +1,6 @@
 package com.spisoft.quicknote.synchro;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -21,6 +22,8 @@ import com.spisoft.sync.wrappers.Wrapper;
  */
 public class AccountConfigActivityFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
+    private static final int REQUEST_FILE_PICK = 1001;
+    private static final String TAG = "AccountConfigActivityFragment";
     private Preference mBrowsePreference;
     private int mAccountId;
     private int mAccountType;
@@ -44,16 +47,27 @@ public class AccountConfigActivityFragment extends PreferenceFragment implements
         mBrowsePreference.setSummary(mCurrentlySetPath);
         mBrowsePreference.setOnPreferenceClickListener(this);
         getPreferenceScreen().addPreference(mBrowsePreference);
-
-
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_FILE_PICK){
+            if(resultCode== Activity.RESULT_OK) {
+                String path = data.getStringExtra(FilePickerActivity.RESULT_PICKER_PATH);
+                Log.d(TAG,"New remote path "+path);
+
+                mWrapper.addFolderSync(PreferenceHelper.getRootPath(getActivity()), path);
+            }
+        }
+        else super.onActivityResult(requestCode, resultCode, data);
+    }
     @Override
     public boolean onPreferenceClick(Preference preference) {
         Intent intent = new Intent(getActivity(), FilePickerActivity.class);
         intent.putExtra(FilePickerActivity.EXTRA_ACCOUNT_ID, mAccountId);
         intent.putExtra(FilePickerActivity.EXTRA_START_PATH, mCurrentlySetPath);
-        getActivity().startActivity(intent);
+        intent.putExtra(FilePickerActivity.EXTRA_AS_FILE_PICKER, true);
+        intent.putExtra(FilePickerActivity.EXTRA_DISPLAY_ONLY_MIMETYPE, "DIR");
+        startActivityForResult(intent,REQUEST_FILE_PICK);
         return true;
     }
 }

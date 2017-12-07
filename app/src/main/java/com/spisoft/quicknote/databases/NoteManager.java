@@ -97,7 +97,7 @@ public class NoteManager
     }
 
     public static String getDontTouchFolder(Context ct) {
-        return PreferenceHelper.getRootPath(ct)+"/.quickdoc";
+        return PreferenceHelper.getRootPath(ct)+"/quickdoc";
     }
 
     public static String getOldDontTouchFolder(Context ct) {
