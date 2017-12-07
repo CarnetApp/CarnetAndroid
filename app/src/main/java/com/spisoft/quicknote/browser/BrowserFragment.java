@@ -16,8 +16,10 @@ import com.spisoft.quicknote.FileManagerService;
 import com.spisoft.quicknote.FloatingService;
 import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.Note;
+import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.NoteManager;
+import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.utils.FileUtils;
 
 import java.io.File;
@@ -140,10 +142,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
             Fragment fragment = BlankFragment.newInstance(new Note(path));
             ((MainActivity) getActivity()).setFragment(fragment);*/
         }else if(view == mRoot.findViewById(R.id.add_note_button)){
-
-            Intent intent = new Intent(getActivity(), FloatingService.class);
-            intent.putExtra(FloatingService.NOTE,  NoteManager.createNewNote(mPath));
-            getActivity().startService(intent);
+            ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(NoteManager.createNewNote(mPath)));
         }else if(view == mRoot.findViewById(R.id.add_folder_button)){
             RenameDialog dialog = new RenameDialog();
             dialog.setName(getString(R.string.new_folder_name));
