@@ -132,7 +132,7 @@ public class NoteAdapter extends RecyclerView.Adapter {
         }
 
         public void setName(String title) {
-            ((TextView) itemView.findViewById(R.id.name_tv)).setText(title);
+            ((TextView) itemView.findViewById(R.id.name_tv)).setText(title.startsWith("untitled")?"":title);
         }
 
         public void setNote(final Note note) {
