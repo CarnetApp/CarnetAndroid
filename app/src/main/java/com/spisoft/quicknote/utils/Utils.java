@@ -8,6 +8,8 @@ import android.content.Context;
 public class Utils {
 
     public static boolean isDebug(Context context){
-       return context.getApplicationContext().getPackageName().endsWith(".debug");
+        if(context.getApplicationContext()!=null)
+            return context.getApplicationContext().getPackageName().endsWith(".debug");
+        return context.getPackageName().endsWith(".debug");
     }
 }

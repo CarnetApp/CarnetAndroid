@@ -13,6 +13,6 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         //context.startService(new Intent(context, SynchroService.class));
-        DBMergerService.scheduleJob(context);
+        DBMergerService.scheduleJob(context, false);
     }
 }

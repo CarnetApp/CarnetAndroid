@@ -14,10 +14,13 @@ import com.spisoft.sync.utils.Utils;
 /**
  * Created by alexandre on 22/02/16.
  */
-public class MyApplication extends Application {
+public class MyApplication extends Application implements Configuration.PathObserver {
+
+    private static final String TAG = "MyApplication";
 
     @Override
     protected void attachBaseContext(Context base) {
+
         super.attachBaseContext(base);
         MultiDex.install(this);
         Log.d("uiddebug",PreferenceHelper.getUid(this));
@@ -35,11 +38,18 @@ public class MyApplication extends Application {
                 startAccountConfigActivity(accountId, accountType);
             }
         };
+        Configuration.addPathObserver(PreferenceHelper.getRootPath(this), this);
+        Configuration.addPathObserver(PreferenceHelper.getRootPath(this)+"/untitled.sqd", this);
     }
     private void startAccountConfigActivity(int accountId, int accountType){
         Intent intent = new Intent(MyApplication.this, AccountConfigActivity.class);
         intent.putExtra(AccountConfigActivity.EXTRA_ACCOUNT_ID, accountId);
         intent.putExtra(AccountConfigActivity.EXTRA_ACCOUNT_TYPE, accountType);
         startActivity(intent);
+    }
+
+    @Override
+    public void onPathChanged(String path) {
+        Log.d(TAG, "onPathChanged "+path);
     }
 }

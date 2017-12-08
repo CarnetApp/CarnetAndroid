@@ -5,7 +5,10 @@ import android.preference.PreferenceManager;
 
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.utils.Utils;
+import com.spisoft.sync.Configuration;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -21,12 +24,38 @@ public class PreferenceHelper {
     public static final String REMOVE_AD_FREE = "pref_remove_ad_free";
     public static final String NOTE_VERSION_PREF = "pref_note_version";
     public static final String PREF_UID = "pref_uid";
+    private static PreferenceHelper sPreferenceHelper;
+    private final Context mContext;
+    private List<RootPathChangeListener> mRootPathChangeListener = new ArrayList<>();
 
+    public void addOnRootPathChangedListener(RootPathChangeListener sRootPathListener) {
+        mRootPathChangeListener.add(sRootPathListener);
+    }
+
+    public interface RootPathChangeListener{
+        public void onRootPathChangeListener(String oldPath, String newPath);
+    }
+    public PreferenceHelper(Context context){
+        mContext = context;
+    }
+
+    public static PreferenceHelper getInstance(Context context){
+        if(sPreferenceHelper == null)
+            sPreferenceHelper = new PreferenceHelper(context);
+        return sPreferenceHelper;
+    }
     public static String getRootPath(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(ROOT_PATH_PREFERENCE, Utils.isDebug(context)?DEFAULT_ROOT_PATH+"Debug":DEFAULT_ROOT_PATH);
     }
     public static void setRootPath(Context context, String rootPath){
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(ROOT_PATH_PREFERENCE, rootPath).commit();
+        getInstance(context).setRootPath(rootPath);
+    }
+
+    public void setRootPath(String rootPath){
+        String old = getRootPath(mContext);
+        PreferenceManager.getDefaultSharedPreferences(mContext).edit().putString(ROOT_PATH_PREFERENCE, rootPath).commit();
+        for(RootPathChangeListener listener : mRootPathChangeListener)
+            listener.onRootPathChangeListener(old, rootPath);
     }
 
     public static boolean shouldLockOnMinimize(Context ct) {

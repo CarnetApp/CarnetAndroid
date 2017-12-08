@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startService(new Intent(this, SynchroService.class));
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
         if(!DBMergerService.isJobScheduledOrRunning(this)){
-            DBMergerService.scheduleJob(this);
+            DBMergerService.scheduleJob(this,false);
         }
         mPermissionChecker = new PermissionChecker();
 

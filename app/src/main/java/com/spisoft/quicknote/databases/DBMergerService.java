@@ -17,6 +17,8 @@ import android.util.Log;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.synchro.SynchroService;
 import com.spisoft.quicknote.synchro.googledrive.DriveWrapper;
+import com.spisoft.sync.Configuration;
+import com.spisoft.sync.utils.Utils;
 
 import java.io.File;
 
@@ -25,6 +27,23 @@ public class DBMergerService extends JobService {
     static final String TAG = "DBMergerService";
     private static final int JOB_ID = 1000;
     private static boolean sIsRunning = false;
+    public static boolean isListenerSet = false;
+    private static Configuration.PathObserver sRecentPathObserver = new Configuration.PathObserver() {
+        @Override
+        public void onPathChanged(String path) {
+            Log.d(TAG, "on recent changed "+path);
+            scheduleJob(Utils.context, true);
+        }
+    };
+    private static PreferenceHelper.RootPathChangeListener sRootPathListener = new PreferenceHelper.RootPathChangeListener() {
+        @Override
+        public void onRootPathChangeListener(String oldPath, String newPath) {
+            Configuration.addPathObserver(NoteManager.getDontTouchFolder(Utils.context)+"/"+ RecentHelper.RECENT_FOLDER_NAME, sRecentPathObserver);
+        }
+    };
+    
+    
+    
     public DBMergerService() {
     }
 
@@ -47,7 +66,7 @@ public class DBMergerService extends JobService {
                     }
                 }
 
-                scheduleJob(DBMergerService.this);
+                scheduleJob(DBMergerService.this,false);
 
         return true;
     }
@@ -67,16 +86,20 @@ public class DBMergerService extends JobService {
         }
         return false;
     }
-
-    public static void scheduleJob(Context context) {
+    public static void scheduleJob(Context context, boolean now) {
+        if(!isListenerSet){
+            Configuration.addPathObserver(NoteManager.getDontTouchFolder(context)+"/"+ RecentHelper.RECENT_FOLDER_NAME, sRecentPathObserver);
+            PreferenceHelper.getInstance(context).addOnRootPathChangedListener(sRootPathListener);
+        }
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
             Log.d(TAG, "scheduleJob");
             ComponentName serviceComponent = new ComponentName(context, DBMergerService.class);
             JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, serviceComponent);
-            builder.setMinimumLatency(5*60 * 1000); // wait at least
-            builder.setOverrideDeadline(10*60 * 1000); // maximum delay
+            builder.setMinimumLatency(now?100:5*60 * 1000); // wait at least
+            builder.setOverrideDeadline(now?1000:10*60 * 1000); // maximum delay
 
             JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            jobScheduler.cancel(JOB_ID);
             jobScheduler.schedule(builder.build());
 
         }
