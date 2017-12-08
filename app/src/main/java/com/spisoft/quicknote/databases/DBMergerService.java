@@ -10,11 +10,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.spisoft.quicknote.PreferenceHelper;
+import com.spisoft.quicknote.browser.NoteListFragment;
 import com.spisoft.quicknote.synchro.SynchroService;
 import com.spisoft.quicknote.synchro.googledrive.DriveWrapper;
 import com.spisoft.sync.Configuration;
@@ -41,14 +43,16 @@ public class DBMergerService extends JobService {
             Configuration.addPathObserver(NoteManager.getDontTouchFolder(Utils.context)+"/"+ RecentHelper.RECENT_FOLDER_NAME, sRecentPathObserver);
         }
     };
-    
-    
-    
+    private final Handler mHandler;
+
+
     public DBMergerService() {
+        mHandler = new Handler();
     }
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
+
         sIsRunning = true;
                 Log.d(TAG, "starting merging task");
                 File recentDBFolder = new File(NoteManager.getDontTouchFolder(DBMergerService.this)+"/"+ RecentHelper.RECENT_FOLDER_NAME);
@@ -65,7 +69,12 @@ public class DBMergerService extends JobService {
                         }
                     }
                 }
-
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Utils.context.sendBroadcast(new Intent(NoteListFragment.ACTION_RELOAD));
+                    }
+                });
                 scheduleJob(DBMergerService.this,false);
 
         return true;
