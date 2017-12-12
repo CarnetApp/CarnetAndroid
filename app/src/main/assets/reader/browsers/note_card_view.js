@@ -57,7 +57,7 @@ NoteCardView.prototype.init = function() {
 
 }
 
-var Masonry = require('packery');
+var Masonry = require('masonry-layout');
 var NoteCardViewGrid = function(elem, discret, dragCallback) {
 
     this.elem = elem;
@@ -94,6 +94,11 @@ NoteCardViewGrid.prototype.onNoteClick = function(callback) {
     this.onNoteClick = callback;
 }
 
+NoteCardViewGrid.prototype.onMenuClick = function(callback) {
+    this.onMenuClick = callback;
+}
+
+
 NoteCardViewGrid.prototype.updateNote = function(note) {
     for (var i = 0; i < this.noteCards.length; i++) {
         var noteCard = this.noteCards[i];
@@ -125,6 +130,14 @@ NoteCardViewGrid.prototype.setNotesAndFolders = function(notes) {
                     data.callback(data.note)
                 }
             });
+
+            $(noteCard.menuButton).bind('click', { note: note, callback: this.onMenuClick }, function(event) {
+                if (!$(this).hasClass('noclick')) {
+                    var data = event.data;
+                    data.callback(data.note)
+                    return false;
+                }
+            });
         } else {
             var folderElem = document.createElement("div");
             folderElem.classList.add("demo-card-wide")
@@ -147,7 +160,7 @@ NoteCardViewGrid.prototype.setNotesAndFolders = function(notes) {
 
     // make all grid-items draggable
     var grid = this;
-    var items = $(this.elem).find('.isotope-item').draggable({
+    /*var items = $(this.elem).find('.isotope-item').draggable({
         start: function(event, ui) {
             $(this).addClass('noclick');
             console.log("addclass")
@@ -166,12 +179,12 @@ NoteCardViewGrid.prototype.setNotesAndFolders = function(notes) {
 
         }
 
-    });
-    console.log(items.length)
-    this.msnry.bindUIDraggableEvents(items)
+    });*/
+   // console.log(items.length)
+    //this.msnry.bindUIDraggableEvents(items)
     this.msnry.layout();
     this.msnry.options.transitionDuration = "0.6s" //restore even when discret
-    this.msnry.on('dragItemPositioned', this.dragCallback);
+   // this.msnry.on('dragItemPositioned', this.dragCallback);
 
     //  this.iso.layout();
 }

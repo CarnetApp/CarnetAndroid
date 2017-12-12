@@ -83,4 +83,5 @@
     <string name="new_keyword">New Keyword</string>
     <string name="title_activity_account_config">AccountConfigActivity</string>
     <string name="remote_folder">Remote folder</string>
+    <string name="keywords">Keywords</string>
 </resources>

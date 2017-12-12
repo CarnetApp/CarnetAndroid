@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,24 +20,32 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.spisoft.quicknote.browser.BrowserFragment;
+import com.spisoft.quicknote.browser.KeywordNotesFragment;
 import com.spisoft.quicknote.browser.PasteDialog;
 import com.spisoft.quicknote.browser.PermissionChecker;
 import com.spisoft.quicknote.browser.RecentNoteListFragment;
 import com.spisoft.quicknote.browser.SearchFragment;
 import com.spisoft.quicknote.databases.DBMergerService;
+import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.synchro.HelpActivity;
 import com.spisoft.quicknote.utils.FileLocker;
 import com.spisoft.quicknote.utils.PinView;
 import com.spisoft.sync.synchro.SynchroService;
+
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SearchView.OnQueryTextListener, PinView.PasswordListener, NoteManager.UpdaterListener {
 
@@ -57,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean mIsPasteDialogDisplayed = false;
     private BroadcastReceiver mReceiver;
     private BlankFragment mEditorFrag;
+    private LinearLayout mKeywordsLayout;
+    private KeywordRefreshTask mKeywordsTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mKeywordsLayout = findViewById(R.id.keywords);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.string.drawer_open, R.string.drawer_close) {
 
@@ -107,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSettingsButton = findViewById(R.id.settings_button);
         mSettingsButton.setOnClickListener(this);
         mPermissionChecker.checkAndRequestPermission(this);
+
        // startService(new Intent(this, FloatingService.class));
         lockOnStart= true;
         if(savedInstanceState==null) {
@@ -153,44 +166,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(FileManagerService.sIsCopying)
             displayPasteDialog();
 
+    }
 
-        new Thread(){
-            public void run(){
-                Log.d("lockdebug","asking lock ");
-                synchronized (FileLocker.getLockOnPath("/sdcard")){
-                    Log.d("lockdebug","asking lock1 acquired");
-                    try {
-                        synchronized (FileLocker.getLockOnPath("/sdcard")){
-                            Log.d("lockdebug","asking lock12 acquired");
-                            try {
-                                Thread.sleep(2000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            Log.d("lockdebug","asking lock12 released");
+    private class KeywordRefreshTask extends AsyncTask<Void, Void, Map<String, List<String>>>{
+
+        @Override
+        protected Map<String, List<String>> doInBackground(Void... voids) {
+
+            return KeywordsHelper.getInstance(MainActivity.this).getFlattenDB(0);
+        }
+
+        @Override
+        protected void onPostExecute(Map<String, List<String>> result) {
+            mKeywordsLayout.removeAllViews();
+            for(final Map.Entry<String, List<String>> entry : result.entrySet()){
+                if(entry.getValue().size() >0){
+                    TextView tv = (TextView) LayoutInflater.from(MainActivity.this).inflate(R.layout.keyword,null);
+                    tv.setText(entry.getKey());
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            openKeyword(entry.getKey());
                         }
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Log.d("lockdebug","asking lock1 released");
+                    });
+                    mKeywordsLayout.addView(tv);
                 }
             }
-        }.start();
-        new Thread(){
-            public void run(){
-                Log.d("lockdebug","asking lock 2");
-                synchronized (FileLocker.getLockOnPath("/sdcardbla")){
-                    Log.d("lockdebug","asking lock2 acquired");
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Log.d("lockdebug","asking lock2 released");
-                }
-            }
-        }.start();
+        }
+
+    }
+
+    private void openKeyword(String keyword) {
+        clearBackstack();
+        Fragment fragment = KeywordNotesFragment.newInstance(keyword);
+        setFragment(fragment);
+        mDrawerLayout.closeDrawers();
+
     }
 
     public void lockDrawer(){
@@ -237,7 +248,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     onPasswordOk();
             }
         }
-
+        if(mKeywordsTask != null)
+            mKeywordsTask.cancel(true);
+        mKeywordsTask = new KeywordRefreshTask();
+        mKeywordsTask.execute();
 
     }
     protected void  onPause(){

@@ -38,6 +38,7 @@ import com.spisoft.quicknote.FloatingFragment;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.browser.NoteListFragment;
+import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.databases.page.Page;
@@ -381,6 +382,16 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
                 }
             }.execute();
+        }
+
+        @JavascriptInterface
+        public void addKeyword(String word, String path){
+            KeywordsHelper.getInstance(getContext()).addKeyword(word, new Note(path));
+        }
+
+        @JavascriptInterface
+        public void removeKeyword(String word, String path){
+            KeywordsHelper.getInstance(getContext()).removeKeyword(word, new Note(path));
         }
 
         @JavascriptInterface

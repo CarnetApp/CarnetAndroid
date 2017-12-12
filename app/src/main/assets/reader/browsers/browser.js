@@ -6,7 +6,8 @@ var oldNotes = {}
 var dontOpen = false;
 var { ipcRenderer, remote } = require('electron');
 var main = remote.require("./main.js");
-
+var SettingsHelper = require("./settings/settings_helper").SettingsHelper
+var settingsHelper = new SettingsHelper()
 var TextGetterTask = function(list) {
     this.list = list;
     this.current = 0;
@@ -49,8 +50,17 @@ TextGetterTask.prototype.getNext = function() {
 }
 
 var NewNoteCreationTask = function(callback) {
-    var fb = new FileBrowser(currentPath);
-    console.log(currentPath + " fefef")
+    var path = currentPath;
+    if(path == initPath || path.startsWith("keyword://"))
+    path = main.getNotePath();
+    var fs = require('fs');
+    if (!fs.exists(path)){
+        var mkdirp = require('mkdirp');
+        mkdirp.sync(path);
+    }
+
+    var fb = new FileBrowser(path);
+    console.log(path + " fefef")
     var task = this;
     fb.list(function(files) {
         task.files = files;
@@ -67,7 +77,7 @@ var NewNoteCreationTask = function(callback) {
                 }
             }
         }
-        callback(currentPath + "/" + name)
+        callback(path + "/" + name)
 
     });
 }
@@ -81,7 +91,7 @@ function openNote(notePath) {
     const electron = require('electron')
     const remote = electron.remote;
     const BrowserWindow = remote.BrowserWindow;
-    var db = new RecentDBManager(main.getNotePath() + "/.quickdoc/recentdb/" + main.getAppUid())
+    var db = new RecentDBManager(main.getNotePath() + "/quickdoc/recentdb/" + main.getAppUid())
     db.addToDB(NoteUtils.getNoteRelativePath(main.getNotePath(), notePath));
     const path = require('path')
         //var win = new BrowserWindow({ width: 800, height: 600 });
@@ -123,12 +133,34 @@ function onDragEnd(gg) {
     dontOpen = true;
 }
 
+function refreshKeywords(){
+    var KeywordsDBManager = require("./keywords/keywords_db_manager").KeywordsDBManager;
+    var keywordsDBManager = new KeywordsDBManager(main.getNotePath()+ "/quickdoc/keywords/"+main.getAppUid())    
+    keywordsDBManager.getFlatenDB(function(error, data){
+        var keywordsContainer = document.getElementById("keywords");
+        keywordsContainer.innerHTML = "";
+        for (let key in data) {
+            if(data[key].length==0)
+                continue;
+            var keywordElem = document.createElement("a");
+            keywordElem.classList.add("mdl-navigation__link")
+            keywordElem.innerHTML = key;
+           // keywordElem.setAttribute("href","");
+            keywordElem.onclick = function(){
+                list("keyword://"+key, false);
+                return false;
+            }
+            keywordsContainer.appendChild(keywordElem)
+        }
+    })
+}
+
 function list(pathToList, discret) {
     if (pathToList == undefined)
         pathToList = currentPath;
     console.log("listing path " + pathToList);
     currentPath = pathToList;
-    if (initPath == currentPath) {
+    if (pathToList == settingsHelper.getNotePath() || pathToList == initPath || pathToList.startsWith("keyword://")) {
         $("#back_arrow").hide()
     } else
         $("#back_arrow").show()
@@ -149,6 +181,41 @@ function list(pathToList, discret) {
         // var reader = new Writer(note,"");
         // reader.extractNote()
     })
+
+
+    noteCardViewGrid.onMenuClick(function(note) {
+        var dialog = document.querySelector('#contextual-dialog');
+        dialog.querySelector('#name-input').value=note.title;
+        dialog.querySelector('.delete-button').onclick = function(){
+            NoteUtils.deleteNote(note.path, function(){
+                dialog.close();
+                list(currentPath, true)
+            })
+        }
+        dialog.querySelector('#archive-button').onclick = function(){
+            var db = new RecentDBManager(main.getNotePath() + "/quickdoc/recentdb/" + main.getAppUid())
+            db.removeFromDB(NoteUtils.getNoteRelativePath(main.getNotePath(), note.path), function(){
+                dialog.close();
+               
+                list(currentPath, true)
+            });
+            
+        }
+        dialog.querySelector('.cancel').onclick = function(){
+            dialog.close();
+        }
+        dialog.querySelector('.ok').onclick = function(){
+            NoteUtils.renameNote(note.path, dialog.querySelector('#name-input').value+".sqd", function(){
+                list(currentPath, true)
+            })
+            
+            dialog.close();
+        }
+        dialog.showModal();
+        dialog.querySelector('#name-input').focus()
+        
+    })
+    
     var notes = [];
 
     var fb = new FileBrowser(pathToList);
@@ -181,6 +248,10 @@ function list(pathToList, discret) {
 
 }
 list(initPath)
+refreshKeywords();
+main.setMergeListener(function(){
+    list(initPath,true)
+})
 
 document.getElementById("add-note-button").onclick = function() {
     new NewNoteCreationTask(function(path) {
@@ -194,6 +265,7 @@ document.getElementById("back_arrow").addEventListener("click", function() {
 });
 $(window).focus(function() {
     list(currentPath, true)
+    refreshKeywords()
 });
 
 function getNotePath() {

@@ -14,6 +14,9 @@ if(typeof require !== "function"){
              return ArchiverCompatibility;
          } else if(required == "path")
 		    return PathCompatibility;
+		 else if(required == "../keywords/keywords_db_manager"){
+		    return KeywordDBManagerCompatibility;
+		 }
 	return "";	
 	}
 

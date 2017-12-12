@@ -55,8 +55,8 @@ Writer.prototype.fillWriter = function (extractedHTML) {
     }, false);
     this.sDefTxt = this.oDoc.innerHTML;
     /*simple initialization*/
-    this.oDoc.focus();
-    if(app!=undefined)
+    this.oDoc.focus();    
+    if(typeof app == 'object')
         app.hideProgress();
     resetScreenHeight();
     this.refreshKeywords();
@@ -186,10 +186,12 @@ Writer.prototype.surroundSelection = function (element) {
         }
     }
 }
-
+var KeywordsDBManager = require("../keywords/keywords_db_manager").KeywordsDBManager;
+var keywordsDBManager = new KeywordsDBManager()
 Writer.prototype.addKeyword = function(word){
     if(this.note.metadata.keywords.indexOf(word) < 0 && word.length > 0){
         this.note.metadata.keywords.push(word);
+        keywordsDBManager.addToDB(word, this.note.path)
         this.seriesTaskExecutor.addTask(this.saveNoteTask.saveTxt)
         this.refreshKeywords();
     }
@@ -198,6 +200,7 @@ Writer.prototype.addKeyword = function(word){
 Writer.prototype.removeKeyword = function(word){
     if(this.note.metadata.keywords.indexOf(word) >= 0){
         this.note.metadata.keywords.splice(this.note.metadata.keywords.indexOf(word),1);
+        keywordsDBManager.removeFromDB(word, this.note.path)
         this.seriesTaskExecutor.addTask(this.saveNoteTask.saveTxt)
         this.refreshKeywords();
     }

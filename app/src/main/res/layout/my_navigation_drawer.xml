@@ -8,15 +8,7 @@
 
         android:layout_height="match_parent"
         android:gravity="left">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="60dip"
-            android:background="@color/blue_500"
-            android:textColor="@android:color/white"
-            android:gravity="center_vertical"
-            android:paddingLeft="20dip"
-            android:textSize="20dip"
-            android:text="@string/app_name"/>
+
 
         <Button
             android:layout_width="match_parent"
@@ -49,13 +41,6 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:gravity="left|center_vertical" />
-    <LinearLayout
-        android:orientation="vertical"
-        android:background="@color/blue_50"
-        android:layout_width="300dip"
-        android:layout_height="match_parent"
-        android:gravity="left|bottom"
-        android:layout_gravity="bottom">
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,5 +57,26 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:gravity="left|center_vertical" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dip"
+        android:gravity="center"
+        android:text="@string/keywords"/>
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:background="@color/blue_50"
+            android:layout_width="300dip"
+            android:id="@+id/keywords"
+            android:layout_height="wrap_content"
+            >
         </LinearLayout>
+    </ScrollView>
+
+
 </LinearLayout>
