@@ -35,10 +35,5 @@
         android:key="pref_remove_ad_pay"
         android:title="@string/remove_ad"
         />
-        <CheckBoxPreference
-            android:key="pref_remove_ad_free"
-            android:defaultValue="false"
-            android:title="@string/remove_ad_free"
-            />
     </PreferenceCategory>
 </PreferenceScreen>

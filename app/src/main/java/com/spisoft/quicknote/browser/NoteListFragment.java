@@ -67,41 +67,15 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
     private TextView mEmptyViewMessage;
     private View mEmptyView;
-    private AdView mAdView;
     private boolean mHasLoaded;
     private ZipReaderAndHttpProxy mServer;
 
     public void onPause(){
         super.onPause();
-        mAdView.pause();
     }
 
     public void onResume(){
         super.onResume();
-
-        if(PreferenceHelper.shouldDisplayAd(getContext())) {
-            BillingUtils u = new BillingUtils(getActivity());
-            u.checkPayement(new IsPaidCallback(getActivity()) {
-
-                @Override
-                public void hasBeenPaid(int isPaid) {
-                    super.hasBeenPaid(isPaid);
-                    if (!checkPayement(isPaid)) {
-                        if(!mHasLoaded) {
-                            mHasLoaded = true;
-                            AdRequest mAdRequest = new AdRequest.Builder()
-                                    .addTestDevice("83AFEFC21FAC0463FBEB3AE8BB750855")
-                                    .build();
-                            mAdView.loadAd(mAdRequest);
-                        }else mAdView.resume();
-                        mAdView.setVisibility(View.VISIBLE);
-                    }else mAdView.setVisibility(View.GONE);
-                }
-            });
-
-        }
-        else mAdView.setVisibility(View.GONE);
-
     }
 
     @Override
@@ -120,7 +94,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                 e.printStackTrace();
             }
             mRoot = inflater.inflate(R.layout.note_recycler_layout, null);
-            mAdView = (AdView)mRoot.findViewById(R.id.adView) ;
 
             mRecyclerView = (RecyclerView) mRoot.findViewById(R.id.recyclerView);
             mEmptyView = mRoot.findViewById(R.id.empty_view);

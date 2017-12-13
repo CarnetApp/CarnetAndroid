@@ -58,7 +58,6 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
         findPreference("pref_set_password").setOnPreferenceClickListener(this);
         findPreference("pref_report_bug").setOnPreferenceClickListener(this);
         findPreference("pref_remove_ad_pay").setOnPreferenceClickListener(this);
-        findPreference("pref_remove_ad_free").setOnPreferenceChangeListener(this);
         u.checkPayement(isPaidCallback);
 
     }
@@ -127,21 +126,7 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
             }
             return true;
         }
-        else if(preference==findPreference("pref_remove_ad_free")){
-            if(((CheckBoxPreference)preference).isChecked())
-                return true;
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(R.string.remove_ad_free_confirm);
-            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    ((CheckBoxPreference)preference).setChecked(true);
-                    getPreferenceManager().getSharedPreferences().edit().putBoolean("pref_remove_ad_free",true).commit();
-                }
-            }).setNegativeButton(android.R.string.cancel, null);
-            builder.show();
-            return false;
-        }
+        
         return true;
     }
 }
