@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SearchView.OnQueryTextListener, PinView.PasswordListener, NoteManager.UpdaterListener {
+    public static final String ACTION_RELOAD_KEYWORDS = "action_reload_keywords";
 
     private static final String WAS_LOCKED = "was_locked";
     private Fragment fragment;
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startService(new Intent(this, SynchroService.class));
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
         if(!DBMergerService.isJobScheduledOrRunning(this)){
-            DBMergerService.scheduleJob(this,false);
+            DBMergerService.scheduleJob(this,true, DBMergerService.ALL_DATABASES);
         }
         mPermissionChecker = new PermissionChecker();
 
@@ -157,6 +158,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                    }
                 }
+                if(intent.getAction().equals(ACTION_RELOAD_KEYWORDS)) {
+                    if(mKeywordsTask != null)
+                        mKeywordsTask.cancel(true);
+                    mKeywordsTask = new KeywordRefreshTask();
+                    mKeywordsTask.execute();
+                }
             }
         };
         IntentFilter filter = new IntentFilter();
@@ -165,6 +172,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registerReceiver(mReceiver, filter);
         if(FileManagerService.sIsCopying)
             displayPasteDialog();
+        filter = new IntentFilter();
+        filter.addAction(ACTION_RELOAD_KEYWORDS);
+        filter.addAction(NoteManager.ACTION_UPDATE_END);
+
+        registerReceiver(mReceiver, filter);
 
     }
 
