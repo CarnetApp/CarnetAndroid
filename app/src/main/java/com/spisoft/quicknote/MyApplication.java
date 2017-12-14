@@ -38,6 +38,7 @@ public class MyApplication extends Application implements Configuration.PathObse
                 startAccountConfigActivity(accountId, accountType);
             }
         };
+        Configuration.dontDisplayNotification = true;
         Configuration.addPathObserver(PreferenceHelper.getRootPath(this), this);
         Configuration.addPathObserver(PreferenceHelper.getRootPath(this)+"/untitled.sqd", this);
     }
