@@ -24,8 +24,7 @@
             android:paddingRight="5dp"
             android:layout_width="match_parent" android:layout_height="match_parent"
             >
-            <LinearLayout
-                android:orientation="horizontal"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             <TextView
@@ -49,16 +48,22 @@
                     android:scaleType="fitCenter"
                     android:layout_height="30dp"
                     android:id="@+id/optionsButton"
-                    android:layout_gravity="center_vertical" />
-            </LinearLayout>
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical|right" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="text text text text text text "
+                android:layout_below="@+id/name_tv"
+                android:text="texttexttexttexttexttexttexttexttexttexttexttext "
                 android:id="@+id/text_tv"
                 android:maxLines="10"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:padding="5dp" />
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingRight="20dp"/>
+            </RelativeLayout>
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/keywords"
                 xmlns:app="http://schemas.android.com/apk/res-auto"

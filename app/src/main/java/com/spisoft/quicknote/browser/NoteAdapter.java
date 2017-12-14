@@ -125,14 +125,21 @@ public class NoteAdapter extends RecyclerView.Adapter {
 
 
         private final View mCard;
+        private final TextView mTitleView;
 
         public NoteViewHolder(View itemView) {
             super(itemView);
             mCard = itemView.findViewById(R.id.cardview);
+            mTitleView = (TextView) itemView.findViewById(R.id.name_tv);
         }
 
         public void setName(String title) {
-            ((TextView) itemView.findViewById(R.id.name_tv)).setText(title.startsWith("untitled")?"":title);
+            if(title.startsWith("untitled"))
+                mTitleView.setVisibility(View.GONE);
+            else {
+                mTitleView.setVisibility(View.VISIBLE);
+                mTitleView.setText(title);
+            }
         }
 
         public void setNote(final Note note) {

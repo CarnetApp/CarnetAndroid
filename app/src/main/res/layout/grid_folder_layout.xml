@@ -18,10 +18,7 @@
             card_view:cardCornerRadius="4dp"
             android:id="@+id/cardview"
             android:background="@drawable/normal_button"
-            android:padding="15dp"
-            android:paddingLeft="15dp"
-            android:paddingTop="15dp"
-            android:paddingRight="15dp"
+            android:padding="5dp"
             android:layout_width="match_parent" android:layout_height="match_parent"
             >
             <LinearLayout
@@ -44,7 +41,7 @@
                 android:text="Titre"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:id="@+id/name_tv"
-                android:padding="15dp" />
+                android:padding="5dp" />
 
                 <ImageButton
                     android:src="@drawable/threedots"
