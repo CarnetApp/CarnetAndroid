@@ -83,6 +83,7 @@ public class NoteManager
 
             notFile.renameTo(toFile);
             RecentHelper.getInstance(context).moveNote(note,toFile.getAbsolutePath());
+            KeywordsHelper.getInstance(context).moveNote(note, toFile.getAbsolutePath());
             note.setPath(toFile.getAbsolutePath());
             return toFile.getAbsolutePath();
 
@@ -102,6 +103,12 @@ public class NoteManager
 
     public static String getOldDontTouchFolder(Context ct) {
         return PreferenceHelper.getRootPath(ct)+"/.dontouch";
+    }
+
+    public static void deleteNote(Context context, Note note) {
+        FileUtils.deleteRecursive(new File(note.path));
+        RecentHelper.getInstance(context).removeRecent(note);
+        KeywordsHelper.getInstance(context).deleteNote(note);
     }
 
     public interface UpdaterListener{

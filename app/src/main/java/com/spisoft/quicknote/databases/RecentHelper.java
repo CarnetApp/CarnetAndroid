@@ -45,7 +45,18 @@ public class RecentHelper {
 
 
     public void moveNote(Note note, String path){
-
+        try {
+            JSONObject object = getJson();
+            JSONObject noteObject = new JSONObject();
+            noteObject.put("path",getRelativePath(note.path, mContext));
+            noteObject.put("newPath",getRelativePath(path, mContext));
+            noteObject.put("action","move");
+            noteObject.put("time",System.currentTimeMillis());
+            object.getJSONArray("data").put(noteObject);
+            write(object.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -159,13 +170,14 @@ public class RecentHelper {
 
     public List<Object> getLatestNotes(int limit){
         List<Object> notes = new ArrayList<>();
+        String rootPath = PreferenceHelper.getRootPath(mContext)+"/";
         try {
             JSONObject object = getJson();
             for(int i = 0; i<object.getJSONArray("data").length(); i++){
                 JSONObject obj = object.getJSONArray("data").getJSONObject(i);
                 String action = obj.getString("action");
                 String path = obj.getString("path");
-                Note note = new Note(PreferenceHelper.getRootPath(mContext)+"/"+path);
+                Note note = new Note(rootPath+path);
                 if(action.equals("add")){
                     notes.remove(note);
                     notes.add(0,note);
@@ -173,6 +185,11 @@ public class RecentHelper {
                 }
                 else if(action.equals("remove")){
                     notes.remove(note);
+                } else if(action.equals("move")){
+                    int index = -1;
+                    if((index = notes.indexOf(note))>=0){
+                        ((Note)notes.get(index)).setPath(rootPath+obj.getString("newPath"));
+                    }
                 }
             }
         } catch (JSONException e) {

@@ -1,6 +1,7 @@
 package com.spisoft.quicknote.databases;
 
 import android.content.Context;
+import android.util.JsonWriter;
 import android.util.Log;
 
 import com.spisoft.quicknote.Note;
@@ -42,6 +43,36 @@ public class KeywordsHelper {
             sKeywordsHelper = new KeywordsHelper(context, NoteManager.getDontTouchFolder(context)+"/"+ KEYWORDS_FOLDER_NAME+"/"+ PreferenceHelper.getUid(context));
         }
         return sKeywordsHelper;
+    }
+    public void moveNote(Note note, String path){
+        try {
+            JSONObject object = getJson();
+            JSONObject noteObject = new JSONObject();
+            noteObject.put("path",RecentHelper.getRelativePath(note.path, mContext));
+            noteObject.put("newPath",RecentHelper.getRelativePath(path, mContext));
+            noteObject.put("action","move");
+            noteObject.put("time",System.currentTimeMillis());
+            object.getJSONArray("data").put(noteObject);
+            write(object.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void deleteNote(Note note){
+        try {
+            JSONObject object = getJson();
+            JSONObject noteObject = new JSONObject();
+            noteObject.put("path",RecentHelper.getRelativePath(note.path, mContext));
+            noteObject.put("action","delete");
+            noteObject.put("time",System.currentTimeMillis());
+            object.getJSONArray("data").put(noteObject);
+            write(object.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void addKeyword(String keyword, Note note){
@@ -141,9 +172,10 @@ public class KeywordsHelper {
             for(int i = 0; i<object.getJSONArray("data").length(); i++){
                 JSONObject obj = object.getJSONArray("data").getJSONObject(i);
                 String action = obj.getString("action");
-                String keyword = obj.getString("keyword");
+                String keyword ="";
+                if(!action.equals("move")&&!action.equals("delete"))
+                    keyword = obj.getString("keyword");
                 String path = obj.getString("path");
-                Note note = new Note(PreferenceHelper.getRootPath(mContext)+"/"+path);
                 if(action.equals("add")){
                     if(!flattenDb.containsKey(keyword))
                         flattenDb.put(keyword, new ArrayList<String>());
@@ -153,6 +185,21 @@ public class KeywordsHelper {
                 else if(action.equals("remove")){
                     if(flattenDb.containsKey(keyword) && flattenDb.get(keyword).contains(path))
                         flattenDb.get(keyword).remove(path);
+                } else if(action.equals("move")){
+                    for(Map.Entry<String, List<String>> entry : flattenDb.entrySet()){
+                        int index = -1;
+                        if((index = entry.getValue().indexOf(path))>=0){
+                            entry.getValue().set(index, obj.getString("newPath"));
+                        }
+                    }
+                }
+                else if(action.equals("delete")){
+                    for(Map.Entry<String, List<String>> entry : flattenDb.entrySet()){
+                        int index = -1;
+                        if((index = entry.getValue().indexOf(path))>=0){
+                            entry.getValue().remove(index);
+                        }
+                    }
                 }
             }
         } catch (JSONException e) {

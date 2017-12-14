@@ -363,8 +363,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                         Toast.makeText(getActivity(), R.string.unable_to_delete_use, Toast.LENGTH_LONG).show();
                         return true;
                     }
-                    FileUtils.deleteRecursive(new File(note.path));
-                    RecentHelper.getInstance(getContext()).removeRecent(note);
+                    NoteManager.deleteNote(getContext(), note);
                     mNotes = getNotes();
                     mNoteAdapter.setNotes((List<Object>) mNotes);
 
