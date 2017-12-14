@@ -414,18 +414,21 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                 mWebView.post(new Runnable() {
                     @Override
                     public void run() {
-                        mWebView.loadUrl("javascript:FSCompatibility.resultFileRead('" + callback + "',false,'" + Base64.encodeToString(content, 0) + "')");
+                        final String retFunction = "FSCompatibility.resultFileRead('" + callback + "',false,'" + StringEscapeUtils.escapeEcmaScript(Base64.encodeToString(content, 0)) + "');";
+                        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT)
+                            mWebView.evaluateJavascript(retFunction,null);
+                        else
+                            mWebView.loadUrl("javascript:"+retFunction);
 
                     }
                 });
             } catch (IOException e) {
                 // Some error occured
                 e.printStackTrace();
-                Log.d(TAG, "result " + Base64.encodeToString(content, 0));
-
                 mWebView.post(new Runnable() {
                     @Override
                     public void run() {
+
                         mWebView.loadUrl("javascript:FSCompatibility.resultFileRead('" + callback + "',true,'')");
 
                     }
