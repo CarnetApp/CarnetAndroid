@@ -241,7 +241,11 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         mRootPath = getContext().getFilesDir().getAbsolutePath();
         File dir = new File(mRootPath + "/reader");
         if (dir.exists())
-            dir.delete();
+            FileUtils.deleteRecursive(dir);
+        dir.mkdirs();
+        dir = new File(mRootPath + "/tmp");
+        if (dir.exists())
+            FileUtils.deleteRecursive(dir);
         dir.mkdirs();
         copyFileOrDir("reader");
         //copy reader to separate folder and change rootpath
