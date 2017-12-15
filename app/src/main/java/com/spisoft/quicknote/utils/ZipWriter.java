@@ -17,6 +17,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.FileLock;
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
+import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -165,7 +168,8 @@ public class ZipWriter {
 
                     FileOutputStream fos = new FileOutputStream(tmp);
                     ZipOutputStream zos = new ZipOutputStream(fos);
-
+                   // zos.setMethod(ZipOutputStream.DEFLATED); // this line optional
+                    zos.setLevel(0);
                     lock = fos.getChannel().lock();
 
                     recursiveAddFile(folder, zos, folder.getAbsolutePath());
@@ -205,16 +209,25 @@ public class ZipWriter {
                     recursiveAddFile(child,zos, rootFolderPathWithoutSlash);
         }else {
             // Add ZIP entry to output stream.
-            zos.putNextEntry(new ZipEntry(file.getAbsolutePath().substring(rootFolderPathWithoutSlash.length()+1)));
-
-            FileInputStream in = new FileInputStream(file);
+            ZipEntry entry = new ZipEntry(file.getAbsolutePath().substring(rootFolderPathWithoutSlash.length()+1));
+            entry.setMethod(ZipEntry.STORED);
+            entry.setSize(file.length());
+            entry.setCompressedSize(file.length());
+            Checksum checksum = new CRC32();
+            final byte[] content = new byte[(int) file.length()];
+            InputStream in = new FileInputStream(file);
+            for (int off = 0, read;
+                 (read = in.read(content, off, content.length - off)) > 0;
+                 off += read)
+                ;
+            checksum.update(content, 0, content.length);
+            entry.setCrc(checksum.getValue());
+            zos.putNextEntry(entry);
             // Transfer bytes from the file to the ZIP file
             Log.d("zipdebug", "addEntry "+file.getAbsolutePath());
 
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                zos.write(buf, 0, len);
-            }
+            zos.write(content, 0, content.length);
+
             in.close();
             zos.closeEntry();
         }
