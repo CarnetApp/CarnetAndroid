@@ -115,12 +115,15 @@ mdl-layout--fixed-header">
 				<button id="back-arrow" class="mdl-button mdl-js-button mdl-button--icon" style="left: -15px; ">
 <i class="material-icons">arrow_back</i>
 </button>
-				<button id="format-button" class="mdl-button mdl-js-button headerbar-button">
+				<button id="format-button" class="mdl-button mdl-js-button headerbar-button toolbar-button" for="format-toolbar">
 		Format
 </button>
 
-				<button id="back_arrow" class="mdl-button mdl-js-button headerbar-button">
-	  Edit
+				<button id="edit-button" class="mdl-button mdl-js-button headerbar-button toolbar-button" for="edit-toolbar">
+	 				Edit
+</button>
+<button id="tools-button" class="mdl-button mdl-js-button headerbar-button toolbar-button" for="tools-toolbar">
+		Tools
 </button>
 
 
@@ -191,6 +194,20 @@ mdl-layout--fixed-header">
 
 
 				</div>
+				<div id="edit-toolbar" class="toolbar">
+						<button id="copy-button" class="mdl-button mdl-js-button headerbar-button" onclick="writer.copy()">
+								copy
+						   </button>
+						   <button id="copy-button" class="mdl-button mdl-js-button headerbar-button" onclick="writer.paste()">
+								paste
+		   				</button>
+					</div>
+					<div id="tools-toolbar" class="toolbar">
+							<button id="tools-button" onclick="writer.displayCountDialog()" class="mdl-button mdl-js-button headerbar-button">
+									Statistics
+							   </button>
+							   
+						</div>
 			</div>
 			<div id="page-content" class="page-content">
 				<div id="center" style="height:100%;padding:0px;">
