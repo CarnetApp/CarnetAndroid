@@ -90,23 +90,15 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
         registerReceiver(mReceiver, filter);
         ((FloatingWindow) image).setListener(this);
         //image.setAlpha((float) 0.8);
-        mContent = image.findViewById(R.id.content);
-        mOptionMenuContainer = (ViewGroup) image.findViewById(R.id.option_menu_container);
-        mfragmentContainer = (FrameLayout) image.findViewById(R.id.fragment_container);
 
         mEditor = (EditorView) image.findViewById(R.id.editor_view);
         mFragments.push(mEditor);
         mEditor.setHideListener(this);
-        mTitleBar = image.findViewById(R.id.title_bar);
         mEditor.setOptionMenu(mOptionMenuContainer);
-        mContent.findViewById(R.id.minimize).setOnClickListener(this);
-        mContent.findViewById(R.id.dim_button).setOnClickListener(this);
-        mShadowButton = mContent.findViewById(R.id.shadow_button);
+
         mShadowButton.setVisibility(View.GONE);
         mShadowButton.setOnClickListener(this);
-        mDim = mContent.findViewById(R.id.dim_button);
         mDim.setOnClickListener(this);
-        mContent.findViewById(R.id.close).setOnClickListener(this);
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mBubbleManager = new BubbleManager(mWindowManager, this, mBubble);
         if (PreferenceHelper.shouldLockOnBubbleStart(this))
@@ -320,7 +312,7 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
 
     @Override
     public void onClick(View view) {
-        if (view == mContent.findViewById(R.id.minimize)) {
+       /* if (view == mContent.findViewById(R.id.minimize)) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -375,7 +367,7 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
 
             image.setAlpha(image.getAlpha() == 1 ? (float) 0.5 : 1);
             mWindowManager.updateViewLayout(image, paramsF);
-        }
+        }*/
     }
 
     @Override

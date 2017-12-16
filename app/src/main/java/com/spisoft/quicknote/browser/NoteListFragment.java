@@ -87,7 +87,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState){
         super.onCreateView(inflater, container, savedInstanceState);
-        if(mRoot==null) {
             try {
                 mServer = new ZipReaderAndHttpProxy(getContext());
             } catch (IOException e) {
@@ -106,7 +105,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             mRecyclerView.setLayoutManager(mGridLayout);
             mRecyclerView.setAdapter(mNoteAdapter);
 
-        }
 
 
         return mRoot;

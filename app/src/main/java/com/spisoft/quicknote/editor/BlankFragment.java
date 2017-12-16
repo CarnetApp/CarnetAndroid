@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
@@ -120,41 +121,33 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        if(mRoot!=null)
-            return mRoot;
-        mRoot = inflater.inflate(R.layout.floating_note, container, false);
-        mRoot.findViewById(R.id.shadow_button).setVisibility(View.GONE);
-        mRoot.findViewById(R.id.dim_button).setOnClickListener(this);
-        mRoot.findViewById(R.id.minimize).setOnClickListener(this);
-        mRoot.findViewById(R.id.close).setOnClickListener(this);
-        mFragments = new Stack<>();
-        mOptionMenuContainer = (ViewGroup) mRoot.findViewById(R.id.option_menu_container);
-        mfragmentContainer = (FrameLayout)mRoot.findViewById(R.id.fragment_container);
-        mEditor = ((EditorView) mRoot.findViewById(R.id.editor_view));
-        mEditor.setNote(mNote);
-        mEditor.reset();
-        mFragments.add(mEditor);
-        ViewGroup menuContainer = (ViewGroup) mRoot.findViewById(R.id.option_menu_container);
-        mEditor.setOptionMenu(menuContainer);
-        ((EditorView)mRoot.findViewById(R.id.editor_view)).setHideListener(this);
-        mRoot.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ((HorizontalScrollView) mRoot.findViewById(R.id.horizontalScrollView)).scrollTo(200, 0);
-                ((HorizontalScrollView) mRoot.findViewById(R.id.horizontalScrollView)).smoothScrollTo(0, 0);
-
+        if(mRoot!=null) {
+            if(mNote!=null)
+                mEditor.setNote(mNote);
+            int result = 0;
+            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                result = getResources().getDimensionPixelSize(resourceId);
+                mRoot.setPadding(0,result, 0,0);
             }
-        }, 1000);
 
+            return mRoot;
+        }
+        mRoot = inflater.inflate(R.layout.floating_note, container, false);
+
+        mEditor = ((EditorView) mRoot.findViewById(R.id.editor_view));
+        if(mNote!=null)
+            mEditor.setNote(mNote);
+        mEditor.reset();
+        mEditor.setHideListener(this);
+
+        boolean fullScreen = (getActivity().getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0;
 
         return mRoot ;
     }
 
     public boolean onBackPressed(){
-        if(mFragments.size()>1) {
-            removeFragment();
-            return true;
-        }
+
         return false;
     }
 
@@ -162,15 +155,13 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         getActivity().stopService(new Intent(getContext(), FloatingService.class));
-        ((MainActivity)getActivity()).lockDrawer();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
        mEditor.onDestroy();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
-        ((MainActivity)getActivity()).unlockDrawer();
+        //((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 
     @Override
@@ -181,45 +172,12 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
                 startFloating();
             }
         }
-        if(((AppCompatActivity)getActivity()).getSupportActionBar()!=null)
-            ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+
         mHasAskedMinimize = false;
     }
     @Override
     public void onClick(View view) {
-        if(view ==  mRoot.findViewById(R.id.dim_button)){
 
-            Toast.makeText(getActivity(), R.string.switch_to_minimize_to_dim,Toast.LENGTH_LONG).show();
-        }
-        if(view == mRoot.findViewById(R.id.minimize)){
-            if(Build.VERSION.SDK_INT>=  Build.VERSION_CODES.M&&!Settings.canDrawOverlays(getActivity())){
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage(R.string.authorize_description);
-                builder.setPositiveButton(R.string.authorize, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent in = new Intent();
-                        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        in.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                        in.putExtra("android.intent.extra.PACKAGE_NAME", getContext().getPackageName());
-                        startActivity(in);
-                        mHasAskedMinimize = true;
-                    }
-                });
-                builder.setNegativeButton(android.R.string.cancel, null);
-                builder.show();
-
-                return;
-            }
-           startFloating();
-            if(getActivity()!=null)
-            getActivity().onBackPressed();
-
-        }
-        if(view == mRoot.findViewById(R.id.close)){
-            if(getActivity()!=null)
-            getActivity().onBackPressed();
-        }
 
     }
 

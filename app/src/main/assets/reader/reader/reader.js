@@ -1,7 +1,5 @@
-var Writer = function (note, elem) {
-    this.note = note;
+var Writer = function (elem) {
     this.elem = elem;
-    this.noteOpener = new NoteOpener(note);
     this.seriesTaskExecutor = new SeriesTaskExecutor();
     this.saveNoteTask = new SaveNoteTask(this)
     resetScreenHeight();
@@ -9,6 +7,11 @@ var Writer = function (note, elem) {
 
 }
 
+Writer.prototype.setNote = function(note){
+    this.note = note;   
+    this.noteOpener = new NoteOpener(note);
+    
+}
 
 Writer.prototype.extractNote = function () {
     console.log("Writer.prototype.extractNote")
@@ -43,6 +46,8 @@ Writer.prototype.extractNote = function () {
         //copying reader.html
     })
 }
+
+
 
 Writer.prototype.fillWriter = function (extractedHTML) {
     if (extractedHTML != undefined)
@@ -121,7 +126,7 @@ Writer.prototype.init = function () {
     }
 
     this.statsDialog.querySelector('.ok').addEventListener('click', function () {
-        writer.statsDialog.close();
+        this.statsDialog.close();
 
     });
 
@@ -137,53 +142,32 @@ Writer.prototype.init = function () {
     }
 
     this.oEditor = document.getElementById("editor");
+   
     this.backArrow = document.getElementById("back-arrow");
     this.backArrow.addEventListener("click", function () {
        Compatibility.onBackPressed();
     });
     this.toolbarManager = new ToolbarManager()
+    this.toolbarManager.addToolbar(document.getElementById("format-toolbar"))
     var toolbarManager = this.toolbarManager
-    for(var toolbar of document.getElementsByClassName("toolbar")){
-        this.toolbarManager.addToolbar(toolbar);
-    };
-    for(var toolbar of document.getElementsByClassName("toolbar-button")){
-        console.log("tool "+toolbar.getAttribute("for"))
-        
-        toolbar.addEventListener("click", function (event) {
-            console.log("display "+event.target.getAttribute("for"))
-            toolbarManager.toggleToolbar(document.getElementById(event.target.getAttribute("for")))
-        });   
-     };
- 
+    document.getElementById("format-button").addEventListener("click", function () {
+        toolbarManager.toggleToolbar(document.getElementById("format-toolbar"))
+    });
     // $("#editor").webkitimageresize().webkittableresize().webkittdresize();
 }
-
-Writer.prototype.copy = function(){
-    document.execCommand( 'copy' );
-}
-
-Writer.prototype.paste = function(){
-    document.execCommand( 'paste' );
-}
-
 Writer.prototype.displayCountDialog = function () {
-    var nouveauDiv;
     if (window.getSelection().toString().length == 0) {
-        nouveauDiv = this.oDoc;
-        
+        nouveauDiv = oDoc;
     }
     else {
         nouveauDiv = document.createElement("div");
         nouveauDiv.innerHTML = window.getSelection();
     }
-    console.log(" is defined ? "+nouveauDiv)
-    
-    var writer = this
     Countable.once(nouveauDiv, function (counter) {
-        writer.statsDialog.querySelector('.words_count').innerHTML = counter.words;
-        writer.statsDialog.querySelector('.characters_count').innerHTML = counter.characters;
-        writer.statsDialog.querySelector('.sentences_count').innerHTML = counter.sentences;
-        writer.statsDialog.showModal();
+        mStatsDialog.querySelector('.words_count').innerHTML = counter.words;
+        mStatsDialog.querySelector('.characters_count').innerHTML = counter.characters;
+        mStatsDialog.querySelector('.sentences_count').innerHTML = counter.sentences;
+        mStatsDialog.showModal();
     });
 
 }
@@ -226,6 +210,16 @@ Writer.prototype.removeKeyword = function(word){
         this.seriesTaskExecutor.addTask(this.saveNoteTask.saveTxt)
         this.refreshKeywords();
     }
+}
+
+Writer.prototype.reset = function(){
+    this.oEditor.innerHTML = '<div id="text" contenteditable="true" style="height:100%;">\
+    <!-- be aware that THIS will be modified in java -->\
+    <!-- soft won\'t save note if contains donotsave345oL -->\
+</div>\
+<div id="floating">\
+\
+</div>';
 }
 
 Writer.prototype.setColor = function (color) {

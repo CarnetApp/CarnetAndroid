@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -47,19 +48,13 @@ import com.spisoft.sync.synchro.SynchroService;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, SearchView.OnQueryTextListener, PinView.PasswordListener, NoteManager.UpdaterListener {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, PinView.PasswordListener, NoteManager.UpdaterListener {
     public static final String ACTION_RELOAD_KEYWORDS = "action_reload_keywords";
 
     private static final String WAS_LOCKED = "was_locked";
     private Fragment fragment;
-    private View mRecentButton;
-    private View mBrowserButton;
-    private Toolbar mToolbar;
-    private View mSettingsButton;
     private FrameLayout mLockLayout;
     private boolean isLocked;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerLayout;
     private PermissionChecker mPermissionChecker;
     private Handler mHandler = new Handler();
     private boolean lockOnStart;
@@ -67,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean mIsPasteDialogDisplayed = false;
     private BroadcastReceiver mReceiver;
     private BlankFragment mEditorFrag;
-    private LinearLayout mKeywordsLayout;
-    private KeywordRefreshTask mKeywordsTask;
+    private boolean mShouldRemove;
+    private Fragment mFragmentToPut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,50 +85,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         PreferenceHelper.incrementDisplayAd(this);
         setContentView(R.layout.activity_main);
         mLockLayout = (FrameLayout)findViewById(R.id.lock_layout);
-        mToolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mKeywordsLayout = findViewById(R.id.keywords);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.string.drawer_open, R.string.drawer_close) {
 
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
 
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-        };
-
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mBrowserButton = findViewById(R.id.browser_button);
-        mBrowserButton.setOnClickListener(this);
-        mRecentButton = findViewById(R.id.recent_button);
-        mRecentButton.setOnClickListener(this);
-        mSettingsButton = findViewById(R.id.settings_button);
-        mSettingsButton.setOnClickListener(this);
         mPermissionChecker.checkAndRequestPermission(this);
 
-       // startService(new Intent(this, FloatingService.class));
+        // startService(new Intent(this, FloatingService.class));
         lockOnStart= true;
         if(savedInstanceState==null) {
-            Fragment fragment = RecentNoteListFragment.newInstance();
+            Fragment fragment = MainFragment.newInstance();
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     NoteManager.update(MainActivity.this, MainActivity.this);
                 }
             }, 3000);
-
-            setFragment(fragment);
-            //setPreloadBlankFragment();
+            mFragmentToPut = fragment;
+            //setFragment(fragment);
+            setPreloadBlankFragment();
 
         }
         else
@@ -153,76 +121,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onReceive(Context context, Intent intent) {
                 if(intent.getAction().equals(FileManagerService.ACTION_COPY_ENDS)){
-                   if(mIsPasteDialogDisplayed&&mPasteDialog!=null) {
-                       mPasteDialog.dismiss();
+                    if(mIsPasteDialogDisplayed&&mPasteDialog!=null) {
+                        mPasteDialog.dismiss();
 
-                   }
+                    }
                 }
-                if(intent.getAction().equals(ACTION_RELOAD_KEYWORDS)) {
-                    if(mKeywordsTask != null)
-                        mKeywordsTask.cancel(true);
-                    mKeywordsTask = new KeywordRefreshTask();
-                    mKeywordsTask.execute();
-                }
+
             }
         };
         IntentFilter filter = new IntentFilter();
         filter.addAction(FileManagerService.ACTION_COPY_ENDS);
 
-        registerReceiver(mReceiver, filter);
         if(FileManagerService.sIsCopying)
             displayPasteDialog();
         filter = new IntentFilter();
-        filter.addAction(ACTION_RELOAD_KEYWORDS);
         filter.addAction(NoteManager.ACTION_UPDATE_END);
 
         registerReceiver(mReceiver, filter);
 
     }
 
-    private class KeywordRefreshTask extends AsyncTask<Void, Void, Map<String, List<String>>>{
 
-        @Override
-        protected Map<String, List<String>> doInBackground(Void... voids) {
-
-            return KeywordsHelper.getInstance(MainActivity.this).getFlattenDB(0);
-        }
-
-        @Override
-        protected void onPostExecute(Map<String, List<String>> result) {
-            mKeywordsLayout.removeAllViews();
-            for(final Map.Entry<String, List<String>> entry : result.entrySet()){
-                if(entry.getValue().size() >0){
-                    TextView tv = (TextView) LayoutInflater.from(MainActivity.this).inflate(R.layout.keyword,null);
-                    tv.setText(entry.getKey());
-                    tv.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            openKeyword(entry.getKey());
-                        }
-                    });
-                    mKeywordsLayout.addView(tv);
-                }
-            }
-        }
-
-    }
-
-    private void openKeyword(String keyword) {
-        clearBackstack();
-        Fragment fragment = KeywordNotesFragment.newInstance(keyword);
-        setFragment(fragment);
-        mDrawerLayout.closeDrawers();
-
-    }
-
-    public void lockDrawer(){
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-    }
-
-    public void unlockDrawer(){
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
@@ -230,7 +149,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setTitle(int str){
-        mToolbar.setTitle(str);
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().setTitle(str);
     }
 
     protected void onStop(){
@@ -260,11 +180,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     onPasswordOk();
             }
         }
-        if(mKeywordsTask != null)
-            mKeywordsTask.cancel(true);
-        mKeywordsTask = new KeywordRefreshTask();
-        mKeywordsTask.execute();
-
     }
     protected void  onPause(){
         super.onPause();
@@ -292,37 +207,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
-        }
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     public void setFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right);
         if(fragment instanceof BlankFragment){
             if(mEditorFrag!=null) {
 
@@ -330,24 +222,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragment = mEditorFrag;
 
             }
-            //mEditorFrag = (BlankFragment) fragment;
-
+            mEditorFrag = (BlankFragment) fragment;
         }
+        transaction.add(R.id.root,fragment);
+        transaction.addToBackStack(fragment.getClass().getName()).commit();
         this.fragment = fragment;
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.root,fragment)
-                .addToBackStack(null).commit();
     }
+    @Override
+    public void onAttachFragment(Fragment fragment){
+        super.onAttachFragment(fragment);
+        if(mShouldRemove && fragment == mEditorFrag) {
+            getSupportFragmentManager().popBackStack();
+            setFragment(mFragmentToPut);
 
+            mShouldRemove = false;
+        }
+    }
     public void setPreloadBlankFragment() {
 
             if(mEditorFrag==null) {
-                mEditorFrag = BlankFragment.newInstance(NoteManager.createNewNote("test"));
+                mShouldRemove = true;
+                mEditorFrag = BlankFragment.newInstance(null);
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.blanfragment,mEditorFrag)
+                        .addToBackStack(mEditorFrag.getClass().getName())
+                        .replace(R.id.root,mEditorFrag)
                         .commit();
             }
 
@@ -358,47 +258,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onBackPressed() {
         if(fragment instanceof com.spisoft.quicknote.editor.BlankFragment)
-            if(((BlankFragment) fragment).onBackPressed())
+            if(((com.spisoft.quicknote.editor.BlankFragment) fragment).onBackPressed())
                 return;
-        getSupportFragmentManager().popBackStackImmediate();
 
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0){
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1){
             finish();
             return;
         }
+
+        getSupportFragmentManager().popBackStackImmediate();
         this.fragment  = getSupportFragmentManager().getFragments().get(0);
 
+
     }
-
-    @Override
-    public void onClick(View view) {
-
-        if(view==mRecentButton){
-            clearBackstack();
-            //getSupportFragmentManager().back
-            Fragment fragment = RecentNoteListFragment.newInstance();
-            setFragment(fragment);
-            mDrawerLayout.closeDrawers();
-        }else if(view==mBrowserButton){
-            clearBackstack();
-            Fragment fragment = BrowserFragment.newInstance(PreferenceHelper.getRootPath(this));
-            setFragment(fragment);
-            mDrawerLayout.closeDrawers();
-        }
-        else if(mSettingsButton==view){
-            startActivity(new Intent(this, SettingsActivity.class));
-            mDrawerLayout.closeDrawers();
-        }
-    }
-
-    private void clearBackstack() {
-
-        FragmentManager fm = getSupportFragmentManager();
-        for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-            fm.popBackStack();
-        }
-    }
-
     @Override
     public boolean onQueryTextSubmit(String query) {
         if(fragment instanceof SearchFragment)

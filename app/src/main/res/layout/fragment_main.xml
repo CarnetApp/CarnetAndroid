@@ -1,0 +1,64 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <android.support.v4.widget.DrawerLayout
+
+        android:id="@+id/drawer_layout"
+        android:fitsSystemWindows="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <!-- Your normal content view -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- We use a Toolbar so that our drawer can be displayed
+                 in front of the action bar -->
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/my_awesome_toolbar"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="@style/GalaxyZooThemeToolbarDarkOverflow"
+                />
+            <!-- The main content view -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:id="@+id/blanfragment">
+
+
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/rootbis">
+                </FrameLayout>
+
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <!-- The navigation drawer -->
+
+        <include
+
+            layout="@layout/my_navigation_drawer"
+            />
+
+    </android.support.v4.widget.DrawerLayout>
+
+</FrameLayout>
+

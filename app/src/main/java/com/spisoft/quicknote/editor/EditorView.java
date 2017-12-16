@@ -71,6 +71,9 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 
+import static com.spisoft.quicknote.MainActivity.ACTION_RELOAD_KEYWORDS;
+import static com.spisoft.quicknote.browser.NoteListFragment.ACTION_RELOAD;
+
 
 /**
  * Created by phoenamandre on 01/02/16.
@@ -111,6 +114,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
     private String mRootPath;
     private NewHttpProxy mServer2;
+    private boolean mSetNoteOnLoad;
 
     private void rename(String stringExtra, String path) {
         mWebView.loadUrl("javascript:replace('" + StringEscapeUtils.escapeEcmaScript(stringExtra) + "','" + StringEscapeUtils.escapeEcmaScript(path) + "')");
@@ -234,16 +238,18 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(getContext()), "app");
         mHasLoaded = false;
+        try {
+            mServer2 = new NewHttpProxy(getContext());
+            mWebView.loadUrl(mServer2.getUrl("/tmp/reader.html"));
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //prepare Reader
         //extract
 
         mRootPath = getContext().getFilesDir().getAbsolutePath();
         File dir = new File(mRootPath + "/reader");
-        if (dir.exists())
-            FileUtils.deleteRecursive(dir);
-        dir.mkdirs();
-        dir = new File(mRootPath + "/tmp");
         if (dir.exists())
             FileUtils.deleteRecursive(dir);
         dir.mkdirs();
@@ -306,20 +312,26 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
     }
 
+    public void loadNote(){
+        File dir = new File(mRootPath + "/tmp");
+        if (dir.exists())
+            FileUtils.deleteRecursive(dir);
+        dir.mkdirs();
+        mWebView.loadUrl("javascript:loadPath('" + Uri.encode(mNote.path) + "')");
+
+    }
 
     public void setNote(Note note) {
+        mProgressLayout.setAlpha(1);
         try {
             getContext().registerReceiver(mBroadcastReceiver, mFilter);
         } catch (Exception e) {
         }
         mProgressLayout.setVisibility(VISIBLE);
         mNote = note;
-        try {
-            mServer2 = new NewHttpProxy(getContext());
-            mWebView.loadUrl(mServer2.getUrl("/tmp/reader.html") + "?path=" + Uri.encode(mNote.path));
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        mSetNoteOnLoad = !mHasLoaded;
+        if(mHasLoaded) {
+            loadNote();
         }
         editedAbsolutePath = mNote.path;
         RecentHelper.getInstance(getContext()).addNote(mNote);
@@ -333,6 +345,8 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         mHasRequestedSave = true;
         mWebView.loadUrl("javascript:requestSave()");
         editedAbsolutePath = null;
+        getContext().sendBroadcast(new Intent(ACTION_RELOAD_KEYWORDS));
+        getContext().sendBroadcast(new Intent(ACTION_RELOAD));
     }
 
     private void sendAction(String string) {
@@ -473,7 +487,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                 public void run() {
                     mProgressLayout.animate().alpha(0).setDuration(500).start();
                 }
-            },500);
+            },1);
         }
 
         @JavascriptInterface
@@ -523,7 +537,6 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
                 protected void onPostExecute(Void result) {
                     mWebView.loadUrl("javascript:FSCompatibility.writeFileResult('" + callback + "')");
-
                 }
             }.execute();
 
@@ -586,7 +599,11 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             mHasLoaded = true;
-            onNoteAndPageReady();
+            if(mSetNoteOnLoad){
+                loadNote();
+                mSetNoteOnLoad = false;
+            }
+
         }
     };
 
