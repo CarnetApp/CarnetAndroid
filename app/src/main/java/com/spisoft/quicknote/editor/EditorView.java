@@ -1,11 +1,7 @@
 package com.spisoft.quicknote.editor;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.LayoutTransition;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -21,55 +17,39 @@ import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.soundcloud.android.crop.Crop;
 import com.spisoft.quicknote.FloatingFragment;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.R;
-import com.spisoft.quicknote.browser.NoteListFragment;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.databases.page.Page;
-import com.spisoft.quicknote.databases.page.PageManager;
-import com.spisoft.quicknote.editor.pages.PageView;
 import com.spisoft.quicknote.editor.pages.PagesAdapter;
 import com.spisoft.quicknote.server.NewHttpProxy;
-import com.spisoft.quicknote.server.ZipReaderAndHttpProxy;
 import com.spisoft.quicknote.serviceactivities.CropWrapperActivity;
-import com.spisoft.quicknote.utils.AmbilWarnaDialog;
 import com.spisoft.quicknote.utils.FileUtils;
-import com.spisoft.quicknote.utils.PictureUtils;
-import com.spisoft.quicknote.utils.SpiDebugUtils;
-import com.spisoft.quicknote.utils.ZipWriter;
+import com.spisoft.quicknote.utils.ZipUtils;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.jsoup.Jsoup;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.util.ArrayList;
 
 import static com.spisoft.quicknote.MainActivity.ACTION_RELOAD_KEYWORDS;
 import static com.spisoft.quicknote.browser.NoteListFragment.ACTION_RELOAD;
@@ -78,7 +58,7 @@ import static com.spisoft.quicknote.browser.NoteListFragment.ACTION_RELOAD;
 /**
  * Created by phoenamandre on 01/02/16.
  */
-public class EditorView extends FrameLayout implements View.OnClickListener, CropWrapperActivity.CroperResultListener, FloatingFragment, PictureEditorFloatingFragment.OnEditEndListener, ZipWriter.WriterListener, PagesAdapter.OnPageSelectedListener {
+public class EditorView extends FrameLayout implements View.OnClickListener, CropWrapperActivity.CroperResultListener, FloatingFragment, PictureEditorFloatingFragment.OnEditEndListener, ZipUtils.WriterListener, PagesAdapter.OnPageSelectedListener {
 
 
     private static final String TAG = "EditorView";
@@ -345,7 +325,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         mHasRequestedSave = true;
         mWebView.loadUrl("javascript:requestSave()");
         editedAbsolutePath = null;
-        getContext().sendBroadcast(new Intent(ACTION_RELOAD_KEYWORDS));
+            getContext().sendBroadcast(new Intent(ACTION_RELOAD_KEYWORDS));
         getContext().sendBroadcast(new Intent(ACTION_RELOAD));
     }
 
@@ -410,6 +390,26 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         @JavascriptInterface
         public void removeKeyword(String word, String path){
             KeywordsHelper.getInstance(getContext()).removeKeyword(word, new Note(path));
+        }
+
+        @JavascriptInterface
+        public void extractTo(String from, String to, final String callback){
+            if (!from.startsWith("/"))
+                from = mRootPath + "/" + from;
+            if (!to.startsWith("/"))
+                to = mRootPath + "/" + to;
+            try {
+                ZipUtils.unzip(from, to);
+                mWebView.post(new Runnable() {
+                      @Override
+                      public void run() {
+                          mWebView.loadUrl("javascript:NoteOpenerResultReceiver.extractResult('" + callback + "',false);");
+                      }
+                  }
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         @JavascriptInterface
@@ -497,7 +497,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
             if (!out.startsWith("/"))
                 out = mRootPath + "/" + dir;
             Log.d(TAG, "zipping " + dir + " to " + out);
-            ZipWriter.zipFolder(new File(dir), out);
+            ZipUtils.zipFolder(new File(dir), out);
         }
 
         @JavascriptInterface

@@ -18,7 +18,7 @@ import com.spisoft.quicknote.photoview.PhotoView;
 import com.spisoft.quicknote.server.ZipReaderAndHttpProxy;
 import com.spisoft.quicknote.serviceactivities.CropWrapperActivity;
 import com.spisoft.quicknote.utils.FileUtils;
-import com.spisoft.quicknote.utils.ZipWriter;
+import com.spisoft.quicknote.utils.ZipUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -86,7 +86,7 @@ public class PictureEditorFloatingFragment implements FloatingFragment, View.OnC
 
         }
         else if(view == mDeleteButton){
-            ZipWriter.deleteEntry(mContext, mNote, mPath);
+            ZipUtils.deleteEntry(mContext, mNote, mPath);
             mListener.onDelete(mId, mPath);
             mFragmentManager.removeFragment();
         }
@@ -95,7 +95,7 @@ public class PictureEditorFloatingFragment implements FloatingFragment, View.OnC
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode== Activity.RESULT_OK) {
-            if(ZipWriter.addEntry(mContext, mNote, mPath, Uri.parse(mOutFile.getAbsolutePath()))) {
+            if(ZipUtils.addEntry(mContext, mNote, mPath, Uri.parse(mOutFile.getAbsolutePath()))) {
                 mListener.onEditEnd(mId, mPath, true);
                 setPic();
             }

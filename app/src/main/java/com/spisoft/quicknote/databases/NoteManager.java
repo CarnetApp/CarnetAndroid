@@ -9,17 +9,15 @@ import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.server.ZipReaderAndHttpProxy;
 import com.spisoft.quicknote.utils.FileLocker;
 import com.spisoft.quicknote.utils.FileUtils;
-import com.spisoft.quicknote.utils.ZipWriter;
+import com.spisoft.quicknote.utils.ZipUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
@@ -172,7 +170,7 @@ public class NoteManager
             JSONObject jsonObject = new JSONObject();
             JSONArray jsArray = new JSONArray(note.keywords);
             jsonObject.put(KEYWORDS,jsArray);
-            ZipWriter.changeText(context, note, getMetadataPath(), jsonObject.toString(), new ZipWriter.WriterListener() {
+            ZipUtils.changeText(context, note, getMetadataPath(), jsonObject.toString(), new ZipUtils.WriterListener() {
                 @Override
                 public void onError() {
 
@@ -248,7 +246,7 @@ public class NoteManager
                 path = path.substring(0, path.length()-1);
             path+=".sqd";
             if(!new File(path).exists()) {
-                if (ZipWriter.zipFolder(file, path)) {
+                if (ZipUtils.zipFolder(file, path)) {
                     File fileNew = new File(path);
                     if(fileNew.exists()&&fileNew.length()>0) {//triple check
                         FileUtils.deleteRecursive(file);

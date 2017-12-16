@@ -9,6 +9,7 @@ import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.page.PageManager;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +28,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * Created by alexandre on 29/03/16.
  */
-public class ZipWriter {
+public class ZipUtils {
 
     public static SerialExecutor executor = new SerialExecutor();
     public static boolean addEntry(Context ct,Note note,String path, Uri file){
@@ -280,8 +281,6 @@ public class ZipWriter {
 
             @Override
             protected Void doInBackground(Void... voids) {
-                Log.d("zipdebug", "on change text");
-
                 // convert String into InputStream
                 InputStream is = new ByteArrayInputStream(txt.getBytes());
                 if(!addEntry(ct,note,path, is))
@@ -290,5 +289,49 @@ public class ZipWriter {
             }
         }.executeOnExecutor(executor);
 
+    }
+
+    public static void unzip(String zipFilePath, String destDirectory) throws IOException {
+        File destDir = new File(destDirectory);
+        if (!destDir.exists()) {
+            destDir.mkdirs();
+        }
+        ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
+        ZipEntry entry = zipIn.getNextEntry();
+        // iterates over entries in the zip file
+        while (entry != null) {
+            String filePath = destDirectory + File.separator + entry.getName();
+            if (!entry.isDirectory()) {
+                Log.d("zipdebug",entry.getName()+" is a file ");
+                // if the entry is a file, extracts it
+                extractFile(zipIn, filePath);
+            } else {
+                // if the entry is a directory, make the directory
+                File dir = new File(filePath);
+                dir.mkdir();
+            }
+            zipIn.closeEntry();
+            entry = zipIn.getNextEntry();
+        }
+        zipIn.close();
+    }
+    /**
+     * Extracts a zip entry (file entry)
+     * @param zipIn
+     * @param filePath
+     * @throws IOException
+     */
+    private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
+        File parent = new File(filePath).getParentFile();
+        if(parent.exists() && !parent.isDirectory())
+            parent.delete();
+        parent.mkdirs();
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
+        byte[] bytesIn = new byte[1024];
+        int read = 0;
+        while ((read = zipIn.read(bytesIn)) != -1) {
+            bos.write(bytesIn, 0, read);
+        }
+        bos.close();
     }
 }
