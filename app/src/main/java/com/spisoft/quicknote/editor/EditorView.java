@@ -394,22 +394,27 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
         @JavascriptInterface
         public void extractTo(String from, String to, final String callback){
+            boolean error;
             if (!from.startsWith("/"))
                 from = mRootPath + "/" + from;
             if (!to.startsWith("/"))
                 to = mRootPath + "/" + to;
             try {
                 ZipUtils.unzip(from, to);
-                mWebView.post(new Runnable() {
-                      @Override
-                      public void run() {
-                          mWebView.loadUrl("javascript:NoteOpenerResultReceiver.extractResult('" + callback + "',false);");
-                      }
-                  }
-                );
+                error = false;
+
             } catch (IOException e) {
                 e.printStackTrace();
+                error = true;
             }
+            final boolean finalError = error;
+            mWebView.post(new Runnable() {
+                              @Override
+                              public void run() {
+                                  mWebView.loadUrl("javascript:NoteOpenerResultReceiver.extractResult('" + callback + "',"+ finalError +");");
+                              }
+                          }
+            );
         }
 
         @JavascriptInterface
