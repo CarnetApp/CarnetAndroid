@@ -55,7 +55,7 @@ NoteOpener.prototype.getFullHTML = function (callback) {
 NoteOpener.prototype.extractTo = function (path, callback) {
   var opener = this;
   console.log("extractTo")
-  fs.readFile(this.note.path, function (err, data) {
+  fs.readFile(this.note.path,'base64', function (err, data) {
     console.log("read " + err)
     if (!err) {
       var extractor = new Extractor(data, path, opener, callback)
@@ -73,6 +73,7 @@ var Extractor = function (data, dest, opener, callback) {
   this.data = data;
   this.currentFile = 0;
   this.path = dest;
+  this.startTime = Date.now()
   this.callback = callback;
   this.opener = opener;
 }
@@ -90,7 +91,8 @@ Extractor.prototype.fullExtract = function () {
   console.log("fullExtract = " + this.files.length)
 
   if (this.currentFile >= this.files.length) {
-    console.log("size = " + this.files.length)
+    console.log("size = " + this.files.length) 
+    console.log("took "+(Date.now()-this.startTime)+"ms")
     this.callback()
     return;
   }
@@ -114,7 +116,7 @@ Extractor.prototype.fullExtract = function () {
 
         fs.writeFileSync(dest, content,'base64');
         if (filename == "metadata.json") {
-          extractor.opener.note.metadata = JSON.parse(atob(content));
+          extractor.opener.note.metadata = JSON.parse(decodeURIComponent(escape(atob(content))));
         }
 
       }

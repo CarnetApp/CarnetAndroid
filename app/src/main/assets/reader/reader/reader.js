@@ -26,7 +26,13 @@ Writer.prototype.extractNote = function () {
                 if (err) {
                     throw err;
                 }
-
+                fs.readFile('tmp/metadata.json','base64', function read(err, metadata) {                    
+                    if (err) {
+                        throw err;
+                    }
+                    writer.note.metadata = JSON.parse(decodeURIComponent(escape(atob(metadata))));
+                    writer.refreshKeywords()
+                });
                 content = data;
                 writer.fillWriter(decodeURIComponent(escape(atob(content))))
             });
@@ -126,7 +132,7 @@ Writer.prototype.init = function () {
     }
 
     this.statsDialog.querySelector('.ok').addEventListener('click', function () {
-        this.statsDialog.close();
+        writer.statsDialog.close();
 
     });
 
@@ -148,26 +154,48 @@ Writer.prototype.init = function () {
        Compatibility.onBackPressed();
     });
     this.toolbarManager = new ToolbarManager()
-    this.toolbarManager.addToolbar(document.getElementById("format-toolbar"))
     var toolbarManager = this.toolbarManager
-    document.getElementById("format-button").addEventListener("click", function () {
-        toolbarManager.toggleToolbar(document.getElementById("format-toolbar"))
-    });
+    for(var toolbar of document.getElementsByClassName("toolbar")){
+        this.toolbarManager.addToolbar(toolbar);
+    };
+    for(var toolbar of document.getElementsByClassName("toolbar-button")){
+        console.log("tool "+toolbar.getAttribute("for"))
+        
+        toolbar.addEventListener("click", function (event) {
+            console.log("display "+event.target.getAttribute("for"))
+            toolbarManager.toggleToolbar(document.getElementById(event.target.getAttribute("for")))
+        });   
+     };
+ 
     // $("#editor").webkitimageresize().webkittableresize().webkittdresize();
 }
+
+Writer.prototype.copy = function(){
+    document.execCommand( 'copy' );
+}
+
+Writer.prototype.paste = function(){
+    document.execCommand( 'paste' );
+}
+
 Writer.prototype.displayCountDialog = function () {
+    var nouveauDiv;
     if (window.getSelection().toString().length == 0) {
-        nouveauDiv = oDoc;
+        nouveauDiv = this.oDoc;
+        
     }
     else {
         nouveauDiv = document.createElement("div");
         nouveauDiv.innerHTML = window.getSelection();
     }
+    console.log(" is defined ? "+nouveauDiv)
+    
+    var writer = this
     Countable.once(nouveauDiv, function (counter) {
-        mStatsDialog.querySelector('.words_count').innerHTML = counter.words;
-        mStatsDialog.querySelector('.characters_count').innerHTML = counter.characters;
-        mStatsDialog.querySelector('.sentences_count').innerHTML = counter.sentences;
-        mStatsDialog.showModal();
+        writer.statsDialog.querySelector('.words_count').innerHTML = counter.words;
+        writer.statsDialog.querySelector('.characters_count').innerHTML = counter.characters;
+        writer.statsDialog.querySelector('.sentences_count').innerHTML = counter.sentences;
+        writer.statsDialog.showModal();
     });
 
 }
