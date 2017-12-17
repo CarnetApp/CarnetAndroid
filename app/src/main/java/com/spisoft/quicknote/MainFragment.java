@@ -52,6 +52,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private BroadcastReceiver mReceiver;
     private KeywordRefreshTask mKeywordsTask;
     private Fragment fragment;
+    private IntentFilter mFilter;
 
     public MainFragment() {
         // Required empty public constructor
@@ -118,11 +119,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 }
             }
         };
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(FileManagerService.ACTION_COPY_ENDS);
-        filter.addAction(ACTION_RELOAD_KEYWORDS);
-        filter.addAction(NoteManager.ACTION_UPDATE_END);
-        getActivity().registerReceiver(mReceiver, filter);
+        mFilter = new IntentFilter();
+        mFilter.addAction(FileManagerService.ACTION_COPY_ENDS);
+        mFilter.addAction(ACTION_RELOAD_KEYWORDS);
+        mFilter.addAction(NoteManager.ACTION_UPDATE_END);
 
         if(savedInstanceState==null) {
             Fragment fragment = RecentNoteListFragment.newInstance();
@@ -131,22 +131,17 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         return mRoot;
     }
 
-
-
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onStop(){
+        super.onStop();
+        getActivity().unregisterReceiver(mReceiver);
+        if(mKeywordsTask != null)
+            mKeywordsTask.cancel(true);
 
     }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-
     public void onResume(){
         super.onResume();
+        getActivity().registerReceiver(mReceiver, mFilter);
 
         if(mKeywordsTask != null)
             mKeywordsTask.cancel(true);
