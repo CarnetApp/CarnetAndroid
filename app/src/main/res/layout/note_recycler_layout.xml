@@ -11,14 +11,19 @@
         android:layout_width="match_parent"
         android:animateLayoutChanges="true"
         android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/blue_50"
-            />
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/blue_50"
+                />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
     </LinearLayout>
     <LinearLayout
         android:orientation="vertical"

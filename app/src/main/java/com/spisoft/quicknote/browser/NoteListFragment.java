@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Pair;
@@ -34,6 +35,8 @@ import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.server.ZipReaderAndHttpProxy;
 import com.spisoft.quicknote.utils.FileUtils;
+import com.spisoft.sync.Configuration;
+import com.spisoft.sync.synchro.SynchroService;
 
 import org.jsoup.Jsoup;
 
@@ -51,7 +54,7 @@ import java.util.zip.ZipEntry;
 /**
  * Created by alexandre on 03/02/16.
  */
-public abstract class NoteListFragment extends Fragment implements NoteAdapter.OnNoteItemClickListener, View.OnClickListener {
+public abstract class NoteListFragment extends Fragment implements NoteAdapter.OnNoteItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, Configuration.SyncStatusListener {
     public static final String ACTION_RELOAD = "action_reload";
     protected RecyclerView mRecyclerView;
     protected NoteAdapter mNoteAdapter;
@@ -69,13 +72,17 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     private View mEmptyView;
     private boolean mHasLoaded;
     private ZipReaderAndHttpProxy mServer;
+    private SwipeRefreshLayout mSwipeLayout;
 
     public void onPause(){
         super.onPause();
+        Configuration.removeSyncStatusListener(this);
     }
 
     public void onResume(){
         super.onResume();
+        Configuration.addSyncStatusListener(this);
+        refreshSyncedStatus();
     }
 
     @Override
@@ -93,7 +100,12 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                 e.printStackTrace();
             }
             mRoot = inflater.inflate(R.layout.note_recycler_layout, null);
-
+            mSwipeLayout = (SwipeRefreshLayout) mRoot.findViewById(R.id.swipe_container);
+            mSwipeLayout.setOnRefreshListener(this);
+            mSwipeLayout.setColorScheme(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
             mRecyclerView = (RecyclerView) mRoot.findViewById(R.id.recyclerView);
             mEmptyView = mRoot.findViewById(R.id.empty_view);
             mEmptyViewMessage = (TextView) mRoot.findViewById(R.id.empty_message);
@@ -213,6 +225,26 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         getActivity().unregisterReceiver(mReceiver);
 
     }
+
+    @Override
+    public void onRefresh() {
+        getActivity().startService(new Intent(getActivity(), SynchroService.class));
+    }
+
+    @Override
+    public void onSyncStatusChanged(boolean isSyncing) {
+        mRoot.post(new Runnable() {
+            @Override
+            public void run() {
+                refreshSyncedStatus();
+            }
+        });
+    }
+
+    private void refreshSyncedStatus() {
+        mSwipeLayout.setRefreshing(SynchroService.isSyncing);
+    }
+
     public class ReadReturnStruct{
         boolean hasFound;
         String readText;
