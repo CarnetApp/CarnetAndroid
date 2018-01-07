@@ -445,7 +445,10 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
                     return;
                 }else {*/
-                    ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(NoteManager.createNewNote(PreferenceHelper.getRootPath(getActivity()))));
+              Note note = NoteManager.createNewNote(PreferenceHelper.getRootPath(getActivity()));
+                RecentHelper.getInstance(getContext()).addNote(note);
+
+                ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(note));
                     /*Intent intent = new Intent(getActivity(), FloatingService.class);
                     intent.putExtra(FloatingService.NOTE, NoteManager.createNewNote(PreferenceHelper.getRootPath(getActivity())));
                     getActivity().startService(intent);*/

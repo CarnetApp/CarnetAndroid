@@ -367,7 +367,6 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
             loadNote();
         }
         editedAbsolutePath = mNote.path;
-        RecentHelper.getInstance(getContext()).addNote(mNote);
     }
 
     public void onDestroy() {
