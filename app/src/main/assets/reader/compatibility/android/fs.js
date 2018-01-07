@@ -32,7 +32,6 @@ FSCompatibility.readdir = function (path, callback) {
 }
 
 FSCompatibility.resultReaddir = function (callback, err, data) {
-    console.log("result dir " + data)
     callbacks[callback](err, JSON.parse(data)['data']);
 }
 

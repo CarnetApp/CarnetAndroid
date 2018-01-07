@@ -6,8 +6,9 @@
 	<script src="<!ROOTPATH>compatibility/mkdirp.js"></script>
 	<script src="<!ROOTPATH>compatibility/archiver.js"></script>
 	<script src="<!ROOTPATH>compatibility/path.js"></script>
+	<script src="<!ROOTPATH>compatibility/file-opener.js"></script>
 	<script src="<!ROOTPATH>compatibility/keywords_db_manager.js"></script>
-	
+
 	<script src="<!ROOTPATH>reader/libs/jquery.min.js"></script>
 
 	<script>
@@ -21,26 +22,23 @@
 	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/simplecolorpicker/simple-color-picker.css">
 	<script src="<!ROOTPATH>compatibility.js"></script>
 	<script>
-
-
 	</script>
 </head>
 
 <body>
 	<script>
-	if(isElectron){
-		var $ = require('jquery');
-		var jQuery = $;
-		$.mobile = require('jquery-mobile');
-		var ColorPicker = require('simple-color-picker');
-	}
-
+		if (isElectron) {
+			var $ = require('jquery');
+			var jQuery = $;
+			$.mobile = require('jquery-mobile');
+			var ColorPicker = require('simple-color-picker');
+		}
 	</script>
 	<script src="<!ROOTPATH>reader/reader.js"></script>
 	<!--<script src="<!ROOTPATH>reader/libs/simplecolorpicker/index.js"></script>	-->
 	<script src="<!ROOTPATH>note/note-opener.js"></script>
 	<script src="<!ROOTPATH>compatibility/note-opener.js"></script>
-	
+
 	<script src="<!ROOTPATH>browsers/note.js"></script>
 
 	<script src="<!ROOTPATH>browsers/file-browser.js"></script>
@@ -53,10 +51,12 @@
 	<script src="<!ROOTPATH>libs/jszip.min.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/standalone.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/Countable.js"></script>
+	<script src="<!ROOTPATH>utils/file_utils.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/jquery.ui.touch-punch.min.js"></script>
 	<script type="text/javascript">
 		function resetScreenHeight() {
-			var screen = $(window).height(),
+			console.log("resetScreenHeight")
+			var screen = $(window).innerHeight(),
 				header = $("#header").height() + $("#toolbars").height(),
 				content = screen - header;
 			style = window.getComputedStyle(document.getElementById("header"));
@@ -64,6 +64,7 @@
 				content = screen;
 			$("#center").height(content);
 			$("#editor").height(content - 45);
+			console.log(content - 45)
 		}
 	</script>
 
@@ -77,8 +78,13 @@
 		<h4 class="mdl-dialog__title">Statistics</h4>
 		<div class="mdl-dialog__content">
 			<p>
-				Sentences : <span class="sentences_count"></span> <br /> Words : <span class="words_count"></span> <br /> Characters
-				: <span class="characters_count"></span><br />
+				Sentences :
+				<span class="sentences_count"></span>
+				<br /> Words :
+				<span class="words_count"></span>
+				<br /> Characters :
+				<span class="characters_count"></span>
+				<br />
 			</p>
 		</div>
 		<div class="mdl-dialog__actions">
@@ -90,7 +96,8 @@
 
 
 	<dialog class="mdl-dialog" id="color-picker-dialog" style="padding: 0;">
-		<div class="mdl-dialog__content jscolor {valueElement:'chosen-value', onFineChange:'writer.setPickerColor(this)' , shadow:false}" id="color-picker-div" >
+		<div class="mdl-dialog__content jscolor {valueElement:'chosen-value', onFineChange:'writer.setPickerColor(this)' , shadow:false}"
+		    id="color-picker-div">
 		</div>
 		<div class="mdl-dialog__actions">
 			<button type="button" class="mdl-button ok">OK</button>
@@ -109,32 +116,34 @@
 		</div>
 	</dialog>
 
-
 	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
 mdl-layout--fixed-header">
 		<header id="header" class="mdl-layout__header">
-			<div class="mdl-layout__header-row">
+			<div class="mdl-layout__header-row" style="overflow-x: auto">
 				<button id="back-arrow" class="mdl-button mdl-js-button mdl-button--icon" style="left: -15px; ">
-<i class="material-icons">arrow_back</i>
-</button>
+					<i class="material-icons">arrow_back</i>
+				</button>
 				<button id="format-button" class="mdl-button mdl-js-button headerbar-button toolbar-button" for="format-toolbar">
-		Format
-</button>
+					Format
+				</button>
 
 				<button id="edit-button" class="mdl-button mdl-js-button headerbar-button toolbar-button" for="edit-toolbar">
-	 				Edit
-</button>
-<button id="tools-button" class="mdl-button mdl-js-button headerbar-button toolbar-button" for="tools-toolbar">
-		Tools
-</button>
+					Edit
+				</button>
+				<button id="media-button" class="mdl-button mdl-js-button headerbar-button toolbar-button" for="media-toolbar">
+					Media
+				</button>
+				<button id="tools-button" class="mdl-button mdl-js-button headerbar-button toolbar-button" for="tools-toolbar">
+					Tools
+				</button>
 
 
 				<div class="mdl-layout-spacer"></div>
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
 			mdl-textfield--floating-label mdl-textfield--align-right">
 					<label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp">
-<i class="material-icons">search</i>
-</label>
+						<i class="material-icons">search</i>
+					</label>
 					<div class="mdl-textfield__expandable-holder">
 						<input class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp">
 					</div>
@@ -143,8 +152,8 @@ mdl-layout--fixed-header">
 		</header>
 		<div class="mdl-layout__drawer">
 			<nav class="mdl-navigation">
-					<span style="text-align:center; margin:10px;"> File</span>
-					
+				<span style="text-align:center; margin:10px;"> File</span>
+
 				<a class="mdl-navigation__link" href="">Export note</a>
 				<a class="mdl-navigation__link" href="">Rename</a>
 				<span style="text-align:center; margin:10px;"> Keywords</span>
@@ -157,73 +166,84 @@ mdl-layout--fixed-header">
 		</div>
 		<main class="mdl-layout__content">
 			<div id="toolbars">
+				<div id="media-toolbar" class="toolbar">
+					<div id="media-list"></div>
+
+					<button id="add-note-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button" onclick="writer.addMedia()">
+						<i class="material-icons">add</i>
+					</button>
+				</div>
+
 				<div id="format-toolbar" class="toolbar">
 					<button onclick="writer.formatDoc('bold');" class="mdl-button mdl-js-button headerbar-button">
-					<i class="material-icons">format_bold</i>
-			  </button>
+						<i class="material-icons">format_bold</i>
+					</button>
 					<button onclick="writer.formatDoc('italic');" class="mdl-button mdl-js-button headerbar-button">
-					<i class="material-icons">format_italic</i>
-			  </button>
+						<i class="material-icons">format_italic</i>
+					</button>
 					<button onclick="writer.formatDoc('underline');" class="mdl-button mdl-js-button headerbar-button">
-					<i class="material-icons">format_underline</i>
-			  </button>
+						<i class="material-icons">format_underline</i>
+					</button>
 
 					<button onclick="    writer.displayTextColorPicker();" class="mdl-button mdl-js-button headerbar-button">
-					<i class="material-icons">format_color_text</i>
-			  </button>
+						<i class="material-icons">format_color_text</i>
+					</button>
 					<button onclick="writer.displayFillColorPicker();" class="mdl-button mdl-js-button headerbar-button">
-					<i class="material-icons">format_color_fill</i>
-			  </button>
+						<i class="material-icons">format_color_fill</i>
+					</button>
 					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.decreaseFontSize();">
-					<i class="material-icons">format_size</i>-
-			  </button>
+						<i class="material-icons">format_size</i>-
+					</button>
 					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.increaseFontSize();">
-					<i class="material-icons">format_size</i>+
-			  </button>
+						<i class="material-icons">format_size</i>+
+					</button>
 					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.formatDoc('justifyleft');">
-					<i class="material-icons">format_align_left</i>
-			  </button>
+						<i class="material-icons">format_align_left</i>
+					</button>
 					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.formatDoc('justifycenter');">
-					<i class="material-icons">format_align_center</i>
-			  </button>
+						<i class="material-icons">format_align_center</i>
+					</button>
 					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.formatDoc('justifyright');">
-					<i class="material-icons">format_align_right</i>
-			  </button>
+						<i class="material-icons">format_align_right</i>
+					</button>
 					<button class="mdl-button mdl-js-button headerbar-button">
-					<i class="material-icons">format_align_justify</i>
-			  </button>
+						<i class="material-icons">format_align_justify</i>
+					</button>
 
 
 
 				</div>
 				<div id="edit-toolbar" class="toolbar">
-						<button id="copy-button" class="mdl-button mdl-js-button headerbar-button" onclick="writer.copy()">
-								copy
-						   </button>
-						   <button id="copy-button" class="mdl-button mdl-js-button headerbar-button" onclick="writer.paste()">
-								paste
-		   				</button>
-					</div>
-					<div id="tools-toolbar" class="toolbar">
-							<button id="tools-button" onclick="writer.displayCountDialog()" class="mdl-button mdl-js-button headerbar-button">
-									Statistics
-							   </button>
-							   
-						</div>
+					<button id="copy-button" class="mdl-button mdl-js-button headerbar-button" onclick="writer.copy()">
+						copy
+					</button>
+					<button id="copy-button" class="mdl-button mdl-js-button headerbar-button" onclick="writer.paste()">
+						paste
+					</button>
+				</div>
+				<div id="tools-toolbar" class="toolbar">
+					<button id="tools-button" onclick="writer.displayCountDialog()" class="mdl-button mdl-js-button headerbar-button">
+						Statistics
+					</button>
+
+				</div>
 			</div>
 			<div id="page-content" class="page-content">
 				<div id="center" style="height:100%;padding:0px;">
 					<div id="editor" style="height:100%;overflow-y: auto;overflow-x: none;margin:0px;position: relative;">
-						
+
 					</div>
 				</div>
 			</div>
 		</main>
+	</div>
+	<div id="fullscreen-viewer"></div>
 
-		<script>
+	<script>
 		var writer = undefined;
-		function loadPath(path){
-			if(writer == undefined){
+
+		function loadPath(path) {
+			if (writer == undefined) {
 				writer = new Writer(document);
 				writer.init();
 			}
@@ -233,11 +253,11 @@ mdl-layout--fixed-header">
 			console.log("extract")
 			writer.extractNote();
 		}
-			if(loaded == undefined)
+		if (loaded == undefined)
 			var loaded = false; //don't know why, loaded twice on android
-			if(!loaded){
+		if (!loaded) {
 			console.log("loading html ");
-		
+
 			function getParameterByName(name, url) {
 				if (!url) {
 					url = window.location.href;
@@ -251,24 +271,27 @@ mdl-layout--fixed-header">
 			}
 
 			$(window).on('resize', resetScreenHeight);
-			if(isElectron){
-			var { ipcRenderer, remote } = require('electron');
-			var main = remote.require("./main.js");
-			var win = remote.getCurrentWindow();
-			win.show()
-			main.hideMainWindow();
+			if (isElectron) {
+				var {
+					ipcRenderer,
+					remote
+				} = require('electron');
+				var main = remote.require("./main.js");
+				var win = remote.getCurrentWindow();
+				win.show()
+				main.hideMainWindow();
+			}
+
+			var path = getParameterByName("path");
+			if (path != undefined) {
+				console.log("path " + getParameterByName("path"))
+				loadPath(path)
+
+			}
+
+			loaded = true;
 		}
-		
-		var path = getParameterByName("path");
-		if(path != undefined){
-			console.log("path " + getParameterByName("path"))
-			loadPath(path)
-			
-		}
-		resetScreenHeight();
-		loaded = true;
-	}
-		</script>
+	</script>
 
 </body>
 </head>

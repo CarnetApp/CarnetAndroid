@@ -7,7 +7,7 @@
 
 .note-card-view :hover,
 .folder-card-view :hover {
-    background-color: #BFBBBB;
+    background-color: rgb(230, 230, 230);
     -webkit-transition: background-color 250ms linear;
     -ms-transition: background-color 250ms linear;
     transition: background-color 250ms linear;
@@ -60,12 +60,34 @@ body {
     overflow-y: auto;
 }
 
+.big-text {
+    font-size: 40px;
+}
+
+.medium-text {
+    font-size: 30px;
+}
+
+@media (min-width: 1314px) {
+    #grid-container {
+        max-width: 1074px;
+        left: calc(50% - 537px);
+    }
+}
+
 .card-title {
     font-size: 24px;
     font-weight: 300;
     line-height: normal;
     color: black;
     margin: 0px;
+}
+
+.card-text {
+    line-height: initial;
+    margin-bottom: 10px;
+    margin-right: 20px;
+    word-wrap: break-word;
 }
 
 .card-title:hover {

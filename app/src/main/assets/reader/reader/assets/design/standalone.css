@@ -1,116 +1,189 @@
-body{
-
-		height:100%;
-		padding:0px;
-		overflow:hidden;
-		margin:0px;
-		background:#E8EAF6;
-	}
-	#filebar .button{
-		color:white;
-		text-decoration:none;
-	}
-	#filebar{
-		padding:3px;
-		font-weight: bold;
-	}
-	#editorbar{
-	
-	}
-	#editor{
-	font-size : 20px;
-		padding:20px;
-		margin:0px;
-		
-	}
-	[is="spi-toolbar"]{
-	width:100%;
-	background:#3F51B5;
-		padding:3px;
-		margin:0px;
-			box-shadow:0px 7px 10px 0px grey;	
-	}
-	.blue500{
-		background:#3F51B5;	
-	}
-	.toolbar{
-		background:#7085FF;	
-		overflow-x: auto;
-		white-space: nowrap;
-	}
-    .quicknote-img{
-    position:absolute;
-    max-width:100%;
-    max-height:100%;
-
-    }
-    #toolBar2{
-		text-align:center;
-		padding:3px;
-		margin:0px;
-			box-shadow:0px 7px 10px 0px grey;	
-	}
-	
-	
-    #center{
-		height:100%;
-		margin: 0 auto;
-		background:white;
-		box-shadow:0px 3px 5px grey;	
-    
-    }
-    #text:focus{
-    outline: 0px solid transparent;
-    }
-     #text{
-    outline: 0px solid transparent;
-    }
-    .intLink { cursor: pointer; }
-    img.intLink { border: 0; }
-    #toolBar1 select { font-size:10px; }
-    #textdf {
-    width: 540px;
-    height: 200px;
-    border: 1px #000000 solid;
-    padding: 12px;
-    overflow: scroll;
-    }
-    #textsd #sourceText {
-    padding: 0;
-    margin: 0;
-    min-width: 498px;
-    min-height: 200px;
-    }
-    .ui-content,
-.ui-content #full-height-div { /* divs will inherit page's height */
-  height: inherit;
+body {
+	height: 100%;
+	padding: 0px;
+	overflow: hidden;
+	margin: 0px;
+	background: #E8EAF6;
 }
 
-	#editMode label { cursor: pointer; }
-	
-	.mdl-layout__header{
-		-webkit-app-region: drag;
-	  }
-	  
-	.mdl-layout__header .mdl-layout__drawer-button,
-	.mdl-layout__header button,
-	.mdl-layout__header .mdl-textfield{
-	  -webkit-app-region:no-drag;
+@keyframes fadein {
+	from {
+		opacity: 0;
 	}
+	to {
+		opacity: 1;
+	}
+}
 
-	.headerbar-button{
-		color:white;
-	}
+#fullscreen-viewer {
+	position: fixed;
+	height: 100%;
+	display: none;
+	width: 100%;
+	background: black;
+	text-align: center;
+	z-index: 10;
+}
 
-	body{
-		-webkit-animation: 1s ease 0s normal forwards 1 fadein;
-		animation: 1s ease 0s normal forwards 1 fadein;
+#fullscreen-viewer img {
+	max-height: 100%;
+	max-width: 100%;
+	animation: fadein 1s;
+	transition: margin-top 0.2s;
+	transition: margin-left 0.2s;
+}
+
+#filebar .button {
+	color: white;
+	text-decoration: none;
+}
+
+#media-list {
+	display: inline;
+}
+
+.media {
+	display: inline-block;
+	max-height: 200px;
+	margin: 10px;
+	cursor: pointer;
+}
+
+.media-file {
+	text-align: center;
+	color: white;
+	width: 100px;
+	word-wrap: break-word;
+}
+
+.media img {
+	max-height: 200px;
+}
+
+#filebar {
+	padding: 3px;
+	font-weight: bold;
+}
+
+#editorbar {}
+
+#editor {
+	font-size: 20px;
+	padding: 20px;
+	margin: 0px;
+}
+
+[is="spi-toolbar"] {
+	width: 100%;
+	background: #3F51B5;
+	padding: 3px;
+	margin: 0px;
+	box-shadow: 0px 7px 10px 0px grey;
+}
+
+.blue500 {
+	background: #3F51B5;
+}
+
+.toolbar {
+	background: #7085FF;
+	overflow-x: auto;
+	white-space: nowrap;
+}
+
+.quicknote-img {
+	position: absolute;
+	max-width: 100%;
+	max-height: 100%;
+}
+
+#toolBar2 {
+	text-align: center;
+	padding: 3px;
+	margin: 0px;
+	box-shadow: 0px 7px 10px 0px grey;
+}
+
+#center {
+	height: 100%;
+	margin: 0 auto;
+	background: white;
+	box-shadow: 0px 3px 5px grey;
+}
+
+#text:focus {
+	outline: 0px solid transparent;
+}
+
+#text {
+	outline: 0px solid transparent;
+}
+
+.intLink {
+	cursor: pointer;
+}
+
+img.intLink {
+	border: 0;
+}
+
+#toolBar1 select {
+	font-size: 10px;
+}
+
+#textdf {
+	width: 540px;
+	height: 200px;
+	border: 1px #000000 solid;
+	padding: 12px;
+	overflow: scroll;
+}
+
+#textsd #sourceText {
+	padding: 0;
+	margin: 0;
+	min-width: 498px;
+	min-height: 200px;
+}
+
+.ui-content,
+.ui-content #full-height-div {
+	/* divs will inherit page's height */
+	height: inherit;
+}
+
+#editMode label {
+	cursor: pointer;
+}
+
+.mdl-layout__header {
+	-webkit-app-region: drag;
+}
+
+.mdl-layout__header .mdl-layout__drawer-button,
+.mdl-layout__header button,
+.mdl-layout__header .mdl-textfield {
+	-webkit-app-region: no-drag;
+}
+
+.headerbar-button {
+	color: white;
+}
+
+body {
+	-webkit-animation: 1s ease 0s normal forwards 1 fadein;
+	animation: 1s ease 0s normal forwards 1 fadein;
+}
+
+@keyframes fadein {
+	0% {
+		opacity: 0;
 	}
-	
-	@keyframes fadein{
-		0% { opacity:0; }
-		100% { opacity:1; }
+	100% {
+		opacity: 1;
 	}
-	.mdl-dialog{
-		top: 5px;
-	}
+}
+
+.mdl-dialog {
+	top: 5px;
+}
