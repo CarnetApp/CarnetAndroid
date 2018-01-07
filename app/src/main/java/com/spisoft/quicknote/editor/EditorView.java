@@ -1,11 +1,13 @@
 package com.spisoft.quicknote.editor;
 
 import android.animation.LayoutTransition;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,12 +15,14 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 
+import android.provider.OpenableColumns;
 import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -41,6 +45,9 @@ import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.ZipUtils;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,6 +69,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
 
     private static final String TAG = "EditorView";
+    private static final int OPEN_MEDIA_REQUEST = 343;
     private WebView mWebView;
     private Note mNote;
 
@@ -95,6 +103,8 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     private String mRootPath;
     private NewHttpProxy mServer2;
     private boolean mSetNoteOnLoad;
+    public static EditorView sEditorView;
+    private String mSelectFileCallback;
 
     private void rename(String stringExtra, String path) {
         mWebView.loadUrl("javascript:replace('" + StringEscapeUtils.escapeEcmaScript(stringExtra) + "','" + StringEscapeUtils.escapeEcmaScript(path) + "')");
@@ -122,7 +132,43 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        if(requestCode == OPEN_MEDIA_REQUEST && resultCode == Activity.RESULT_OK){
+            Log.d(TAG, data.getDataString());
+
+            Cursor cursor = null;
+            String displayName = data.getData().getLastPathSegment();
+            try {
+                cursor = getContext().getContentResolver().query(data.getData(), null, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+            Log.d(TAG, displayName);
+            try {
+                final File outF = new File(getContext().getExternalCacheDir(), displayName);
+                InputStream in = getContext().getContentResolver().openInputStream(data.getData());
+                OutputStream out = new FileOutputStream(outF);
+                FileUtils.copy(in, out);
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String retFunction = "FileOpener.selectFileResult('"+mSelectFileCallback+"','" + outF.getAbsolutePath() + "')";
+                        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT)
+                            mWebView.evaluateJavascript(retFunction,null);
+                        else
+                            mWebView.loadUrl("javascript:"+retFunction);
+                    }
+                });
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
 
@@ -190,7 +236,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
     private void init() {
         // Inflate the layout for this fragment
-
+        sEditorView = this;
         mFilter = new IntentFilter();
         mFilter.addAction(NoteManager.ACTION_MOVE);
 
@@ -218,6 +264,9 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(getContext()), "app");
         mHasLoaded = false;
+
+        mRootPath = getContext().getFilesDir().getAbsolutePath();
+        copyReader();
         try {
             mServer2 = new NewHttpProxy(getContext());
             mWebView.loadUrl(mServer2.getUrl("/tmp/reader.html"));
@@ -228,7 +277,14 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         //prepare Reader
         //extract
 
-        mRootPath = getContext().getFilesDir().getAbsolutePath();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
+
+    }
+
+    private void copyReader() {
         File dir = new File(mRootPath + "/reader");
         if (dir.exists())
             FileUtils.deleteRecursive(dir);
@@ -237,9 +293,6 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         //copy reader to separate folder and change rootpath
         String reader = FileUtils.readFile(mRootPath + "/reader/reader/reader.html");
         FileUtils.writeToFile(mRootPath + "/tmp/reader.html", reader.replace("<!ROOTPATH>", "../reader/"));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            WebView.setWebContentsDebuggingEnabled(true);
-        }
 
     }
 
@@ -381,7 +434,35 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                 }
             }.execute();
         }
+        @JavascriptInterface
+        public void readdir(String path, final String callback){
+            if (!path.startsWith("/"))
+                path = mRootPath + "/" + path;
+            final JSONObject object = new JSONObject();
+            JSONArray array = new JSONArray();
+            final File file = new File(path);
+            for(File f : file.listFiles()){
+                Log.d(TAG, "read dir ");
+                Log.d(TAG, "read dir"+ f.getAbsolutePath());
 
+                array.put(f.getAbsolutePath().substring(path.length()));
+            }
+            try {
+                object.put("data",array);
+
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "read dir"+ file.getAbsolutePath());
+                        mWebView.loadUrl("javascript:FSCompatibility.resultReaddir('" + callback + "',false,'"
+                                +StringEscapeUtils.escapeEcmaScript(object.toString())+"')");
+
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         @JavascriptInterface
         public void addKeyword(String word, String path){
             KeywordsHelper.getInstance(getContext()).addKeyword(word, new Note(path));
@@ -392,6 +473,23 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
             KeywordsHelper.getInstance(getContext()).removeKeyword(word, new Note(path));
         }
 
+        @JavascriptInterface
+        public void selectFile(String callback) {
+            mSelectFileCallback = callback;
+            mWebView.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    
+                    intent.setType("image/*");
+
+                    ((Activity)getContext()).startActivityForResult(intent, OPEN_MEDIA_REQUEST);
+
+                }
+            });
+        }
         @JavascriptInterface
         public void extractTo(String from, String to, final String callback){
             boolean error;
@@ -419,18 +517,30 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
         @JavascriptInterface
         public void readFile(final String callback, String path) {
-            if (!path.startsWith("/"))
+            if (!path.startsWith("/")&& ! path.startsWith("content"))
                 path = mRootPath + "/" + path;
             File f = new File(path);
             Log.d(TAG, "read " + path);
 
-            final byte[] content = new byte[(int) f.length()];
             InputStream in = null;
             try {
-                in = new FileInputStream(f);
+                int length = -1;
+                if(!path.startsWith("content")) {
+                    in = new FileInputStream(f);
+                    length = (int)f.length();
+                }
+                else {
+                    in = getContext().getContentResolver().openInputStream(Uri.parse("content://com.android.providers.media.documents/document/image%3A116742"));
+                    length = in.available();
+                    Log.d(TAG, "readdiiiing " + in.available());
+                }
+                final byte[] content = new byte[length];
+
                 for (int off = 0, read;
                      (read = in.read(content, off, content.length - off)) > 0;
-                     off += read)
+                     off += read){
+                    Log.d(TAG,"readdiiiing");
+                }
                     ;
                 Log.d(TAG, "result " + Base64.encodeToString(content, 0));
 

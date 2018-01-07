@@ -40,6 +40,7 @@ import com.spisoft.quicknote.databases.DBMergerService;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.editor.BlankFragment;
+import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.synchro.HelpActivity;
 import com.spisoft.quicknote.utils.FileLocker;
 import com.spisoft.quicknote.utils.PinView;
@@ -238,6 +239,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
             mShouldRemove = false;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(EditorView.sEditorView!=null)
+            EditorView.sEditorView.onActivityResult(requestCode, resultCode, data);
     }
     public void setPreloadBlankFragment() {
 
