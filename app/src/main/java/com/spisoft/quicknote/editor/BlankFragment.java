@@ -127,18 +127,11 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
             return mRoot;
         }
         mRoot = inflater.inflate(R.layout.floating_note, container, false);
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            int result = getResources().getDimensionPixelSize(resourceId);
-            mRoot.setPadding(0,result, 0,0);
-        }
         mEditor = ((EditorView) mRoot.findViewById(R.id.editor_view));
         if(mNote!=null)
             mEditor.setNote(mNote);
         mEditor.reset();
         mEditor.setHideListener(this);
-
-        boolean fullScreen = (getActivity().getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0;
 
         return mRoot ;
     }
