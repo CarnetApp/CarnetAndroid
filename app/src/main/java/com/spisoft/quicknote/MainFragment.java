@@ -12,8 +12,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,7 @@ import com.spisoft.quicknote.browser.BrowserFragment;
 import com.spisoft.quicknote.browser.KeywordNotesFragment;
 import com.spisoft.quicknote.browser.PermissionChecker;
 import com.spisoft.quicknote.browser.RecentNoteListFragment;
+import com.spisoft.quicknote.browser.SearchFragment;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.editor.*;
@@ -38,7 +42,7 @@ import static com.spisoft.quicknote.MainActivity.ACTION_RELOAD_KEYWORDS;
 
 /**
  */
-public class MainFragment extends Fragment implements View.OnClickListener {
+public class MainFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
 
 
     private View mRoot;
@@ -149,6 +153,30 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         mKeywordsTask.execute();
 
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main, menu);
+        SearchView view = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        view.setOnQueryTextListener(this);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        if(fragment instanceof SearchFragment)
+            ((SearchFragment) fragment).doSearch(query);
+        else {
+            Fragment fragment = SearchFragment.newInstance(PreferenceHelper.getRootPath(getActivity()),query);
+            setFragment(fragment);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
 
     public void setFragment(Fragment fragment) {
         this.fragment = fragment;
@@ -234,6 +262,16 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     public void unlockDrawer(){
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    public boolean onBackPressed() {
+        if (getChildFragmentManager().getBackStackEntryCount() == 1){
+            return false;
+        }
+
+        getChildFragmentManager().popBackStackImmediate();
+        this.fragment  = getChildFragmentManager().getFragments().get(0);
+        return true;
     }
 
 

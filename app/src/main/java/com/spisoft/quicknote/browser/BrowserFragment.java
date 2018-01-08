@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.spisoft.quicknote.FileManagerService;
 import com.spisoft.quicknote.FloatingService;
 import com.spisoft.quicknote.MainActivity;
+import com.spisoft.quicknote.MainFragment;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
@@ -125,7 +126,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
     public void onViewCreated(View v, Bundle save) {
         super.onViewCreated(v, save);
         setHasOptionsMenu(true);
-        if(!hasAddedButton)
+        if(mRoot.findViewById(R.id.add_note_button) == null)
             addSecondaryButton(R.layout.browser_secondary_buttons);
         hasAddedButton = true;
         mRoot.findViewById(R.id.add_note_button).setOnClickListener(this);
@@ -182,7 +183,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
     @Override
     public void onFolderClick(File folder) {
         Fragment fragment = BrowserFragment.newInstance(folder.getAbsolutePath());
-        ((MainActivity)getActivity()).setFragment(fragment);
+        ((MainFragment)getParentFragment()).setFragment(fragment);
     }
 
     @Override

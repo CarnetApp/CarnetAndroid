@@ -64,6 +64,7 @@ public class SearchFragment extends NoteListFragment implements BrowserAdapter.O
 
         protected void onProgressUpdate(Map.Entry<Object, Pair<String, Long>>... values) {
             mNoteAdapter.addNote(values[0].getKey());
+            mEmptyView.setVisibility(View.GONE);
             if(values[0].getKey() instanceof Note)
             mNoteAdapter.setText((Note) values[0].getKey(), values[0].getValue().first);
         }
@@ -78,33 +79,8 @@ public class SearchFragment extends NoteListFragment implements BrowserAdapter.O
                 Log.d("testdebug", "looking for "+toSearch+" in " + file.getAbsolutePath());
                 boolean nameToBeAdded = file.getName().toLowerCase().contains(toSearch);
 
-                if(file.isDirectory()) {
-                    if(new File(NoteManager.getHtmlPath(0)).exists()){
 
-                        Pair<String, Boolean> result = read(file.getAbsolutePath(), 100, 10,!nameToBeAdded?toSearch:null);
-                        if(result.second||nameToBeAdded) {
-                            final String txt = result.first;
-                            final Note note = new Note(file.getAbsolutePath());
-                            publishProgress(new Map.Entry<Object, Pair<String, Long>>() {
-                                @Override
-                                public Object getKey() {
-                                    return note;
-                                }
-
-                                @Override
-                                public Pair<String, Long> getValue() {
-                                    return new Pair<String, Long>(txt, file.lastModified());
-                                }
-
-                                @Override
-                                public Pair<String, Long> setValue(Pair<String, Long> s) {
-                                    return new Pair<String, Long>(txt, file.lastModified());
-                                }
-                            });
-                        }
-
-                    }
-                    else {
+                    if(file.isDirectory()) {
                         if (nameToBeAdded)
                             publishProgress(new Map.Entry<Object, Pair<String, Long>>() {
                                 @Override
@@ -123,6 +99,33 @@ public class SearchFragment extends NoteListFragment implements BrowserAdapter.O
                                 }
                             });
                         listFiles(file.getAbsolutePath(), toSearch);
+                    }
+                else {
+                    if(file.getAbsolutePath().endsWith(".sqd")){
+
+                        Pair<String, Boolean> result = read(file.getAbsolutePath(), 100, 10,!nameToBeAdded?toSearch:null);
+                        if(result.second||nameToBeAdded) {
+                            final String txt = result.first;
+                            final Note note = new Note(file.getAbsolutePath());
+                            note.setShortText(result.first);
+                            publishProgress(new Map.Entry<Object, Pair<String, Long>>() {
+                                @Override
+                                public Object getKey() {
+                                    return note;
+                                }
+
+                                @Override
+                                public Pair<String, Long> getValue() {
+                                    return new Pair<String, Long>(txt, file.lastModified());
+                                }
+
+                                @Override
+                                public Pair<String, Long> setValue(Pair<String, Long> s) {
+                                    return new Pair<String, Long>(txt, file.lastModified());
+                                }
+                            });
+                        }
+
                     }
                 }
 

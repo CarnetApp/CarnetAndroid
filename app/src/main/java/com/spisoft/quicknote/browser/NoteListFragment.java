@@ -36,6 +36,7 @@ import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.server.ZipReaderAndHttpProxy;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.sync.Configuration;
+import com.spisoft.sync.Log;
 import com.spisoft.sync.synchro.SynchroService;
 
 import org.jsoup.Jsoup;
@@ -69,7 +70,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     private boolean mHasSecondaryButtons;
 
     private TextView mEmptyViewMessage;
-    private View mEmptyView;
+    protected View mEmptyView;
     private boolean mHasLoaded;
     private ZipReaderAndHttpProxy mServer;
     private SwipeRefreshLayout mSwipeLayout;

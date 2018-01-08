@@ -49,7 +49,7 @@ import com.spisoft.sync.synchro.SynchroService;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, PinView.PasswordListener, NoteManager.UpdaterListener {
+public class MainActivity extends AppCompatActivity implements PinView.PasswordListener, NoteManager.UpdaterListener {
     public static final String ACTION_RELOAD_KEYWORDS = "action_reload_keywords";
 
     private static final String WAS_LOCKED = "was_locked";
@@ -139,6 +139,16 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         filter.addAction(NoteManager.ACTION_UPDATE_END);
 
         registerReceiver(mReceiver, filter);
+        final Runnable run = new Runnable() {
+            @Override
+            public void run() {
+                Log.d("actheight", "h& "+getWindow().getDecorView().getHeight());
+                Log.d("actheight", "h2 "+getWindow().getDecorView().getMeasuredHeight());
+                mHandler.postDelayed(this, 1000);
+
+            }
+        };
+        mHandler.postDelayed(run, 1000);
 
     }
 
@@ -198,15 +208,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         mLockLayout.setVisibility(View.VISIBLE);
         mLockLayout.addView(pinView);
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        SearchView view = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        view.setOnQueryTextListener(this);
-        return true;
-    }
+
 
 
 
@@ -269,7 +271,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         if(fragment instanceof com.spisoft.quicknote.editor.BlankFragment)
             if(((com.spisoft.quicknote.editor.BlankFragment) fragment).onBackPressed())
                 return;
-
+        if(fragment instanceof com.spisoft.quicknote.MainFragment)
+            if(((com.spisoft.quicknote.MainFragment) fragment).onBackPressed())
+                return;
         if (getSupportFragmentManager().getBackStackEntryCount() == 1){
             finish();
             return;
@@ -279,21 +283,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         this.fragment  = getSupportFragmentManager().getFragments().get(0);
 
 
-    }
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        if(fragment instanceof SearchFragment)
-            ((SearchFragment) fragment).doSearch(query);
-        else {
-            Fragment fragment = SearchFragment.newInstance(PreferenceHelper.getRootPath(this),query);
-            setFragment(fragment);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
     }
 
     @Override
