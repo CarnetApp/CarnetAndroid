@@ -46,6 +46,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,6 +75,8 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     private boolean mHasLoaded;
     private ZipReaderAndHttpProxy mServer;
     private SwipeRefreshLayout mSwipeLayout;
+    private View mProgress;
+    private View mCircleView;
 
     public void onPause(){
         super.onPause();
@@ -102,6 +105,19 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             }
             mRoot = inflater.inflate(R.layout.note_recycler_layout, null);
             mSwipeLayout = (SwipeRefreshLayout) mRoot.findViewById(R.id.swipe_container);
+            Field field = null;
+            try {
+                field = mSwipeLayout.getClass().getDeclaredField("mCircleView");
+                field.setAccessible(true);
+                mCircleView = (View)field.get(mSwipeLayout);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+
+            mProgress = mRoot.findViewById(R.id.list_progress);
             mSwipeLayout.setOnRefreshListener(this);
             mSwipeLayout.setColorScheme(android.R.color.holo_blue_bright,
                     android.R.color.holo_green_light,
@@ -243,6 +259,14 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     }
 
     private void refreshSyncedStatus() {
+        mProgress.setVisibility(SynchroService.isSyncing?View.VISIBLE:View.GONE);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mCircleView.setVisibility(View.GONE);
+
+            }
+        },500);
         mSwipeLayout.setRefreshing(SynchroService.isSyncing);
     }
 
