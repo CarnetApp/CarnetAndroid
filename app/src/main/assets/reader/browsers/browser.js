@@ -168,16 +168,34 @@ function refreshKeywords() {
         }
     })
 }
+function searchInNotes(searching){
+    resetGrid(false)
+    var settingsHelper = require("./settings/settings_helper").SettingsHelper
+    var SettingsHelper = new settingsHelper();
+    var Search = require("./browsers/search").Search
+    var browser = this;
+    notes = []
+    var callback = function(){
+    
+    }
+    callback.update = function(note){
+        console.log("found "+note.path)
+        note = new Note(note.title, note.text.substring(0, 200), note.path, note.metadata)
+        browser.noteCardViewGrid.addNote(note)
+        notes.push(note)
+        
+    }
+    callback.onEnd = function(list){
+        console.log("onEnd "+list.length)
+        
+    
+    }
+    search = new Search(searching, SettingsHelper.getNotePath(),callback)
+    search.start()
+    
+}
 
-function list(pathToList, discret) {
-    if (pathToList == undefined)
-        pathToList = currentPath;
-    console.log("listing path " + pathToList);
-    currentPath = pathToList;
-    if (pathToList == settingsHelper.getNotePath() || pathToList == initPath || pathToList.startsWith("keyword://")) {
-        $("#back_arrow").hide()
-    } else
-        $("#back_arrow").show()
+function resetGrid(discret){
     var grid = document.getElementById("page-content");
     var scroll = 0;
     if (discret)
@@ -229,7 +247,20 @@ function list(pathToList, discret) {
         dialog.querySelector('#name-input').focus()
 
     })
+}
 
+function list(pathToList, discret) {
+    if (pathToList == undefined)
+        pathToList = currentPath;
+    console.log("listing path " + pathToList);
+    currentPath = pathToList;
+    if (pathToList == settingsHelper.getNotePath() || pathToList == initPath || pathToList.startsWith("keyword://")) {
+        $("#back_arrow").hide()
+    } else
+        $("#back_arrow").show()
+    
+    resetGrid(discret);
+    var noteCardViewGrid = this.noteCardViewGrid
     var notes = [];
     notePath = [];
 
@@ -279,6 +310,12 @@ document.getElementById("add-note-button").onclick = function () {
     })
 }
 
+document.getElementById("search-input").onkeydown = function(event){
+    if(event.key === 'Enter') {
+        searchInNotes(this.value)
+    }
+}
+
 document.getElementById("back_arrow").addEventListener("click", function () {
     list(getParentFolderFromPath(currentPath))
 });
@@ -316,3 +353,4 @@ document.getElementById("grid-container").onscroll = function () {
 
     }
 }
+

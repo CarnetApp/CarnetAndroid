@@ -290,6 +290,19 @@ Writer.prototype.init = function () {
             toolbarManager.toggleToolbar(document.getElementById(event.target.getAttribute("for")))
         });
     };
+    this.searchInput = document.getElementById("search-input");
+    this.searchInput.onfocus = function(){
+        var el = document.getElementById('container-button');
+        console.log('test')
+        $(el).animate({
+            scrollLeft: el.scrollLeft+300
+        }, 200);
+    }
+    this.searchInput.onkeyup = function(event){
+        if(event.key === 'Enter') {
+            window.find(this.value);
+        }
+    }
 
     // $("#editor").webkitimageresize().webkittableresize().webkittdresize();
 }

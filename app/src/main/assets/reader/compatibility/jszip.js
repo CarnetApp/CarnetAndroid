@@ -1,8 +1,8 @@
-this.zip.loadAsync(this.data, {base64: true}).then(function (contents) {
+/*this.zip.loadAsync(this.data, {base64: true}).then(function (contents) {
     extractor.files = Object.keys(contents.files);
     extractor.fullExtract()
   });
-
+*/
 var JSZipCompatibility = function(){
 
 }
@@ -27,7 +27,7 @@ function generateUID() {
 
 var callbacks = []
 
-JSZipTask.prototype.then = function(callback){
+JSZipTask.prototype.then = function(callback, errorCallback){
     var uid = generateUID();
     callbacks[uid] = callback;
     //start

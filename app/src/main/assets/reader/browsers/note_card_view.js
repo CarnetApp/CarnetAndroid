@@ -84,6 +84,9 @@ var NoteCardViewGrid = function (elem, discret, dragCallback) {
 
 
 NoteCardViewGrid.prototype.init = function () {
+    this.noteCards = [];
+    this.lastAdded = 0;
+    this.notes = []
     this.msnry = new Masonry(this.elem, {
         // options
         itemSelector: '.demo-card-wide.mdl-card',
@@ -127,8 +130,11 @@ NoteCardViewGrid.prototype.setNotesAndFolders = function (notes) {
     this.noteCards = [];
     this.lastAdded = 0;
     this.addNext(45);
-    var gr = this
-
+}
+NoteCardViewGrid.prototype.addNote = function(note){
+    this.notes.push(note)
+    this.addNext(1);
+    
 }
 NoteCardViewGrid.prototype.addNext = function (num) {
     var lastAdded = this.lastAdded

@@ -19,3 +19,4 @@ var NoteMetadata = function(){
     this.last_modification_date = ""
     this.keywords = []
 }
+exports.Note = Note

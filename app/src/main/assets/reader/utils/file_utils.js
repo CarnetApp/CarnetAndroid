@@ -24,6 +24,8 @@ FileUtils.getExtensionFromMimetype = function (mimetype) {
   switch (mimetype) {
     case "audio/3gpp":
       return "3gpp"
+    case "image/jpeg":
+      return "jpg"
     case "image/png":
       return "png";
 

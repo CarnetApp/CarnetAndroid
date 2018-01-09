@@ -36,17 +36,24 @@ NoteOpener.prototype.getFullHTML = function (callback) {
   fs.readFile(this.note.path, function (err, data) {
     if (err) {
       console.log("error ")
+      callback(undefined, undefined)
       return console.log(err);
     }
+    console.log("loadAsync  " + data.length)
+
     if (data.length != 0)
       JSZip.loadAsync(data, {
         base64: true
       }).then(function (zip) {
+        console.log("then  " + zip)
+
         zip.file("index.html").async("string").then(function (content) {
           console.log("ok  ")
 
           callback(content, zip)
         })
+      }, function (e) {
+        callback(undefined, undefined)
       });
     else callback(undefined, undefined)
   });
@@ -149,3 +156,4 @@ Compressor.prototype.start = function () {
     .finalize();
   this.callback()
 }
+if (typeof exports !== 'undefined')  exports.NoteOpener = NoteOpener
