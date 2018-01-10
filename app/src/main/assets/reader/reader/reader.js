@@ -4,6 +4,7 @@ var Writer = function (elem) {
     this.elem = elem;
     this.seriesTaskExecutor = new SeriesTaskExecutor();
     this.saveNoteTask = new SaveNoteTask(this)
+    this.hasTextChanged = false;
     resetScreenHeight();
     console.log("create Writer")
 
@@ -16,25 +17,85 @@ Writer.prototype.setNote = function (note) {
 }
 
 Writer.prototype.displayMediaFullscreen = function (index) {
+    var writer = this
+    var imgContainer = document.createElement("div")
+    imgContainer.setAttribute("id","fullimg_container")
     var img = document.createElement("img")
     img.src = this.fullscreenableMedia[index];
 
     $(img).on('load', function () {
         img.style.marginTop = "-" + $(this).height() / 2 + "px"
         img.style.marginLeft = "-" + $(this).width() / 2 + "px"
-
         console.log(img.height)
+        $(img).imgViewer();
+        
     });
-
+    
     img.style.top = "50%"
     img.style.left = "50%"
-
-    img.style.position = "absolute"
+    img.setAttribute("id","fullimage")
+   // img.style.position = "absolute"
     this.fullscreenViewer.innerHTML = "";
-    this.fullscreenViewer.appendChild(img)
+    imgContainer.appendChild(img)
+    this.fullscreenViewer.appendChild(imgContainer)
+    var toolbar = document.createElement("div")
+
+
+   //insert
+   var insertButton = document.createElement("button")
+   insertButton.onclick = function(e){
+       e.stopPropagation();
+       $(writer.fullscreenViewer).hide("slow")
+       return fa;
+   }
+   insertButton.classList.add('mdl-button');
+   insertButton.classList.add('mdl-js-button')
+   insertButton.innerHTML ="insert"    
+   toolbar.setAttribute("id","toolbar")
+   toolbar.appendChild(insertButton)
+
+    //download
+    var a = document.createElement("a")
+    a.href=this.fullscreenableMedia[index];
+    a.download = "" // force download, not view
+    var downloadButton = document.createElement("button")
+    
+    downloadButton.classList.add('mdl-button');
+    downloadButton.classList.add('mdl-js-button')
+    downloadButton.classList.add('mdl-button--icon')
+    var imgD = document.createElement("img")
+    imgD.src= rootpath+"/img/ic_file_download_white_24px.svg"
+    downloadButton.appendChild(imgD)    
+    a.appendChild(downloadButton)
+    toolbar.appendChild(a)
+    
+    //close
+    var closeButton = document.createElement("button")
+    closeButton.onclick = function(e){
+        e.stopPropagation();
+        $(writer.fullscreenViewer).hide("slow")
+        return fa;
+    }
+    closeButton.classList.add('mdl-button');
+    closeButton.classList.add('mdl-js-button')
+    closeButton.classList.add('mdl-button--icon')
+    var imgC = document.createElement("img")
+    imgC.src= rootpath+"/img/ic_close_white_24px.svg"
+    closeButton.appendChild(imgC)    
+    toolbar.appendChild(closeButton)
+
+    this.fullscreenViewer.appendChild(toolbar)
+    this.fullscreenViewer.toolbar = toolbar;
     $(this.fullscreenViewer).fadeIn("slow");
     this.fullscreenViewer.style.display = "table-cell"
     this.currentFullscreen = index;
+    this.fullscreenViewer.onclick = function () {
+        if($(toolbar).is(":visible"))
+            $(toolbar).slideUp("fast");
+        else
+            $(toolbar).slideDown("fast");
+              //  $(writer.fullscreenViewer).hide("slow")
+    }
 }
 
 Writer.prototype.previousMedia = function () {
@@ -155,8 +216,12 @@ Writer.prototype.extractNote = function () {
     })
 }
 
-
-
+saveTextIfChanged = function () {
+    console.log("has text changed ? " + writer.hasTextChanged)
+    if (writer.hasTextChanged)
+        writer.seriesTaskExecutor.addTask(writer.saveNoteTask.saveTxt)
+    writer.hasTextChanged = false;
+}
 Writer.prototype.fillWriter = function (extractedHTML) {
     if (extractedHTML != undefined)
         this.oEditor.innerHTML = extractedHTML;
@@ -164,8 +229,9 @@ Writer.prototype.fillWriter = function (extractedHTML) {
     this.oFloating = document.getElementById("floating");
     var writer = this
     this.oDoc.addEventListener("input", function () {
-        writer.seriesTaskExecutor.addTask(writer.saveNoteTask.saveTxt)
+        writer.hasTextChanged = true;
     }, false);
+    this.saveInterval = setInterval(saveTextIfChanged, 2000);
     this.sDefTxt = this.oDoc.innerHTML;
     /*simple initialization*/
     this.oDoc.focus();
@@ -271,11 +337,9 @@ Writer.prototype.init = function () {
             }
         }
     });
-    this.fullscreenViewer.onclick = function () {
-        $(writer.fullscreenViewer).hide("slow")
-    }
+   
     this.backArrow.addEventListener("click", function () {
-        Compatibility.onBackPressed();
+        writer.askToExit()
     });
     this.toolbarManager = new ToolbarManager()
     var toolbarManager = this.toolbarManager
@@ -291,15 +355,15 @@ Writer.prototype.init = function () {
         });
     };
     this.searchInput = document.getElementById("search-input");
-    this.searchInput.onfocus = function(){
+    this.searchInput.onfocus = function () {
         var el = document.getElementById('container-button');
         console.log('test')
         $(el).animate({
-            scrollLeft: el.scrollLeft+300
+            scrollLeft: el.scrollLeft + 300
         }, 200);
     }
-    this.searchInput.onkeyup = function(event){
-        if(event.key === 'Enter') {
+    this.searchInput.onkeyup = function (event) {
+        if (event.key === 'Enter') {
             window.find(this.value);
         }
     }
@@ -307,6 +371,13 @@ Writer.prototype.init = function () {
     // $("#editor").webkitimageresize().webkittableresize().webkittdresize();
 }
 
+Writer.prototype.askToExit = function () {
+    console.log("exec? " + this.seriesTaskExecutor.isExecuting)
+    if (this.seriesTaskExecutor.isExecuting)
+        return
+    else
+        Compatibility.onBackPressed()
+}
 Writer.prototype.copy = function () {
     document.execCommand('copy');
 }
@@ -377,6 +448,8 @@ Writer.prototype.removeKeyword = function (word) {
 }
 
 Writer.prototype.reset = function () {
+    if (this.saveInterval !== undefined)
+        removeInterval(this.saveInterval)
     this.oEditor.innerHTML = '<div id="text" contenteditable="true" style="height:100%;">\
     <!-- be aware that THIS will be modified in java -->\
     <!-- soft won\'t save note if contains donotsave345oL -->\

@@ -53,6 +53,12 @@
 	<script src="<!ROOTPATH>reader/assets/scripts/Countable.js"></script>
 	<script src="<!ROOTPATH>utils/file_utils.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/jquery.ui.touch-punch.min.js"></script>
+
+	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/jquery-ui.css" media="screen">
+	<script src="<!ROOTPATH>reader/libs/hammer.min.js"></script>
+	<script src="<!ROOTPATH>reader/libs/jquery.hammer.js"></script>
+	<script src="<!ROOTPATH>reader/libs/jquery.mousewheel.min.js"></script>
+	<script src="<!ROOTPATH>reader/libs/imgViewer.js"></script>
 	<script type="text/javascript">
 		function resetScreenHeight() {
 			console.log("resetScreenHeight")
@@ -119,7 +125,7 @@
 	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
 mdl-layout--fixed-header">
 		<header id="header" class="mdl-layout__header">
-			<div class="mdl-layout__header-row" id="container-button" style="overflow-x: auto">
+			<div class="mdl-layout__header-row" id="container-button" style="overflow-x: auto;overflow-y: hidden">
 				<button id="back-arrow" class="mdl-button mdl-js-button mdl-button--icon" style="left: -15px; ">
 					<i class="material-icons">arrow_back</i>
 				</button>
@@ -208,8 +214,7 @@ mdl-layout--fixed-header">
 					</button>
 					<button class="mdl-button mdl-js-button headerbar-button">
 						<i class="material-icons">format_align_justify</i>
-					</button>
-
+					</button>		
 
 
 				</div>
