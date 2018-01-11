@@ -375,9 +375,8 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         } catch (Exception e) {
         }
         mHasRequestedSave = true;
-        mWebView.loadUrl("javascript:requestSave()");
         editedAbsolutePath = null;
-            getContext().sendBroadcast(new Intent(ACTION_RELOAD_KEYWORDS));
+        getContext().sendBroadcast(new Intent(ACTION_RELOAD_KEYWORDS));
         getContext().sendBroadcast(new Intent(ACTION_RELOAD));
     }
 
@@ -440,7 +439,9 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
             final JSONObject object = new JSONObject();
             JSONArray array = new JSONArray();
             final File file = new File(path);
-            for(File f : file.listFiles()){
+            File[] files = file.listFiles();
+            if(files!=null)
+            for(File f : files){
                 Log.d(TAG, "read dir ");
                 Log.d(TAG, "read dir"+ f.getAbsolutePath());
 
