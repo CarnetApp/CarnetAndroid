@@ -605,13 +605,29 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         }
 
         @JavascriptInterface
-        public void zipDir(String dir, String out) {
+        public void zipDir(String dir, String out, final String callback) {
             if (!dir.startsWith("/"))
                 dir = mRootPath + "/" + dir;
             if (!out.startsWith("/"))
                 out = mRootPath + "/" + dir;
             Log.d(TAG, "zipping " + dir + " to " + out);
-            ZipUtils.zipFolder(new File(dir), out);
+
+            final String finalDir = dir;
+            final String finalOut = out;
+            new AsyncTask<Void, Void, Void>() {
+
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    ZipUtils.zipFolder(new File(finalDir), finalOut);
+
+                    return null;
+                }
+
+                protected void onPostExecute(Void result) {
+                    mWebView.loadUrl("javascript:ArchiverCompatibility.finalizeResult('" + callback + "')");
+
+                }
+            }.execute();
         }
 
         @JavascriptInterface
