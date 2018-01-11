@@ -19,7 +19,7 @@ Writer.prototype.setNote = function (note) {
 Writer.prototype.displayMediaFullscreen = function (index) {
     var writer = this
     var imgContainer = document.createElement("div")
-    imgContainer.setAttribute("id","fullimg_container")
+    imgContainer.setAttribute("id", "fullimg_container")
     var img = document.createElement("img")
     img.src = this.fullscreenableMedia[index];
 
@@ -28,50 +28,50 @@ Writer.prototype.displayMediaFullscreen = function (index) {
         img.style.marginLeft = "-" + $(this).width() / 2 + "px"
         console.log(img.height)
         $(img).imgViewer();
-        
+
     });
-    
+
     img.style.top = "50%"
     img.style.left = "50%"
-    img.setAttribute("id","fullimage")
-   // img.style.position = "absolute"
+    img.setAttribute("id", "fullimage")
+    // img.style.position = "absolute"
     this.fullscreenViewer.innerHTML = "";
     imgContainer.appendChild(img)
     this.fullscreenViewer.appendChild(imgContainer)
     var toolbar = document.createElement("div")
 
 
-   //insert
-   var insertButton = document.createElement("button")
-   insertButton.onclick = function(e){
-       e.stopPropagation();
-       $(writer.fullscreenViewer).hide("slow")
-       return fa;
-   }
-   insertButton.classList.add('mdl-button');
-   insertButton.classList.add('mdl-js-button')
-   insertButton.innerHTML ="insert"    
-   toolbar.setAttribute("id","toolbar")
-   toolbar.appendChild(insertButton)
+    //insert
+    var insertButton = document.createElement("button")
+    insertButton.onclick = function (e) {
+        e.stopPropagation();
+        $(writer.fullscreenViewer).hide("slow")
+        return fa;
+    }
+    insertButton.classList.add('mdl-button');
+    insertButton.classList.add('mdl-js-button')
+    insertButton.innerHTML = "insert"
+    toolbar.setAttribute("id", "toolbar")
+    toolbar.appendChild(insertButton)
 
     //download
     var a = document.createElement("a")
-    a.href=this.fullscreenableMedia[index];
+    a.href = this.fullscreenableMedia[index];
     a.download = "" // force download, not view
     var downloadButton = document.createElement("button")
-    
+
     downloadButton.classList.add('mdl-button');
     downloadButton.classList.add('mdl-js-button')
     downloadButton.classList.add('mdl-button--icon')
     var imgD = document.createElement("img")
-    imgD.src= rootpath+"/img/ic_file_download_white_24px.svg"
-    downloadButton.appendChild(imgD)    
+    imgD.src = rootpath + "/img/ic_file_download_white_24px.svg"
+    downloadButton.appendChild(imgD)
     a.appendChild(downloadButton)
     toolbar.appendChild(a)
-    
+
     //close
     var closeButton = document.createElement("button")
-    closeButton.onclick = function(e){
+    closeButton.onclick = function (e) {
         e.stopPropagation();
         $(writer.fullscreenViewer).hide("slow")
         return fa;
@@ -80,8 +80,8 @@ Writer.prototype.displayMediaFullscreen = function (index) {
     closeButton.classList.add('mdl-js-button')
     closeButton.classList.add('mdl-button--icon')
     var imgC = document.createElement("img")
-    imgC.src= rootpath+"/img/ic_close_white_24px.svg"
-    closeButton.appendChild(imgC)    
+    imgC.src = rootpath + "/img/ic_close_white_24px.svg"
+    closeButton.appendChild(imgC)
     toolbar.appendChild(closeButton)
 
     this.fullscreenViewer.appendChild(toolbar)
@@ -90,11 +90,11 @@ Writer.prototype.displayMediaFullscreen = function (index) {
     this.fullscreenViewer.style.display = "table-cell"
     this.currentFullscreen = index;
     this.fullscreenViewer.onclick = function () {
-        if($(toolbar).is(":visible"))
+        if ($(toolbar).is(":visible"))
             $(toolbar).slideUp("fast");
         else
             $(toolbar).slideDown("fast");
-              //  $(writer.fullscreenViewer).hide("slow")
+        //  $(writer.fullscreenViewer).hide("slow")
     }
 }
 
@@ -337,7 +337,7 @@ Writer.prototype.init = function () {
             }
         }
     });
-   
+
     this.backArrow.addEventListener("click", function () {
         writer.askToExit()
     });
@@ -449,7 +449,7 @@ Writer.prototype.removeKeyword = function (word) {
 
 Writer.prototype.reset = function () {
     if (this.saveInterval !== undefined)
-        removeInterval(this.saveInterval)
+        clearInterval(this.saveInterval)
     this.oEditor.innerHTML = '<div id="text" contenteditable="true" style="height:100%;">\
     <!-- be aware that THIS will be modified in java -->\
     <!-- soft won\'t save note if contains donotsave345oL -->\

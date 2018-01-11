@@ -76,5 +76,14 @@ FSCompatibility.writeFileSync = function (path, content, encoding) {
 }
 
 FSCompatibility.createWriteStream = function (path) {
-    return path;
+    var wr = new WriteStream()
+    wr.path = path
+    return wr;
+}
+
+var WriteStream = function () {
+
+}
+WriteStream.prototype.on = function (action, callback) {
+    this.close = callback
 }

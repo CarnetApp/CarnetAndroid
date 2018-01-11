@@ -149,11 +149,15 @@ Compressor.prototype.start = function () {
   console.log("start")
   var archive = archiver.create('zip');
   var output = fs.createWriteStream(this.path);
+  output.on('close', function () {
+    compressor.callback()
+  });
   archive.pipe(output);
-
+  var compressor = this;
   archive
     .directory("tmp", false)
     .finalize();
-  this.callback()
+
+
 }
-if (typeof exports !== 'undefined')  exports.NoteOpener = NoteOpener
+if (typeof exports !== 'undefined') exports.NoteOpener = NoteOpener

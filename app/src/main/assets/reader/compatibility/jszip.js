@@ -1,8 +1,8 @@
-/*this.zip.loadAsync(this.data, {base64: true}).then(function (contents) {
+this.zip.loadAsync(this.data, {base64: true}).then(function (contents) {
     extractor.files = Object.keys(contents.files);
     extractor.fullExtract()
   });
-*/
+
 var JSZipCompatibility = function(){
 
 }
