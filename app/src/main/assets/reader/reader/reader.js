@@ -242,7 +242,8 @@ Writer.prototype.fillWriter = function (extractedHTML) {
     //  $("#editor").webkitimageresize().webkittableresize().webkittdresize();
 
 }
-
+var KeywordsDBManager = require("../keywords/keywords_db_manager").KeywordsDBManager;
+var keywordsDBManager = new KeywordsDBManager()
 Writer.prototype.refreshKeywords = function () {
     var keywordsContainer = document.getElementById("keywords-list");
     keywordsContainer.innerHTML = "";
@@ -257,7 +258,15 @@ Writer.prototype.refreshKeywords = function () {
         });
 
     }
+    keywordsDBManager.getFlatenDB(function (error, data) {
+        writer.availableKeyword = data;
+       
+    })
+
 }
+Writer.prototype.simulateKeyPress = function(character) {
+    $.event.trigger({ type : 'keypress', which : character.charCodeAt(0) });
+  }
 
 Writer.prototype.formatDoc = function (sCmd, sValue) {
     this.oEditor.focus();
@@ -292,6 +301,21 @@ Writer.prototype.displayColorPicker = function (callback) {
     document.getElementById('color-picker-div').show();
 }
 Writer.prototype.init = function () {
+    var snackbarContainer = document.querySelector('#snackbar');
+
+    window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+        if(errorMsg.indexOf("parentElement")>=0)//ignore that one
+            return;
+        var data = {
+            message: "Error occured: " + errorMsg,
+            timeout: 5000,
+
+        };
+        if (!(typeof snackbarContainer.MaterialSnackbar == undefined))
+            snackbarContainer.MaterialSnackbar.showSnackbar(data);
+        return false;
+    }
+
     document.execCommand('styleWithCSS', false, true);
     var writer = this;
     this.statsDialog = this.elem.querySelector('#statsdialog');
@@ -368,6 +392,45 @@ Writer.prototype.init = function () {
         }
     }
 
+    this.keywordsList = document.getElementById("keywords")
+
+
+    writer.keywordsList.innerHTML = "";
+    document.getElementById('keyword-input').addEventListener("input", function(){
+        console.log("input i")
+        writer.keywordsList.innerHTML = "";
+        if(this.value.length<2)
+        return;
+        console.log("input >2")
+        
+        var i = 0
+        for (let word in writer.availableKeyword) {
+            if(i>2)
+                break;
+            if(writer.availableKeyword[word]==0)
+                continue;
+            console.log(this.value.toLowerCase()+" "+word)
+            if(word.toLowerCase().indexOf(this.value.toLowerCase())>=0){
+                console.log(word)
+                var o = document.createElement("tr")
+                let td = document.createElement("td")
+                td.classList.add("mdl-data-table__cell--non-numeric")
+                td.innerHTML = word;
+                o.style="cursor: pointer;"
+                o.appendChild(td)
+                o.onclick = function(){
+                    document.getElementById('keyword-input').value = td.innerHTML
+                    return false
+                }
+                writer.keywordsList.appendChild(o)
+                i++;
+            }
+        }
+        try{
+        new MaterialDataTable(writer.keywordsList)
+        }catch(e){}
+    })
+    
     // $("#editor").webkitimageresize().webkittableresize().webkittdresize();
 }
 

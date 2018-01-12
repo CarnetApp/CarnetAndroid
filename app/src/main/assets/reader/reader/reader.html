@@ -110,12 +110,16 @@
 		</div>
 	</dialog>
 
-	<dialog class="mdl-dialog" id="new-keyword-dialog">
+	<dialog class="mdl-dialog" id="new-keyword-dialog" onclick="return false;">
 		<div class="mdl-dialog__content">
 			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 				<input class="mdl-textfield__input" type="text" id="keyword-input">
 				<label class="mdl-textfield__label" for="sample3">Keyword</label>
 			</div>
+			<table style="width:100%;" id="keywords" class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+
+			</table>
+			
 		</div>
 		<div class="mdl-dialog__actions">
 			<button type="button" class="mdl-button ok" onclick="writer.addKeyword(document.getElementById('keyword-input').value); writer.newKeywordDialog.close(); return false;">OK</button>
@@ -240,6 +244,10 @@ mdl-layout--fixed-header">
 
 					</div>
 				</div>
+			</div>
+			<div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
+				<div class="mdl-snackbar__text"></div>
+				<button class="mdl-snackbar__action" type="button"></button>
 			</div>
 		</main>
 	</div>

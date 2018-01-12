@@ -57,6 +57,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Map;
 
 import static com.spisoft.quicknote.MainActivity.ACTION_RELOAD_KEYWORDS;
 import static com.spisoft.quicknote.browser.NoteListFragment.ACTION_RELOAD;
@@ -630,6 +632,37 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                 }
             }.execute();
         }
+        @JavascriptInterface
+        public void getFlatenKeywordsDB(final String callback) {
+
+            new AsyncTask<Void, Void, String>() {
+
+                @Override
+                protected String doInBackground(Void... voids) {
+                    Map<String, List<String>> keywords = KeywordsHelper.getInstance(getContext()).getFlattenDB(-1);
+                    JSONObject object = new JSONObject();
+                    for(Map.Entry<String, List<String>> entry : keywords.entrySet()){
+                        JSONArray keyArray = new JSONArray();
+                        for(String path : entry.getValue()){
+                            keyArray.put(path);
+                        }
+                        try {
+                            object.put(entry.getKey(), keyArray);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    return object.toString();
+                }
+
+                protected void onPostExecute(String result) {
+                    mWebView.loadUrl("javascript:KeywordDBManagerCompatibility.getFlatenDBResult('" + callback + "','"+StringEscapeUtils.escapeEcmaScript(result)+"')");
+
+                }
+            }.execute();
+        }
+
 
         @JavascriptInterface
         public void writeFileSync(String path, String content, String encoding) {
