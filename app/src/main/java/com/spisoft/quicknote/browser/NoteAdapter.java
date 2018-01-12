@@ -3,6 +3,7 @@ package com.spisoft.quicknote.browser;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,9 @@ public class NoteAdapter extends RecyclerView.Adapter {
     private static final int NOTE = 0;
     protected final Context mContext;
     private final HashMap<Note, String> mText;
+    private final float mBigText;
+    private final float mMediumText;
+    private final float mSmallText;
     protected List<Object> mNotes;
     private ArrayList<Object> mSelelectedNotes;
 
@@ -33,6 +37,9 @@ public class NoteAdapter extends RecyclerView.Adapter {
         mContext = context;
         mNotes = notes;
         mText = new HashMap<Note, String>();
+        mBigText = mContext.getResources().getDimension(R.dimen.big_text);
+        mMediumText = mContext.getResources().getDimension(R.dimen.medium_text);
+        mSmallText = mContext.getResources().getDimension(R.dimen.small_text);
     }
 
     public void setNotes(List<Object> notes) {
@@ -126,11 +133,13 @@ public class NoteAdapter extends RecyclerView.Adapter {
 
         private final View mCard;
         private final TextView mTitleView;
+        private final TextView mTextView;
 
         public NoteViewHolder(View itemView) {
             super(itemView);
             mCard = itemView.findViewById(R.id.cardview);
             mTitleView = (TextView) itemView.findViewById(R.id.name_tv);
+            mTextView = (TextView) itemView.findViewById(R.id.text_tv);
         }
 
         public void setName(String title) {
@@ -173,10 +182,17 @@ public class NoteAdapter extends RecyclerView.Adapter {
         }
 
         public void setText(String s) {
-            if (s != null)
-                ((TextView) itemView.findViewById(R.id.text_tv)).setText(s);
-            else
-                ((TextView) itemView.findViewById(R.id.text_tv)).setText("");
+            if(s==null)
+                s = "";
+            mTextView.setText(s);
+            if(s.length()<40){
+                mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,mBigText);
+            } else if(s.length()<100){
+                mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,mMediumText);
+            }else
+                mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,mSmallText);
+
+
         }
 
         public void setDate(long lastModified) {

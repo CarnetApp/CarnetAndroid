@@ -31,6 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="@android:color/black"
                 android:text="Titre"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold"
@@ -51,18 +52,20 @@
                     android:layout_alignParentRight="true"
                     android:layout_gravity="center_vertical|right" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/name_tv"
-                android:text="texttexttexttexttexttexttexttexttexttexttexttext "
-                android:id="@+id/text_tv"
-                android:maxLines="10"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:paddingLeft="5dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingRight="20dp"/>
+                <TextView
+                    android:id="@+id/text_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/name_tv"
+                    android:maxLines="10"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="5dp"
+                    android:textColor="@android:color/black"
+                    android:text="texttexttexttexttexttexttexttexttexttexttexttext "
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="10sp" />
             </RelativeLayout>
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/keywords"
