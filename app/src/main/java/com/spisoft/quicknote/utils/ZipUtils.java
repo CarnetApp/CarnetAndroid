@@ -164,6 +164,7 @@ public class ZipUtils {
             synchronized (FileLocker.getLockOnPath(path)) {
                 FileLock lock = null;
                 boolean ret = false;
+                Log.d("pathdebug","mkdirs"+new File(path).getParentFile().mkdirs());
                 String tmp = path;
                 try {
 

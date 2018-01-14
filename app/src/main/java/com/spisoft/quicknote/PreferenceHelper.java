@@ -1,12 +1,14 @@
 package com.spisoft.quicknote;
 
 import android.content.Context;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.utils.Utils;
 import com.spisoft.sync.Configuration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +18,7 @@ import java.util.UUID;
  */
 public class PreferenceHelper {
 
-    public static final String DEFAULT_ROOT_PATH = "/sdcard/QuickNote";
+    public static final String DEFAULT_ROOT_PATH = new File(Environment.getExternalStorageDirectory(),"QuickNote").getAbsolutePath();
     public static final String ROOT_PATH_PREFERENCE = "pref_root_path";
     public static final String CURRENT_PASSWORD_PREFERENCE = "pref_password";
     public static final String DISPLAY_AD_COUNT = "pref_display_ad_count";
