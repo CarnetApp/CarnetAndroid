@@ -29,7 +29,6 @@ KeywordDBManagerCompatibility.KeywordsDBManager.prototype.getFlatenDB = function
 }
 
 KeywordDBManagerCompatibility.getFlatenDBResult = function(callback, dataStr){
-    console.log(dataStr)
     var data = JSON.parse(dataStr)
     KeywordDBManagerCompatibility.callbacks[callback](false,data)
 }

@@ -1,3 +1,4 @@
+<!--1-->
 <!DOCTYPE html>
 <html>
 
@@ -98,7 +99,38 @@
 		</div>
 	</dialog>
 
+
 	<!-- </statistics> -->
+
+	<dialog class="mdl-dialog" id="style-dialog" style="padding: 0;">
+		<div class="mdl-dialog__content">
+			<h3>Style</h3>
+			Text size :
+			<input type="text" id="style-text-size" value="" />
+			<br /> Color:
+			<br />
+			<button class="mdl-button mdl-js-button">
+				<i class="material-icons">format_color_text</i>
+			</button>
+			<button class="mdl-button mdl-js-button">
+				<i class="material-icons">format_color_fill</i>
+			</button>
+			<br /> Format
+			<br />
+			<button class="mdl-button mdl-js-button">
+				<i class="material-icons">format_bold</i>
+			</button>
+			<button class="mdl-button mdl-js-button">
+				<i class="material-icons">format_italic</i>
+			</button>
+			<button class="mdl-button mdl-js-button selectedButton" selected>
+				<i class="material-icons">format_underline</i>
+			</button>
+		</div>
+		<div class="mdl-dialog__actions">
+			<button type="button" class="mdl-button ok">OK</button>
+		</div>
+	</dialog>
 
 
 	<dialog class="mdl-dialog" id="color-picker-dialog" style="padding: 0;">
@@ -119,7 +151,7 @@
 			<table style="width:100%;" id="keywords" class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 
 			</table>
-			
+
 		</div>
 		<div class="mdl-dialog__actions">
 			<button type="button" class="mdl-button ok" onclick="writer.addKeyword(document.getElementById('keyword-input').value); writer.newKeywordDialog.close(); return false;">OK</button>
@@ -130,9 +162,6 @@
 mdl-layout--fixed-header">
 		<header id="header" class="mdl-layout__header">
 			<div class="mdl-layout__header-row" id="container-button" style="overflow-x: auto;overflow-y: hidden">
-				<button id="back-arrow" class="mdl-button mdl-js-button mdl-button--icon" style="left: -15px; ">
-					<i class="material-icons">arrow_back</i>
-				</button>
 				<button id="format-button" class="mdl-button mdl-js-button headerbar-button toolbar-button" for="format-toolbar">
 					Format
 				</button>
@@ -166,6 +195,7 @@ mdl-layout--fixed-header">
 
 				<a class="mdl-navigation__link" href="">Export note</a>
 				<a class="mdl-navigation__link" href="">Rename</a>
+				<a class="mdl-navigation__link" href="" onclick="writer.askToExit()">Exit</a>
 				<span style="text-align:center; margin:10px;"> Keywords</span>
 
 				<a class="mdl-navigation__link" href="" onclick="writer.newKeywordDialog.showModal();return false;">Add a keyword</a>
@@ -174,7 +204,10 @@ mdl-layout--fixed-header">
 
 			</nav>
 		</div>
-		<main class="mdl-layout__content">
+		<script>
+			var testtt = undefined;
+		</script>
+		<main class="mdl-layout__content" style="overflow-y: hidden">
 			<div id="toolbars">
 				<div id="media-toolbar" class="toolbar">
 					<div id="media-list"></div>
@@ -219,9 +252,13 @@ mdl-layout--fixed-header">
 					<button class="mdl-button mdl-js-button headerbar-button">
 						<i class="material-icons">format_align_justify</i>
 					</button>
-
-
-
+					<!--<select>
+						<option>test</option>
+					</select>
+					<button class="mdl-button mdl-js-button headerbar-button">
+						<i class="material-icons" onclick="writer.displayStyleDialog()">style</i>
+					</button>
+				-->
 				</div>
 				<div id="edit-toolbar" class="toolbar">
 					<button id="copy-button" class="mdl-button mdl-js-button headerbar-button" onclick="writer.copy()">
@@ -252,7 +289,10 @@ mdl-layout--fixed-header">
 		</main>
 	</div>
 	<div id="fullscreen-viewer"></div>
+	<div id="loading">
+		<div class="mdl-spinner mdl-js-spinner is-active" style="width:200px; height:200px; top:50%; left:50%; margin-top:-150px; margin-left:-100px;"></div>
 
+	</div>
 	<script>
 		var writer = undefined;
 
@@ -285,16 +325,7 @@ mdl-layout--fixed-header">
 			}
 
 			$(window).on('resize', resetScreenHeight);
-			if (isElectron) {
-				var {
-					ipcRenderer,
-					remote
-				} = require('electron');
-				var main = remote.require("./main.js");
-				var win = remote.getCurrentWindow();
-				win.show()
-				main.hideMainWindow();
-			}
+
 
 			var path = getParameterByName("path");
 			if (path != undefined) {

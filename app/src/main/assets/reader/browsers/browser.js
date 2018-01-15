@@ -168,34 +168,35 @@ function refreshKeywords() {
         }
     })
 }
-function searchInNotes(searching){
+
+function searchInNotes(searching) {
     resetGrid(false)
     var settingsHelper = require("./settings/settings_helper").SettingsHelper
     var SettingsHelper = new settingsHelper();
     var Search = require("./browsers/search").Search
     var browser = this;
     notes = []
-    var callback = function(){
-    
+    var callback = function () {
+
     }
-    callback.update = function(note){
-        console.log("found "+note.path)
+    callback.update = function (note) {
+        console.log("found " + note.path)
         note = new Note(note.title, note.text.substring(0, 200), note.path, note.metadata)
         browser.noteCardViewGrid.addNote(note)
         notes.push(note)
-        
+
     }
-    callback.onEnd = function(list){
-        console.log("onEnd "+list.length)
-        
-    
+    callback.onEnd = function (list) {
+        console.log("onEnd " + list.length)
+
+
     }
-    search = new Search(searching, SettingsHelper.getNotePath(),callback)
+    search = new Search(searching, SettingsHelper.getNotePath(), callback)
     search.start()
-    
+
 }
 
-function resetGrid(discret){
+function resetGrid(discret) {
     var grid = document.getElementById("page-content");
     var scroll = 0;
     if (discret)
@@ -258,7 +259,7 @@ function list(pathToList, discret) {
         $("#back_arrow").hide()
     } else
         $("#back_arrow").show()
-    
+
     resetGrid(discret);
     var noteCardViewGrid = this.noteCardViewGrid
     var notes = [];
@@ -268,6 +269,10 @@ function list(pathToList, discret) {
     fb.list(function (files) {
         if (currentTask != undefined)
             currentTask.continue = false
+        if (files.length > 0) {
+            $("#emty-view").fadeOut("fast");
+        } else
+            $("#emty-view").fadeIn("fast");
         for (let file of files) {
             var filename = getFilenameFromPath(file.path);
             if (file.isFile && filename.endsWith(".sqd")) {
@@ -310,8 +315,8 @@ document.getElementById("add-note-button").onclick = function () {
     })
 }
 
-document.getElementById("search-input").onkeydown = function(event){
-    if(event.key === 'Enter') {
+document.getElementById("search-input").onkeydown = function (event) {
+    if (event.key === 'Enter') {
         searchInNotes(this.value)
     }
 }
@@ -353,4 +358,3 @@ document.getElementById("grid-container").onscroll = function () {
 
     }
 }
-

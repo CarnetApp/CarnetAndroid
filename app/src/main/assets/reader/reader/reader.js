@@ -1,5 +1,4 @@
 var fs = require('fs');
-
 var Writer = function (elem) {
     this.elem = elem;
     this.seriesTaskExecutor = new SeriesTaskExecutor();
@@ -74,7 +73,7 @@ Writer.prototype.displayMediaFullscreen = function (index) {
     closeButton.onclick = function (e) {
         e.stopPropagation();
         $(writer.fullscreenViewer).hide("slow")
-        return fa;
+        return false;
     }
     closeButton.classList.add('mdl-button');
     closeButton.classList.add('mdl-js-button')
@@ -110,14 +109,15 @@ Writer.prototype.refreshMedia = function () {
     var writer = this;
     writer.mediaList.innerHTML = "";
 
-    fs.readdir('tmp/data/', (err, dir) => {
+    fs.readdir('tmp/data/', function (err, dir) {
         if (err) {
-            throw err
+            return
         }
         writer.currentFullscreen = 0;
         writer.fullscreenableMedia = []
         var mediaCount = 0;
-        for (let filePath of dir) {
+        for (var i = 0; i < dir.length; i++) {
+            var filePath = dir[i]
             console.log("file " + filePath)
             var el = document.createElement("div")
             el.classList.add("media")
@@ -223,6 +223,11 @@ saveTextIfChanged = function () {
     writer.hasTextChanged = false;
 }
 Writer.prototype.fillWriter = function (extractedHTML) {
+
+    setTimeout(function () {
+        $(document.getElementById("loading")).fadeOut("slow")
+    }, 100);
+
     if (extractedHTML != undefined)
         this.oEditor.innerHTML = extractedHTML;
     this.oDoc = document.getElementById("text");
@@ -248,25 +253,29 @@ Writer.prototype.refreshKeywords = function () {
     var keywordsContainer = document.getElementById("keywords-list");
     keywordsContainer.innerHTML = "";
     var writer = this;
-    for (let word of this.note.metadata.keywords) {
+    for (var i = 0; i < this.note.metadata.keywords.length; i++) {
+        var word = this.note.metadata.keywords[i]
         var keywordElem = document.createElement("a")
         keywordElem.classList.add("mdl-navigation__link");
         keywordElem.innerHTML = word;
         keywordsContainer.appendChild(keywordElem);
+        keywordElem.word = word
         keywordElem.addEventListener('click', function () {
-            writer.removeKeyword(word);
+            writer.removeKeyword(this.word);
         });
 
     }
     keywordsDBManager.getFlatenDB(function (error, data) {
         writer.availableKeyword = data;
-       
     })
 
 }
-Writer.prototype.simulateKeyPress = function(character) {
-    $.event.trigger({ type : 'keypress', which : character.charCodeAt(0) });
-  }
+Writer.prototype.simulateKeyPress = function (character) {
+    $.event.trigger({
+        type: 'keypress',
+        which: character.charCodeAt(0)
+    });
+}
 
 Writer.prototype.formatDoc = function (sCmd, sValue) {
     this.oEditor.focus();
@@ -294,17 +303,32 @@ Writer.prototype.setPickerColor = function (picker) {
 Writer.prototype.displayColorPicker = function (callback) {
     currentColorCallback = callback;
     this.colorPickerDialog.querySelector('.ok').addEventListener('click', function () {
-        writer.colorPickerDialog.close();
         callback(currentColor);
+        writer.colorPickerDialog.close();
+
     });
     this.colorPickerDialog.showModal()
     document.getElementById('color-picker-div').show();
 }
+
+Writer.prototype.displayStyleDialog = function () {
+
+    this.styleDialog.showModal()
+}
 Writer.prototype.init = function () {
+    if (isElectron) {
+        var ipcRenderer = require('electron').ipcRenderer;
+        var remote = require('electron').remote;
+        var main = remote.require("./main.js");
+        var win = remote.getCurrentWindow();
+        win.show();
+        main.hideMainWindow();
+
+    }
     var snackbarContainer = document.querySelector('#snackbar');
 
     window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
-        if(errorMsg.indexOf("parentElement")>=0)//ignore that one
+        if (errorMsg.indexOf("parentElement") >= 0) //ignore that one
             return;
         var data = {
             message: "Error occured: " + errorMsg,
@@ -334,6 +358,10 @@ Writer.prototype.init = function () {
         dialogPolyfill.registerDialog(this.colorPickerDialog);
     }
 
+    this.styleDialog = this.elem.querySelector('#style-dialog');
+    if (!this.styleDialog.showModal) {
+        dialogPolyfill.registerDialog(this.styleDialog);
+    }
 
     this.newKeywordDialog = this.elem.querySelector('#new-keyword-dialog');
     if (!this.newKeywordDialog.showModal) {
@@ -342,7 +370,6 @@ Writer.prototype.init = function () {
 
     this.oEditor = document.getElementById("editor");
 
-    this.backArrow = document.getElementById("back-arrow");
     this.mediaList = document.getElementById("media-list");
     this.fullscreenViewer = document.getElementById("fullscreen-viewer");
     $(document).bind('keydown', function (event) {
@@ -362,15 +389,16 @@ Writer.prototype.init = function () {
         }
     });
 
-    this.backArrow.addEventListener("click", function () {
-        writer.askToExit()
-    });
+    ;
     this.toolbarManager = new ToolbarManager()
     var toolbarManager = this.toolbarManager
-    for (var toolbar of document.getElementsByClassName("toolbar")) {
-        this.toolbarManager.addToolbar(toolbar);
+    var toolbars = document.getElementsByClassName("toolbar")
+    for (var i = 0; i < toolbars.length; i++) {
+        this.toolbarManager.addToolbar(toolbars[i]);
     };
-    for (var toolbar of document.getElementsByClassName("toolbar-button")) {
+    var toolbarButtons = document.getElementsByClassName("toolbar-button")
+    for (var i = 0; i < toolbarButtons.length; i++) {
+        var toolbar = toolbarButtons[i]
         console.log("tool " + toolbar.getAttribute("for"))
 
         toolbar.addEventListener("click", function (event) {
@@ -396,41 +424,41 @@ Writer.prototype.init = function () {
 
 
     writer.keywordsList.innerHTML = "";
-    document.getElementById('keyword-input').addEventListener("input", function(){
+    document.getElementById('keyword-input').addEventListener("input", function () {
         console.log("input i")
         writer.keywordsList.innerHTML = "";
-        if(this.value.length<2)
-        return;
+        if (this.value.length < 2)
+            return;
         console.log("input >2")
-        
+
         var i = 0
-        for (let word in writer.availableKeyword) {
-            if(i>2)
+        for (var i = 0; i < writer.availableKeyword.length; i++) {
+            var word = writer.availableKeyword[i]
+            if (i > 2)
                 break;
-            if(writer.availableKeyword[word]==0)
+            if (writer.availableKeyword[word] == 0)
                 continue;
-            console.log(this.value.toLowerCase()+" "+word)
-            if(word.toLowerCase().indexOf(this.value.toLowerCase())>=0){
-                console.log(word)
+            if (word.toLowerCase().indexOf(this.value.toLowerCase()) >= 0) {
                 var o = document.createElement("tr")
-                let td = document.createElement("td")
+                var td = document.createElement("td")
                 td.classList.add("mdl-data-table__cell--non-numeric")
                 td.innerHTML = word;
-                o.style="cursor: pointer;"
+                o.style = "cursor: pointer;"
                 o.appendChild(td)
-                o.onclick = function(){
-                    document.getElementById('keyword-input').value = td.innerHTML
+                o.word = word
+                o.onclick = function () {
+                    document.getElementById('keyword-input').value = this.word
                     return false
                 }
                 writer.keywordsList.appendChild(o)
                 i++;
             }
         }
-        try{
-        new MaterialDataTable(writer.keywordsList)
-        }catch(e){}
+        try {
+            new MaterialDataTable(writer.keywordsList)
+        } catch (e) {}
     })
-    
+
     // $("#editor").webkitimageresize().webkittableresize().webkittdresize();
 }
 
@@ -540,11 +568,15 @@ ToolbarManager.prototype.addToolbar = function (elem) {
 }
 
 ToolbarManager.prototype.toggleToolbar = function (elem) {
-    for (let toolbar of this.toolbars) {
+    for (var i = 0; i < this.toolbars.length; i++) {
+        var toolbar = this.toolbars[i]
         if (toolbar != elem)
-            $(toolbar).hide()
+            $(toolbar).slideUp(always = resetScreenHeight)
     }
-    $(elem).show()
+    if ($(elem).is(":visible"))
+        $(elem).slideUp(always = resetScreenHeight)
+    else
+        $(elem).slideDown(always = resetScreenHeight)
 
     resetScreenHeight()
 }
