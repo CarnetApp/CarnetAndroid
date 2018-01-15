@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.spisoft.quicknote.FloatingFragment;
 import com.spisoft.quicknote.Note;
+import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
@@ -255,46 +256,67 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         //params.topMargin = getResources().getDimensionPixelSize(R.dimen.editor_vertical_margin);
 
         mLinearLayout.addView(mWebView, params);
-
         mWebView.requestFocus();
         mWebView.setVerticalScrollBarEnabled(false);
         mWebView.setHorizontalScrollBarEnabled(false);
         mWebView.getSettings().setJavaScriptEnabled(true);
         //mWebView.getSettings().setSupportZoom(false);
-
         mWebView.setWebViewClient(mClient);
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(getContext()), "app");
         mHasLoaded = false;
-
         mRootPath = getContext().getFilesDir().getAbsolutePath();
-        copyReader();
-        try {
-            mServer2 = new NewHttpProxy(getContext());
-            mWebView.loadUrl(mServer2.getUrl("/tmp/reader.html"));
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //prepare Reader
-        //extract
+        new AsyncTask<Void, Void, Void>(){
 
+            @Override
+            protected Void doInBackground(Void... voids) {
+                copyReader();
+                return null;
+            }
+            protected void onPostExecute(Void result) {
+                try {
+                    mServer2 = new NewHttpProxy(getContext());
+                    mWebView.loadUrl(mServer2.getUrl("/tmp/reader.html"));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            WebView.setWebContentsDebuggingEnabled(true);
-        }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //prepare Reader
+                //extract
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    WebView.setWebContentsDebuggingEnabled(true);
+                }
+            }
+
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
 
     }
 
+
+
     private void copyReader() {
-        File dir = new File(mRootPath + "/reader");
-        if (dir.exists())
-            FileUtils.deleteRecursive(dir);
-        dir.mkdirs();
-        copyFileOrDir("reader");
-        //copy reader to separate folder and change rootpath
+        copyFileOrDir("reader/reader/reader.html");
         String reader = FileUtils.readFile(mRootPath + "/reader/reader/reader.html");
         FileUtils.writeToFile(mRootPath + "/tmp/reader.html", reader.replace("<!ROOTPATH>", "../reader/"));
+        String firstLine = reader.substring(0,reader.indexOf("\n"));
+        Log.d(TAG,"archive version "+firstLine);
+
+        int version = Integer.parseInt(firstLine.substring("<!--".length(), firstLine.length()-"-->".length()));
+        int currentVersion = PreferenceHelper.getCurrentReaderVersion(getContext());
+        Log.d(TAG,"current version "+currentVersion);
+        Log.d(TAG,"archive version "+version);
+        if(version!=currentVersion) {
+            File dir = new File(mRootPath + "/reader");
+            if (dir.exists())
+                FileUtils.deleteRecursive(dir);
+            dir.mkdirs();
+            copyFileOrDir("reader");
+            PreferenceHelper.setCurrentReaderVersion(getContext(), version);
+        }
+        //copy reader to separate folder and change rootpath
 
     }
 
@@ -329,6 +351,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         try {
             in = assetManager.open(filename);
             String newFileName = mRootPath + "/" + filename;
+            new File(newFileName).getParentFile().mkdirs();
             out = new FileOutputStream(newFileName);
 
             byte[] buffer = new byte[1024];
