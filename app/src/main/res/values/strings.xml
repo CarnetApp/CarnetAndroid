@@ -70,6 +70,8 @@
     <string name="write_error">Error while saving text</string>
     <string name="title_activity_authorize">AuthorizeActivity</string>
     <string name="google_drive_preference">Sync Google drive</string>
+    <string name="sync_cloud_preference">Sync with cloud storage</string>
+
     <string name="title_activity_help">HelpActivity</string>
     <string name="sync_drive_activity">Better safe than sorry : \nSync your documents with Google Drive !</string>
     <string name="add_account">Add account</string>

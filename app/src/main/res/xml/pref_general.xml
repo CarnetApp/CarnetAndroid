@@ -8,7 +8,7 @@
 />
         <Preference
             android:key="pref_google_drive"
-            android:title="@string/google_drive_preference"
+            android:title="@string/sync_cloud_preference"
             />
     </PreferenceCategory>
     <CheckBoxPreference
