@@ -1,10 +1,21 @@
 apply plugin: 'com.android.application'
 
-android {
+static def getDate() {
+    // we increment version number every 1000 seconds,
+    // we start on 31/08/2016
+    def date = new Date().getTime() / 1000L - 1472637600L
+    return (int) (date / 1000L)
+}
 
+static def getFormattedDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMdd.HHmm')
+    return formattedDate
+}
+
+android {
     compileSdkVersion 27
     buildToolsVersion '25.0.3'
-
     dexOptions {
         javaMaxHeapSize "4g"
     }
@@ -12,35 +23,33 @@ android {
         applicationId "com.spisoft.quicknote"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 23
-        versionName "1.23"
+        versionCode getDate()
+        versionName '10.2-' + getFormattedDate()
         multiDexEnabled true
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             zipAlignEnabled true
             resValue "string", "app_name", "QuickNote"
+            signingConfig signingConfigs.release
         }
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             zipAlignEnabled true
             applicationIdSuffix '.debug'
             versionNameSuffix '-DEBUG'
             resValue "string", "app_name", "QuickNote debug"
         }
-
     }
     lintOptions {
         disable 'MissingTranslation'
     }
-
 }
 
 dependencies {
-
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'org.jsoup:jsoup:1.8.3'
     compile 'com.android.support:appcompat-v7:27.0.2'
