@@ -317,7 +317,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
             PreferenceHelper.setCurrentReaderVersion(getContext(), version);
         }
         //copy reader to separate folder and change rootpath
-
+        pet
     }
 
 
