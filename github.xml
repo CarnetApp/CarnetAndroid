@@ -2,6 +2,6 @@
 <manifest>
   <remote  name="github" fetch=".." />
   <default revision="master" remote="github" />
-  <project path="QuickDoc" name="QuickDoc" />
-  <project path="Sync" name="Sync" />
+  <project path="QuickDoc" name="Phief/QuickDoc" />
+  <project path="Sync" name="Phief/Sync" />
 </manifest>
