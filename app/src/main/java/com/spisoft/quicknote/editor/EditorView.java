@@ -10,6 +10,7 @@ import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -743,12 +745,15 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     }
 
     WebViewClient mClient = new WebViewClient() {
-
+        @Override
+        public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
+            handler.cancel();
+        }
 
         /*
-                                **  Manage if the url should be load or not, and get the result of the request
-                                **
-                                */
+        **  Manage if the url should be load or not, and get the result of the request
+        **
+        */
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
