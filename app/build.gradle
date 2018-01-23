@@ -15,7 +15,7 @@ static def getFormattedDate() {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '25.0.3'
+    buildToolsVersion '26.0.2'
     dexOptions {
         javaMaxHeapSize "4g"
     }
