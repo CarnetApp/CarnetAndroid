@@ -217,6 +217,8 @@ public class KeywordsHelper {
             JSONObject otherDBJson = otherDBHelper.getJson();
             for(int i = 0; i<otherDBJson.getJSONArray("data").length(); i++){
                 JSONObject obj = otherDBJson.getJSONArray("data").getJSONObject(i);
+                if(!obj.has("keyword"))
+                    continue;
                 String action = obj.getString("action");
                 String path = obj.getString("path");
                 String keyword = obj.getString("keyword");
@@ -225,6 +227,8 @@ public class KeywordsHelper {
                 int index = 0;
                 for(int j = 0; j<myJSON.getJSONArray("data").length(); j++){
                     JSONObject myObj = myJSON.getJSONArray("data").getJSONObject(j);
+                    if(!myObj.has("keyword"))
+                        continue;
                     String myAction = myObj.getString("action");
                     String myPath = myObj.getString("path");
                     String myKeyword = myObj.getString("keyword");
