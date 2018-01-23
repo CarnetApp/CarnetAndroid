@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <remote  name="github" fetch=".." />
+  <default revision="master" remote="github" />
+  <project path="QuickDoc" name="QuickDoc" />
+  <project path="Sync" name="Sync" />
+</manifest>
