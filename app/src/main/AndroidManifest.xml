@@ -21,16 +21,8 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service android:name="com.tooleap.sdk.TooleapAppService" />
         <service android:name=".noise.NoiseService" />
-        <service
-            android:name="com.tooleap.sdk.TooleapUIService"
-            android:exported="true"
-            android:process=":UIService">
-            <intent-filter>
-                <action android:name="com.tooleap.sdk.BIND_UI_SERVICE" />
-            </intent-filter>
-        </service>
+
         <service android:name=".synchro.SynchroService" />
         <service
             android:name=".synchro.googledrive.MyDriveEventService"
@@ -41,16 +33,6 @@
         </service>
         <service android:name=".FileManagerService"></service>
 
-        <receiver android:name="com.tooleap.sdk.TooleapReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
-
-                <data android:scheme="package" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.tooleap.sdk.TOOLEAP_ACTION" />
-            </intent-filter>
-        </receiver>
 
         <activity
             android:name=".MainActivity"
