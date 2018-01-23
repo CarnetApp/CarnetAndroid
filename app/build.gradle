@@ -33,7 +33,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             zipAlignEnabled true
             resValue "string", "app_name", "QuickNote"
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
         debug {
             minifyEnabled false
