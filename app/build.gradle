@@ -49,6 +49,10 @@ android {
     }
 }
 
+if (file("../../Internal").exists()) {
+    apply from: '../../Internal/internal_build.gradle'
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'org.jsoup:jsoup:1.8.3'
