@@ -153,9 +153,15 @@ function refreshKeywords() {
     keywordsDBManager.getFlatenDB(function (error, data) {
         var keywordsContainer = document.getElementById("keywords");
         keywordsContainer.innerHTML = "";
+        var dataArray = []
         for (let key in data) {
             if (data[key].length == 0)
-                continue;
+            continue;
+            dataArray.push(key)
+        }
+        dataArray.sort(Utils.caseInsensitiveSrt)
+        for (let key of dataArray) {
+            
             var keywordElem = document.createElement("a");
             keywordElem.classList.add("mdl-navigation__link")
             keywordElem.innerHTML = key;

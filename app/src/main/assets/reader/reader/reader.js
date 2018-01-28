@@ -429,11 +429,8 @@ Writer.prototype.init = function () {
         writer.keywordsList.innerHTML = "";
         if (this.value.length < 2)
             return;
-        console.log("input >2")
-
         var i = 0
-        for (var i = 0; i < writer.availableKeyword.length; i++) {
-            var word = writer.availableKeyword[i]
+        for (var word in writer.availableKeyword) {
             if (i > 2)
                 break;
             if (writer.availableKeyword[word] == 0)
