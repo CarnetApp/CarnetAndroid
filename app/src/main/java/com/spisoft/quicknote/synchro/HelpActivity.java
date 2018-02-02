@@ -9,19 +9,27 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
+import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.synchro.googledrive.AuthorizeActivity;
+import com.spisoft.sync.account.*;
+import com.spisoft.sync.wrappers.*;
+import com.spisoft.sync.wrappers.nextcloud.NextCloudAuthorizeFragment;
+import com.spisoft.sync.wrappers.nextcloud.NextCloudCredentialsHelper;
+import com.spisoft.sync.wrappers.nextcloud.NextCloudWrapper;
 
-public class HelpActivity extends AppCompatActivity {
+public class HelpActivity extends AppCompatActivity implements NextCloudAuthorizeFragment.OnConnectClickListener {
 
     private static final String SHOULD_START_ACTIVITY = "should_start_gdrive_act";
 
-    private static final int NUM_PAGES = 5;
+    private  int NUM_PAGES = 2;
 
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
+    private NextCloudAuthorizeFragment mNextCloudFragment;
 
 
     @Override
@@ -43,7 +51,20 @@ public class HelpActivity extends AppCompatActivity {
         finish();
     }
     public static boolean shouldStartActivity(Context context){
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SHOULD_START_ACTIVITY, true)||true;
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SHOULD_START_ACTIVITY, true);
+    }
+
+    public void next() {
+        mPager.setCurrentItem(mPager.getCurrentItem()+1);
+    }
+
+    @Override
+    public void onConnectClick(String remote, String username, String password) {
+        com.spisoft.sync.account.DBAccountHelper.Account account = com.spisoft.sync.account.DBAccountHelper.getInstance(this)
+                .addOrReplaceAccount(new com.spisoft.sync.account.DBAccountHelper.Account(-1, NextCloudWrapper.ACCOUNT_TYPE, "NextCloud"));
+        NextCloudCredentialsHelper.getInstance(this).addOrReplaceAccount(new NextCloudCredentialsHelper.Credentials(-1, account.accountID, remote, username, password));
+        com.spisoft.sync.wrappers.WrapperFactory.getWrapper(this,NextCloudWrapper.ACCOUNT_TYPE, account.accountID).addFolderSync(PreferenceHelper.getRootPath(this), "Documents/QuickNote");
+        finish();
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -53,7 +74,13 @@ public class HelpActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return new SynchroIntroductionFragment();
+            if(position == 0)
+                return new SynchroIntroductionFragment();
+            else {
+                mNextCloudFragment = new NextCloudAuthorizeFragment();
+                mNextCloudFragment.setOnConnectClickListener(HelpActivity.this);
+                return mNextCloudFragment;
+            }
         }
 
         @Override
