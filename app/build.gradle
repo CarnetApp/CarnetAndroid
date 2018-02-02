@@ -54,6 +54,7 @@ if (file("../../Internal").exists()) {
 }
 
 dependencies {
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'org.jsoup:jsoup:1.8.3'
     compile 'com.android.support:appcompat-v7:27.0.2'
