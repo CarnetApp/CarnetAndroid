@@ -18,6 +18,7 @@ import com.spisoft.quicknote.synchro.googledrive.AuthorizeActivity;
 import com.spisoft.sync.account.*;
 import com.spisoft.sync.wrappers.*;
 import com.spisoft.sync.wrappers.googledrive.DriveSyncWrapper;
+import com.spisoft.sync.wrappers.googledrive.GDriveWrapper;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudAuthorizeFragment;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudCredentialsHelper;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudWrapper;
@@ -31,6 +32,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private NextCloudAuthorizeFragment mNextCloudFragment;
+    private DriveSyncWrapper mDriveWrapper;
 
 
     @Override
@@ -68,6 +70,11 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
         finish();
     }
 
+    public void connectGoogleDrive() {
+        mDriveWrapper = new DriveSyncWrapper(this, -1);
+        mDriveWrapper.authorize(this);
+    }
+
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
@@ -92,10 +99,13 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        Log.d(TAG, "onActivityResult "+resultCode);
+        Log.d(TAG, requestCode+" onActivityResult "+resultCode);
         switch (requestCode) {
             case DriveSyncWrapper.RESOLVE_CONNECTION_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
+                    com.spisoft.sync.account.DBAccountHelper.Account account = com.spisoft.sync.account.DBAccountHelper.getInstance(this)
+                            .addOrReplaceAccount(new com.spisoft.sync.account.DBAccountHelper.Account(-1, GDriveWrapper.ACCOUNT_TYPE, "Google Drive"));
+                    com.spisoft.sync.wrappers.WrapperFactory.getWrapper(this,GDriveWrapper.ACCOUNT_TYPE, account.accountID).addFolderSync(PreferenceHelper.getRootPath(this), "Documents/QuickNote");
 
                     finish();
 

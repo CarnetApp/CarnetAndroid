@@ -7,16 +7,18 @@ import android.widget.Toast;
 
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.synchro.SynchroService;
+import com.spisoft.sync.wrappers.googledrive.DriveSyncWrapper;
+import com.spisoft.sync.wrappers.googledrive.GDriveWrapper;
 
 public class AuthorizeActivity extends AppCompatActivity {
 
-    private DriveWrapper mDriveWrapper;
+    private DriveSyncWrapper mDriveWrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        // setContentView(R.layout.activity_authorize);
-        mDriveWrapper = new DriveWrapper(this, -1);
+        mDriveWrapper = new DriveSyncWrapper(this, -1);
         mDriveWrapper.authorize(this);
     }
 
