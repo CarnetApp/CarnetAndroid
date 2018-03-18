@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.spisoft.quicknote.R;
+import com.spisoft.sync.wrappers.googledrive.DriveSyncWrapper;
 
 
 public class SynchroIntroductionFragment extends Fragment {
@@ -38,7 +39,7 @@ public class SynchroIntroductionFragment extends Fragment {
         view.findViewById(R.id.gdrive_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().finish();
+                new DriveSyncWrapper(getActivity(), 0).authorize(getActivity());
             }
         });
         view.findViewById(R.id.nextcloud_button).setOnClickListener(new View.OnClickListener() {

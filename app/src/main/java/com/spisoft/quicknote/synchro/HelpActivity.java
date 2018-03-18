@@ -17,6 +17,7 @@ import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.synchro.googledrive.AuthorizeActivity;
 import com.spisoft.sync.account.*;
 import com.spisoft.sync.wrappers.*;
+import com.spisoft.sync.wrappers.googledrive.DriveSyncWrapper;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudAuthorizeFragment;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudCredentialsHelper;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudWrapper;
@@ -26,7 +27,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
     private static final String SHOULD_START_ACTIVITY = "should_start_gdrive_act";
 
     private  int NUM_PAGES = 2;
-
+    public String TAG = "HelpActivity";
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private NextCloudAuthorizeFragment mNextCloudFragment;
@@ -51,7 +52,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
         finish();
     }
     public static boolean shouldStartActivity(Context context){
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SHOULD_START_ACTIVITY, true);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SHOULD_START_ACTIVITY, true)||true;
     }
 
     public void next() {
@@ -87,6 +88,22 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
         public int getCount() {
             return NUM_PAGES;
         }
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        Log.d(TAG, "onActivityResult "+resultCode);
+        switch (requestCode) {
+            case DriveSyncWrapper.RESOLVE_CONNECTION_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+
+                    finish();
+
+                }
+
+                break;
+        }
+
     }
 }
 
