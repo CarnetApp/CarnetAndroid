@@ -79,7 +79,7 @@
             android:name=".noise.NoisePlayer"
             android:label="@string/title_activity_noise_player" />
         <activity
-            android:name=".synchro.googledrive.AuthorizeActivity"
+            android:name="com.spisoft.sync.wrappers.googledrive.AuthorizeActivity"
             android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".synchro.HelpActivity"

@@ -71,8 +71,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
     }
 
     public void connectGoogleDrive() {
-        mDriveWrapper = new DriveSyncWrapper(this, -1);
-        mDriveWrapper.authorize(this);
+        startActivityForResult(new Intent(this, com.spisoft.sync.wrappers.googledrive.AuthorizeActivity.class),0);
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -101,18 +100,22 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         Log.d(TAG, requestCode+" onActivityResult "+resultCode);
         switch (requestCode) {
-            case DriveSyncWrapper.RESOLVE_CONNECTION_REQUEST_CODE:
+            case 0:
                 if (resultCode == RESULT_OK) {
-                    com.spisoft.sync.account.DBAccountHelper.Account account = com.spisoft.sync.account.DBAccountHelper.getInstance(this)
-                            .addOrReplaceAccount(new com.spisoft.sync.account.DBAccountHelper.Account(-1, GDriveWrapper.ACCOUNT_TYPE, "Google Drive"));
-                    com.spisoft.sync.wrappers.WrapperFactory.getWrapper(this,GDriveWrapper.ACCOUNT_TYPE, account.accountID).addFolderSync(PreferenceHelper.getRootPath(this), "Documents/QuickNote");
-
-                    finish();
-
-                }
+                    onGoogleConnectionOK();
+                    }
 
                 break;
         }
+
+    }
+
+    private void onGoogleConnectionOK() {
+        com.spisoft.sync.account.DBAccountHelper.Account account = com.spisoft.sync.account.DBAccountHelper.getInstance(this)
+                .addOrReplaceAccount(new com.spisoft.sync.account.DBAccountHelper.Account(-1, GDriveWrapper.ACCOUNT_TYPE, "Google Drive"));
+        com.spisoft.sync.wrappers.WrapperFactory.getWrapper(this,GDriveWrapper.ACCOUNT_TYPE, account.accountID).addFolderSync(PreferenceHelper.getRootPath(this), "Documents/QuickNote");
+
+        finish();
 
     }
 }

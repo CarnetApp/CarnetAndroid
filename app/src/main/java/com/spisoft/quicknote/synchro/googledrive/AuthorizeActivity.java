@@ -19,7 +19,7 @@ public class AuthorizeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
        // setContentView(R.layout.activity_authorize);
         mDriveWrapper = new DriveSyncWrapper(this, -1);
-        mDriveWrapper.authorize(this);
+        mDriveWrapper.authorize(this, null);
     }
 
     @Override
