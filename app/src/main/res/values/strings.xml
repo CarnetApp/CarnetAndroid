@@ -92,4 +92,5 @@
     <string name="google_drive">Google Drive</string>
     <string name="sync_intro_gdrive_text">Easy, most of you already have a gmail address, not OpenSource</string>
     <string name="sync_select_nextcloud_text">QuickNote is compatible with ever NextCloud providers. Please, find and register with a provider (some are available for free)</string>
+    <string name="skip">Skip</string>
 </resources>

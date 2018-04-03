@@ -101,8 +101,13 @@
             </LinearLayout>
 
 
-
         </LinearLayout>
+        <TextView
+            android:onClick="skip"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:text="@string/skip"/>
     </LinearLayout>
 
 </FrameLayout>

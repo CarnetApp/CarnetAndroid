@@ -109,7 +109,9 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
         }
 
     }
-
+    public void skip(View v){
+        finish();
+    }
     private void onGoogleConnectionOK() {
         com.spisoft.sync.account.DBAccountHelper.Account account = com.spisoft.sync.account.DBAccountHelper.getInstance(this)
                 .addOrReplaceAccount(new com.spisoft.sync.account.DBAccountHelper.Account(-1, GDriveWrapper.ACCOUNT_TYPE, "Google Drive"));
