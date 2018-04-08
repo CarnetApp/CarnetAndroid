@@ -3,6 +3,7 @@ package com.spisoft.quicknote;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -11,9 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.spisoft.quicknote.billingutils.BillingUtils;
 import com.spisoft.quicknote.billingutils.IsPaidCallback;
+import com.spisoft.quicknote.intro.HelpActivity;
 import com.spisoft.quicknote.synchro.googledrive.AuthorizeActivity;
 import com.spisoft.quicknote.utils.PinView;
 import com.spisoft.sync.account.AccountListActivity;
+import com.spisoft.sync.account.DBAccountHelper;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -79,14 +82,16 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
             return true;
         }
         if(preference==findPreference("pref_google_drive")){
-            startActivity(new Intent(getActivity(),AccountListActivity.class));
+            Cursor cursor = DBAccountHelper.getInstance(getActivity()).getCursor();
+            if(cursor == null || cursor.getCount() == 0){
+                startActivity(new Intent(getActivity(), HelpActivity.class));
+            }
+            else
+                startActivity(new Intent(getActivity(),AccountListActivity.class));
             return true;
         }else if(preference==findPreference("pref_set_password")){
             PasswordDialog dialog = new PasswordDialog();
             dialog.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(),"" );
-            return true;
-        }else if(preference==findPreference("pref_remove_ad_pay")){
-            u.purchase(getActivity(),isPaidCallback);
             return true;
         }
         else if(preference==findPreference("pref_report_bug")){
