@@ -82,7 +82,7 @@
             android:name="com.spisoft.sync.wrappers.googledrive.AuthorizeActivity"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".synchro.HelpActivity"
+            android:name=".intro.HelpActivity"
             android:label="@string/title_activity_help"
             android:theme="@style/AppTheme" />
 

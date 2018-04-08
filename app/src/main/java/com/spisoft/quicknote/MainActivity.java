@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,33 +19,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.spisoft.quicknote.browser.BrowserFragment;
-import com.spisoft.quicknote.browser.KeywordNotesFragment;
 import com.spisoft.quicknote.browser.PasteDialog;
 import com.spisoft.quicknote.browser.PermissionChecker;
-import com.spisoft.quicknote.browser.RecentNoteListFragment;
-import com.spisoft.quicknote.browser.SearchFragment;
 import com.spisoft.quicknote.databases.DBMergerService;
-import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.editor.EditorView;
-import com.spisoft.quicknote.synchro.HelpActivity;
-import com.spisoft.quicknote.utils.FileLocker;
+import com.spisoft.quicknote.intro.HelpActivity;
 import com.spisoft.quicknote.utils.PinView;
 import com.spisoft.sync.synchro.SynchroService;
-
-import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements PinView.PasswordListener, NoteManager.UpdaterListener {
     public static final String ACTION_RELOAD_KEYWORDS = "action_reload_keywords";

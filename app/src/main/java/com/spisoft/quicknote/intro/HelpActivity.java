@@ -1,4 +1,4 @@
-package com.spisoft.quicknote.synchro;
+package com.spisoft.quicknote.intro;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,8 +15,6 @@ import android.view.View;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.synchro.googledrive.AuthorizeActivity;
-import com.spisoft.sync.account.*;
-import com.spisoft.sync.wrappers.*;
 import com.spisoft.sync.wrappers.googledrive.DriveSyncWrapper;
 import com.spisoft.sync.wrappers.googledrive.GDriveWrapper;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudAuthorizeFragment;
@@ -27,7 +25,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
 
     private static final String SHOULD_START_ACTIVITY = "should_start_gdrive_act";
 
-    private  int NUM_PAGES = 2;
+    private  int NUM_PAGES = 3;
     public String TAG = "HelpActivity";
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
@@ -82,6 +80,8 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
         @Override
         public Fragment getItem(int position) {
             if(position == 0)
+                return new WelcomeIntroductionFragment();
+            else if(position == 1)
                 return new SynchroIntroductionFragment();
             else {
                 mNextCloudFragment = new NextCloudAuthorizeFragment();
@@ -112,6 +112,10 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
     public void skip(View v){
         finish();
     }
+    public void next(View v){
+        next();
+    }
+
     private void onGoogleConnectionOK() {
         com.spisoft.sync.account.DBAccountHelper.Account account = com.spisoft.sync.account.DBAccountHelper.getInstance(this)
                 .addOrReplaceAccount(new com.spisoft.sync.account.DBAccountHelper.Account(-1, GDriveWrapper.ACCOUNT_TYPE, "Google Drive"));

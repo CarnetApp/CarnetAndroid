@@ -1,4 +1,4 @@
-package com.spisoft.quicknote.synchro;
+package com.spisoft.quicknote.intro;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,10 +11,9 @@ import android.view.ViewGroup;
 import com.spisoft.quicknote.R;
 
 
-public class SelectNextcloudProviderFragment extends Fragment {
+public class SynchroIntroductionFragment extends Fragment {
 
-
-    public SelectNextcloudProviderFragment() {
+    public SynchroIntroductionFragment() {
         // Required empty public constructor
     }
 
@@ -28,12 +27,23 @@ public class SelectNextcloudProviderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_synchro_nextcloud_provider, container, false);
+        return inflater.inflate(R.layout.fragment_synchro_introduction, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
+        view.findViewById(R.id.gdrive_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((HelpActivity)getActivity()).connectGoogleDrive();
+            }
+        });
+        view.findViewById(R.id.nextcloud_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((HelpActivity)getActivity()).next();
+            }
+        });
     }
 
 }
