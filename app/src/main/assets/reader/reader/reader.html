@@ -1,4 +1,4 @@
-<!--2-->
+<!--4-->
 <!DOCTYPE html>
 <html>
 
@@ -14,26 +14,23 @@
 
 	<script>
 		var rootpath = "<!ROOTPATH>";
+		var tmppath = "tmp/";
 	</script>
+	<script src="<!ROOTPATH>compatibility.js"></script>
+
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
 	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/icon.css">
 	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/material.indigo-pink.min.css">
 	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/standalone.css">
 	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/simplecolorpicker/simple-color-picker.css">
-	<script src="<!ROOTPATH>compatibility.js"></script>
+
 	<script>
 	</script>
 </head>
 
 <body>
 	<script>
-		if (isElectron) {
-			var $ = require('jquery');
-			var jQuery = $;
-			$.mobile = require('jquery-mobile');
-			var ColorPicker = require('simple-color-picker');
-		}
 	</script>
 	<script src="<!ROOTPATH>reader/reader.js"></script>
 	<!--<script src="<!ROOTPATH>reader/libs/simplecolorpicker/index.js"></script>	-->
@@ -50,7 +47,6 @@
 	<script src="<!ROOTPATH>reader/libs/jscolor.js"></script>
 	<script src="<!ROOTPATH>reader/libs/jscolor.js"></script>
 	<script src="<!ROOTPATH>libs/jszip.min.js"></script>
-	<script src="<!ROOTPATH>reader/assets/scripts/standalone.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/Countable.js"></script>
 	<script src="<!ROOTPATH>utils/file_utils.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/jquery.ui.touch-punch.min.js"></script>
@@ -195,7 +191,7 @@ mdl-layout--fixed-header">
 
 				<a class="mdl-navigation__link" href="">Export note</a>
 				<a class="mdl-navigation__link" href="">Rename</a>
-				<a class="mdl-navigation__link" href="" onclick="writer.askToExit()">Exit</a>
+				<a class="mdl-navigation__link" href="" onclick="writer.askToExit(); return false;">Exit</a>
 				<span style="text-align:center; margin:10px;"> Keywords</span>
 
 				<a class="mdl-navigation__link" href="" onclick="writer.newKeywordDialog.showModal();return false;">Add a keyword</a>
@@ -328,6 +324,9 @@ mdl-layout--fixed-header">
 
 
 			var path = getParameterByName("path");
+			var tmp = getParameterByName("tmppath");
+			if (tmp != null)
+				tmppath = tmp;
 			if (path != undefined) {
 				console.log("path " + getParameterByName("path"))
 				loadPath(path)

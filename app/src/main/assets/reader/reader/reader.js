@@ -109,7 +109,7 @@ Writer.prototype.refreshMedia = function () {
     var writer = this;
     writer.mediaList.innerHTML = "";
 
-    fs.readdir('tmp/data/', function (err, dir) {
+    fs.readdir(tmppath + 'data/', function (err, dir) {
         if (err) {
             return
         }
@@ -160,9 +160,9 @@ Writer.prototype.addMedia = function () {
                 throw err;
             }
             //filename
-            require('mkdirp').sync('tmp/data/');
+            require('mkdirp').sync(tmppath + 'data/');
             var name = FileUtils.getFilename(filePath)
-            fs.writeFile('tmp/data/' + name, data, 'base64', function (err) {
+            fs.writeFile(tmppath + 'data/' + name, data, 'base64', function (err) {
                 if (!err) {
                     writer.seriesTaskExecutor.addTask(writer.saveNoteTask.saveTxt)
                     writer.refreshMedia();
@@ -180,16 +180,16 @@ Writer.prototype.extractNote = function () {
     console.log("Writer.prototype.extractNote")
 
     var writer = this;
-    console.log("extractNote")
-    writer.noteOpener.extractTo("tmp/", function (noSuchFile) {
+    console.log("extractNote to " + tmppath)
+    writer.noteOpener.extractTo(tmppath, function (noSuchFile) {
         console.log("done")
         if (!noSuchFile) {
             var fs = require('fs');
-            fs.readFile('tmp/index.html', 'base64', function read(err, data) {
+            fs.readFile(tmppath + 'index.html', 'base64', function read(err, data) {
                 if (err) {
                     throw err;
                 }
-                fs.readFile('tmp/metadata.json', 'base64', function read(err, metadata) {
+                fs.readFile(tmppath + 'metadata.json', 'base64', function read(err, metadata) {
                     if (err) {
                         throw err;
                     }
@@ -203,7 +203,7 @@ Writer.prototype.extractNote = function () {
         } else {
             writer.fillWriter(undefined)
         }
-        /*fs.readFile('tmp/metadata.json', function read(err, data) {
+        /*fs.readFile(tmppath+'metadata.json', function read(err, data) {
             if (err) {
                 throw err;
             }
@@ -224,10 +224,12 @@ saveTextIfChanged = function () {
 }
 Writer.prototype.fillWriter = function (extractedHTML) {
 
-    setTimeout(function () {
-        $(document.getElementById("loading")).fadeOut("slow")
-    }, 100);
-
+    if (isElectron) {
+        const {
+            ipcRenderer
+        } = require('electron')
+        ipcRenderer.sendToHost('loaded', "")
+    }
     if (extractedHTML != undefined)
         this.oEditor.innerHTML = extractedHTML;
     this.oDoc = document.getElementById("text");
@@ -247,7 +249,7 @@ Writer.prototype.fillWriter = function (extractedHTML) {
     //  $("#editor").webkitimageresize().webkittableresize().webkittdresize();
 
 }
-var KeywordsDBManager = require("../keywords/keywords_db_manager").KeywordsDBManager;
+var KeywordsDBManager = require(rootpath + "keywords/keywords_db_manager").KeywordsDBManager;
 var keywordsDBManager = new KeywordsDBManager()
 Writer.prototype.refreshKeywords = function () {
     var keywordsContainer = document.getElementById("keywords-list");
@@ -302,11 +304,14 @@ Writer.prototype.setPickerColor = function (picker) {
 }
 Writer.prototype.displayColorPicker = function (callback) {
     currentColorCallback = callback;
-    this.colorPickerDialog.querySelector('.ok').addEventListener('click', function () {
-        callback(currentColor);
+    var call =  function () {
+        writer.colorPickerDialog.querySelector('.ok').removeEventListener('click',call)
         writer.colorPickerDialog.close();
+        callback(currentColor);
 
-    });
+
+    }
+    this.colorPickerDialog.querySelector('.ok').addEventListener('click',call);
     this.colorPickerDialog.showModal()
     document.getElementById('color-picker-div').show();
 }
@@ -317,12 +322,12 @@ Writer.prototype.displayStyleDialog = function () {
 }
 Writer.prototype.init = function () {
     if (isElectron) {
-        var ipcRenderer = require('electron').ipcRenderer;
-        var remote = require('electron').remote;
-        var main = remote.require("./main.js");
-        var win = remote.getCurrentWindow();
-        win.show();
-        main.hideMainWindow();
+        /* var ipcRenderer = require('electron').ipcRenderer;
+          var remote = require('electron').remote;
+          var main = remote.require("./main.js");
+          var win = remote.getCurrentWindow();
+          win.show();
+          main.hideMainWindow();*/
 
     }
     var snackbarContainer = document.querySelector('#snackbar');
@@ -515,7 +520,7 @@ Writer.prototype.surroundSelection = function (element) {
         }
     }
 }
-var KeywordsDBManager = require("../keywords/keywords_db_manager").KeywordsDBManager;
+var KeywordsDBManager = require(rootpath + "keywords/keywords_db_manager").KeywordsDBManager;
 var keywordsDBManager = new KeywordsDBManager()
 Writer.prototype.addKeyword = function (word) {
     if (this.note.metadata.keywords.indexOf(word) < 0 && word.length > 0) {
@@ -553,6 +558,7 @@ Writer.prototype.setColor = function (color) {
 }
 
 Writer.prototype.fillColor = function (color) {
+    document.execCommand('styleWithCSS', false, true);
     document.execCommand('backColor', false, color);
 }
 
@@ -621,21 +627,21 @@ SaveNoteTask.prototype.saveTxt = function (onEnd) {
     var fs = require('fs');
     var writer = this.writer;
     console.log("saving")
-    fs.unlink("tmp/reader.html", function () {
-        fs.writeFile('tmp/index.html', writer.oEditor.innerHTML, function (err) {
+    fs.unlink(tmppath + "reader.html", function () {
+        fs.writeFile(tmppath + 'index.html', writer.oEditor.innerHTML, function (err) {
             if (err) {
                 onEnd()
                 return console.log(err);
             }
             writer.note.metadata.last_modification_date = Date.now();
             console.log("saving meta  " + writer.note.metadata.keywords[0])
-            fs.writeFile('tmp/metadata.json', JSON.stringify(writer.note.metadata), function (err) {
+            fs.writeFile(tmppath + 'metadata.json', JSON.stringify(writer.note.metadata), function (err) {
                 if (err) {
                     onEnd()
                     return console.log(err);
                 }
                 console.log("compress")
-                writer.noteOpener.compressFrom("tmp", function () {
+                writer.noteOpener.compressFrom(tmppath, function () {
                     console.log("compressed")
 
                     onEnd()

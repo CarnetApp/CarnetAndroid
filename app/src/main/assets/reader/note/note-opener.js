@@ -155,7 +155,7 @@ Compressor.prototype.start = function () {
   archive.pipe(output);
   var compressor = this;
   archive
-    .directory("tmp", false)
+    .directory(this.source, false)
     .finalize();
 
 

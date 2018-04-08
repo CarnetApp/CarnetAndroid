@@ -6,6 +6,10 @@ body {
 	background: rgb(255, 255, 255);
 }
 
+body, html{
+    line-height: initial;
+}
+
 @keyframes fadein {
 	from {
 		opacity: 0;
@@ -102,6 +106,13 @@ body {
 	font-size: 20px;
 	padding: 20px;
 	margin: 0px;
+}
+
+@media screen and (min-width: 769px) {
+	#editor {
+		padding-left: 70px;
+		padding-right: 70px;
+	}
 }
 
 [is="spi-toolbar"] {

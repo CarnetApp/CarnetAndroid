@@ -2,15 +2,23 @@ var initPath = "recentdb://"
 var currentPath;
 var currentTask = undefined;
 var noteCardViewGrid = undefined;
-var oldNotes = {}
 var notePath = []
 var wasNewNote = false
 var dontOpen = false;
 var currentNotePath = undefined
-var {
+const {
     ipcRenderer,
-    remote
+    remote,
+    app
 } = require('electron');
+const Store = require('electron-store');
+const store = new Store();
+var noteCacheStr = String(store.get("note_cache"))
+if (noteCacheStr == "undefined")
+    noteCacheStr = "{}"
+console.log("cache loaded " + noteCacheStr)
+
+var oldNotes = JSON.parse(noteCacheStr);
 var main = remote.require("./main.js");
 var SettingsHelper = require("./settings/settings_helper").SettingsHelper
 var settingsHelper = new SettingsHelper()
@@ -18,7 +26,7 @@ var TextGetterTask = function (list) {
     this.list = list;
     this.current = 0;
     this.continue = true;
-    this.stopAt = 80;
+    this.stopAt = 50;
 }
 
 TextGetterTask.prototype.startList = function () {
@@ -26,29 +34,36 @@ TextGetterTask.prototype.startList = function () {
 }
 
 TextGetterTask.prototype.getNext = function () {
-    if (this.current >= this.stopAt)
+    if (this.current >= this.stopAt) {
+        console.log("save cache")
+        store.set("note_cache", JSON.stringify(oldNotes))
         return;
+    }
     if (this.list[this.current] instanceof Note) {
         var opener = new NoteOpener(this.list[this.current])
         var myTask = this;
         var note = this.list[this.current]
-        try {
-            opener.getMainTextAndMetadata(function (txt, metadata) {
-                if (myTask.continue) {
-                    if (txt != undefined)
-                        note.text = txt.substring(0, 200);
-                    if (metadata != undefined)
-                        note.metadata = metadata;
-                    oldNotes[note.path] = note;
-                    noteCardViewGrid.updateNote(note)
-                    noteCardViewGrid.msnry.layout();
-                    myTask.getNext();
-                }
-            });
-        } catch (error) {
-            console.log(error);
-        }
-        this.current++;
+        setTimeout(function () {
+            try {
+                opener.getMainTextAndMetadata(function (txt, metadata) {
+                    if (myTask.continue) {
+                        if (txt != undefined)
+                            note.text = txt.substring(0, 200);
+                        if (metadata != undefined)
+                            note.metadata = metadata;
+                        oldNotes[note.path] = note;
+                        noteCardViewGrid.updateNote(note)
+                        noteCardViewGrid.msnry.layout();
+
+                        myTask.getNext();
+                    }
+                });
+            } catch (error) {
+                console.log(error);
+            }
+            myTask.current++;
+        }, oldNotes[note.path] !== undefined ? 1000 : 100)
+
     } else {
         this.current++;
         this.getNext();
@@ -101,39 +116,59 @@ function openNote(notePath) {
     const BrowserWindow = remote.BrowserWindow;
     const path = require('path')
     //var win = new BrowserWindow({ width: 800, height: 600 });
-
+    if (!hasLoadedOnce)
+        $(loadingView).fadeIn();
+    //$(browserElem).faceOut();
     var rimraf = require('rimraf');
-    rimraf('tmp', function () {
+    const tmp = path.join(main.getPath("temp"), "tmpquicknote");
+    rimraf(tmp, function () {
         var fs = require('fs');
 
-        fs.mkdir(__dirname + "/tmp", function (e) {
+        fs.mkdir(tmp, function (e) {
             fs.readFile(__dirname + '/reader/reader.html', 'utf8', function (err, data) {
                 if (err) {
                     fs.rea
                     console.log("error ")
                     return console.log(err);
                 }
-
-                fs.writeFileSync('tmp/reader.html', data.replace(new RegExp('<!ROOTPATH>', 'g'), '../'));
-                var size = remote.getCurrentWindow().getSize();
-                var pos = remote.getCurrentWindow().getPosition();
-                var win = new BrowserWindow({
-                    width: size[0],
-                    height: size[1],
-                    x: pos[0],
-                    y: pos[1],
-                    frame: false
-                });
-                console.log("w " + remote.getCurrentWindow().getPosition()[0])
+                const index = path.join(tmp, 'reader.html');
+                fs.writeFileSync(index, data.replace(new RegExp('<!ROOTPATH>', 'g'), __dirname + '/'));
+                /* var size = remote.getCurrentWindow().getSize();
+                 var pos = remote.getCurrentWindow().getPosition();
+                 var win = new BrowserWindow({
+                     width: size[0],
+                     height: size[1],
+                     x: pos[0],
+                     y: pos[1],
+                     frame: false
+                 });
+                 console.log("w " + remote.getCurrentWindow().getPosition()[0])
+                 const url = require('url')
+                 win.loadURL(url.format({
+                     pathname: path.join(__dirname, 'tmp/reader.html'),
+                     protocol: 'file:',
+                     query: {
+                         'path': notePath
+                     },
+                     slashes: true
+                 }))*/
                 const url = require('url')
-                win.loadURL(url.format({
-                    pathname: path.join(__dirname, 'tmp/reader.html'),
-                    protocol: 'file:',
-                    query: {
-                        'path': notePath
-                    },
-                    slashes: true
-                }))
+
+                if (!hasLoadedOnce) {
+                    webview.setAttribute("src", url.format({
+                        pathname: index,
+                        protocol: 'file:',
+                        query: {
+                            'path': notePath,
+                            'tmppath': tmp + "/"
+                        },
+                        slashes: true
+                    }));
+                } else
+                    webview.send('loadnote', notePath);
+                webview.style = "position:fixed; top:0px; left:0px; height:100%; width:100%; z-index:100; right:0; bottom:0;"
+                //to resize properly
+                hasLoadedOnce = true;
             });
 
 
@@ -156,12 +191,12 @@ function refreshKeywords() {
         var dataArray = []
         for (let key in data) {
             if (data[key].length == 0)
-            continue;
+                continue;
             dataArray.push(key)
         }
         dataArray.sort(Utils.caseInsensitiveSrt)
         for (let key of dataArray) {
-            
+
             var keywordElem = document.createElement("a");
             keywordElem.classList.add("mdl-navigation__link")
             keywordElem.innerHTML = key;
@@ -330,21 +365,6 @@ document.getElementById("search-input").onkeydown = function (event) {
 document.getElementById("back_arrow").addEventListener("click", function () {
     list(getParentFolderFromPath(currentPath))
 });
-$(window).focus(function () {
-    if (wasNewNote)
-        list(currentPath, true)
-    else if (currentTask != undefined) {
-        var noteIndex
-        if ((noteIndex = notePath.indexOf(currentNotePath)) == -1) {
-            noteIndex = 0;
-        }
-        currentTask.current = noteIndex;
-        currentTask.getNext()
-    }
-    wasNewNote = false;
-    refreshKeywords()
-
-});
 
 function getNotePath() {
 
@@ -364,3 +384,35 @@ document.getElementById("grid-container").onscroll = function () {
 
     }
 }
+var webview = document.getElementById("writer-webview")
+
+webview.addEventListener('ipc-message', event => {
+    if (event.channel == "exit") {
+        webview.style = "position:fixed; top:0px; left:0px; height:0px; width:0px; z-index:100; right:0; bottom:0;"
+        //$(browserElem).faceIn();
+        $("#no-drag-bar").hide()
+        if (wasNewNote)
+            list(currentPath, true)
+        else if (currentTask != undefined) {
+            var noteIndex
+            if ((noteIndex = notePath.indexOf(currentNotePath)) == -1) {
+                noteIndex = 0;
+            }
+            currentTask.current = noteIndex;
+            currentTask.getNext()
+        }
+        wasNewNote = false;
+        refreshKeywords()
+
+    } else if (event.channel == "loaded") {
+        $(loadingView).fadeOut();
+        $("#no-drag-bar").show()
+
+    }
+});
+var hasLoadedOnce = false
+webview.addEventListener('dom-ready', () => {
+    // webview.openDevTools()
+})
+var loadingView = document.getElementById("loading-view")
+//var browserElem = document.getElementById("browser")
