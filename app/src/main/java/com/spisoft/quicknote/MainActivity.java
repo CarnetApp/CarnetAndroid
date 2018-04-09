@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.spisoft.quicknote.browser.NoteListFragment;
 import com.spisoft.quicknote.browser.PasteDialog;
 import com.spisoft.quicknote.browser.PermissionChecker;
 import com.spisoft.quicknote.databases.DBMergerService;
@@ -200,8 +201,8 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     public void setFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right);
+                .setCustomAnimations(R.anim.fade_in,
+                R.anim.fade_out);
         if(fragment instanceof BlankFragment){
             if(mEditorFrag!=null) {
 
@@ -211,7 +212,8 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
             }
             mEditorFrag = (BlankFragment) fragment;
         }
-        transaction.add(R.id.root,fragment);
+        transaction.replace(R.id.root,fragment);
+
         transaction.addToBackStack(fragment.getClass().getName()).commit();
         this.fragment = fragment;
 
@@ -265,8 +267,6 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
         getSupportFragmentManager().popBackStackImmediate();
         this.fragment  = getSupportFragmentManager().getFragments().get(0);
-
-
     }
 
     @Override

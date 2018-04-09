@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,6 +46,7 @@ import static com.spisoft.quicknote.MainActivity.ACTION_RELOAD_KEYWORDS;
 public class MainFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
 
 
+    private static final String TAG = "MainFragment";
     private View mRoot;
     private DrawerLayout mDrawerLayout;
     private LinearLayout mKeywordsLayout;
@@ -76,6 +78,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         mRoot = inflater.inflate(R.layout.fragment_main, container, false);
         setHasOptionsMenu(true);
@@ -129,22 +132,28 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
         mFilter.addAction(NoteManager.ACTION_UPDATE_END);
 
         if(savedInstanceState==null) {
-            Fragment fragment = RecentNoteListFragment.newInstance();
+
+            Fragment fragment = this.fragment!=null?this.fragment:RecentNoteListFragment.newInstance();
             setFragment(fragment);
         }
         return mRoot;
     }
 
     @Override
-    public void onStop(){
-        super.onStop();
+    public void onPause(){
+        super.onPause();
+        Log.d(TAG, "onPause");
+
         getActivity().unregisterReceiver(mReceiver);
         if(mKeywordsTask != null)
             mKeywordsTask.cancel(true);
 
     }
+    
+    
     public void onResume(){
         super.onResume();
+        Log.d(TAG, "onResume");
         getActivity().registerReceiver(mReceiver, mFilter);
 
         if(mKeywordsTask != null)
@@ -182,8 +191,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
         this.fragment = fragment;
         getChildFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(android.R.anim.slide_in_left,
-                        0)
                 .replace(R.id.rootbis,fragment)
                 .addToBackStack(null).commit();
     }
@@ -273,7 +280,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
         this.fragment  = getChildFragmentManager().getFragments().get(0);
         return true;
     }
-
 
     private class KeywordRefreshTask extends AsyncTask<Void, Void, Map<String, List<String>>> {
 

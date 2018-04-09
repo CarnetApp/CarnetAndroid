@@ -58,6 +58,7 @@ import java.util.zip.ZipEntry;
  */
 public abstract class NoteListFragment extends Fragment implements NoteAdapter.OnNoteItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, Configuration.SyncStatusListener {
     public static final String ACTION_RELOAD = "action_reload";
+    private static final String TAG = "NoteListFragment";
     protected RecyclerView mRecyclerView;
     protected NoteAdapter mNoteAdapter;
     protected View mRoot;
@@ -80,13 +81,12 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
     public void onPause(){
         super.onPause();
-        Configuration.removeSyncStatusListener(this);
+        myOnPause();
     }
 
     public void onResume(){
         super.onResume();
-        Configuration.addSyncStatusListener(this);
-        refreshSyncedStatus();
+        myOnResume();
     }
 
     @Override
@@ -270,6 +270,20 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         mSwipeLayout.setRefreshing(SynchroService.isSyncing);
     }
 
+    public void myOnPause() {
+        Log.d(TAG, "onPause");
+        if (mTextTask != null)
+            mTextTask.cancel(true);
+        Configuration.removeSyncStatusListener(this);
+    }
+
+    public void myOnResume() {
+        Log.d(TAG, "onResume");
+
+        Configuration.addSyncStatusListener(this);
+        refreshSyncedStatus();
+    }
+
     public class ReadReturnStruct{
         boolean hasFound;
         String readText;
@@ -359,8 +373,11 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             List<Object> notes = new ArrayList<>(lists[0]);
             HashMap<Note, String> txts = new HashMap<>();
             for(final Object object : notes){
+                if(isCancelled())
+                    return txts;
                 if(!(object instanceof  Note))
                     continue;
+
                 Note note = (Note) object;
                 final File file = new File(note.path);
 
