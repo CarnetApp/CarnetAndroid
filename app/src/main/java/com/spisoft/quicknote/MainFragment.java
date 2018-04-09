@@ -131,9 +131,9 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
         mFilter.addAction(ACTION_RELOAD_KEYWORDS);
         mFilter.addAction(NoteManager.ACTION_UPDATE_END);
 
-        if(savedInstanceState==null) {
+        if(savedInstanceState==null&&this.fragment==null) {
 
-            Fragment fragment = this.fragment!=null?this.fragment:RecentNoteListFragment.newInstance();
+            Fragment fragment = RecentNoteListFragment.newInstance();
             setFragment(fragment);
         }
         return mRoot;
