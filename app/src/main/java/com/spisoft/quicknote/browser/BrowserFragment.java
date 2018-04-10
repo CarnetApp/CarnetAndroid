@@ -143,7 +143,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
             Fragment fragment = BlankFragment.newInstance(new Note(path));
             ((MainActivity) getActivity()).setFragment(fragment);*/
         }else if(view == mRoot.findViewById(R.id.add_note_button)){
-            ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(NoteManager.createNewNote(mPath)));
+            createAndOpenNewNote(mPath);
         }else if(view == mRoot.findViewById(R.id.add_folder_button)){
             RenameDialog dialog = new RenameDialog();
             dialog.setName(getString(R.string.new_folder_name));

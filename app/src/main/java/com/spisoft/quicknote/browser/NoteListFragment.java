@@ -474,6 +474,13 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
     protected abstract void internalCreateOptionMenu(Menu menu);
 
+    protected void createAndOpenNewNote(String path){
+        Note note = NoteManager.createNewNote(path);
+        RecentHelper.getInstance(getContext()).addNote(note);
+
+        ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(note));
+    }
+
     @Override
     public void onClick(View view) {
         if(view==mRoot.findViewById(R.id.add_button)) {
@@ -489,10 +496,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
                     return;
                 }else {*/
-              Note note = NoteManager.createNewNote(PreferenceHelper.getRootPath(getActivity()));
-                RecentHelper.getInstance(getContext()).addNote(note);
-
-                ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(note));
+              createAndOpenNewNote(PreferenceHelper.getRootPath(getActivity()));
                     /*Intent intent = new Intent(getActivity(), FloatingService.class);
                     intent.putExtra(FloatingService.NOTE, NoteManager.createNewNote(PreferenceHelper.getRootPath(getActivity())));
                     getActivity().startService(intent);*/
