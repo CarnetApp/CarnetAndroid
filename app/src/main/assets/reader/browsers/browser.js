@@ -43,6 +43,14 @@ TextGetterTask.prototype.getNext = function () {
         var opener = new NoteOpener(this.list[this.current])
         var myTask = this;
         var note = this.list[this.current]
+        var fast = false;
+        //should we go fast or slow refresh ?
+        for (var i = this.current; i < this.stopAt; i++) {
+            if (oldNotes[this.list[i].path] == undefined) {
+                fast = true;
+                break;
+            }
+        }
         setTimeout(function () {
             try {
                 opener.getMainTextAndMetadata(function (txt, metadata) {
@@ -62,7 +70,7 @@ TextGetterTask.prototype.getNext = function () {
                 console.log(error);
             }
             myTask.current++;
-        }, oldNotes[note.path] !== undefined ? 1000 : 100)
+        }, !fast ? 1000 : 100)
 
     } else {
         this.current++;
@@ -342,6 +350,28 @@ function list(pathToList, discret) {
 }
 list(initPath)
 refreshKeywords();
+
+function minimize() {
+    remote.BrowserWindow.getFocusedWindow().minimize();
+}
+
+function maximize() {
+    if (remote.BrowserWindow.getFocusedWindow().isMaximized())
+        remote.BrowserWindow.getFocusedWindow().unmaximize();
+    else
+        remote.BrowserWindow.getFocusedWindow().maximize();
+}
+
+function closeW() {
+    remote.app.exit(0);
+    console.log("cloose")
+}
+
+function toggleSearch() {
+    $("#search-container").slideToggle();
+}
+
+
 main.setMergeListener(function () {
     list(initPath, true)
 })

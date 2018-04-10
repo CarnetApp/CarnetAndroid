@@ -1,7 +1,7 @@
 var isElectron = true;
 
 if (typeof require !== "function") {
-	var exports = function(){}
+	var exports = function () {}
 	isElectron = false;
 	var require = function (required) {
 		if (required == "fs") {
@@ -19,8 +19,8 @@ if (typeof require !== "function") {
 		return "";
 	}
 
-}else {
-	module.paths.push(rootpath+'node_modules');	
+} else {
+	module.paths.push(rootpath + 'node_modules');
 }
 
 var Compatibility = function () {}
@@ -31,8 +31,8 @@ Compatibility.onBackPressed = function () {
 		} = require('electron')
 		ipcRenderer.sendToHost('exit', "")
 	}
-	if(typeof app == "function")		 
-	app.onBackPressed();
+	if (typeof app == "object")
+		app.onBackPressed();
 }
 if (isElectron) {
 	require('electron').ipcRenderer.on('loadnote', function (event, path) {

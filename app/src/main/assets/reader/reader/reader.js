@@ -50,6 +50,9 @@ Writer.prototype.displayMediaFullscreen = function (index) {
     insertButton.classList.add('mdl-button');
     insertButton.classList.add('mdl-js-button')
     insertButton.innerHTML = "insert"
+    insertButton.onclick = function () {
+        writer.warnNotYetImplemented
+    };
     toolbar.setAttribute("id", "toolbar")
     toolbar.appendChild(insertButton)
 
@@ -304,14 +307,14 @@ Writer.prototype.setPickerColor = function (picker) {
 }
 Writer.prototype.displayColorPicker = function (callback) {
     currentColorCallback = callback;
-    var call =  function () {
-        writer.colorPickerDialog.querySelector('.ok').removeEventListener('click',call)
+    var call = function () {
+        writer.colorPickerDialog.querySelector('.ok').removeEventListener('click', call)
         writer.colorPickerDialog.close();
         callback(currentColor);
 
 
     }
-    this.colorPickerDialog.querySelector('.ok').addEventListener('click',call);
+    this.colorPickerDialog.querySelector('.ok').addEventListener('click', call);
     this.colorPickerDialog.showModal()
     document.getElementById('color-picker-div').show();
 }
@@ -319,6 +322,22 @@ Writer.prototype.displayColorPicker = function (callback) {
 Writer.prototype.displayStyleDialog = function () {
 
     this.styleDialog.showModal()
+}
+
+Writer.prototype.warnNotYetImplemented = function () {
+    var data = {
+        message: 'Not yet implemented',
+        timeout: 5000,
+    };
+    this.displaySnack(data);
+    return false;
+}
+
+Writer.prototype.displaySnack = function (data) {
+
+    var snackbarContainer = document.querySelector('#snackbar');
+    if (!(typeof snackbarContainer.MaterialSnackbar == undefined))
+        snackbarContainer.MaterialSnackbar.showSnackbar(data);
 }
 Writer.prototype.init = function () {
     if (isElectron) {
@@ -330,7 +349,7 @@ Writer.prototype.init = function () {
           main.hideMainWindow();*/
 
     }
-    var snackbarContainer = document.querySelector('#snackbar');
+    var writer = this;
 
     window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
         if (errorMsg.indexOf("parentElement") >= 0) //ignore that one
@@ -340,13 +359,11 @@ Writer.prototype.init = function () {
             timeout: 5000,
 
         };
-        if (!(typeof snackbarContainer.MaterialSnackbar == undefined))
-            snackbarContainer.MaterialSnackbar.showSnackbar(data);
+        writer.displaySnack(data)
         return false;
     }
 
     document.execCommand('styleWithCSS', false, true);
-    var writer = this;
     this.statsDialog = this.elem.querySelector('#statsdialog');
     this.showDialogButton = this.elem.querySelector('#show-dialog');
     if (!this.statsDialog.showModal) {
