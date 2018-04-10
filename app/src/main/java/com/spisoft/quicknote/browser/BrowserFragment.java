@@ -99,6 +99,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
     @Override
     protected List<Object> getNotes() {
         mPath = getArguments().getString(PATH);
+        boolean avoidDbFolder = mPath.equals(PreferenceHelper.getRootPath(getActivity()));
         File file = new File(mPath);
         List<Object> ret = new ArrayList<>();
         List<Object> dir = new ArrayList<>();
@@ -107,7 +108,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
             File[] files = file.listFiles();
             if(files!=null){
                 for(File file1 : files){
-                    if(file1.getName().startsWith("."))
+                    if(file1.getName().startsWith(".")||avoidDbFolder&&file1.getName().equals("quickdoc"))
                         continue;
                     if(file1.isFile()&&file1.getName().endsWith(".sqd")){
                         notes.add(new Note(file1.getAbsolutePath()));
