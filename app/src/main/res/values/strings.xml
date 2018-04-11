@@ -96,4 +96,6 @@
     <string name="welcome">Welcome !</string>
     <string name="welcome_subtitle">Let\'s discover QuickNote</string>
     <string name="next">Next</string>
+    <string name="app_restart">The app will now restart</string>
+
 </resources>
