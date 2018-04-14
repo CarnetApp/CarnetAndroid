@@ -485,8 +485,9 @@ Writer.prototype.askToExit = function () {
     console.log("exec? " + this.seriesTaskExecutor.isExecuting)
     if (this.seriesTaskExecutor.isExecuting)
         return
-    else
+    else {
         Compatibility.onBackPressed()
+    }
 }
 Writer.prototype.copy = function () {
     document.execCommand('copy');

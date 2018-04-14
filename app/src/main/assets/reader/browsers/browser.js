@@ -45,7 +45,7 @@ TextGetterTask.prototype.getNext = function () {
         var note = this.list[this.current]
         var fast = false;
         //should we go fast or slow refresh ?
-        for (var i = this.current; i < this.stopAt; i++) {
+        for (var i = this.current; i < this.stopAt && i < this.list.length && i < oldNotes.length; i++) {
             if (oldNotes[this.list[i].path] == undefined) {
                 fast = true;
                 break;
@@ -266,38 +266,93 @@ function resetGrid(discret) {
 
 
     noteCardViewGrid.onMenuClick(function (note) {
-        var dialog = document.querySelector('#contextual-dialog');
-        dialog.querySelector('#name-input').value = note.title;
-        dialog.querySelector('.delete-button').onclick = function () {
+        mNoteContextualDialog.show(note)
+    })
+}
+
+class ContextualDialog {
+    constructor() {
+        this.showDelete = true;
+        this.showArchive = true;
+        this.dialog = document.querySelector('#contextual-dialog');
+        this.nameInput = this.dialog.querySelector('#name-input');
+        this.deleteButton = this.dialog.querySelector('.delete-button');
+        this.archiveButton = this.dialog.querySelector('#archive-button');
+        this.cancel = this.dialog.querySelector('.cancel');
+        this.ok = this.dialog.querySelector('.ok');
+        var context = this;
+        this.cancel.onclick = function () {
+            context.dialog.close();
+        }
+    }
+
+    show() {
+        this.showDelete ? $(this.deleteButton).show() : $(this.deleteButton).hide();
+        this.showArchive ? $(this.deleteButton).show() : $(this.deleteButton).hide();
+        this.dialog.showModal();
+        this.nameInput.focus()
+    }
+}
+
+class NewFolderDialog extends ContextualDialog {
+    constructor() {
+        super();
+        this.showDelete = false;
+        this.showArchive = false;
+    }
+
+    show() {
+        var context = this;
+
+        this.ok.onclick = function () {
+            var fb = new FileBrowser(currentPath);
+            fb.createFolder(context.nameInput.value, function () {
+                list(currentPath, true)
+                context.dialog.close();
+            })
+        }
+        super.show()
+
+    }
+}
+
+class NoteContextualDialog extends ContextualDialog {
+    constructor() {
+        super();
+    }
+
+    show(note) {
+        var context = this;
+        this.nameInput.value = note.title;
+        this.deleteButton.onclick = function () {
             NoteUtils.deleteNote(note.path, function () {
-                dialog.close();
+                context.dialog.close();
                 list(currentPath, true)
             })
         }
-        dialog.querySelector('#archive-button').onclick = function () {
+        this.archiveButton.onclick = function () {
             var db = new RecentDBManager(main.getNotePath() + "/quickdoc/recentdb/" + main.getAppUid())
             db.removeFromDB(NoteUtils.getNoteRelativePath(main.getNotePath(), note.path), function () {
-                dialog.close();
-
+                context.dialog.close();
                 list(currentPath, true)
             });
 
         }
-        dialog.querySelector('.cancel').onclick = function () {
-            dialog.close();
-        }
-        dialog.querySelector('.ok').onclick = function () {
-            NoteUtils.renameNote(note.path, dialog.querySelector('#name-input').value + ".sqd", function () {
+        this.ok.onclick = function () {
+            NoteUtils.renameNote(note.path, context.nameInput.value + ".sqd", function () {
                 list(currentPath, true)
             })
 
-            dialog.close();
+            context.dialog.close();
         }
-        dialog.showModal();
-        dialog.querySelector('#name-input').focus()
+        super.show()
 
-    })
+    }
 }
+
+var mNoteContextualDialog = new NoteContextualDialog()
+var mNewFolderDialog = new NewFolderDialog()
+
 
 function list(pathToList, discret) {
     if (pathToList == undefined)
@@ -305,9 +360,16 @@ function list(pathToList, discret) {
     console.log("listing path " + pathToList);
     currentPath = pathToList;
     if (pathToList == settingsHelper.getNotePath() || pathToList == initPath || pathToList.startsWith("keyword://")) {
+        if (pathToList != settingsHelper.getNotePath()) {
+            $("#add-directory-button").hide()
+        } else
+            $("#add-directory-button").show()
+
         $("#back_arrow").hide()
-    } else
+    } else {
         $("#back_arrow").show()
+        $("#add-directory-button").show()
+    }
 
     resetGrid(discret);
     var noteCardViewGrid = this.noteCardViewGrid
@@ -385,6 +447,11 @@ document.getElementById("add-note-button").onclick = function () {
         openNote(path)
     })
 }
+
+document.getElementById("add-directory-button").onclick = function () {
+    mNewFolderDialog.show();
+}
+
 
 document.getElementById("search-input").onkeydown = function (event) {
     if (event.key === 'Enter') {

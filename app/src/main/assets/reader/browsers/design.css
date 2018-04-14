@@ -25,7 +25,9 @@
     transition: transform 0.2s;
 }
 
+
 /* highlight drag & drop */
+
 
 /* jQuery UI Draggable adds ui-draggable-dragging */
 
@@ -86,7 +88,8 @@ body {
     margin-bottom: 10px;
     margin-right: 20px;
     word-wrap: break-word;
-    color: rgba(0, 0, 0, .87);
+    color: rgba(0,0,0,.87);
+    
 }
 
 .card-title:hover {

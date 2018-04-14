@@ -1,4 +1,4 @@
-<!--5-->
+<!--6-->
 <!DOCTYPE html>
 <html>
 
@@ -21,7 +21,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
 	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/icon.css">
-	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/material.indigo-pink.min.css">
+	<link rel="stylesheet" href="<!ROOTPATH>libs/material.indigo-pink.min.css">
 	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/standalone.css">
 	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/simplecolorpicker/simple-color-picker.css">
 
@@ -40,7 +40,7 @@
 	<script src="<!ROOTPATH>browsers/note.js"></script>
 
 	<script src="<!ROOTPATH>browsers/file-browser.js"></script>
-	<script defer src="<!ROOTPATH>reader/assets/scripts/material.min.js"></script>
+	<script defer src="<!ROOTPATH>libs/material.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/jquery.webkitresize.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/jquery-ui.min.js"></script>
 	<script src="<!ROOTPATH>reader/libs/jquery.mobile-min.js"></script>
@@ -191,7 +191,7 @@ mdl-layout--fixed-header">
 
 				<a class="mdl-navigation__link" href="" onclick="writer.warnNotYetImplemented(); return false;">Export note</a>
 				<a class="mdl-navigation__link" href="" onclick="writer.warnNotYetImplemented(); return false;">Rename</a>
-				<a class="mdl-navigation__link" href="" onclick="writer.askToExit(); return false;">Exit</a>
+				<a class="mdl-navigation__link" href="" onclick="if(document.querySelector('.mdl-layout__drawer').classList.contains('is-visible')){ layout = document.querySelector('.mdl-layout');layout.MaterialLayout.toggleDrawer();}writer.askToExit(); return false;">Exit</a>
 				<span style="text-align:center; margin:10px;"> Keywords</span>
 
 				<a class="mdl-navigation__link" href="" onclick="writer.newKeywordDialog.showModal();return false;">Add a keyword</a>
