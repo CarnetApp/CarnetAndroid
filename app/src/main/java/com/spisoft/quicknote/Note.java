@@ -21,6 +21,7 @@ public class Note implements Serializable{
     public long lastModified = -1;
     public ArrayList<String> keywords;
     public Metadata mMetadata = new Metadata();
+    public boolean isPinned = false;
 
     @Override
     public boolean equals(Object o) {

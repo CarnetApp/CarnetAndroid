@@ -61,12 +61,24 @@ public class RecentNoteListFragment extends NoteListFragment {
             mNotes = getNotes();
             mNoteAdapter.setNotes((List<Object>) mNotes);
         }
+        else if(menuItem.getItemId()==R.string.pin){
+            RecentHelper.getInstance(getContext()).pin(note);
+            reload();
+        }
+        else if(menuItem.getItemId()==R.string.unpin){
+            RecentHelper.getInstance(getContext()).unpin(note);
+            reload();
+        }
         return false;
     }
 
     @Override
-    protected void internalCreateOptionMenu(Menu menu) {
+    protected void internalCreateOptionMenu(Menu menu, Note note) {
         menu.add(0, R.string.remove_recent, 0,R.string.remove_recent);
+        if(note.isPinned)
+            menu.add(0, R.string.unpin, 0,R.string.unpin);
+        else
+            menu.add(0, R.string.pin, 0,R.string.pin);
     }
 
     ItemTouchHelper.Callback mSimpleItemTouchHelperCallback = new ItemTouchHelper.Callback (){

@@ -201,7 +201,7 @@ public class SearchFragment extends NoteListFragment implements BrowserAdapter.O
     }
 
     @Override
-    protected void internalCreateOptionMenu(Menu menu) {
+    protected void internalCreateOptionMenu(Menu menu, Note note) {
 
     }
 

@@ -1,6 +1,5 @@
 package com.spisoft.quicknote.browser;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -19,8 +18,6 @@ import com.spisoft.quicknote.MainFragment;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
-import com.spisoft.quicknote.databases.NoteManager;
-import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.utils.FileUtils;
 
 import java.io.File;
@@ -177,7 +174,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
     }
 
     @Override
-    protected void internalCreateOptionMenu(Menu menu) {
+    protected void internalCreateOptionMenu(Menu menu, Note note) {
 
     }
 
@@ -227,7 +224,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
         });
         menu.getMenu().add(0, R.string.rename, 0, R.string.rename);
         menu.getMenu().add(0, R.string.delete, 0, R.string.delete);
-        internalCreateOptionMenu(menu.getMenu());
+        internalCreateOptionMenu(menu.getMenu(), null);
         menu.show();
     }
 

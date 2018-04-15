@@ -21,20 +21,15 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.spisoft.quicknote.FloatingService;
 import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
-import com.spisoft.quicknote.billingutils.BillingUtils;
-import com.spisoft.quicknote.billingutils.IsPaidCallback;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.server.ZipReaderAndHttpProxy;
-import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.Log;
 import com.spisoft.sync.synchro.SynchroService;
@@ -50,7 +45,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 
 /**
@@ -293,9 +287,8 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     }
 
 
-    protected Note getNoteInfo(String path){
-        Note note = new Note (path);
-        note.setShortText(read(path, 100, 10, null).first);
+    protected Note getNoteInfo(Note note){
+        note.setShortText(read(note.path, 100, 10, null).first);
         Note.Metadata metadata = new Note.Metadata();
         String metadataStr = readZipEntry(mServer.getZipEntry("metadata.json"), -1,-1, null).first;
         if(metadataStr!=null && metadataStr.length()>0){
@@ -384,7 +377,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                 final File file = new File(note.path);
 
                 if(file.exists()) {
-                    note= getNoteInfo(note.path);
+                    note= getNoteInfo(note);
                     note.lastModified = file.lastModified();
                     if (note.mMetadata.creation_date == -1)
                         note.mMetadata.creation_date = file.lastModified();
@@ -466,13 +459,13 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         });
         menu.getMenu().add(0, R.string.rename, 0, R.string.rename);
         menu.getMenu().add(0, R.string.delete, 0, R.string.delete);
-        internalCreateOptionMenu(menu.getMenu());
+        internalCreateOptionMenu(menu.getMenu(), note);
         menu.show();
     }
 
     protected abstract boolean internalOnMenuClick(MenuItem menuItem, Note note);
 
-    protected abstract void internalCreateOptionMenu(Menu menu);
+    protected abstract void internalCreateOptionMenu(Menu menu, Note note);
 
     protected void createAndOpenNewNote(String path){
         Note note = NoteManager.createNewNote(path);

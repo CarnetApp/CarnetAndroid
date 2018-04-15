@@ -94,6 +94,34 @@ public class RecentHelper {
         }
     }
 
+    public void unpin(Note note){
+        try {
+            JSONObject object = getJson();
+            JSONObject noteObject = new JSONObject();
+            noteObject.put("path",getRelativePath(note.path, mContext));
+            noteObject.put("action","unpin");
+            noteObject.put("time",System.currentTimeMillis());
+            object.getJSONArray("data").put(noteObject);
+            write(object.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void pin(Note note){
+        try {
+            JSONObject object = getJson();
+            JSONObject noteObject = new JSONObject();
+            noteObject.put("path",getRelativePath(note.path, mContext));
+            noteObject.put("action","pin");
+            noteObject.put("time",System.currentTimeMillis());
+            object.getJSONArray("data").put(noteObject);
+            write(object.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void moveNote(Note note, int pos){
 
 
@@ -169,7 +197,9 @@ public class RecentHelper {
     }
 
     public List<Object> getLatestNotes(int limit){
-        List<Object> notes = new ArrayList<>();
+        List<Note> notes = new ArrayList<>();
+        List<Object> pin = new ArrayList<>();
+
         String rootPath = PreferenceHelper.getRootPath(mContext)+"/";
         try {
             JSONObject object = getJson();
@@ -182,21 +212,34 @@ public class RecentHelper {
                     notes.remove(note);
                     notes.add(0,note);
                     Log.d("addingdebug","adding "+note.path);
+                }else if(action.equals("pin")){
+                    pin.remove(note);
+                    note.isPinned = true;
+                    pin.add(0,note);
+                }else if(action.equals("unpin")){
+                    pin.remove(note);
                 }
                 else if(action.equals("remove")){
                     notes.remove(note);
+                    pin.remove(note);
                 } else if(action.equals("move")){
                     int index = -1;
                     if((index = notes.indexOf(note))>=0){
-                        ((Note)notes.get(index)).setPath(rootPath+obj.getString("newPath"));
+                        notes.get(index).setPath(rootPath+obj.getString("newPath"));
+                    }
+                    if((index = pin.indexOf(note))>=0){
+                        ((Note)pin.get(index)).setPath(rootPath+obj.getString("newPath"));
                     }
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        return notes;
+        for(Note note : notes){
+            if(!pin.contains(note))
+                pin.add(note);
+        }
+        return pin;
     }
 
     private JSONObject getJson() throws JSONException {

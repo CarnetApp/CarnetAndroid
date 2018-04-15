@@ -97,5 +97,7 @@
     <string name="welcome_subtitle">Let\'s discover QuickNote</string>
     <string name="next">Next</string>
     <string name="app_restart">The app will now restart</string>
+    <string name="pin">Pin</string>
+    <string name="unpin">Unpin</string>
 
 </resources>

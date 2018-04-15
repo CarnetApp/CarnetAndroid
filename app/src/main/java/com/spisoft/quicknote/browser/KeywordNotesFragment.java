@@ -1,8 +1,6 @@
 package com.spisoft.quicknote.browser;
 
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,10 +8,8 @@ import android.view.View;
 import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
-import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
-import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.utils.SpiDebugUtils;
 
@@ -71,7 +67,7 @@ public class KeywordNotesFragment extends NoteListFragment {
     }
 
     @Override
-    protected void internalCreateOptionMenu(Menu menu) {
+    protected void internalCreateOptionMenu(Menu menu, Note note) {
     }
 
     @Override

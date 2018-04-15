@@ -67,12 +67,16 @@ public class NoteAdapter extends RecyclerView.Adapter {
         for (Object note : oldNotes) {
             int newPos = notes.indexOf(note);
             int currentPos = oldNotes1.indexOf(note);
-            if (newPos >= 0 && newPos != currentPos) {
-                newNotes.remove(note);
-                Log.d("notedebug", "notifyItemMoved(" + i + ", " + newPos + ")");
-                oldNotes1.remove(currentPos);
-                oldNotes1.add(newPos, note);
-                notifyItemMoved(currentPos, newPos);
+            if (newPos >= 0) {
+                if(newPos != currentPos) {
+                    newNotes.remove(note);
+                    oldNotes1.remove(currentPos);
+                    oldNotes1.add(newPos, note);
+                    notifyItemMoved(currentPos, newPos);
+                }
+                if(note instanceof Note && ((Note)note).isPinned != ((Note)notes.get(i)).isPinned){
+                    notifyItemChanged(newPos);
+                }
 
             }
             if (newPos == -1)
