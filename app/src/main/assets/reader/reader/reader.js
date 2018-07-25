@@ -199,6 +199,11 @@ Writer.prototype.extractNote = function () {
                     writer.note.metadata = JSON.parse(decodeURIComponent(escape(atob(metadata))));
                     writer.refreshKeywords()
                     writer.refreshMedia()
+                    var ratingStars = document.querySelectorAll("input.star")
+                    for (var i = 0; i < ratingStars.length; i++) {
+                        ratingStars[i].checked = writer.note.metadata.rating == (5-i);
+                    };
+                    writer.updateRating(writer.note.metadata.rating)
                 });
                 content = data;
                 writer.fillWriter(decodeURIComponent(escape(atob(content))))
@@ -442,6 +447,16 @@ Writer.prototype.init = function () {
         }
     }
 
+    var ratingStars = document.getElementsByClassName("star")
+    for (var i = 0; i < ratingStars.length; i++) {
+        ratingStars[i].checked = false;
+        ratingStars[i].onclick=function(){
+            writer.saveRating(this.value);
+            writer.updateRating(this.value);
+        }
+    };
+
+
     this.keywordsList = document.getElementById("keywords")
 
 
@@ -578,6 +593,24 @@ Writer.prototype.setColor = function (color) {
 Writer.prototype.fillColor = function (color) {
     document.execCommand('styleWithCSS', false, true);
     document.execCommand('backColor', false, color);
+}
+
+Writer.prototype.saveRating = function (rating) {
+    this.note.metadata.rating = rating;
+    console.log("new rating "+this.note.metadata.rating)
+    writer.hasTextChanged = true;
+}
+
+Writer.prototype.updateRating = function (rating) {
+    var ratingStars = document.querySelectorAll("label.star")
+    for (var i = 0; i < ratingStars.length; i++) {
+        if(5-i <=this.note.metadata.rating){
+            ratingStars[i].classList.add("checked");
+
+        }else
+        ratingStars[i].classList.remove("checked");
+
+    };
 }
 
 var ToolbarManager = function () {

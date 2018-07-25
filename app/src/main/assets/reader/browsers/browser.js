@@ -274,10 +274,12 @@ class ContextualDialog {
     constructor() {
         this.showDelete = true;
         this.showArchive = true;
+        this.showPin = true;
         this.dialog = document.querySelector('#contextual-dialog');
         this.nameInput = this.dialog.querySelector('#name-input');
         this.deleteButton = this.dialog.querySelector('.delete-button');
         this.archiveButton = this.dialog.querySelector('#archive-button');
+        this.pinButton = this.dialog.querySelector('#pin-button');
         this.cancel = this.dialog.querySelector('.cancel');
         this.ok = this.dialog.querySelector('.ok');
         var context = this;
@@ -288,7 +290,8 @@ class ContextualDialog {
 
     show() {
         this.showDelete ? $(this.deleteButton).show() : $(this.deleteButton).hide();
-        this.showArchive ? $(this.deleteButton).show() : $(this.deleteButton).hide();
+        this.showArchive ? $(this.archiveButton).show() : $(this.archiveButton).hide();
+        this.showPin ? $(this.pinButton).show() : $(this.pinButton).hide();
         this.dialog.showModal();
         this.nameInput.focus()
     }
@@ -299,6 +302,7 @@ class NewFolderDialog extends ContextualDialog {
         super();
         this.showDelete = false;
         this.showArchive = false;
+        this.showPin = false;
     }
 
     show() {
@@ -337,6 +341,24 @@ class NoteContextualDialog extends ContextualDialog {
                 list(currentPath, true)
             });
 
+        }
+        if (note.isPinned == true) {
+            this.pinButton.innerHTML = "Unpin"
+        } else this.pinButton.innerHTML = "Pin"
+
+        this.pinButton.onclick = function () {
+            var db = new RecentDBManager(main.getNotePath() + "/quickdoc/recentdb/" + main.getAppUid())
+            if (note.isPinned == true)
+                db.unpin(NoteUtils.getNoteRelativePath(main.getNotePath(), note.path), function () {
+                    context.dialog.close();
+                    list(currentPath, true)
+                });
+
+            else
+                db.pin(NoteUtils.getNoteRelativePath(main.getNotePath(), note.path), function () {
+                    context.dialog.close();
+                    list(currentPath, true)
+                });
         }
         this.ok.onclick = function () {
             NoteUtils.renameNote(note.path, context.nameInput.value + ".sqd", function () {
@@ -390,6 +412,7 @@ function list(pathToList, discret) {
                 var oldNote = oldNotes[file.path];
 
                 var noteTestTxt = new Note(stripExtensionFromName(filename), oldNote != undefined ? oldNote.text : "", file.path, oldNote != undefined ? oldNote.metadata : undefined);
+                noteTestTxt.isPinned = file.isPinned
                 notes.push(noteTestTxt)
             } else if (!file.isFile) {
 
@@ -509,7 +532,7 @@ webview.addEventListener('ipc-message', event => {
 });
 var hasLoadedOnce = false
 webview.addEventListener('dom-ready', () => {
-    // webview.openDevTools()
+    webview.openDevTools()
 })
 var loadingView = document.getElementById("loading-view")
 //var browserElem = document.getElementById("browser")

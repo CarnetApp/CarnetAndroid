@@ -127,3 +127,8 @@ body {
     background: #D2D2D2;
     display: inline-block;
 }
+
+.card-rating{
+    margin-right:10px;
+    float:right;
+}

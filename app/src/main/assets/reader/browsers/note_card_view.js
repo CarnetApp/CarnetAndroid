@@ -11,6 +11,7 @@ NoteCardView.prototype.setNote = function (note) {
     var date = new Date(note.metadata.last_modification_date).toLocaleDateString();
     this.cardText.innerHTML = note.text;
     this.cardDate.innerHTML = date;
+    this.cardRating.innerHTML = note.metadata.rating+"★"
     this.cardKeywords.innerHTML = "";
     this.cardText.classList.remove("big-text")
     this.cardText.classList.remove("medium-text")
@@ -59,6 +60,9 @@ NoteCardView.prototype.init = function () {
     this.cardTitleText.classList.add("card-title");
     this.cardContent.appendChild(this.cardTitleText)
     this.cardContent.appendChild(this.cardText)
+    this.cardRating = document.createElement('div');
+    this.cardRating.classList.add("card-rating");
+    this.cardContent.appendChild(this.cardRating)
     this.cardDate = document.createElement('div');
     this.cardDate.classList.add("card-date");
     this.cardContent.appendChild(this.cardDate)

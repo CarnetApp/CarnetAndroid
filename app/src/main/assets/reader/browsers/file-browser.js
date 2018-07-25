@@ -23,10 +23,19 @@ FileBrowser.prototype.list = function (callback) {
     if (this.path == "recentdb://") {
         console.log("getting recent")
         var db = new RecentDBManager(mainPath + "/quickdoc/recentdb/" + main.getAppUid())
-        db.getFlatenDB(function (err, flaten) {
+        db.getFlatenDB(function (err, flaten, pin) {
             console.log(JSON.stringify(flaten))
             var files = [];
+            for (let filePath of pin) {
+                var filename = filePath;
+                filePath = mainPath + "/" + filePath
+                file = new File(filePath, true, filename);
+                file.isPinned = true;
+                files.push(file)
+            }
             for (let filePath of flaten) {
+                if (pin.indexOf(filePath) != -1)
+                    continue;
                 var filename = filePath;
                 filePath = mainPath + "/" + filePath
                 file = new File(filePath, true, filename);

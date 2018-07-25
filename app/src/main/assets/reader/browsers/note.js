@@ -18,5 +18,6 @@ var NoteMetadata = function(){
     this.creation_date = ""
     this.last_modification_date = ""
     this.keywords = []
+    this.rating = -1;
 }
 exports.Note = Note
