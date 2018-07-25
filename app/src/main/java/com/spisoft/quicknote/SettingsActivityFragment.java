@@ -10,8 +10,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 
-import com.spisoft.quicknote.billingutils.BillingUtils;
-import com.spisoft.quicknote.billingutils.IsPaidCallback;
 import com.spisoft.quicknote.intro.HelpActivity;
 import com.spisoft.quicknote.synchro.googledrive.AuthorizeActivity;
 import com.spisoft.quicknote.utils.PinView;
@@ -23,37 +21,14 @@ import com.spisoft.sync.account.DBAccountHelper;
  */
 public class SettingsActivityFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
-    private BillingUtils u;
-    private IsPaidCallback isPaidCallback;
 
     public SettingsActivityFragment() {
-    }
-
-    public void launchPurchase() {
-        // TODO Auto-generated method stub
-        u.purchase(getActivity(), isPaidCallback);
-
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        u = new BillingUtils(getActivity());
-        isPaidCallback =new IsPaidCallback(getActivity()) {
-
-            @Override
-            public void hasBeenPaid(int isPaid) {
-                super.hasBeenPaid(isPaid);
-                if(!isAdded())
-                    return;
-                if (checkPayement(isPaid)) {
-                    setPaidStatus();
-                } else {
-                    setFreeStatus();
-                }
-            }
-        };
         addPreferencesFromResource(R.xml.pref_general);
         findPreference("pref_root_path").setOnPreferenceClickListener(this);
         findPreference("pref_google_drive").setOnPreferenceClickListener(this);
@@ -61,7 +36,6 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
         findPreference("pref_set_password").setOnPreferenceClickListener(this);
         findPreference("pref_report_bug").setOnPreferenceClickListener(this);
         findPreference("pref_remove_ad_pay").setOnPreferenceClickListener(this);
-        u.checkPayement(isPaidCallback);
 
     }
 
