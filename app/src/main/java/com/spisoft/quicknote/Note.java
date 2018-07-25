@@ -73,13 +73,15 @@ public class Note implements Serializable{
         public long creation_date = -1;
         public long last_modification_date = -1;
         public List<String> keywords = new ArrayList();
-
+        public int rating = -1;
         public static Metadata fromString(String string){
             Metadata metadata = new Metadata();
             try {
                 JSONObject jsonObject = new JSONObject(string);
                 metadata.creation_date = jsonObject.getLong("creation_date");
                 metadata.last_modification_date = jsonObject.getLong("last_modification_date");
+                if(jsonObject.has("rating"))
+                    metadata.rating = jsonObject.getInt("rating");
                 JSONArray array =  jsonObject.getJSONArray("keywords");
                 for (int i = 0; i < array.length(); i++) {
                     metadata.keywords.add(array.getString(i));

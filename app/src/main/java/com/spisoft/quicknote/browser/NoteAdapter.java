@@ -138,12 +138,14 @@ public class NoteAdapter extends RecyclerView.Adapter {
         private final View mCard;
         private final TextView mTitleView;
         private final TextView mTextView;
+        private final TextView mMarkView;
 
         public NoteViewHolder(View itemView) {
             super(itemView);
             mCard = itemView.findViewById(R.id.cardview);
             mTitleView = (TextView) itemView.findViewById(R.id.name_tv);
             mTextView = (TextView) itemView.findViewById(R.id.text_tv);
+            mMarkView = (TextView) itemView.findViewById(R.id.mark_tv);
         }
 
         public void setName(String title) {
@@ -181,6 +183,7 @@ public class NoteAdapter extends RecyclerView.Adapter {
             });
             setName(note.title);
             setText(note.shortText);
+            setRating(note.mMetadata.rating);
             setDate(note.mMetadata.last_modification_date);
             setKeywords(note.mMetadata.keywords);
         }
@@ -198,14 +201,19 @@ public class NoteAdapter extends RecyclerView.Adapter {
 
 
         }
-
+        public void setRating(int rating){
+            String ratingStr = "";
+            if(rating>=0) ratingStr = " "+rating + "★";
+            mMarkView.setText(ratingStr);
+        }
         public void setDate(long lastModified) {
-            if (lastModified == -1)
-                ((TextView) itemView.findViewById(R.id.date_tv)).setText("");
-            else {
-                String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(lastModified));
-                ((TextView) itemView.findViewById(R.id.date_tv)).setText(dateString);
+            String date = "";
+
+            if (lastModified != -1) {
+                date = new SimpleDateFormat("dd/MM/yyyy").format(new Date(lastModified));
             }
+            ((TextView) itemView.findViewById(R.id.date_tv)).setText(date);
+
         }
 
         public void setKeywords(List<String> keywords) {
