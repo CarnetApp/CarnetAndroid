@@ -376,7 +376,6 @@ public class ZipReaderAndHttpProxy {
 		try {
 			ZipFile zp = new ZipFile(mUri.toString());
 
-
 			return zp.getEntry(path);
 		} catch (IOException e) {
 			Log.d("pathdebug","getZipEntry"+e.toString());

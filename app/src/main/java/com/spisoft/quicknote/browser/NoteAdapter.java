@@ -17,11 +17,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import android.os.Handler;
 
 /**
  * Created by alexandre on 03/02/16.
  */
-public class NoteAdapter extends RecyclerView.Adapter {
+public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriever.NoteInfoListener {
 
     private static final int NOTE = 0;
     protected final Context mContext;
@@ -29,17 +30,23 @@ public class NoteAdapter extends RecyclerView.Adapter {
     private final float mBigText;
     private final float mMediumText;
     private final float mSmallText;
+    private final NoteInfoRetriever mNoteInfoRetriever;
+    private final Handler mHandler;
+    private final String mLoadingText;
     protected List<Object> mNotes;
     private ArrayList<Object> mSelelectedNotes;
 
     public NoteAdapter(Context context, List<Object> notes) {
         super();
         mContext = context;
+        mHandler = new Handler();
         mNotes = notes;
         mText = new HashMap<Note, String>();
         mBigText = mContext.getResources().getDimension(R.dimen.big_text);
         mMediumText = mContext.getResources().getDimension(R.dimen.medium_text);
         mSmallText = mContext.getResources().getDimension(R.dimen.small_text);
+        mNoteInfoRetriever = new NoteInfoRetriever(this, context);
+        mLoadingText = context.getResources().getString(R.string.loading);
     }
 
     public void setNotes(List<Object> notes) {
@@ -132,6 +139,11 @@ public class NoteAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    @Override
+    public void onNoteInfo(Note note) {
+        setText(note, note.shortText);
+    }
+
     public class NoteViewHolder extends RecyclerView.ViewHolder {
 
 
@@ -139,6 +151,7 @@ public class NoteAdapter extends RecyclerView.Adapter {
         private final TextView mTitleView;
         private final TextView mTextView;
         private final TextView mMarkView;
+        private Note mNote;
 
         public NoteViewHolder(View itemView) {
             super(itemView);
@@ -158,7 +171,7 @@ public class NoteAdapter extends RecyclerView.Adapter {
         }
 
         public void setNote(final Note note) {
-
+            mNote = note;
             mCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -182,7 +195,7 @@ public class NoteAdapter extends RecyclerView.Adapter {
                 }
             });
             setName(note.title);
-            setText(note.shortText);
+            setText(note.shortText.isEmpty() && note.needsUpdateInfo ? mLoadingText:note.shortText);
             setRating(note.mMetadata.rating);
             setDate(note.mMetadata.last_modification_date);
             setKeywords(note.mMetadata.keywords);
@@ -232,6 +245,10 @@ public class NoteAdapter extends RecyclerView.Adapter {
             mCard.setSelected(contains);
 
         }
+
+        public Note getNote() {
+            return mNote;
+        }
     }
 
     @Override
@@ -244,14 +261,26 @@ public class NoteAdapter extends RecyclerView.Adapter {
 
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() == NOTE) {
-            Note note = (Note) mNotes.get(position);
-            NoteViewHolder viewHolder = (NoteViewHolder) holder;
+            final Note note = (Note) mNotes.get(position);
+            final NoteViewHolder viewHolder = (NoteViewHolder) holder;
+            if(viewHolder.getNote()!=null){
+                //first we detach it
+                mNoteInfoRetriever.cancelNote(viewHolder.getNote());
+            }
             viewHolder.setNote(note);
 
             viewHolder.setSelected(mSelelectedNotes != null && mSelelectedNotes.contains(note));
-            Log.d("notedebug", note.title);
+            Log.d(" ", note.title);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(note.equals(viewHolder.getNote()) && note.needsUpdateInfo)
+                        mNoteInfoRetriever.addNote(note);
+                }
+            },500);
+
         }
 
     }

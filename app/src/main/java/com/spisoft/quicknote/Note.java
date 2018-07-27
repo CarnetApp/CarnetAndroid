@@ -22,6 +22,8 @@ public class Note implements Serializable{
     public ArrayList<String> keywords;
     public Metadata mMetadata = new Metadata();
     public boolean isPinned = false;
+    public ArrayList<String> previews;
+    public boolean needsUpdateInfo = true;
 
     @Override
     public boolean equals(Object o) {
@@ -46,6 +48,7 @@ public class Note implements Serializable{
         this.path = path;
         this.title = name;
         this.keywords = null;
+        this.previews = new ArrayList<>();
     }
     public Note(String path, String title){
         this.path = path;

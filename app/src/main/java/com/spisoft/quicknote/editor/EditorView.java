@@ -507,11 +507,8 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                 @Override
                 public void run() {
                     Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    
                     intent.setType("image/*");
-
                     ((Activity)getContext()).startActivityForResult(intent, OPEN_MEDIA_REQUEST);
 
                 }

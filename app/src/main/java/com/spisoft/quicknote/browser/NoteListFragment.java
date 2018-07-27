@@ -59,7 +59,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     public Handler mHandler = new Handler();
     private StaggeredGridLayoutManager mGridLayout;
     protected List<Object> mNotes;
-    private AsyncTask<List<Object>, Note, HashMap<Note, String>> mTextTask;
     private Note mLastSelected;
     private BroadcastReceiver mReceiver;
     private ViewGroup mSecondaryButtonsContainer;
@@ -68,7 +67,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     private TextView mEmptyViewMessage;
     protected View mEmptyView;
     private boolean mHasLoaded;
-    private ZipReaderAndHttpProxy mServer;
     private SwipeRefreshLayout mSwipeLayout;
     private View mProgress;
     private View mCircleView;
@@ -94,11 +92,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         super.onCreateView(inflater, container, savedInstanceState);
             if(mRoot!=null)
                 return mRoot;
-            try {
-                mServer = new ZipReaderAndHttpProxy(getContext());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             mRoot = inflater.inflate(R.layout.note_recycler_layout, null);
             mSwipeLayout = (SwipeRefreshLayout) mRoot.findViewById(R.id.swipe_container);
             Field field = null;
@@ -168,11 +161,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                         showEmptyMessage(null);
                     else
                         hideEmptyView();
-                    if (mTextTask != null) {
-                        mTextTask.cancel(true);
-                    }
-
-                    mTextTask = new TextAsyncTask().execute(mNotes);
                     if (mLastSelected != null && mNotes.indexOf(mLastSelected) > 0)
                         mGridLayout.scrollToPosition(mNotes.indexOf(mLastSelected));
                     else
@@ -212,13 +200,8 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     protected void reload() {
         mNotes = getNotes();
         if(mNotes!=null) {
-
             mNoteAdapter.setNotes(mNotes);
-            if (mTextTask != null) {
-                mTextTask.cancel(true);
-            }
             if (mNotes != null) {
-                mTextTask = new TextAsyncTask().execute(mNotes);
                 if(mNotes.isEmpty())
                     showEmptyMessage(null);
                 else
@@ -268,8 +251,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
     public void myOnPause() {
         Log.d(TAG, "onPause");
-        if (mTextTask != null)
-            mTextTask.cancel(true);
         Configuration.removeSyncStatusListener(this);
     }
 
@@ -278,6 +259,18 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
         Configuration.addSyncStatusListener(this);
         refreshSyncedStatus();
+        //invalidate notes
+        if(mNotes!=null) {
+            boolean needsRefresh = false;
+            for (Object obj : mNotes) {
+                if (obj instanceof Note) {
+                    if(!((Note) obj).needsUpdateInfo) needsRefresh = true;
+                    ((Note) obj).needsUpdateInfo = true;
+                }
+            }
+            if (mNoteAdapter != null && needsRefresh)
+                mNoteAdapter.notifyDataSetChanged();
+        }
     }
 
     public class ReadReturnStruct{
@@ -287,110 +280,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     }
 
 
-    protected Note getNoteInfo(Note note){
-        note.setShortText(read(note.path, 100, 10, null).first);
-        Note.Metadata metadata = new Note.Metadata();
-        String metadataStr = readZipEntry(mServer.getZipEntry("metadata.json"), -1,-1, null).first;
-        if(metadataStr!=null && metadataStr.length()>0){
-            metadata = Note.Metadata.fromString(metadataStr);
-        }
-        note.setMetaData(metadata);
-        return note;
-    }
 
-    protected Pair<String, Boolean> readZipEntry(ZipEntry entry, long length, int maxLines, String toFind){
-        String sb = new String();
-        BufferedReader br = null;
-
-        boolean hasFound = toFind == null;
-        if(toFind!=null)
-            toFind = toFind.toLowerCase();
-        try {
-            br = new BufferedReader(  br = new BufferedReader(new InputStreamReader(mServer.getZipInputStream(entry))));
-
-            String line = br.readLine();
-            long total=0;
-            int lines = 0;
-            maxLines= 352623523;
-            while (line != null) {
-                if((total<length||length==-1)&&(lines==-1||lines<maxLines)) {
-                    sb += line;
-                    sb += "\n";
-                }
-                total = Jsoup.parse(sb).text().length();
-                if(!hasFound){
-                    if(line.toLowerCase().contains(toFind)){
-                        hasFound = true;
-                    }
-                }
-                line = null;
-                lines++;
-                if((total<length||length==-1)&&(lines==-1||lines<maxLines)||!hasFound)
-                    line = br.readLine();
-
-            }
-            sb = Jsoup.parse(sb).text();
-            if(!hasFound){
-                if(sb.toLowerCase().contains(toFind)){
-                    hasFound = true;
-                }
-            }
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if(br!=null)
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-        }
-        return new Pair<>(sb.toString(), hasFound);
-    }
-
-    protected Pair<String, Boolean> read(String path, long length, int maxLines, String toFind){
-        mServer.setUri(path);
-        path = NoteManager.getHtmlPath(0);
-        return readZipEntry(mServer.getZipEntry(path),length, maxLines, toFind);
-    }
-
-    public class TextAsyncTask extends AsyncTask<List<Object>,Note, HashMap<Note,String>>{
-
-        protected void onProgressUpdate(Note... values) {
-            mNoteAdapter.setText(values[0], values[0].shortText);
-        }
-
-        @Override
-        protected HashMap<Note, String> doInBackground(List<Object>... lists) {
-            Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-            List<Object> notes = new ArrayList<>(lists[0]);
-            HashMap<Note, String> txts = new HashMap<>();
-            for(final Object object : notes){
-                if(isCancelled())
-                    return txts;
-                if(!(object instanceof  Note))
-                    continue;
-
-                Note note = (Note) object;
-                final File file = new File(note.path);
-
-                if(file.exists()) {
-                    note= getNoteInfo(note);
-                    note.lastModified = file.lastModified();
-                    if (note.mMetadata.creation_date == -1)
-                        note.mMetadata.creation_date = file.lastModified();
-                    if (note.mMetadata.last_modification_date == -1)
-                        note.mMetadata.last_modification_date = file.lastModified();
-                    publishProgress(note);
-                }
-
-            }
-
-            return txts;
-        }
-    }
     public  NoteAdapter getAdapter(){
         return new NoteAdapter(getActivity(),new ArrayList<Object>());
     }
