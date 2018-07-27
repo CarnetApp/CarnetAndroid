@@ -23,6 +23,7 @@ public class Note implements Serializable{
     public Metadata mMetadata = new Metadata();
     public boolean isPinned = false;
     public ArrayList<String> previews;
+    public ArrayList<String> medias;
     public boolean needsUpdateInfo = true;
 
     @Override
@@ -49,6 +50,7 @@ public class Note implements Serializable{
         this.title = name;
         this.keywords = null;
         this.previews = new ArrayList<>();
+        this.medias = new ArrayList<>();
     }
     public Note(String path, String title){
         this.path = path;

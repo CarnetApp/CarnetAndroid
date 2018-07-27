@@ -27,31 +27,6 @@ public class NoteInfoSearchHelper {
 
     }
 
-    protected Note getNoteInfo(Note note){
-        ZipFile zp = null;
-        try {
-            zp = new ZipFile(note.path);
-            note.setShortText(read(zp, zp.getEntry(NoteManager.getHtmlPath(0)), 100, 10, null).first);
-
-            Note.Metadata metadata = new Note.Metadata();
-            String metadataStr = readZipEntry(zp, zp.getEntry("metadata.json"), -1,-1, null).first;
-            if(metadataStr!=null && metadataStr.length()>0){
-                metadata = Note.Metadata.fromString(metadataStr);
-            }
-
-            Enumeration<? extends ZipEntry> entries = zp.entries();
-            while(entries.hasMoreElements()){
-                ZipEntry entry = entries.nextElement();
-                if(entry.getName().startsWith("data/preview_"))
-                    note.previews.add(entry.getName());
-            }
-
-            note.setMetaData(metadata);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return note;
-    }
 
     protected Pair<String, Boolean> readZipEntry(ZipFile zp, ZipEntry entry, long length, int maxLines, String toFind){
         String sb = new String();

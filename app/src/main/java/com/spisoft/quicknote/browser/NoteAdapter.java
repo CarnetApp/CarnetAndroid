@@ -1,12 +1,14 @@
 package com.spisoft.quicknote.browser;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.spisoft.quicknote.Note;
@@ -31,6 +33,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
     private final float mMediumText;
     private final float mSmallText;
     private final NoteInfoRetriever mNoteInfoRetriever;
+    private final NoteThumbnailEngine mNoteThumbnailEngine;
+
     private final Handler mHandler;
     private final String mLoadingText;
     protected List<Object> mNotes;
@@ -46,7 +50,9 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         mMediumText = mContext.getResources().getDimension(R.dimen.medium_text);
         mSmallText = mContext.getResources().getDimension(R.dimen.small_text);
         mNoteInfoRetriever = new NoteInfoRetriever(this, context);
+        mNoteThumbnailEngine = new NoteThumbnailEngine(context);
         mLoadingText = context.getResources().getString(R.string.loading);
+
     }
 
     public void setNotes(List<Object> notes) {
@@ -151,6 +157,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         private final TextView mTitleView;
         private final TextView mTextView;
         private final TextView mMarkView;
+        private final ImageView mPreview1;
+        private final ImageView mPreview2;
         private Note mNote;
 
         public NoteViewHolder(View itemView) {
@@ -159,6 +167,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             mTitleView = (TextView) itemView.findViewById(R.id.name_tv);
             mTextView = (TextView) itemView.findViewById(R.id.text_tv);
             mMarkView = (TextView) itemView.findViewById(R.id.mark_tv);
+            mPreview1= (ImageView) itemView.findViewById(R.id.preview1);
+            mPreview2 = (ImageView) itemView.findViewById(R.id.preview2);
         }
 
         public void setName(String title) {
@@ -171,6 +181,11 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         }
 
         public void setNote(final Note note) {
+            if(!note.equals(getNote())){
+                //reset preview
+                setPreview1(null);
+                setPreview2(null);
+            }
             mNote = note;
             mCard.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -199,6 +214,22 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             setRating(note.mMetadata.rating);
             setDate(note.mMetadata.last_modification_date);
             setKeywords(note.mMetadata.keywords);
+        }
+
+        public void setPreview1(Bitmap bitmap) {
+            if(bitmap == null)
+                mPreview1.setVisibility(View.GONE);
+            else
+                mPreview1.setVisibility(View.VISIBLE);
+            mPreview1.setImageBitmap(bitmap);
+        }
+
+        public void setPreview2(Bitmap bitmap) {
+            if(bitmap == null)
+                mPreview2.setVisibility(View.GONE);
+            else
+                mPreview2.setVisibility(View.VISIBLE);
+            mPreview2.setImageBitmap(bitmap);
         }
 
         public void setText(String s) {
@@ -268,6 +299,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             if(viewHolder.getNote()!=null){
                 //first we detach it
                 mNoteInfoRetriever.cancelNote(viewHolder.getNote());
+                mNoteThumbnailEngine.cancelNote(viewHolder.getNote());
             }
             viewHolder.setNote(note);
 
@@ -280,6 +312,16 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                         mNoteInfoRetriever.addNote(note);
                 }
             },500);
+
+            if(note.previews.size()>0){
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(note.equals(viewHolder.getNote()))
+                            mNoteThumbnailEngine.addNote(note, viewHolder);
+                    }
+                },1000);
+            }
 
         }
 

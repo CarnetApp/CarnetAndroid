@@ -124,16 +124,6 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         filter.addAction(NoteManager.ACTION_UPDATE_END);
 
         registerReceiver(mReceiver, filter);
-        final Runnable run = new Runnable() {
-            @Override
-            public void run() {
-                Log.d("actheight", "h& "+getWindow().getDecorView().getHeight());
-                Log.d("actheight", "h2 "+getWindow().getDecorView().getMeasuredHeight());
-                mHandler.postDelayed(this, 1000);
-
-            }
-        };
-        mHandler.postDelayed(run, 1000);
 
     }
 

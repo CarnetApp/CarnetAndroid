@@ -6,12 +6,17 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.spisoft.quicknote.Note;
+import com.spisoft.quicknote.databases.NoteManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * Created by phiedora on 26/07/18.
@@ -55,7 +60,37 @@ public class NoteInfoRetriever {
             return null;
         }
     }
-    
+
+    protected Note getNoteInfo(Note note){
+        ZipFile zp = null;
+        try {
+            zp = new ZipFile(note.path);
+            note.setShortText(mNoteInfoSearchHelper.read(zp, zp.getEntry(NoteManager.getHtmlPath(0)), 100, 10, null).first);
+
+            Note.Metadata metadata = new Note.Metadata();
+            String metadataStr = mNoteInfoSearchHelper.readZipEntry(zp, zp.getEntry("metadata.json"), -1,-1, null).first;
+            if(metadataStr!=null && metadataStr.length()>0){
+                metadata = Note.Metadata.fromString(metadataStr);
+            }
+
+            Enumeration<? extends ZipEntry> entries = zp.entries();
+            while(entries.hasMoreElements()){
+                ZipEntry entry = entries.nextElement();
+                Log.d(TAG, "media found "+entry.getName());
+
+                if(entry.getName().startsWith("data/preview_")) {
+                    note.previews.add(entry.getName());
+                    Log.d(TAG, "preview found");
+                }
+            }
+
+            note.setMetaData(metadata);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return note;
+    }
+
 
     public interface NoteInfoListener{
         void onNoteInfo(Note note);
@@ -72,7 +107,7 @@ public class NoteInfoRetriever {
                 if(file.exists()) {
                     Log.d(TAG, "exists");
 
-                    note= mNoteInfoSearchHelper.getNoteInfo(note);
+                    note= getNoteInfo(note);
                     Log.d(TAG, "getNoteInfo");
 
                     note.lastModified = file.lastModified();
