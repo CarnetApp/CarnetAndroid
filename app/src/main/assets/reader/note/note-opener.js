@@ -6,20 +6,80 @@ var NoteOpener = function (note) {
   this.note = note;
 }
 
-NoteOpener.prototype.getMainTextAndMetadata = function (callback) {
+NoteOpener.prototype.getMainTextMetadataAndPreviews = function (callback) {
   var opener = this;
   this.getFullHTML(function (data, zip) {
     if (zip != undefined) {
       opener.getMetadataString(zip, function (metadata) {
         var tempElement = document.createElement("div");
         tempElement.innerHTML = data;
-        callback(tempElement.innerText, metadata != undefined ? JSON.parse(metadata) : undefined)
+        opener.getPreviews(zip, function(previews){
+          console.log(previews)
+          callback(tempElement.innerText, metadata != undefined ? JSON.parse(metadata) : undefined, previews)
+
+        })
       })
     } else {
       callback(undefined, undefined)
 
     }
   });
+}
+
+NoteOpener.prototype.getPreviews = function (zip, callback) {
+  var p = new PreviewOpener(zip, callback)
+  p.start();
+}
+
+
+var PreviewOpener = function (zip, callback) {
+  this.zip = zip;
+  this.currentFile = 0;
+  this.callback = callback;
+  this.data = []
+}
+
+PreviewOpener.prototype.start = function () {
+  var extractor = this;
+  this.files = [];
+  this.zip.folder("data").forEach(function (relativePath, file) {
+    console.log(relativePath)
+
+    if(relativePath.startsWith("preview_")){
+      extractor.files.push(file.name)
+    }
+  })
+  this.fullRead()
+}
+
+PreviewOpener.prototype.fullRead = function () {
+  console.log("fullExtract = " + this.files.length)
+
+  if (this.currentFile >= this.files.length || this.currentFile >= 2) {
+    console.log("size = " + this.files.length)
+    console.log("took " + (Date.now() - this.startTime) + "ms")
+    this.callback(this.data)
+    return;
+  }
+  var filename = this.files[this.currentFile]
+  var previewOpener = this;
+  console.log("extract  = " + filename)
+  var file = this.zip.file(filename);
+
+  if (file != null) {
+    file.async('base64').then(function (content) {
+
+      if (content != "") {
+        previewOpener.data.push('data:image/jpeg;base64,'+content)
+
+      }
+      previewOpener.currentFile++;
+      previewOpener.fullRead();
+    });
+  } else {
+    previewOpener.currentFile++;
+    previewOpener.fullRead();
+  }
 }
 
 NoteOpener.prototype.getMetadataString = function (zip, callback) {

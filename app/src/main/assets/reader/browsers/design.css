@@ -5,6 +5,10 @@
     cursor: pointer;
 }
 
+.mdl-card__supporting-text{
+    padding-bottom: 0px !important;
+}
+
 .note-card-view :hover,
 .folder-card-view :hover {
     background-color: rgb(230, 230, 230);
@@ -120,6 +124,10 @@ body {
     position: absolute !important;
 }
 
+.keywords{
+    margin-bottom:16px;
+}
+
 .keyword {
     margin-right: 3px;
     margin-top: 3px;
@@ -131,4 +139,14 @@ body {
 .card-rating{
     margin-right:10px;
     float:right;
+}
+
+.card-medias{
+    margin-left:-20px;
+    margin-right:-5px;
+    background: black;
+    border-radius: 2px;
+}
+.card-medias img{
+    width:100%;
 }

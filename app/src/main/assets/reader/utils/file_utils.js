@@ -28,8 +28,22 @@ FileUtils.getExtensionFromMimetype = function (mimetype) {
       return "jpg"
     case "image/png":
       return "png";
-
   }
+}
+
+FileUtils.geMimetypeFromExtension = function (extension) {
+  switch (extension) {
+    case "3gpp":
+      return "audio/3gpp"
+    case "jpg":
+      return "image/jpeg"
+    case "png":
+      return "image/png";
+  }
+}
+
+FileUtils.getExtensionFromPath = function(path){
+  return path.split('.').pop().toLowerCase();
 }
 
 var fs = require('fs');

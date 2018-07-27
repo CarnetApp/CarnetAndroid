@@ -35,7 +35,7 @@ TextGetterTask.prototype.startList = function () {
 
 TextGetterTask.prototype.getNext = function () {
     if (this.current >= this.stopAt) {
-        console.log("save cache")
+        console.log("save cache ")
         store.set("note_cache", JSON.stringify(oldNotes))
         return;
     }
@@ -53,12 +53,13 @@ TextGetterTask.prototype.getNext = function () {
         }
         setTimeout(function () {
             try {
-                opener.getMainTextAndMetadata(function (txt, metadata) {
+                opener.getMainTextMetadataAndPreviews(function (txt, metadata, previews) {
                     if (myTask.continue) {
                         if (txt != undefined)
                             note.text = txt.substring(0, 200);
                         if (metadata != undefined)
                             note.metadata = metadata;
+                        note.previews = previews;
                         oldNotes[note.path] = note;
                         noteCardViewGrid.updateNote(note)
                         noteCardViewGrid.msnry.layout();
@@ -411,7 +412,7 @@ function list(pathToList, discret) {
             if (file.isFile && filename.endsWith(".sqd")) {
                 var oldNote = oldNotes[file.path];
 
-                var noteTestTxt = new Note(stripExtensionFromName(filename), oldNote != undefined ? oldNote.text : "", file.path, oldNote != undefined ? oldNote.metadata : undefined);
+                var noteTestTxt = new Note(stripExtensionFromName(filename), oldNote != undefined ? oldNote.text : "", file.path, oldNote != undefined ? oldNote.metadata : undefined, oldNote != undefined ? oldNote.previews : undefined);
                 noteTestTxt.isPinned = file.isPinned
                 notes.push(noteTestTxt)
             } else if (!file.isFile) {

@@ -125,18 +125,20 @@ Writer.prototype.refreshMedia = function () {
             var el = document.createElement("div")
             el.classList.add("media")
             if (FileUtils.isFileImage(filePath)) {
-                var img = document.createElement("img")
-                img.src = "data/" + filePath
-                el.appendChild(img)
-                writer.fullscreenableMedia.push("data/" + filePath)
+                if(!filePath.startsWith("preview_")){
+                    var img = document.createElement("img")
+                    img.src = "data/" + filePath
+                    el.appendChild(img)
+                    writer.fullscreenableMedia.push("data/" + filePath)
 
-                img.mediaIndex = mediaCount;
-                el.onclick = function (event) {
-                    console.log(event.target)
-                    writer.displayMediaFullscreen(event.target.mediaIndex)
+                    img.mediaIndex = mediaCount;
+                    el.onclick = function (event) {
+                        console.log(event.target)
+                        writer.displayMediaFullscreen(event.target.mediaIndex)
 
+                    }
+                    mediaCount++;
                 }
-                mediaCount++;
             } else {
                 var img = document.createElement("img")
                 img.src = rootpath + "/img/file.svg"
@@ -163,12 +165,51 @@ Writer.prototype.addMedia = function () {
                 throw err;
             }
             //filename
+            console.log("read file ok !")
             require('mkdirp').sync(tmppath + 'data/');
             var name = FileUtils.getFilename(filePath)
             fs.writeFile(tmppath + 'data/' + name, data, 'base64', function (err) {
                 if (!err) {
-                    writer.seriesTaskExecutor.addTask(writer.saveNoteTask.saveTxt)
-                    writer.refreshMedia();
+                    console.log("write ok !")
+
+                    if(FileUtils.isFileImage(filePath)){
+                        console.log("creating thumb")
+
+                        var img = document.createElement("img");
+                        img.src = 'data:'+FileUtils.geMimetypeFromExtension(FileUtils.getExtensionFromPath(filePath))+';base64,' +data
+                        img.onload = function(){
+                            var canvas = document.createElement('canvas');
+                            var MAX_WIDTH = 200;
+                            var MAX_HEIGHT = 200;
+                            var width = img.width;
+                            var height = img.height;
+    
+                            if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                            } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                            }
+                            canvas.width = width;
+                            canvas.height = height;
+                            var ctx = canvas.getContext("2d");
+                            ctx.drawImage(img, 0, 0, width, height);
+                            console.log("data width "+width)
+    
+                            var dataurl = canvas.toDataURL("image/jpeg");
+                            console.log("data url"+dataurl)
+                            fs.writeFile(tmppath + 'data/' + 'preview_'+name, dataurl.replace(/^data:image\/\w+;base64,/, ""), 'base64', function (err) {
+                                writer.seriesTaskExecutor.addTask(writer.saveNoteTask.saveTxt)
+                                writer.refreshMedia();
+                            })
+                        }
+                        
+                    }
                 }
             })
 
