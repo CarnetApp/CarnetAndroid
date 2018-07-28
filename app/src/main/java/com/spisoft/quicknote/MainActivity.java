@@ -86,8 +86,14 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
                 }
             }, 3000);
             mFragmentToPut = fragment;
+            setFragment(mFragmentToPut);
             //setFragment(fragment);
-            setPreloadBlankFragment();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setPreloadBlankFragment();
+                }
+            }, 5000);
 
         }
         else
@@ -213,8 +219,6 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         super.onAttachFragment(fragment);
         if(mShouldRemove && fragment == mEditorFrag) {
             getSupportFragmentManager().popBackStack();
-            setFragment(mFragmentToPut);
-
             mShouldRemove = false;
         }
     }
