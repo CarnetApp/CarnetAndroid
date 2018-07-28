@@ -83,6 +83,16 @@ public class Note implements Serializable{
             Metadata metadata = new Metadata();
             try {
                 JSONObject jsonObject = new JSONObject(string);
+                return fromJSONObject(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return metadata;
+        }
+
+        public static Metadata fromJSONObject(JSONObject jsonObject){
+            Metadata metadata = new Metadata();
+            try {
                 metadata.creation_date = jsonObject.getLong("creation_date");
                 metadata.last_modification_date = jsonObject.getLong("last_modification_date");
                 if(jsonObject.has("rating"))
@@ -95,6 +105,23 @@ public class Note implements Serializable{
                 e.printStackTrace();
             }
             return metadata;
+        }
+
+        public JSONObject toJsonObject(){
+            JSONObject object = new JSONObject();
+            try {
+                object.put("creation_date",creation_date);
+                object.put("last_modification_date",last_modification_date);
+                object.put("rating",rating);
+                JSONArray keywordsJson = new JSONArray();
+                for(String keyword : keywords){
+                    keywordsJson.put(keyword);
+                }
+                object.put("keywords",keywordsJson);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return object;
         }
     }
 }

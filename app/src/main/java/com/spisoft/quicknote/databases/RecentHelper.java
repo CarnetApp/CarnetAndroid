@@ -197,6 +197,7 @@ public class RecentHelper {
     }
 
     public List<Object> getLatestNotes(int limit){
+        CacheManager.getInstance(mContext).loadCache();
         List<Note> notes = new ArrayList<>();
         List<Object> pin = new ArrayList<>();
 
@@ -207,7 +208,10 @@ public class RecentHelper {
                 JSONObject obj = object.getJSONArray("data").getJSONObject(i);
                 String action = obj.getString("action");
                 String path = obj.getString("path");
-                Note note = new Note(rootPath+path);
+                Note note = CacheManager.getInstance(mContext).get(rootPath+path);
+
+                if(note == null)
+                    note = new Note(rootPath+path);
                 if(action.equals("add")){
                     notes.remove(note);
                     notes.add(0,note);

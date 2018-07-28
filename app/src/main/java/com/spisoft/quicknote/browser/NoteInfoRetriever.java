@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.spisoft.quicknote.Note;
+import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.NoteManager;
 
 import java.io.File;
@@ -28,11 +29,13 @@ public class NoteInfoRetriever {
     private final Handler mHandler;
     private final Stack<Note> mNoteStack;
     private final NoteInfoListener mListener;
+    private final Context mContext;
     private NoteInfoRetrieverThread mThread = null;
 
     private NoteAdapter mNoteAdapter = null;
     public NoteInfoRetriever(NoteInfoListener listener, Context context){
         super();
+        mContext = context;
         mHandler = new Handler();
         mListener = listener;
         mNoteInfoSearchHelper = new NoteInfoSearchHelper(context);
@@ -116,6 +119,7 @@ public class NoteInfoRetriever {
                     if (note.mMetadata.last_modification_date == -1)
                         note.mMetadata.last_modification_date = file.lastModified();
                     note.needsUpdateInfo = false;
+                    CacheManager.getInstance(mContext).addToCache(note);
                     final Note finalNote = note;
                     Log.d(TAG, "finalNote");
                     mHandler.post(new Runnable() {
@@ -128,6 +132,7 @@ public class NoteInfoRetriever {
                     });
                 }
             }
+            CacheManager.getInstance(mContext).writeCache();
         }
     }
 

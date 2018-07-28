@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
@@ -60,6 +61,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -404,7 +406,11 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         mHasRequestedSave = true;
         editedAbsolutePath = null;
         getContext().sendBroadcast(new Intent(ACTION_RELOAD_KEYWORDS));
-        getContext().sendBroadcast(new Intent(ACTION_RELOAD));
+        /*Intent intent = new Intent(ACTION_RELOAD);
+        List<Note> notes = new ArrayList<>();
+        notes.add(mNote);
+        intent.putExtra("notes",mNote);
+        getContext().sendBroadcast(intent);*/
     }
 
     private void sendAction(String string) {

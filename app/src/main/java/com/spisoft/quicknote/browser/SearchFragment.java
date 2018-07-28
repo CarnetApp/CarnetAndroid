@@ -1,11 +1,8 @@
 package com.spisoft.quicknote.browser;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,9 +15,7 @@ import com.spisoft.quicknote.databases.NoteManager;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by alexandre on 05/02/16.
@@ -94,7 +89,7 @@ public class SearchFragment extends NoteListFragment implements BrowserAdapter.O
                     boolean isOk = !(newFolder).exists();
                     if (isOk) {
                         newFolder.mkdir();
-                        reload();
+                        reload(mLastSelected);
                     }
                     return isOk;
 

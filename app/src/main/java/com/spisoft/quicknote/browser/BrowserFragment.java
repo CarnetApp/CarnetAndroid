@@ -152,7 +152,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
                     boolean isOk = !(newFolder).exists();
                     if (isOk) {
                         newFolder.mkdir();
-                        reload();
+                        reload(mLastSelected);
                     }
                     return isOk;
 
@@ -198,7 +198,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
                         return true;
                     }
                     FileUtils.deleteRecursive(new File(note.getAbsolutePath()));
-                    reload();
+                    reload(mLastSelected);
                 }else if(menuItem.getItemId() == R.string.rename){
                     if(FloatingService.sService!=null&&FloatingService.sService.getNote()!=null&&FloatingService.sService.getNote().path.startsWith(note.getAbsolutePath())){
 
@@ -211,7 +211,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
                         @Override
                         public boolean renameTo(String name) {
                             boolean success = FileUtils.renameDirectory(getContext(), note, name) != null;
-                            reload();
+                            reload(mLastSelected);
                             return true;
 
                         }

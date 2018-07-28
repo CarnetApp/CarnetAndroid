@@ -63,11 +63,11 @@ public class RecentNoteListFragment extends NoteListFragment {
         }
         else if(menuItem.getItemId()==R.string.pin){
             RecentHelper.getInstance(getContext()).pin(note);
-            reload();
+            reload(mLastSelected);
         }
         else if(menuItem.getItemId()==R.string.unpin){
             RecentHelper.getInstance(getContext()).unpin(note);
-            reload();
+            reload(mLastSelected);
         }
         return false;
     }

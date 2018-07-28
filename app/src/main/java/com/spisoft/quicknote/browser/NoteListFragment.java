@@ -4,14 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,23 +27,13 @@ import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.editor.BlankFragment;
-import com.spisoft.quicknote.server.ZipReaderAndHttpProxy;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.Log;
 import com.spisoft.sync.synchro.SynchroService;
 
-import org.jsoup.Jsoup;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.zip.ZipEntry;
 
 /**
  * Created by alexandre on 03/02/16.
@@ -59,7 +47,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     public Handler mHandler = new Handler();
     private StaggeredGridLayoutManager mGridLayout;
     protected List<Object> mNotes;
-    private Note mLastSelected;
+    protected Note mLastSelected;
     private BroadcastReceiver mReceiver;
     private ViewGroup mSecondaryButtonsContainer;
     private boolean mHasSecondaryButtons;
@@ -150,12 +138,10 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(getActivity()==null)
+                if(getActivity()==null || mNotes != null)
                     return;
                 mNotes = getNotes();
-
                 if(mNotes!=null) {
-
                     mNoteAdapter.setNotes(mNotes);
                     if(mNotes.isEmpty())
                         showEmptyMessage(null);
@@ -175,11 +161,26 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             public void onReceive(Context context, Intent intent) {
                 //requestMinimize();
                 if(intent.getAction().equals(ACTION_RELOAD)||intent.getAction().equals(NoteManager.ACTION_UPDATE_END)){
+                    boolean reloadAll = false;
+                    if(intent.getAction().equals(ACTION_RELOAD) && intent.getSerializableExtra("notes")!=null && mNotes!=null){//reload only specified notes
+                        List<Note> notes = (List<Note>) intent.getSerializableExtra("notes");
+                        for(Note note : notes){
+                            int index;
+                            if((index = mNotes.indexOf(note))>=0){
+                                ((Note)mNotes.get(index)).needsUpdateInfo = true;
+                                mNoteAdapter.notifyItemChanged(index);
+                            }else{
+                                reloadAll = true;
+                                break;
+                            }
+                        }
+                    } else reloadAll = true;
 
+                    if(reloadAll)
                     mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            reload();
+                            reload(mLastSelected);
 
                         }
                     }, 500);
@@ -197,7 +198,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
     protected  void onReady(){}
 
-    protected void reload() {
+    protected void reload(Note scrollTo) {
         mNotes = getNotes();
         if(mNotes!=null) {
             mNoteAdapter.setNotes(mNotes);
@@ -207,8 +208,8 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                 else
                     hideEmptyView();
             }
-            if (mLastSelected != null && mNotes.indexOf(mLastSelected) > 0)
-                mGridLayout.scrollToPosition(mNotes.indexOf(mLastSelected));
+            if (scrollTo != null && mNotes.indexOf(scrollTo) > 0)
+                mGridLayout.scrollToPosition(mNotes.indexOf(scrollTo));
             else
                 mGridLayout.scrollToPosition(0);
         }
@@ -259,17 +260,17 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
         Configuration.addSyncStatusListener(this);
         refreshSyncedStatus();
-        //invalidate notes
-        if(mNotes!=null) {
-            boolean needsRefresh = false;
-            for (Object obj : mNotes) {
-                if (obj instanceof Note) {
-                    if(!((Note) obj).needsUpdateInfo) needsRefresh = true;
-                    ((Note) obj).needsUpdateInfo = true;
-                }
+        if(mLastSelected != null && mNotes != null){
+            int index;
+            if((index = mNotes.indexOf(mLastSelected))>=0){
+                ((Note)mNotes.get(index)).needsUpdateInfo = true;
+                mNoteAdapter.notifyItemChanged(index);
+                Log.d(TAG, "notifyItemChanged");
+
             }
-            if (mNoteAdapter != null && needsRefresh)
-                mNoteAdapter.notifyDataSetChanged();
+            else
+                reload(mLastSelected);
+            mLastSelected = null;
         }
     }
 
@@ -337,7 +338,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                         @Override
                         public boolean renameTo(String name) {
                             boolean success = NoteManager.renameNote(getContext(), note, name+".sqd") != null;
-                            reload();
+                            reload(mLastSelected);
                             return success;
 
                         }
@@ -360,7 +361,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     protected void createAndOpenNewNote(String path){
         Note note = NoteManager.createNewNote(path);
         RecentHelper.getInstance(getContext()).addNote(note);
-
+        mLastSelected = note;
         ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(note));
     }
 
