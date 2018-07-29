@@ -107,11 +107,17 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
     }
 
     public void setText(Note note, String text) {
-        mText.put(note, text);
         int index = mNotes.indexOf(note);
-        mNotes.remove(index);
-        mNotes.add(index, note);
-        notifyItemChanged(index);
+        if(index>=0) {
+            Note oldNote = (Note) mNotes.get(index);
+            boolean hasChanged = (text != null && text.equals(mText.get(note))) || !note.mMetadata.equals(oldNote.mMetadata) || !note.previews.equals(oldNote.previews) || !note.medias.equals(oldNote.medias);
+            if(hasChanged) {
+                mText.put(note, text);
+                mNotes.remove(index);
+                mNotes.add(index, note);
+                notifyItemChanged(index);
+            }
+        }
 
     }
 
@@ -298,7 +304,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             final NoteViewHolder viewHolder = (NoteViewHolder) holder;
             if(viewHolder.getNote()!=null){
                 //first we detach it
-                mNoteInfoRetriever.cancelNote(viewHolder.getNote());
+                mNoteInfoRetriever.cancelNote(viewHolder.getNote().path);
                 mNoteThumbnailEngine.cancelNote(viewHolder.getNote());
             }
             viewHolder.setNote(note);
@@ -309,7 +315,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                 @Override
                 public void run() {
                     if(note.equals(viewHolder.getNote()) && note.needsUpdateInfo)
-                        mNoteInfoRetriever.addNote(note);
+                        mNoteInfoRetriever.addNote(note.path);
                 }
             },500);
 

@@ -79,6 +79,29 @@ public class Note implements Serializable{
         public long last_modification_date = -1;
         public List<String> keywords = new ArrayList();
         public int rating = -1;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Metadata metadata = (Metadata) o;
+
+            if (creation_date != metadata.creation_date) return false;
+            if (last_modification_date != metadata.last_modification_date) return false;
+            if (rating != metadata.rating) return false;
+            return keywords != null ? keywords.equals(metadata.keywords) : metadata.keywords == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = (int) (creation_date ^ (creation_date >>> 32));
+            result = 31 * result + (int) (last_modification_date ^ (last_modification_date >>> 32));
+            result = 31 * result + (keywords != null ? keywords.hashCode() : 0);
+            result = 31 * result + rating;
+            return result;
+        }
+
         public static Metadata fromString(String string){
             Metadata metadata = new Metadata();
             try {

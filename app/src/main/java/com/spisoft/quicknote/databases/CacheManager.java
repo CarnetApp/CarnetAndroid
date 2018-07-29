@@ -52,6 +52,18 @@ public class CacheManager {
                 Note note = new Note(path);
                 note.setMetaData(metadata);
                 note.shortText = noteJson.getString("shorttext");
+                if(noteJson.has("previews")){
+                    JSONArray previews = noteJson.getJSONArray("previews");
+                    for (int j = 0; j<previews.length(); j++){
+                        note.previews.add(previews.getString(j));
+                    }
+                }
+                if(noteJson.has("medias")){
+                    JSONArray medias = noteJson.getJSONArray("medias");
+                    for (int j = 0; j<medias.length(); j++){
+                        note.medias.add(medias.getString(j));
+                    }
+                }
                 Log.d(TAG,"adding "+path);
                 addToCache(note);
 
@@ -118,6 +130,17 @@ public class CacheManager {
                 noteObj.put("path", note.path);
                 noteObj.put("metadata",note.mMetadata.toJsonObject());
                 noteObj.put("shorttext",note.shortText);
+                JSONArray previewsJson = new JSONArray();
+                for(String prev : note.previews){
+                    previewsJson.put(prev);
+                }
+                noteObj.put("previews",previewsJson);
+
+                JSONArray mediasJson = new JSONArray();
+                for(String media : note.medias){
+                    mediasJson.put(media);
+                }
+                noteObj.put("medias",mediasJson);
                 data.put(noteObj);
             }
             write(root.toString());

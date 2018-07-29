@@ -27,7 +27,7 @@ public class NoteInfoRetriever {
     private static final String TAG = "NoteInfoRetriever";
     private final NoteInfoSearchHelper mNoteInfoSearchHelper;
     private final Handler mHandler;
-    private final Stack<Note> mNoteStack;
+    private final Stack<String> mNoteStack;
     private final NoteInfoListener mListener;
     private final Context mContext;
     private NoteInfoRetrieverThread mThread = null;
@@ -42,8 +42,8 @@ public class NoteInfoRetriever {
         mNoteStack = new Stack<>();
     }
 
-    public synchronized void addNote(Note note){
-            mNoteStack.push(note);
+    public synchronized void addNote(String path){
+            mNoteStack.push(path);
         Log.d(TAG, "add note");
 
         if (mThread == null || !mThread.isAlive()) {
@@ -52,11 +52,11 @@ public class NoteInfoRetriever {
             }
     }
 
-    public synchronized void cancelNote(Note note){
-            mNoteStack.remove(note);
+    public synchronized void cancelNote(String path){
+            mNoteStack.remove(path);
     }
 
-    public synchronized Note popNote(){
+    public synchronized String popNote(){
         try {
             return mNoteStack.pop();
         } catch (java.util.EmptyStackException e){
@@ -64,7 +64,8 @@ public class NoteInfoRetriever {
         }
     }
 
-    protected Note getNoteInfo(Note note){
+    protected Note getNoteInfo(String path){
+        Note note = new Note(path);
         ZipFile zp = null;
         try {
             zp = new ZipFile(note.path);
@@ -102,15 +103,15 @@ public class NoteInfoRetriever {
     private class NoteInfoRetrieverThread extends Thread{
         @Override
         public void run(){
-            Note note;
+            String path;
 
-            while((note = popNote())!=null){
-                final File file = new File(note.path);
-                Log.d(TAG, "retrieving "+note.path);
+            while((path = popNote())!=null){
+                final File file = new File(path);
+                Log.d(TAG, "retrieving "+path);
                 if(file.exists()) {
                     Log.d(TAG, "exists");
 
-                    note= getNoteInfo(note);
+                    Note note= getNoteInfo(path);
                     Log.d(TAG, "getNoteInfo");
 
                     note.lastModified = file.lastModified();
@@ -136,8 +137,6 @@ public class NoteInfoRetriever {
         }
     }
 
-    protected void onProgressUpdate(Note... values) {
-        mNoteAdapter.setText(values[0], values[0].shortText);
-    }
+
 
 }
