@@ -263,7 +263,8 @@ public class RecentHelper {
 
     }
 
-    public void mergeDB(String otherDBPath){
+    public boolean mergeDB(String otherDBPath){
+        boolean hasChanged = false;
         try {
             JSONObject myJSON = getJson();
             RecentHelper otherDBHelper = new RecentHelper(mContext, otherDBPath);
@@ -290,42 +291,45 @@ public class RecentHelper {
                 }
               //  Log.d(TAG,"merging :"+path+" isIn ? "+isIn);
                 if(!isIn){
+                    hasChanged = true;
                     myJSON.getJSONArray("data").put(obj);
                 }
             }
 
+            if(hasChanged) {
+                //sorting
 
-            //sorting
-
-            ArrayList<JSONObject> array = new ArrayList<JSONObject>();
-            for (int i = 0; i < myJSON.getJSONArray("data").length(); i++) {
-                try {
-                    array.add(myJSON.getJSONArray("data").getJSONObject(i));
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-
-            Collections.sort(array, new Comparator<JSONObject>() {
-
-                @Override
-                public int compare(JSONObject lhs, JSONObject rhs) {
-                    // TODO Auto-generated method stub
-
+                ArrayList<JSONObject> array = new ArrayList<JSONObject>();
+                for (int i = 0; i < myJSON.getJSONArray("data").length(); i++) {
                     try {
-                        return (lhs.getString("time").compareTo(rhs.getString("time")));
+                        array.add(myJSON.getJSONArray("data").getJSONObject(i));
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
-                        return 0;
                     }
                 }
-            });
-            myJSON.put("data", new JSONArray(array));
-            write(myJSON.toString());
+
+                Collections.sort(array, new Comparator<JSONObject>() {
+
+                    @Override
+                    public int compare(JSONObject lhs, JSONObject rhs) {
+                        // TODO Auto-generated method stub
+
+                        try {
+                            return (lhs.getString("time").compareTo(rhs.getString("time")));
+                        } catch (JSONException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                            return 0;
+                        }
+                    }
+                });
+                myJSON.put("data", new JSONArray(array));
+                write(myJSON.toString());
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return hasChanged;
     }
 }

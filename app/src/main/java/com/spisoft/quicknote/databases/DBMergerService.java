@@ -69,6 +69,7 @@ public class DBMergerService extends JobService {
         int database = jobParameters.getExtras().getInt(EXTRA_DATABASE,ALL_DATABASES);
         if(database == ALL_DATABASES || database == RECENT_DATABASE) {
             File recentDBFolder = new File(NoteManager.getDontTouchFolder(DBMergerService.this) + "/" + RecentHelper.RECENT_FOLDER_NAME);
+            boolean hasChanged = false;
             if (recentDBFolder.exists()) {
                 RecentHelper myRecentHelper = RecentHelper.getInstance(DBMergerService.this);
                 File[] dbs = recentDBFolder.listFiles();
@@ -77,11 +78,13 @@ public class DBMergerService extends JobService {
                         if (!PreferenceHelper.getUid(DBMergerService.this).equals(db.getName())) {
                             Log.d(TAG, "merging with " + db.getName());
 
-                            myRecentHelper.mergeDB(db.getAbsolutePath());
+                            if(myRecentHelper.mergeDB(db.getAbsolutePath()))
+                                hasChanged = true;
                         }
                     }
                 }
             }
+            if(hasChanged)
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {

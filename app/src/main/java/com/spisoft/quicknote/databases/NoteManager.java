@@ -127,20 +127,21 @@ public class NoteManager
             @Override
             protected Void doInBackground(Void... params) {
                 Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-                File file = new File(PreferenceHelper.getRootPath(ct));
                 if(PreferenceHelper.getCurrentNoteVersion(ct)<NEW_VERSION){
+                    File file = new File(PreferenceHelper.getRootPath(ct));
                     PreferenceHelper.setCurrentNoteVersion(ct,NEW_VERSION);
                     synchronized (FileLocker.getLockOnPath(file.getAbsolutePath())) {
                         if (file.exists())
                             FileUtils.copyDirectoryOneLocationToAnotherLocation(file, new File(file.getParentFile(), "QuickNote" + nextSessionId()));
                     }
-                }
-                listener.onUpdateStart();
-                if(file.exists())
-                    recursiveUpdate(ct,file,listener);
+                    listener.onUpdateStart();
+                    if(file.exists())
+                        recursiveUpdate(ct,file,listener);
 
-                listener.onUpdateFinished();
-                ct.sendBroadcast(new Intent(ACTION_UPDATE_END));
+                    listener.onUpdateFinished();
+                    ct.sendBroadcast(new Intent(ACTION_UPDATE_END));
+                }
+
                 return null;
             }
         }.execute();
