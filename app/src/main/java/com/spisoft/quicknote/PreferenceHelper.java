@@ -43,6 +43,10 @@ public class PreferenceHelper {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(CURRENT_READER_VERSION, version).apply();
     }
 
+    public void setSayHi(boolean b) {
+        PreferenceManager.getDefaultSharedPreferences(mContext).edit().putBoolean("say_hi",b).commit();
+    }
+
     public interface RootPathChangeListener{
         public void onRootPathChangeListener(String oldPath, String newPath);
     }

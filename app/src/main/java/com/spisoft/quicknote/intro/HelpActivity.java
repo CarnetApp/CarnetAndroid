@@ -25,7 +25,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
 
     private static final String SHOULD_START_ACTIVITY = "should_start_gdrive_act";
 
-    private  int NUM_PAGES = 3;
+    private  int NUM_PAGES = 4;
     public String TAG = "HelpActivity";
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
@@ -81,7 +81,10 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
         public Fragment getItem(int position) {
             if(position == 0)
                 return new WelcomeIntroductionFragment();
-            else if(position == 1)
+            else if (position == 1){
+                return new SayHiFragment();
+            }
+            else if(position == 2)
                 return new SynchroIntroductionFragment();
             else {
                 mNextCloudFragment = new NextCloudAuthorizeFragment();

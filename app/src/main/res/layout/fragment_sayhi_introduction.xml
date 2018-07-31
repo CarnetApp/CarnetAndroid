@@ -1,0 +1,66 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_500"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+
+
+    <TextView
+        android:textColor="@android:color/white"
+        android:id="@+id/textView"
+        android:layout_below="@+id/imageView"
+        style="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/say_hi"
+        android:gravity="center"
+        android:layout_marginTop="50dp"
+        android:textSize="40dp" />
+
+    <TextView
+        android:id="@+id/subtitle1"
+        android:textSize="30dp"
+        style="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_below="@+id/textView"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/say_hi_subtitle"
+        />
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_below="@+id/subtitle1"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/say_hi_subtitle2" />
+    <Button
+        android:id="@+id/sayhi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/say_hi"
+        android:textColor="@android:color/white"
+        android:background="@null"
+        android:onClick="next"
+        android:layout_margin="0dp"
+        android:layout_toLeftOf="@id/skip"
+        android:layout_alignParentBottom="true"/>
+    <Button
+        android:id="@+id/skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/skip"
+        android:textColor="@android:color/white"
+        android:background="@null"
+        android:onClick="next"
+        android:layout_alignParentRight="true"
+        android:layout_margin="0dp"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

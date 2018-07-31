@@ -99,5 +99,8 @@
     <string name="app_restart">The app will now restart</string>
     <string name="pin">Pin</string>
     <string name="unpin">Unpin</string>
+    <string name="say_hi">Say hi !</string>
+    <string name="say_hi_subtitle">You can help me know how many people are using this app by pressing Say Hi button \n:)</string>
+    <string name="say_hi_subtitle2"> It will just let me know the app was downloaded once more (not mandatory at all but helpful).</string>
 
 </resources>

@@ -88,6 +88,9 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
             mFragmentToPut = fragment;
             setFragment(mFragmentToPut);
             //setFragment(fragment);
+            if(HelpActivity.shouldStartActivity(this))
+                startActivity(new Intent(this, HelpActivity.class));
+            else // load frag only if no help activity to avoid exception when activity is in background
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
