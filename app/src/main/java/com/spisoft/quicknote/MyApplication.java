@@ -42,7 +42,7 @@ public class MyApplication extends Application implements Configuration.PathObse
         Configuration.addPathObserver(PreferenceHelper.getRootPath(this), this);
         Configuration.addPathObserver(PreferenceHelper.getRootPath(this)+"/untitled.sqd", this);
         try {
-            WrapperFactory.wrappers.add(Class.forName("com.spisoft.sync.wrappers.googledrive.GDriveWrapper"));
+            WrapperFactory.wrappers.add(Class.forName("com.spisoft.gsync.wrappers.googledrive.GDriveWrapper"));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
