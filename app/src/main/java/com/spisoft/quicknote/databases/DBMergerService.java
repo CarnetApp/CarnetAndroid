@@ -19,8 +19,6 @@ import android.util.Log;
 import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.browser.NoteListFragment;
-import com.spisoft.quicknote.synchro.SynchroService;
-import com.spisoft.quicknote.synchro.googledrive.DriveWrapper;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.utils.Utils;
 

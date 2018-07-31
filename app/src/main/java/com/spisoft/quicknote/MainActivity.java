@@ -54,8 +54,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(HelpActivity.shouldStartActivity(this))
-            startActivity(new Intent(this, HelpActivity.class));
+
         if(PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.NOTE_VERSION_PREF, -1)==-1&& PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.DISPLAY_AD_COUNT, 0)>0){
             //not set but already start  : V1
             PreferenceHelper.setCurrentNoteVersion(getApplicationContext(),1);

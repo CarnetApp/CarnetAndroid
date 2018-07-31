@@ -3,13 +3,13 @@ package com.spisoft.quicknote;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.spisoft.quicknote.synchro.AccountConfigActivity;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.utils.Utils;
+import com.spisoft.sync.wrappers.WrapperFactory;
 
 /**
  * Created by alexandre on 22/02/16.
@@ -41,6 +41,11 @@ public class MyApplication extends Application implements Configuration.PathObse
         Configuration.dontDisplayNotification = true;
         Configuration.addPathObserver(PreferenceHelper.getRootPath(this), this);
         Configuration.addPathObserver(PreferenceHelper.getRootPath(this)+"/untitled.sqd", this);
+        try {
+            WrapperFactory.wrappers.add(Class.forName("com.spisoft.sync.wrappers.googledrive.GDriveWrapper"));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
     private void startAccountConfigActivity(int accountId, int accountType){
         Intent intent = new Intent(MyApplication.this, AccountConfigActivity.class);

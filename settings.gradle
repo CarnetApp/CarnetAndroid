@@ -1,4 +1,7 @@
-include ':app', ':Sync'
+include ':app', ':Sync', ':GoogleSync'
 
 include ':Sync'
 project(':Sync').projectDir = new File(settingsDir, '../Sync')
+
+include ':GoogleSync'
+project(':GoogleSync').projectDir = new File(settingsDir, '../GoogleSync')

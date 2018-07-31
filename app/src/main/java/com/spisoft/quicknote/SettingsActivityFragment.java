@@ -11,7 +11,6 @@ import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.spisoft.quicknote.intro.HelpActivity;
-import com.spisoft.quicknote.synchro.googledrive.AuthorizeActivity;
 import com.spisoft.quicknote.utils.PinView;
 import com.spisoft.sync.account.AccountListActivity;
 import com.spisoft.sync.account.DBAccountHelper;

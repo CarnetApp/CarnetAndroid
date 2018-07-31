@@ -11,12 +11,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
-import com.spisoft.quicknote.synchro.googledrive.AuthorizeActivity;
-import com.spisoft.sync.wrappers.googledrive.DriveSyncWrapper;
-import com.spisoft.sync.wrappers.googledrive.GDriveWrapper;
+import com.spisoft.sync.wrappers.Wrapper;
+import com.spisoft.sync.wrappers.WrapperFactory;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudAuthorizeFragment;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudCredentialsHelper;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudWrapper;
@@ -30,7 +30,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private NextCloudAuthorizeFragment mNextCloudFragment;
-    private DriveSyncWrapper mDriveWrapper;
+    private Wrapper mDriveWrapper;
 
 
     @Override
@@ -44,15 +44,12 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
         mPager.setAdapter(mPagerAdapter);
 
     }
-    public void addAccount(View v){
-        startActivity(new Intent(this,AuthorizeActivity.class));
-        finish();
-    }
+
     public void exit(View v){
         finish();
     }
     public static boolean shouldStartActivity(Context context){
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SHOULD_START_ACTIVITY, true);
+        return true||PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SHOULD_START_ACTIVITY, true);
     }
 
     public void next() {
@@ -69,7 +66,18 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
     }
 
     public void connectGoogleDrive() {
-        startActivityForResult(new Intent(this, com.spisoft.sync.wrappers.googledrive.AuthorizeActivity.class),0);
+        Log.d("wrapperdebug","connectGoogleDrive");
+
+        for(Wrapper wrapper : WrapperFactory.getWrapperList(this)){
+            Log.d("wrapperdebug","name "+wrapper.getClass().getSimpleName());
+            if(wrapper.getClass().getSimpleName().equals("GDriveWrapper")){
+                mDriveWrapper = wrapper;
+                wrapper.startAuthorizeActivityForResult(this,0);
+            }
+        }
+        if(mDriveWrapper == null){
+            Toast.makeText(this, R.string.not_available_on_fdroid, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -121,8 +129,8 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
 
     private void onGoogleConnectionOK() {
         com.spisoft.sync.account.DBAccountHelper.Account account = com.spisoft.sync.account.DBAccountHelper.getInstance(this)
-                .addOrReplaceAccount(new com.spisoft.sync.account.DBAccountHelper.Account(-1, GDriveWrapper.ACCOUNT_TYPE, "Google Drive"));
-        com.spisoft.sync.wrappers.WrapperFactory.getWrapper(this,GDriveWrapper.ACCOUNT_TYPE, account.accountID).addFolderSync(PreferenceHelper.getRootPath(this), "Documents/QuickNote");
+                .addOrReplaceAccount(new com.spisoft.sync.account.DBAccountHelper.Account(-1,mDriveWrapper.getAccountType(), "Google Drive"));
+        com.spisoft.sync.wrappers.WrapperFactory.getWrapper(this,mDriveWrapper.getAccountType(), account.accountID).addFolderSync(PreferenceHelper.getRootPath(this), "Documents/QuickNote");
 
         finish();
 

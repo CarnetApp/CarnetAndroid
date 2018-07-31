@@ -47,6 +47,15 @@ android {
     lintOptions {
         disable 'MissingTranslation'
     }
+    flavorDimensions "version"
+    productFlavors {
+        fdroid {
+            dimension "version"
+        }
+        google {
+            dimension "version"
+        }
+    }
 }
 
 if (file("../../Internal").exists()) {
@@ -65,4 +74,6 @@ dependencies {
     compile 'com.android.support:multidex:1.0.2'
     compile 'com.google.android:flexbox:0.3.1'
     compile project(':Sync')
+    googleCompile 'com.google.android.gms:play-services:11.8.0'
+    googleCompile project(':GoogleSync')
 }
