@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -35,6 +36,7 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
         findPreference("pref_set_password").setOnPreferenceClickListener(this);
         findPreference("pref_report_bug").setOnPreferenceClickListener(this);
         findPreference("pref_remove_ad_pay").setOnPreferenceClickListener(this);
+        findPreference("pref_desktop_version").setOnPreferenceClickListener(this);
 
     }
 
@@ -62,6 +64,9 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
             else
                 startActivity(new Intent(getActivity(),AccountListActivity.class));
             return true;
+        }else if(preference==findPreference("pref_desktop_version")){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/PhieF/CarnetDocumentation/blob/master/README.md"));
+            startActivity(browserIntent);
         }else if(preference==findPreference("pref_set_password")){
             PasswordDialog dialog = new PasswordDialog();
             dialog.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(),"" );

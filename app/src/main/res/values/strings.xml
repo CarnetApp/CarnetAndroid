@@ -103,5 +103,6 @@
     <string name="say_hi_subtitle">You can help me know how many people are using this app by pressing \"Say Hi !\" button \n:)</string>
     <string name="say_hi_subtitle2"> I will understand the app was downloaded once more (not mandatory at all but helpful).</string>
     <string name="not_available_on_fdroid">Not available on fdroid</string>
+    <string name="desktop_version">Desktop Version</string>
 
 </resources>
