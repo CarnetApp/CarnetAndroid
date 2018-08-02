@@ -24,7 +24,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode getDate()
-        versionName '10.2-' + getFormattedDate()
+        versionName '0.1-' + getFormattedDate()
         multiDexEnabled true
     }
     buildTypes {
@@ -51,6 +51,8 @@ android {
     productFlavors {
         fdroid {
             dimension "version"
+            versionCode 1
+			versionName '0.1'
         }
         google {
             dimension "version"
