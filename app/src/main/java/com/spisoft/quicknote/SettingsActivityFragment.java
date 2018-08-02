@@ -67,6 +67,11 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
         }else if(preference==findPreference("pref_desktop_version")){
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/PhieF/CarnetDocumentation/blob/master/README.md"));
             startActivity(browserIntent);
+            return true;
+        }else if(preference==findPreference("pref_remove_ad_pay")){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://liberapay.com/~34946"));
+            startActivity(browserIntent);
+            return true;
         }else if(preference==findPreference("pref_set_password")){
             PasswordDialog dialog = new PasswordDialog();
             dialog.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(),"" );
