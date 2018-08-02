@@ -49,10 +49,10 @@
         HelpAuthorizeFloatingWindowActivity
     </string>
     <string name="authorize">Autoriser</string>
-    <string name="authorize_description">QuickNote requiert une permission spéciale pour s\'afficher en fenêtre. Veuiller activer l\'option "se superposer à d\'autres applications"</string>
+    <string name="authorize_description">Carnet requiert une permission spéciale pour s\'afficher en fenêtre. Veuiller activer l\'option "se superposer à d\'autres applications"</string>
     <string name="authorisation_issue" >Problème d\'autorisation</string>
     <string name="error">Erreur</string>
-    <string name="error_permission_storage">La permission Stockage est requise afin d\'enregistrer les notes sur votre appareil. Merci d\'autoriser QuickNote à enregistrer ses documents sur votre carte SD / stockage interne.</string>
+    <string name="error_permission_storage">La permission Stockage est requise afin d\'enregistrer les notes sur votre appareil. Merci d\'autoriser Carnet à enregistrer ses documents sur votre carte SD / stockage interne.</string>
     <string name="allow">Autoriser</string>
     <string name="exit">Quitter</string>
     <string name="title_activity_noise_selector">NoiseSelector</string>

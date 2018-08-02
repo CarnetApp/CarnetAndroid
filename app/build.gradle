@@ -32,7 +32,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             zipAlignEnabled true
-            resValue "string", "app_name", "QuickNote"
+            resValue "string", "app_name", "Carnet"
             signingConfig signingConfigs.debug
         }
         debug {
@@ -41,7 +41,7 @@ android {
             zipAlignEnabled true
             applicationIdSuffix '.debug'
             versionNameSuffix '-DEBUG'
-            resValue "string", "app_name", "QuickNote debug"
+            resValue "string", "app_name", "Carnet debug"
         }
     }
     lintOptions {
