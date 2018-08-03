@@ -1,0 +1,20 @@
+Carnet is more than an usual note taking app.
+
+
+
+
+- Complete editor : bold/italic/underline/color/highlight
+- Insert images / crop / review
+- Floating text zones
+- Open HTML format
+- Organize with folders and choose root storage folder depending on your needs
+- Re-open your last note quickly thanks to floating shortcut
+- Transparency to take note from another app behind
+- Quickly see your recent notes
+- Search amount your notes
+- Protect the app with a pin code (won't encrypt notes)
+- Statistics : words/sentences/characters
+- Sync with Google Drive
+Coming soon :
+
+Chrome version (for Windows/Mac/Linux/FreeBSD)
