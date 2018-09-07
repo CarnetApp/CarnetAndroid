@@ -2,4 +2,4 @@
 
 Android version of Carnet
 
-see [Carnet Documentation](../CarnetDocumentation).
+see [Carnet Documentation](/PhieF/CarnetDocumentation).
