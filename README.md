@@ -2,4 +2,6 @@
 
 Android version of Carnet
 
-see [Carnet Documentation](../../../CarnetDocumentation).
+For feature request, see [Carnet Documentation](../../../CarnetDocumentation)
+
+
