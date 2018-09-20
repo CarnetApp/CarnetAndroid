@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
             PreferenceHelper.setCurrentNoteVersion(getApplicationContext(),1);
         }
 
-        startService(new Intent(this, SynchroService.class));
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
         if(!DBMergerService.isJobScheduledOrRunning(this)){
             DBMergerService.scheduleJob(this,true, DBMergerService.ALL_DATABASES);
@@ -168,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     }
     protected void onResume(){
         super.onResume();
+        startService(new Intent(this, SynchroService.class));
         if(!isChangingConfigurations()) {
             if (!PreferenceHelper.shouldLockOnMinimize(this)) {
                 if (isLocked)

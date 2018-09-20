@@ -9,8 +9,11 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.spisoft.quicknote.R;
+import com.spisoft.quicknote.databases.DBMergerService;
+import com.spisoft.sync.synchro.SynchroService;
 
 
 public class PermissionChecker {
@@ -30,8 +33,10 @@ public class PermissionChecker {
 
     @TargetApi(Build.VERSION_CODES.M)
     public void checkAndRequestPermission(Activity activity) {
-        if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M)
+        if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M) {
+            activity.startService(new Intent(activity, SynchroService.class));
             return;
+        }
         mActivity= activity;
         if(!isDialogDisplayed&&ContextCompat.checkSelfPermission(mActivity,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED) {
             new AlertDialog.Builder(mActivity).setTitle(R.string.error).setMessage(R.string.error_permission_storage).setPositiveButton(R.string.allow, new DialogInterface.OnClickListener() {
@@ -100,6 +105,7 @@ public class PermissionChecker {
         }
         else {
             mActivity.sendBroadcast(new Intent(NoteListFragment.ACTION_RELOAD));
+            DBMergerService.scheduleJob(mActivity, true, DBMergerService.ALL_DATABASES);
         }
     }
 
