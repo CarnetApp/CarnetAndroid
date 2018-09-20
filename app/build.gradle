@@ -52,7 +52,7 @@ android {
         fdroid {
             dimension "version"
             versionCode 1
-			versionName '0.1'
+            versionName '0.1'
         }
         google {
             dimension "version"

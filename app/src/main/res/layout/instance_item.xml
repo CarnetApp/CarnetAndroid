@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/transparent_ripple"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    >
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        card_view:cardElevation="5dp"
+
+        >
+        <RelativeLayout
+            android:orientation="vertical"
+            card_view:cardCornerRadius="4dp"
+            android:id="@+id/cardview"
+            android:background="@drawable/transparent_ripple"
+            android:padding="5dp"
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@android:color/black"
+                android:text="Titre"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"
+                android:id="@+id/name_tv"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                />
+
+
+
+            <TextView
+                android:id="@+id/description_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name_tv"
+                android:maxLines="10"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="20dp"
+                android:paddingTop="5dp"
+                android:textColor="@android:color/black"
+                android:text="texttexttexttexttexttexttexttexttexttexttexttext "
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="13sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Small Text"
+                android:id="@+id/register_tv"
+                android:layout_below="@id/description_tv"
+                android:layout_gravity="bottom" />
+
+            <TextView
+                android:id="@+id/reliability_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="Small Tfdfext"
+                android:layout_below="@id/description_tv"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</FrameLayout>

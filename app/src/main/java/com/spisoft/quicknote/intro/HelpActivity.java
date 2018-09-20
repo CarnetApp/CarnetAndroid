@@ -93,6 +93,8 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
                 return new SayHiFragment();
             }
             else if(position == 2)
+                return new ChooseInstanceFragment();
+            else if(position == 3)
                 return new SynchroIntroductionFragment();
             else {
                 mNextCloudFragment = new NextCloudAuthorizeFragment();
@@ -105,6 +107,11 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
         public int getCount() {
             return NUM_PAGES;
         }
+    }
+
+    public void goToNextcloudFrag(String instance){
+        mPager.setCurrentItem(4);
+        mNextCloudFragment.setInstance(instance);
     }
 
     @Override
