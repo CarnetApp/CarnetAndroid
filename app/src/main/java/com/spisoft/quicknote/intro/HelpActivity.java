@@ -25,12 +25,13 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
 
     private static final String SHOULD_START_ACTIVITY = "should_start_gdrive_act";
 
-    private  int NUM_PAGES = 4;
+    private  int NUM_PAGES = 5;
     public String TAG = "HelpActivity";
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
     private NextCloudAuthorizeFragment mNextCloudFragment;
     private Wrapper mDriveWrapper;
+    private String mInstance;
 
 
     @Override
@@ -99,6 +100,9 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
             else {
                 mNextCloudFragment = new NextCloudAuthorizeFragment();
                 mNextCloudFragment.setOnConnectClickListener(HelpActivity.this);
+                if(mInstance != null)
+                    mNextCloudFragment.setInstance(mInstance);
+                mInstance = null;
                 return mNextCloudFragment;
             }
         }
@@ -111,7 +115,10 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
 
     public void goToNextcloudFrag(String instance){
         mPager.setCurrentItem(4);
-        mNextCloudFragment.setInstance(instance);
+        if(mNextCloudFragment == null)
+            mInstance = instance;
+        else
+            mNextCloudFragment.setInstance(instance);
     }
 
     @Override
