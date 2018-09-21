@@ -85,12 +85,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         lockOnStart= true;
         if(mSavedInstanceState==null) {
             Fragment fragment = MainFragment.newInstance();
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    NoteManager.update(MainActivity.this, MainActivity.this);
-                }
-            }, 3000);
+
             mFragmentToPut = fragment;
             setFragment(mFragmentToPut);
             //setFragment(fragment);
@@ -128,10 +123,6 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
         if(FileManagerService.sIsCopying)
             displayPasteDialog();
-        filter = new IntentFilter();
-        filter.addAction(NoteManager.ACTION_UPDATE_END);
-
-        registerReceiver(mReceiver, filter);
         mSavedInstanceState = null;
     }
 
