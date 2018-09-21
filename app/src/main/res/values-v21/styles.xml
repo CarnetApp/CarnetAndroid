@@ -6,7 +6,7 @@
         <!--   your app branding color for the app bar -->
         <item name="colorPrimary">@color/blue_500</item>
         <!--   darker variant for the status bar and contextual app bars -->
-        <item name="colorPrimaryDark">@color/blue_500</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">@color/blue_400</item>
         <item name="windowActionModeOverlay">true</item>

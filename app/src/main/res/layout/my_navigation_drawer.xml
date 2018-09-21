@@ -1,54 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/left_drawer"
+    android:id="@+id/left_drawer"
     android:layout_gravity="left|start"
-        android:orientation="vertical"
-        android:background="@color/blue_50"
-        android:layout_width="300dip"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:layout_width="250dip"
+    android:layout_height="match_parent"
+    android:paddingTop="22dp"
+    android:gravity="left">
 
-        android:layout_height="match_parent"
-        android:gravity="left">
 
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/recent"
-            android:drawableLeft="@drawable/recent_drawable"
-            android:drawablePadding="20dip"
-            android:id="@+id/recent_button"
-            android:background="@drawable/transparent_ripple"
-            android:paddingTop="5dip"
-            android:paddingBottom="5dip"
-            android:paddingLeft="20dip"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:gravity="left|center_vertical" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/browser"
-
-            android:drawableLeft="@drawable/directory_small"
-            android:drawablePadding="20dip"
-            android:paddingTop="5dip"
-            android:paddingBottom="5dip"
-            android:paddingLeft="20dip"
-            android:id="@+id/browser_button"
-            android:background="@drawable/transparent_ripple"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:gravity="left|center_vertical" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/recent"
+        android:id="@+id/recent_button"
+        android:background="@drawable/transparent_ripple"
+        android:paddingTop="5dip"
+        android:paddingBottom="5dip"
+        android:textAllCaps="false"
+        android:paddingLeft="20dip"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="left|center_vertical" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/browser"
+        android:paddingTop="5dip"
+        android:paddingBottom="5dip"
+        android:textAllCaps="false"
+        android:paddingLeft="20dip"
+        android:id="@+id/browser_button"
+        android:background="@drawable/transparent_ripple"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="left|center_vertical" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/action_settings"
-
-        android:drawableLeft="@drawable/settings_icon"
-        android:drawablePadding="20dip"
         android:paddingTop="5dip"
+        android:textAllCaps="false"
         android:paddingBottom="5dip"
         android:paddingLeft="20dip"
         android:id="@+id/settings_button"
@@ -70,7 +65,7 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:background="@color/blue_50"
+            android:background="@android:color/white"
             android:layout_width="300dip"
             android:id="@+id/keywords"
             android:layout_height="wrap_content"

@@ -9,6 +9,7 @@
     android:paddingBottom="5dip"
     android:paddingLeft="20dip"
     android:id="@+id/keyword_button"
+    android:textAllCaps="false"
     android:background="@drawable/transparent_ripple"
     android:layout_alignParentTop="true"
     android:layout_alignParentRight="true"
