@@ -18,6 +18,8 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by alexandre on 09/02/16.
@@ -44,10 +46,21 @@ public class FileUtils {
         if (fileOrDirectory.isDirectory())
             for (File child : fileOrDirectory.listFiles())
                 deleteRecursive(child);
+        return deleteRecursive(fileOrDirectory, new ArrayList());
 
+    }
+
+    public static boolean deleteRecursive(File fileOrDirectory, List exceptAbsolutePaths) {
+
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child, exceptAbsolutePaths);
+        if(exceptAbsolutePaths.contains(fileOrDirectory.getAbsolutePath()))
+            return false;
         return fileOrDirectory.delete();
 
     }
+
 
     public static void copy(InputStream inputStream, OutputStream outputStream) throws IOException {
         byte[] buf = new byte[1024];

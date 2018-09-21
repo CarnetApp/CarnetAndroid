@@ -108,5 +108,6 @@
     <string name="doesnt_accept_new_users">Doesn\'t accept new users</string>
     <string name="open_for_registrations">Open for registrations</string>
     <string name="reliability">Reliability</string>
+    <string name="updating">Updating...</string>
 
 </resources>

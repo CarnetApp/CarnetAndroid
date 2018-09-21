@@ -270,115 +270,32 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(getContext()), "app");
         mHasLoaded = false;
         mRootPath = getContext().getFilesDir().getAbsolutePath();
-
-        new AsyncTask<Void, Void, Void>(){
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                copyReader();
-                return null;
-            }
-            protected void onPostExecute(Void result) {
-                try {
-                    mServer2 = new NewHttpProxy(getContext());
-                    mWebView.loadUrl(mServer2.getUrl("/tmp/reader.html"));
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //prepare Reader
-                //extract
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    WebView.setWebContentsDebuggingEnabled(true);
-                }
-            }
-
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-
-    }
-
-
-
-    private void copyReader() {
-        copyFileOrDir("reader/reader/reader.html");
-        String reader = FileUtils.readFile(mRootPath + "/reader/reader/reader.html");
-        FileUtils.writeToFile(mRootPath + "/tmp/reader.html", reader.replace("<!ROOTPATH>", "../reader/"));
-        String firstLine = reader.substring(0,reader.indexOf("\n"));
-        Log.d(TAG,"archive version "+firstLine);
-
-        int version = Integer.parseInt(firstLine.substring("<!--".length(), firstLine.length()-"-->".length()));
-        int currentVersion = PreferenceHelper.getCurrentReaderVersion(getContext());
-        Log.d(TAG,"current version "+currentVersion);
-        Log.d(TAG,"archive version "+version);
-        if(version!=currentVersion) {
-            File dir = new File(mRootPath + "/reader");
-            if (dir.exists())
-                FileUtils.deleteRecursive(dir);
-            dir.mkdirs();
-            copyFileOrDir("reader");
-            PreferenceHelper.setCurrentReaderVersion(getContext(), version);
-        }
-        //copy reader to separate folder and change rootpath
-
-    }
-
-
-    public void copyFileOrDir(String path) {
-        Log.d("assetdebug", "copy " + path);
-        AssetManager assetManager = getContext().getAssets();
-        String assets[] = null;
         try {
-            assets = assetManager.list(path);
-            if (assets.length == 0) {
-                copyFile(path);
-            } else {
-                String fullPath = mRootPath + "/" + path;
-                File dir = new File(fullPath);
-                if (!dir.exists())
-                    dir.mkdirs();
-                for (int i = 0; i < assets.length; ++i) {
-                    copyFileOrDir(path + "/" + assets[i]);
-                }
-            }
-        } catch (IOException ex) {
-            Log.e("tag", "I/O Exception", ex);
+            mServer2 = new NewHttpProxy(getContext());
+            mWebView.loadUrl(mServer2.getUrl("/tmp/reader.html"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    }
+        //prepare Reader
+        //extract
 
-    private void copyFile(String filename) {
-        AssetManager assetManager = getContext().getAssets();
-
-        InputStream in = null;
-        OutputStream out = null;
-        try {
-            in = assetManager.open(filename);
-            String newFileName = mRootPath + "/" + filename;
-            new File(newFileName).getParentFile().mkdirs();
-            out = new FileOutputStream(newFileName);
-
-            byte[] buffer = new byte[1024];
-            int read;
-            while ((read = in.read(buffer)) != -1) {
-                out.write(buffer, 0, read);
-            }
-            in.close();
-            in = null;
-            out.flush();
-            out.close();
-            out = null;
-        } catch (Exception e) {
-            Log.e("tag", e.getMessage());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
         }
 
+
     }
+
+
 
     public void loadNote(){
+        Log.d(TAG, "loadNote");
+
         File dir = new File(mRootPath + "/tmp");
-        if (dir.exists())
-            FileUtils.deleteRecursive(dir);
-        dir.mkdirs();
+        List<String> except =new ArrayList();
+        except.add(mRootPath + "/tmp/reader.html");
+        FileUtils.deleteRecursive(dir, except);
         mWebView.loadUrl("javascript:loadPath('" + Uri.encode(mNote.path) + "')");
 
     }

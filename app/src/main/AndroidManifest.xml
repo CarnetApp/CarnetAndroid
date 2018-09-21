@@ -95,7 +95,8 @@
         <activity
             android:name=".synchro.AccountConfigActivity"
             android:label="@string/title_activity_account_config"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".updater.UpdaterActivity"></activity>
     </application>
 
 </manifest>

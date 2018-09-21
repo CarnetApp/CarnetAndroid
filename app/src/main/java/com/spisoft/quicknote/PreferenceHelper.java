@@ -25,6 +25,7 @@ public class PreferenceHelper {
     public static final String PASSWORD_ON_MINIMIZE_PREFERENCE = "pref_password_on_minimize";
     public static final String REMOVE_AD_FREE = "pref_remove_ad_free";
     public static final String NOTE_VERSION_PREF = "pref_note_version";
+    public static final String APP_VERSION_PREF = "pref_app_version";
     public static final String PREF_UID = "pref_uid";
     private static final String CURRENT_READER_VERSION = "current_reader_version";
     private static PreferenceHelper sPreferenceHelper;

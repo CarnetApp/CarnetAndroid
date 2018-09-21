@@ -31,6 +31,7 @@ import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.intro.HelpActivity;
+import com.spisoft.quicknote.updater.UpdaterActivity;
 import com.spisoft.quicknote.utils.PinView;
 import com.spisoft.sync.synchro.SynchroService;
 
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     public static final String ACTION_RELOAD_KEYWORDS = "action_reload_keywords";
 
     private static final String WAS_LOCKED = "was_locked";
+    private static final int UPDATE_REQUEST_CODE = 100;
     private Fragment fragment;
     private FrameLayout mLockLayout;
     private boolean isLocked;
@@ -50,23 +52,29 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     private BlankFragment mEditorFrag;
     private boolean mShouldRemove;
     private Fragment mFragmentToPut;
-
+    private Bundle mSavedInstanceState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if(PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.NOTE_VERSION_PREF, -1)==-1&& PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.DISPLAY_AD_COUNT, 0)>0){
+        mSavedInstanceState = savedInstanceState;
+        if(PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.NOTE_VERSION_PREF, -1)==-1){
             //not set but already start  : V1
             PreferenceHelper.setCurrentNoteVersion(getApplicationContext(),1);
         }
 
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
-        if(!DBMergerService.isJobScheduledOrRunning(this)){
-            DBMergerService.scheduleJob(this,true, DBMergerService.ALL_DATABASES);
+        if(!UpdaterActivity.startUpdateIfNeeded(this, UPDATE_REQUEST_CODE)){
+            onUpdateDone();
         }
+
+    }
+
+    private void onUpdateDone() {
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
+            if(!DBMergerService.isJobScheduledOrRunning(this)){
+                DBMergerService.scheduleJob(this,true, DBMergerService.ALL_DATABASES);
+            }
         mPermissionChecker = new PermissionChecker();
 
-        PreferenceHelper.incrementDisplayAd(this);
         setContentView(R.layout.activity_main);
         mLockLayout = (FrameLayout)findViewById(R.id.lock_layout);
 
@@ -75,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
         // startService(new Intent(this, FloatingService.class));
         lockOnStart= true;
-        if(savedInstanceState==null) {
+        if(mSavedInstanceState==null) {
             Fragment fragment = MainFragment.newInstance();
             mHandler.postDelayed(new Runnable() {
                 @Override
@@ -88,17 +96,10 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
             //setFragment(fragment);
             if(HelpActivity.shouldStartActivity(this))
                 startActivity(new Intent(this, HelpActivity.class));
-            else // load frag only if no help activity to avoid exception when activity is in background
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    setPreloadBlankFragment();
-                }
-            }, 5000);
 
         }
         else
-            lockOnStart = savedInstanceState.getBoolean(WAS_LOCKED,false);
+            lockOnStart = mSavedInstanceState.getBoolean(WAS_LOCKED,false);
 
         //lock when starting and when was locked before rotation
         if (PreferenceHelper.shouldLockOnMinimize(this)) {
@@ -131,9 +132,8 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         filter.addAction(NoteManager.ACTION_UPDATE_END);
 
         registerReceiver(mReceiver, filter);
-
+        mSavedInstanceState = null;
     }
-
 
 
     @Override
@@ -228,8 +228,10 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if(EditorView.sEditorView!=null)
+        if(requestCode == UPDATE_REQUEST_CODE){
+            onUpdateDone();
+        }
+        else if(EditorView.sEditorView!=null)
             EditorView.sEditorView.onActivityResult(requestCode, resultCode, data);
     }
     public void setPreloadBlankFragment() {
