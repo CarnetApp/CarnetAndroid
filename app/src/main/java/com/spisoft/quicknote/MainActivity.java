@@ -118,9 +118,10 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
             }
         };
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(FileManagerService.ACTION_COPY_ENDS);
-
+        registerReceiver(mReceiver, filter);
         if(FileManagerService.sIsCopying)
             displayPasteDialog();
         mSavedInstanceState = null;
