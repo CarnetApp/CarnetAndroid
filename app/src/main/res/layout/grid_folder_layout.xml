@@ -17,7 +17,7 @@
             android:orientation="vertical"
             card_view:cardCornerRadius="4dp"
             android:id="@+id/cardview"
-            android:background="@drawable/normal_button"
+            android:background="@drawable/transparent_ripple"
             android:padding="5dp"
             android:layout_width="match_parent" android:layout_height="match_parent"
             >
