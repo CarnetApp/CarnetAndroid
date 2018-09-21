@@ -369,9 +369,14 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                 @Override
                 protected Void doInBackground(Void... voids) {
                     String pathNotFi = path;
+                    if(pathNotFi.equals("tmp/reader.html")){
+                        Log.d(TAG,"skip deleting reader..."); //will be cchanged when aligning with nextcloud
+                        return null;
+                    }
                     if (!pathNotFi.startsWith("/"))
                         pathNotFi = mRootPath + "/" + pathNotFi;
                     Log.d(TAG, "deleting " + pathNotFi);
+                    Log.d(TAG, "not skiping " + mRootPath+"/tmp/reader.html");
                     FileUtils.deleteRecursive(new File(pathNotFi));
                     return null;
                 }
@@ -566,7 +571,9 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
                 @Override
                 protected Void doInBackground(Void... voids) {
-                    ZipUtils.zipFolder(new File(finalDir), finalOut);
+                    List <String> except = new ArrayList<>();
+                    except.add(mRootPath+"/tmp/reader.html");
+                    ZipUtils.zipFolder(new File(finalDir), finalOut,except);
 
                     return null;
                 }

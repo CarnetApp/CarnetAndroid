@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.FileLock;
+import java.util.List;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 import java.util.zip.Deflater;
@@ -159,7 +160,7 @@ public class ZipUtils {
 
     }
 
-    public static boolean zipFolder(File folder,String path){
+    public static boolean zipFolder(File folder,String path, List<String> execptAbsolute){
         synchronized (FileLocker.getLockOnPath(folder.getAbsolutePath())) {
             synchronized (FileLocker.getLockOnPath(path)) {
                 FileLock lock = null;
@@ -174,7 +175,7 @@ public class ZipUtils {
                     zos.setLevel(0);
                     lock = fos.getChannel().lock();
 
-                    recursiveAddFile(folder, zos, folder.getAbsolutePath());
+                    recursiveAddFile(folder, zos, folder.getAbsolutePath(), execptAbsolute);
 
 
                     // Complete the entry
@@ -200,7 +201,9 @@ public class ZipUtils {
 
     }
 
-    private static void recursiveAddFile(File file, ZipOutputStream zos, String rootFolderPathWithoutSlash) throws IOException {
+    private static void recursiveAddFile(File file, ZipOutputStream zos, String rootFolderPathWithoutSlash, List<String> execptAbsolute) throws IOException {
+        if(execptAbsolute.contains(file.getAbsolutePath()))
+            return;
         byte[] buf = new byte[1024];
         if(file.isDirectory()){
             File [] files = file.listFiles();
@@ -208,7 +211,7 @@ public class ZipUtils {
             zos.putNextEntry(new ZipEntry(file.getAbsolutePath().substring(rootFolderPathWithoutSlash.length()+1)));
             if(files!=null)
                 for (File child : files)
-                    recursiveAddFile(child,zos, rootFolderPathWithoutSlash);
+                    recursiveAddFile(child,zos, rootFolderPathWithoutSlash, execptAbsolute);
         }else {
             // Add ZIP entry to output stream.
             ZipEntry entry = new ZipEntry(file.getAbsolutePath().substring(rootFolderPathWithoutSlash.length()+1));

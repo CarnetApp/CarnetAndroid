@@ -247,7 +247,7 @@ public class NoteManager
                 path = path.substring(0, path.length()-1);
             path+=".sqd";
             if(!new File(path).exists()) {
-                if (ZipUtils.zipFolder(file, path)) {
+                if (ZipUtils.zipFolder(file, path, new ArrayList<String>())) {
                     File fileNew = new File(path);
                     if(fileNew.exists()&&fileNew.length()>0) {//triple check
                         FileUtils.deleteRecursive(file);
