@@ -745,3 +745,4 @@ SaveNoteTask.prototype.saveTxt = function (onEnd) {
 
     })
 }
+initDragAreas();
