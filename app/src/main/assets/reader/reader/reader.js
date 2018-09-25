@@ -1,4 +1,9 @@
-var fs = require('fs');
+function require() {
+    return "pet"
+}
+var rootpath = undefined;
+var api_url = undefined;
+
 var Writer = function (elem) {
     this.elem = elem;
     this.seriesTaskExecutor = new SeriesTaskExecutor();
@@ -11,7 +16,6 @@ var Writer = function (elem) {
 
 Writer.prototype.setNote = function (note) {
     this.note = note;
-    this.noteOpener = new NoteOpener(note);
 
 }
 
@@ -58,8 +62,13 @@ Writer.prototype.displayMediaFullscreen = function (index) {
 
     //download
     var a = document.createElement("a")
-    a.href = this.fullscreenableMedia[index];
-    a.download = "" // force download, not view
+    a.href = "#";
+    a.download = "true"; // force download, not view
+    a.target = "_blank";
+    a.onclick = function () {
+        window.open(writer.fullscreenableMedia[index], '_blank');;
+        return false;
+    }
     var downloadButton = document.createElement("button")
 
     downloadButton.classList.add('mdl-button');
@@ -108,122 +117,187 @@ Writer.prototype.nextMedia = function () {
     if (this.currentFullscreen < this.fullscreenableMedia.length - 1)
         this.displayMediaFullscreen(this.currentFullscreen + 1);
 }
-Writer.prototype.refreshMedia = function () {
-    var writer = this;
+
+Writer.prototype.setMediaList = function (list) {
+    writer.currentFullscreen = 0;
+    writer.fullscreenableMedia = []
     writer.mediaList.innerHTML = "";
 
-    fs.readdir(tmppath + 'data/', function (err, dir) {
-        if (err) {
-            return
-        }
-        writer.currentFullscreen = 0;
-        writer.fullscreenableMedia = []
-        var mediaCount = 0;
-        for (var i = 0; i < dir.length; i++) {
-            var filePath = dir[i]
-            console.log("file " + filePath)
-            var el = document.createElement("div")
-            el.classList.add("media")
-            if (FileUtils.isFileImage(filePath)) {
-                if(!filePath.startsWith("preview_")){
-                    var img = document.createElement("img")
-                    img.src = "data/" + filePath
-                    el.appendChild(img)
-                    writer.fullscreenableMedia.push("data/" + filePath)
-
-                    img.mediaIndex = mediaCount;
-                    el.onclick = function (event) {
-                        console.log(event.target)
-                        writer.displayMediaFullscreen(event.target.mediaIndex)
-
-                    }
-                    mediaCount++;
-                }
-            } else {
+    var mediaCount = 0;
+    for (var i = 0; i < list.length; i++) {
+        var filePath = api_url + list[i]
+        console.log("file " + filePath)
+        var el = document.createElement("div")
+        el.classList.add("media")
+        if (FileUtils.isFileImage(filePath)) {
+            if (!filePath.startsWith("preview_")) {
                 var img = document.createElement("img")
-                img.src = rootpath + "/img/file.svg"
+                img.src = filePath
                 el.appendChild(img)
-                el.innerHTML += "<br /> " + filePath
-                el.classList.add("media-file")
+                writer.fullscreenableMedia.push(filePath)
+
+                img.mediaIndex = mediaCount;
+                el.onclick = function (event) {
+                    console.log(event.target)
+                    writer.displayMediaFullscreen(event.target.mediaIndex)
+
+                }
+                mediaCount++;
             }
-            writer.mediaList.appendChild(el)
+        } else {
+            var img = document.createElement("img")
+            img.src = rootpath + "/img/file.svg"
+            el.appendChild(img)
+            el.innerHTML += "<br /> " + filePath
+            el.classList.add("media-file")
         }
+        writer.mediaList.appendChild(el)
+    }
+}
+Writer.prototype.refreshMedia = function () {
+    var writer = this;
+    if (!isElectron) {
+        RequestBuilder.sRequestBuilder.get("/note/open/" + this.saveID + "/listMedia", function (error, data) {
+            if (error) {
+
+            }
+            writer.setMediaList(data);
+
+        })
+
+    } else
+        fs.readdir(tmppath + 'data/', function (err, dir) {
+            if (err) {
+                return
+            }
+            writer.currentFullscreen = 0;
+            writer.fullscreenableMedia = []
+            var mediaCount = 0;
+
+        })
+}
+
+Writer.prototype.sendFiles = function (files) {
+    $("#media-loading").fadeIn();
+    var writer = this;
+    RequestBuilder.sRequestBuilder.postFiles("/note/open/" + this.saveID + "/addMedia", {
+        path: this.note.path,
+    }, files, function (error, data) {
+        if (error) {
+
+        }
+        $("#media-loading").fadeOut();
+        writer.setMediaList(data);
+
     })
 }
 
 Writer.prototype.addMedia = function () {
     console.log("add media")
     var writer = this;
-    FileOpener.selectFile(function (fileNames) {
+    if (!isElectron) {
+        document.getElementById("input_file").click();
+    } else
+        FileOpener.selectFile(function (fileNames) {
 
-        if (fileNames === undefined) return;
+            if (fileNames === undefined) return;
 
-        var filePath = fileNames[0];
-        console.log("file " + filePath)
-        fs.readFile(filePath, 'base64', function read(err, data) {
-            if (err) {
-                throw err;
-            }
-            //filename
-            console.log("read file ok !")
-            require('mkdirp').sync(tmppath + 'data/');
-            var name = FileUtils.getFilename(filePath)
-            fs.writeFile(tmppath + 'data/' + name, data, 'base64', function (err) {
-                if (!err) {
-                    console.log("write ok !")
-
-                    if(FileUtils.isFileImage(filePath)){
-                        console.log("creating thumb")
-
-                        var img = document.createElement("img");
-                        img.src = 'data:'+FileUtils.geMimetypeFromExtension(FileUtils.getExtensionFromPath(filePath))+';base64,' +data
-                        img.onload = function(){
-                            var canvas = document.createElement('canvas');
-                            var MAX_WIDTH = 200;
-                            var MAX_HEIGHT = 200;
-                            var width = img.width;
-                            var height = img.height;
-    
-                            if (width > height) {
-                            if (width > MAX_WIDTH) {
-                                height *= MAX_WIDTH / width;
-                                width = MAX_WIDTH;
-                            }
-                            } else {
-                            if (height > MAX_HEIGHT) {
-                                width *= MAX_HEIGHT / height;
-                                height = MAX_HEIGHT;
-                            }
-                            }
-                            canvas.width = width;
-                            canvas.height = height;
-                            var ctx = canvas.getContext("2d");
-                            ctx.drawImage(img, 0, 0, width, height);
-                            console.log("data width "+width)
-    
-                            var dataurl = canvas.toDataURL("image/jpeg");
-                            console.log("data url"+dataurl)
-                            fs.writeFile(tmppath + 'data/' + 'preview_'+name, dataurl.replace(/^data:image\/\w+;base64,/, ""), 'base64', function (err) {
-                                writer.seriesTaskExecutor.addTask(writer.saveNoteTask.saveTxt)
-                                writer.refreshMedia();
-                            })
-                        }
-                        
-                    }
+            var filePath = fileNames[0];
+            console.log("file " + filePath)
+            fs.readFile(filePath, 'base64', function read(err, data) {
+                if (err) {
+                    throw err;
                 }
+                //filename
+                console.log("read file ok !")
+                require('mkdirp').sync(tmppath + 'data/');
+                var name = FileUtils.getFilename(filePath)
+                fs.writeFile(tmppath + 'data/' + name, data, 'base64', function (err) {
+                    if (!err) {
+                        console.log("write ok !")
+
+                        if (FileUtils.isFileImage(filePath)) {
+                            console.log("creating thumb")
+
+                            var img = document.createElement("img");
+                            img.src = 'data:' + FileUtils.geMimetypeFromExtension(FileUtils.getExtensionFromPath(filePath)) + ';base64,' + data
+                            img.onload = function () {
+                                var canvas = document.createElement('canvas');
+                                var MAX_WIDTH = 200;
+                                var MAX_HEIGHT = 200;
+                                var width = img.width;
+                                var height = img.height;
+
+                                if (width > height) {
+                                    if (width > MAX_WIDTH) {
+                                        height *= MAX_WIDTH / width;
+                                        width = MAX_WIDTH;
+                                    }
+                                } else {
+                                    if (height > MAX_HEIGHT) {
+                                        width *= MAX_HEIGHT / height;
+                                        height = MAX_HEIGHT;
+                                    }
+                                }
+                                canvas.width = width;
+                                canvas.height = height;
+                                var ctx = canvas.getContext("2d");
+                                ctx.drawImage(img, 0, 0, width, height);
+                                console.log("data width " + width)
+
+                                var dataurl = canvas.toDataURL("image/jpeg");
+                                console.log("data url" + dataurl)
+                                fs.writeFile(tmppath + 'data/' + 'preview_' + name, dataurl.replace(/^data:image\/\w+;base64,/, ""), 'base64', function (err) {
+                                    writer.seriesTaskExecutor.addTask(writer.saveNoteTask)
+                                    writer.refreshMedia();
+                                })
+                            }
+
+                        }
+                    }
+                })
+
             })
+
 
         })
 
+}
 
-    })
+Writer.prototype.setDoNotEdit = function (b) {
+    document.getElementById("text").contentEditable = !b;
+}
+
+Writer.prototype.displayErrorLarge = function (error) {
 
 }
 
 Writer.prototype.extractNote = function () {
     console.log("Writer.prototype.extractNote")
-
-    var writer = this;
+    const writer = this;
+    RequestBuilder.sRequestBuilder.get("/note/open?path=" + encodeURIComponent(this.note.path), function (error, data) {
+        if (error) {
+            writer.setDoNotEdit(true);
+            writer.displayErrorLarge("Error");
+            return;
+        }
+        console.log(data)
+        writer.saveID = data.id;
+        console.log(data.html)
+        writer.fillWriter(data.html)
+        if (data.metadata == null)
+            writer.note.metadata = new NoteMetadata();
+        else
+            writer.note.metadata = data.metadata;
+        writer.refreshKeywords()
+        writer.refreshMedia();
+        var ratingStars = document.querySelectorAll("input.star")
+        for (var i = 0; i < ratingStars.length; i++) {
+            ratingStars[i].checked = writer.note.metadata.rating == (5 - i);
+        };
+        writer.updateRating(writer.note.metadata.rating)
+    });
+    /*var writer = this;
     console.log("extractNote to " + tmppath)
     writer.noteOpener.extractTo(tmppath, function (noSuchFile) {
         console.log("done")
@@ -242,7 +316,7 @@ Writer.prototype.extractNote = function () {
                     writer.refreshMedia()
                     var ratingStars = document.querySelectorAll("input.star")
                     for (var i = 0; i < ratingStars.length; i++) {
-                        ratingStars[i].checked = writer.note.metadata.rating == (5-i);
+                        ratingStars[i].checked = writer.note.metadata.rating == (5 - i);
                     };
                     writer.updateRating(writer.note.metadata.rating)
                 });
@@ -256,28 +330,30 @@ Writer.prototype.extractNote = function () {
             if (err) {
                 throw err;
             }
-            
+
             content = data;
             console.log(data)
             this.note.metadata = JSON.parse(content)
         });*/
-        //copying reader.html
-    })
+    //copying reader.html
+    /* })*/
 }
 
 saveTextIfChanged = function () {
     console.log("has text changed ? " + writer.hasTextChanged)
     if (writer.hasTextChanged)
-        writer.seriesTaskExecutor.addTask(writer.saveNoteTask.saveTxt)
+        writer.seriesTaskExecutor.addTask(writer.saveNoteTask)
     writer.hasTextChanged = false;
 }
 Writer.prototype.fillWriter = function (extractedHTML) {
-
+    console.log("fill")
     if (isElectron) {
         const {
             ipcRenderer
         } = require('electron')
         ipcRenderer.sendToHost('loaded', "")
+    } else if (typeof app !== "function") {
+        parent.postMessage("loaded", "*")
     }
     if (extractedHTML != undefined)
         this.oEditor.innerHTML = extractedHTML;
@@ -298,7 +374,7 @@ Writer.prototype.fillWriter = function (extractedHTML) {
     //  $("#editor").webkitimageresize().webkittableresize().webkittdresize();
 
 }
-var KeywordsDBManager = require(rootpath + "keywords/keywords_db_manager").KeywordsDBManager;
+//var KeywordsDBManager = require(rootpath + "keywords/keywords_db_manager").KeywordsDBManager;
 var keywordsDBManager = new KeywordsDBManager()
 Writer.prototype.refreshKeywords = function () {
     var keywordsContainer = document.getElementById("keywords-list");
@@ -396,9 +472,15 @@ Writer.prototype.init = function () {
 
     }
     var writer = this;
-
+    document.getElementById("input_file").onchange = function () {
+        writer.sendFiles(this.files);
+    }
     window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
         if (errorMsg.indexOf("parentElement") >= 0) //ignore that one
+            return;
+        if ([
+                "TypeError: firstHeader is null"
+            ].includes(errorMsg))
             return;
         var data = {
             message: "Error occured: " + errorMsg,
@@ -491,12 +573,53 @@ Writer.prototype.init = function () {
     var ratingStars = document.getElementsByClassName("star")
     for (var i = 0; i < ratingStars.length; i++) {
         ratingStars[i].checked = false;
-        ratingStars[i].onclick=function(){
+        ratingStars[i].onclick = function () {
             writer.saveRating(this.value);
             writer.updateRating(this.value);
         }
     };
 
+    document.getElementById("button-add-keyword").onclick = function () {
+        writer.toggleDrawer();
+        writer.newKeywordDialog.showModal();
+        return false;
+    }
+    document.getElementById("button-add-keyword-ok").onclick = function () {
+        writer.addKeyword(document.getElementById('keyword-input').value);
+        writer.newKeywordDialog.close();
+    }
+    var inToolbarButtons = document.getElementsByClassName("in-toolbar-button");
+
+    for (var button of inToolbarButtons) {
+        button.onclick = function (ev) {
+            console.log("on click " + this.id);
+            switch (this.id) {
+                case "bold":
+                case "italic":
+                case "underline":
+                case "justifyleft":
+                case "justifycenter":
+                case "justifyright":
+                    writer.formatDoc(this.id);
+                    break;
+                case "text-color":
+                    writer.displayTextColorPicker();
+                    break;
+                case "fill-color":
+                    writer.displayFillColorPicker();
+                    break;
+                case "size-minus":
+                    writer.decreaseFontSize();
+                    break;
+                case "size-plus":
+                    writer.increaseFontSize();
+                    break;
+                case "statistics-button":
+                    writer.displayCountDialog();
+                    break;
+            }
+        }
+    }
 
     this.keywordsList = document.getElementById("keywords")
 
@@ -529,21 +652,40 @@ Writer.prototype.init = function () {
                 i++;
             }
         }
+
         try {
             new MaterialDataTable(writer.keywordsList)
         } catch (e) {}
     })
+    document.getElementById("exit").onclick = function () {
+        writer.toggleDrawer();
+        writer.askToExit();
+    }
+    document.getElementById("add-media-button").onclick = writer.addMedia;
+
+    document.getElementById("rename-button").onclick = document.getElementById("export-button").onclick = function () {
+        writer.toggleDrawer();
+        writer.warnNotYetImplemented()
+        return false;
+    }
+
 
     // $("#editor").webkitimageresize().webkittableresize().webkittdresize();
+}
+
+Writer.prototype.toggleDrawer = function () {
+    if (document.getElementsByClassName("is-small-screen").length > 0)
+        document.getElementsByClassName("mdl-layout__drawer-button")[0].click()
 }
 
 Writer.prototype.askToExit = function () {
     console.log("exec? " + this.seriesTaskExecutor.isExecuting)
     if (this.seriesTaskExecutor.isExecuting)
-        return
+        return false;
     else {
-        Compatibility.onBackPressed()
+        parent.postMessage("exit", "*")
     }
+    return false;
 }
 Writer.prototype.copy = function () {
     document.execCommand('copy');
@@ -594,23 +736,28 @@ Writer.prototype.surroundSelection = function (element) {
         }
     }
 }
-var KeywordsDBManager = require(rootpath + "keywords/keywords_db_manager").KeywordsDBManager;
-var keywordsDBManager = new KeywordsDBManager()
+//var KeywordsDBManager = require(rootpath + "keywords/keywords_db_manager").KeywordsDBManager;
+//var keywordsDBManager = new KeywordsDBManager()
 Writer.prototype.addKeyword = function (word) {
+    const writer = this;
     if (this.note.metadata.keywords.indexOf(word) < 0 && word.length > 0) {
         this.note.metadata.keywords.push(word);
-        keywordsDBManager.addToDB(word, this.note.path)
-        this.seriesTaskExecutor.addTask(this.saveNoteTask.saveTxt)
-        this.refreshKeywords();
+        keywordsDBManager.addToDB(word, this.note.path, function () {
+            writer.refreshKeywords();
+        })
+        this.seriesTaskExecutor.addTask(this.saveNoteTask)
+
     }
 }
 
 Writer.prototype.removeKeyword = function (word) {
+    const writer = this;
     if (this.note.metadata.keywords.indexOf(word) >= 0) {
         this.note.metadata.keywords.splice(this.note.metadata.keywords.indexOf(word), 1);
-        keywordsDBManager.removeFromDB(word, this.note.path)
-        this.seriesTaskExecutor.addTask(this.saveNoteTask.saveTxt)
-        this.refreshKeywords();
+        keywordsDBManager.removeFromDB(word, this.note.path, function () {
+            writer.refreshKeywords();
+        })
+        this.seriesTaskExecutor.addTask(this.saveNoteTask)
     }
 }
 
@@ -638,18 +785,18 @@ Writer.prototype.fillColor = function (color) {
 
 Writer.prototype.saveRating = function (rating) {
     this.note.metadata.rating = rating;
-    console.log("new rating "+this.note.metadata.rating)
+    console.log("new rating " + this.note.metadata.rating)
     writer.hasTextChanged = true;
 }
 
 Writer.prototype.updateRating = function (rating) {
     var ratingStars = document.querySelectorAll("label.star")
     for (var i = 0; i < ratingStars.length; i++) {
-        if(5-i <=this.note.metadata.rating){
+        if (5 - i <= this.note.metadata.rating) {
             ratingStars[i].classList.add("checked");
 
-        }else
-        ratingStars[i].classList.remove("checked");
+        } else
+            ratingStars[i].classList.remove("checked");
 
     };
 }
@@ -702,7 +849,7 @@ SeriesTaskExecutor.prototype.execNext = function () {
         return;
     }
     var executor = this;
-    this.task.shift()(function () {
+    this.task.shift().run(function () {
         executor.execNext()
     })
     console.log("this.task length " + this.task.length)
@@ -713,36 +860,105 @@ var SaveNoteTask = function (writer) {
     this.writer = writer;
 
 }
+SaveNoteTask.prototype.trySave = function (onEnd, trial) {
+    const task = this;
+    this.writer.note.metadata.last_modification_date = Date.now();
+    RequestBuilder.sRequestBuilder.post("/note/saveText", {
+        id: this.writer.saveID,
+        path: this.writer.note.path,
+        html: this.writer.oEditor.innerHTML,
+        metadata: JSON.stringify(this.writer.note.metadata)
+    }, function (error, data) {
+        if (error) {
+            if (trial < 3) {
+                setTimeout(function () {
+                    task.trySave(onEnd, trial + 1);
+                }, 1000)
+            } else {
+                writer.displaySnack({
+                    message: 'An error occured, please save your text and check it is not open in another tab',
+                    timeout: 60000 * 300,
+                })
+                writer.setDoNotEdit(true)
+                onEnd();
+            }
+        } else
+            onEnd();
+    });
+}
 
 SaveNoteTask.prototype.saveTxt = function (onEnd) {
-
-    var fs = require('fs');
-    var writer = this.writer;
-    console.log("saving")
-    fs.unlink(tmppath + "reader.html", function () {
-        fs.writeFile(tmppath + 'index.html', writer.oEditor.innerHTML, function (err) {
-            if (err) {
-                onEnd()
-                return console.log(err);
-            }
-            writer.note.metadata.last_modification_date = Date.now();
-            console.log("saving meta  " + writer.note.metadata.keywords[0])
-            fs.writeFile(tmppath + 'metadata.json', JSON.stringify(writer.note.metadata), function (err) {
-                if (err) {
-                    onEnd()
-                    return console.log(err);
-                }
-                console.log("compress")
-                writer.noteOpener.compressFrom(tmppath, function () {
-                    console.log("compressed")
-
-                    onEnd()
-                })
-            });
-
-        });
-
-
-    })
+    this.trySave(onEnd, 0);
 }
-initDragAreas();
+
+SaveNoteTask.prototype.run = SaveNoteTask.prototype.saveTxt;
+
+
+function resetScreenHeight() {
+    console.log("resetScreenHeight")
+    var screen = $(window).innerHeight(),
+        header = $("#header-carnet").height() + $("#toolbars").height(),
+        content = screen - header;
+    style = window.getComputedStyle(document.getElementById("header-carnet"));
+    if (style.getPropertyValue('display') == "none")
+        content = screen;
+    $("#center").height(content);
+    $("#editor").height(content - 45);
+    console.log(content - 45)
+}
+
+
+function loadPath(path) {
+    if (writer == undefined)
+        return;
+    writer.reset();
+    var note = new Note("", "", path, undefined);
+    writer.setNote(note);
+    console.log("extract")
+    writer.extractNote();
+}
+if (loaded == undefined)
+    var loaded = false; //don't know why, loaded twice on android
+
+var writer = undefined;
+
+
+
+$(document).ready(function () {
+    rootpath = document.getElementById("root-url").innerHTML;
+    api_url = document.getElementById("api-url").innerHTML;
+
+    new RequestBuilder(api_url);
+    if (writer == undefined) {
+        writer = new Writer(document);
+        writer.init();
+    }
+    initDragAreas();
+
+    if (!loaded) {
+        function getParameterByName(name, url) {
+            if (!url) {
+                url = window.location.href;
+            }
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " ").replace(/%2F/g, "/"));
+        }
+        $(window).on('resize', resetScreenHeight);
+
+        var path = getParameterByName("path");
+        var tmp = getParameterByName("tmppath");
+        if (tmp != null)
+            tmppath = tmp;
+        if (path != undefined) {
+            console.log("path " + getParameterByName("path"))
+            loadPath(path)
+
+        }
+
+        loaded = true;
+    }
+});

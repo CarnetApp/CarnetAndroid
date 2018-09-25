@@ -1,6 +1,3 @@
-var fs = require("fs");
-const pathTool = require('path')
-var getParentFolderFromPath = require('path').dirname;
 var FileBrowser = function (path) {
     this.path = path;
 }
@@ -13,22 +10,17 @@ FileBrowser.prototype.createFolder = function (name, callback) {
 }
 
 FileBrowser.prototype.list = function (callback) {
-    var {
-        ipcRenderer,
-        remote
-    } = require('electron');
-    var main = remote.require("./main.js");
-    var mainPath = main.getNotePath();
+
 
     if (this.path == "recentdb://") {
         console.log("getting recent")
-        var db = new RecentDBManager(mainPath + "/quickdoc/recentdb/" + main.getAppUid())
+        var db = new RecentDBManager()
         db.getFlatenDB(function (err, flaten, pin) {
             console.log(JSON.stringify(flaten))
             var files = [];
             for (let filePath of pin) {
                 var filename = filePath;
-                filePath = mainPath + "/" + filePath
+                filePath = filePath
                 file = new File(filePath, true, filename);
                 file.isPinned = true;
                 files.push(file)
@@ -37,16 +29,15 @@ FileBrowser.prototype.list = function (callback) {
                 if (pin.indexOf(filePath) != -1)
                     continue;
                 var filename = filePath;
-                filePath = mainPath + "/" + filePath
+                filePath = filePath
                 file = new File(filePath, true, filename);
                 files.push(file)
             }
-            callback(files)
+            callback(files, true)
         })
     } else if (this.path.startsWith("keyword://")) {
         console.log("getting keyword")
-        var KeywordsDBManager = require("./keywords/keywords_db_manager").KeywordsDBManager;
-        var keywordsDBManager = new KeywordsDBManager(main.getNotePath() + "/quickdoc/keywords/" + main.getAppUid())
+        var keywordsDBManager = new KeywordsDBManager()
         var filebrowser = this;
         keywordsDBManager.getFlatenDB(function (error, data) {
             var files = [];
@@ -55,37 +46,44 @@ FileBrowser.prototype.list = function (callback) {
                 var filename = filePath;
                 console.log("file " + filePath)
 
-                filePath = mainPath + "/" + filePath
+                filePath = filePath
                 file = new File(filePath, true, filename);
                 files.push(file)
             }
-            callback(files)
+            callback(files, true)
         })
     } else {
-        fs.readdir(this.path, (err, dir) => {
-            //console.log(dir);
+        var fbrowser = this;
+        RequestBuilder.sRequestBuilder.get(this.path.startsWith("search://") ? "/notes/getSearchCache" : "/browser/list?path=" + encodeURIComponent(this.path), function (error, data) {
+            if (error) {
+                callback(error);
+                return;
+            }
             var files = [];
             var dirs_in = [];
             var files_in = [];
-            for (let filePath of dir) {
-                var filename = filePath;
-                if (filename == "quickdoc" || filename.startsWith("."))
+            var endOfSearch = !fbrowser.path.startsWith("search://");
+            for (let node of data) {
+                console.log(node);
+                if (node == "end_of_search") {
+                    endOfSearch = true;
                     continue;
-                filePath = this.path + "/" + filePath
-                var stat = fs.statSync(filePath);
-                file = new File(filePath, stat.isFile(), filename);
-                console.log(filePath)
-                if (stat.isFile())
+                }
+
+                if (node.path == "quickdoc")
+                    continue;
+                file = new File(node.path, !node.isDir, node.name);
+                if (!node.isDir)
                     files_in.push(file)
                 else
                     dirs_in.push(file)
-
             }
             files = files.concat(dirs_in)
             files = files.concat(files_in)
+            callback(files, endOfSearch)
 
-            callback(files)
         });
+
     }
 }
 

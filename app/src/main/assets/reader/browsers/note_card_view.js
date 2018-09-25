@@ -11,8 +11,8 @@ NoteCardView.prototype.setNote = function (note) {
     var date = new Date(note.metadata.last_modification_date).toLocaleDateString();
     this.cardText.innerHTML = note.text;
     this.cardDate.innerHTML = date;
-    if(note.metadata.rating>0)
-        this.cardRating.innerHTML = note.metadata.rating+"★"
+    if (note.metadata.rating > 0)
+        this.cardRating.innerHTML = note.metadata.rating + "★"
     this.cardKeywords.innerHTML = "";
     this.cardText.classList.remove("big-text")
     this.cardText.classList.remove("medium-text")
@@ -32,12 +32,12 @@ NoteCardView.prototype.setNote = function (note) {
             this.cardKeywords.appendChild(keywordSpan)
         }
     this.cardMedias.innerHTML = "";
-    if(note.previews != undefined)
-    for (let preview of note.previews) {
-        var img = document.createElement('img');
-        img.src = preview;
-        this.cardMedias.appendChild(img);
-    }
+    if (note.previews != undefined)
+        for (let preview of note.previews) {
+            var img = document.createElement('img');
+            img.src = preview;
+            this.cardMedias.appendChild(img);
+        }
 
 }
 
@@ -87,7 +87,7 @@ NoteCardView.prototype.init = function () {
 
 }
 
-var Masonry = require('masonry-layout');
+//var Masonry = require('masonry-layout');
 var NoteCardViewGrid = function (elem, discret, dragCallback) {
 
     this.elem = elem;
@@ -103,11 +103,20 @@ NoteCardViewGrid.prototype.init = function () {
     this.noteCards = [];
     this.lastAdded = 0;
     this.notes = []
+    //calculating card width
+    this.width = 200;
+    if (document.body.clientWidth / 2 - 10 < 200) {
+        if (document.body.clientWidth > 300)
+            this.width = document.body.clientWidth / 2 - 13;
+        else
+            this.width = document.body.clientWidth - 10;
+    }
+    console.log("width " + document.body.clientWidth)
     this.msnry = new Masonry(this.elem, {
         // options
         itemSelector: '.demo-card-wide.mdl-card',
         fitWidth: true,
-        columnWidth: 212,
+        columnWidth: this.width + 10,
         transitionDuration: this.discret ? 0 : "0.6s",
         animationOptions: {
 
@@ -131,6 +140,9 @@ NoteCardViewGrid.prototype.onMenuClick = function (callback) {
     this.onMenuClick = callback;
 }
 
+NoteCardViewGrid.prototype.onFolderMenuClick = function (callback) {
+    this.onFolderMenuClick = callback
+}
 
 NoteCardViewGrid.prototype.updateNote = function (note) {
     for (var i = 0; i < this.noteCards.length; i++) {
@@ -147,10 +159,10 @@ NoteCardViewGrid.prototype.setNotesAndFolders = function (notes) {
     this.lastAdded = 0;
     this.addNext(45);
 }
-NoteCardViewGrid.prototype.addNote = function(note){
+NoteCardViewGrid.prototype.addNote = function (note) {
     this.notes.push(note)
     this.addNext(1);
-    
+
 }
 NoteCardViewGrid.prototype.addNext = function (num) {
     var lastAdded = this.lastAdded
@@ -160,6 +172,7 @@ NoteCardViewGrid.prototype.addNext = function (num) {
             var noteElem = document.createElement("div");
             noteElem.classList.add("demo-card-wide")
             noteElem.classList.add("isotope-item")
+            noteElem.style.width = this.width + "px";
             var noteCard = new NoteCardView(noteElem);
             noteCard.setNote(note);
             noteElem.note = note;
@@ -191,6 +204,7 @@ NoteCardViewGrid.prototype.addNext = function (num) {
             var folderElem = document.createElement("div");
             folderElem.classList.add("demo-card-wide")
             folderElem.classList.add("isotope-item")
+            folderElem.style.width = this.width + "px";
 
             $(folderElem).bind('click', {
                 folder: note,
@@ -207,6 +221,16 @@ NoteCardViewGrid.prototype.addNext = function (num) {
             folderCard.setFolder(note);
             this.elem.appendChild(folderElem)
             this.msnry.appended(folderElem)
+            $(folderCard.menuButton).bind('click', {
+                note: note,
+                callback: this.onFolderMenuClick
+            }, function (event) {
+                if (!$(this).hasClass('noclick')) {
+                    var data = event.data;
+                    data.callback(data.note)
+                    return false;
+                }
+            });
         }
         this.lastAdded = i + 1;
     }
@@ -234,11 +258,24 @@ FolderView.prototype.init = function () {
     this.elem.classList.add("mdl-card");
     this.elem.classList.add("folder-card-view");
     this.elem.classList.add("mdl-shadow--2dp");
+    this.menuButton = document.createElement('button');
+
+    this.menuButton.classList.add("mdl-button");
+
+    this.menuButton.classList.add("mdl-js-button");
+    this.menuButton.classList.add("mdl-button--icon");
+    this.menuButton.classList.add("card-more-button");
+
+    var menuButtonIcon = document.createElement('li');
+    menuButtonIcon.classList.add("material-icons");
+    menuButtonIcon.innerHTML = "more_vert";
+    this.menuButton.appendChild(menuButtonIcon);
     this.cardContent = document.createElement('div');
     this.cardContent.classList.add("mdl-card__supporting-text");
+    this.cardContent.appendChild(this.menuButton);
     this.img = document.createElement('img');
     this.img.classList.add("folder-icon")
-    this.img.src = "img/directory.png";
+    this.img.src = root_url + "img/directory.png";
     this.cardContent.appendChild(this.img);
 
     this.cardTitle = document.createElement('h2');

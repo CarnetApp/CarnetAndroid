@@ -1,9 +1,10 @@
 var isElectron = true;
+var rootpath = "";
 
 if (typeof require !== "function") {
 	var exports = function () {}
 	isElectron = false;
-	var require = function (required) {
+	/*var require = function (required) {
 		if (required == "fs") {
 			return FSCompatibility;
 		} else if (required == "mkdirp") {
@@ -17,7 +18,7 @@ if (typeof require !== "function") {
 			return KeywordDBManagerCompatibility;
 		}
 		return "";
-	}
+	}*/
 
 } else {
 	module.paths.push(rootpath + 'node_modules');

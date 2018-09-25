@@ -1,12 +1,13 @@
 .demo-card-wide.mdl-card {
-    width: 202px;
     min-height: 0px;
     margin: 5px;
     cursor: pointer;
 }
 
-.mdl-card__supporting-text{
+
+.mdl-card__supporting-text {
     padding-bottom: 0px !important;
+    box-sizing: content-box !important;
 }
 
 .note-card-view :hover,
@@ -15,7 +16,9 @@
     -webkit-transition: background-color 250ms linear;
     -ms-transition: background-color 250ms linear;
     transition: background-color 250ms linear;
+    cursor: pointer;
 }
+
 
 .demo-card-wide>.mdl-card__title {
     color: black;
@@ -29,9 +32,7 @@
     transition: transform 0.2s;
 }
 
-
 /* highlight drag & drop */
-
 
 /* jQuery UI Draggable adds ui-draggable-dragging */
 
@@ -54,6 +55,10 @@ body {
 #page-content {
     position: relative;
     margin: 0 auto;
+}
+
+#page-container {
+    background: #fafafa;
 }
 
 #grid-container {
@@ -92,8 +97,7 @@ body {
     margin-bottom: 10px;
     margin-right: 20px;
     word-wrap: break-word;
-    color: rgba(0,0,0,.87);
-    
+    color: rgba(0, 0, 0, .87);
 }
 
 .card-title:hover {
@@ -124,8 +128,8 @@ body {
     position: absolute !important;
 }
 
-.keywords{
-    margin-bottom:16px;
+.keywords {
+    margin-bottom: 16px;
 }
 
 .keyword {
@@ -136,17 +140,51 @@ body {
     display: inline-block;
 }
 
-.card-rating{
-    margin-right:10px;
-    float:right;
+.card-rating {
+    margin-right: 10px;
+    float: right;
 }
 
-.card-medias{
-    margin-left:-20px;
-    margin-right:-5px;
+.card-medias {
+    margin-left: -20px;
+    margin-right: -5px;
     background: black;
     border-radius: 2px;
 }
-.card-medias img{
-    width:100%;
+
+.card-medias img {
+    width: 100%;
+}
+
+#contextual-dialog .mdl-button {
+    padding: 0 5px;
+}
+
+
+#firstrun {
+    display: none;
+    position: relative;
+    margin: auto;
+    top: 50%;
+    margin-top: -270px;
+    max-width: 500px;
+    max-height: 500px;
+    padding: 10px;
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+    background: rgb(63, 81, 181);
+    box-shadow: 0px 0px 10px grey;
+    overflow-y: auto;
+}
+
+
+
+@media (max-width: 600px) {
+    #firstrun {
+        top: 0;
+        margin-top: 0;
+        max-width: 100%;
+        max-height: calc(100% - 20px);
+        overflow-y: auto;
+    }
 }

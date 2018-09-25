@@ -42,12 +42,12 @@ FileUtils.geMimetypeFromExtension = function (extension) {
   }
 }
 
-FileUtils.getExtensionFromPath = function(path){
+FileUtils.getExtensionFromPath = function (path) {
   return path.split('.').pop().toLowerCase();
 }
 
-var fs = require('fs');
 FileUtils.deleteFolderRecursive = function (path) {
+  var fs = require('fs');
   var utils = this;
   if (fs.existsSync(path)) {
     fs.readdirSync(path).forEach(function (file, index) {
@@ -83,6 +83,31 @@ FileUtils.stripExtensionFromName = function (name) {
   return name.replace(/\.[^/.]+$/, "")
 }
 
-FileUtils.getParentFolderFromPath = require('path').dirname;
+
+FileUtils.splitPathRe =
+  /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+
+
+FileUtils.posixSplitPath = function (filename) {
+  return FileUtils.splitPathRe.exec(filename).slice(1);
+}
+
+FileUtils.getParentFolderFromPath = function (path) {
+  var result = FileUtils.posixSplitPath(path),
+    root = result[0],
+    dir = result[1];
+
+  if (!root && !dir) {
+    // No dirname whatsoever
+    return '.';
+  }
+
+  if (dir) {
+    // It has a dirname, strip trailing slash
+    dir = dir.substr(0, dir.length - 1);
+  }
+
+  return root + dir;
+};
 
 exports.FileUtils = FileUtils;

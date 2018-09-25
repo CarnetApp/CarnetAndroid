@@ -13,7 +13,7 @@ NoteOpener.prototype.getMainTextMetadataAndPreviews = function (callback) {
       opener.getMetadataString(zip, function (metadata) {
         var tempElement = document.createElement("div");
         tempElement.innerHTML = data;
-        opener.getPreviews(zip, function(previews){
+        opener.getPreviews(zip, function (previews) {
           console.log(previews)
           callback(tempElement.innerText, metadata != undefined ? JSON.parse(metadata) : undefined, previews)
 
@@ -45,7 +45,7 @@ PreviewOpener.prototype.start = function () {
   this.zip.folder("data").forEach(function (relativePath, file) {
     console.log(relativePath)
 
-    if(relativePath.startsWith("preview_")){
+    if (relativePath.startsWith("preview_")) {
       extractor.files.push(file.name)
     }
   })
@@ -70,7 +70,7 @@ PreviewOpener.prototype.fullRead = function () {
     file.async('base64').then(function (content) {
 
       if (content != "") {
-        previewOpener.data.push('data:image/jpeg;base64,'+content)
+        previewOpener.data.push('data:image/jpeg;base64,' + content)
 
       }
       previewOpener.currentFile++;

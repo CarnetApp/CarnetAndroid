@@ -6,22 +6,22 @@ var notePath = []
 var wasNewNote = false
 var dontOpen = false;
 var currentNotePath = undefined
-const {
+var root_url = document.getElementById("root-url") != undefined ? document.getElementById("root-url").innerHTML : "";
+new RequestBuilder();
+/*const {
     ipcRenderer,
     remote,
     app
-} = require('electron');
-const Store = require('electron-store');
+} = require('electron');*/
 const store = new Store();
 var noteCacheStr = String(store.get("note_cache"))
 if (noteCacheStr == "undefined")
     noteCacheStr = "{}"
 console.log("cache loaded " + noteCacheStr)
-
 var oldNotes = JSON.parse(noteCacheStr);
-var main = remote.require("./main.js");
+/*var main = remote.require("./main.js");
 var SettingsHelper = require("./settings/settings_helper").SettingsHelper
-var settingsHelper = new SettingsHelper()
+var settingsHelper = new SettingsHelper()*/
 var TextGetterTask = function (list) {
     this.list = list;
     this.current = 0;
@@ -34,51 +34,76 @@ TextGetterTask.prototype.startList = function () {
 }
 
 TextGetterTask.prototype.getNext = function () {
-    if (this.current >= this.stopAt) {
+    console.log(this.current)
+    if (this.current >= this.stopAt || this.current >= this.list.length) {
         console.log("save cache ")
         store.set("note_cache", JSON.stringify(oldNotes))
         return;
     }
-    if (this.list[this.current] instanceof Note) {
-        var opener = new NoteOpener(this.list[this.current])
-        var myTask = this;
-        var note = this.list[this.current]
-        var fast = false;
-        //should we go fast or slow refresh ?
-        for (var i = this.current; i < this.stopAt && i < this.list.length && i < oldNotes.length; i++) {
-            if (oldNotes[this.list[i].path] == undefined) {
-                fast = true;
-                break;
-            }
-        }
-        setTimeout(function () {
-            try {
-                opener.getMainTextMetadataAndPreviews(function (txt, metadata, previews) {
-                    if (myTask.continue) {
-                        if (txt != undefined)
-                            note.text = txt.substring(0, 200);
-                        if (metadata != undefined)
-                            note.metadata = metadata;
-                        note.previews = previews;
-                        oldNotes[note.path] = note;
-                        noteCardViewGrid.updateNote(note)
-                        noteCardViewGrid.msnry.layout();
 
-                        myTask.getNext();
-                    }
-                });
-            } catch (error) {
-                console.log(error);
-            }
-            myTask.current++;
-        }, !fast ? 1000 : 100)
-
-    } else {
-        this.current++;
-        this.getNext();
+    var paths = "";
+    var start = this.current;
+    for (var i = start; i < this.stopAt && i < this.list.length && i - start < 10; i++) { //do it ten by ten
+        this.current = i + 1
+        if (!(this.list[i] instanceof Note))
+            continue;
+        paths += this.list[i].path + ",";
+        if (oldNotes[this.list[i].path] == undefined)
+            oldNotes[this.list[i].path] = this.list[i];
     }
+    var myTask = this;
+    RequestBuilder.sRequestBuilder.get("/metadata?paths=" + encodeURIComponent(paths), function (error, data) {
+        for (var meta in data) {
+            oldNotes[meta].metadata = data[meta].metadata != undefined ? data[meta].metadata : new NoteMetadata();
+            oldNotes[meta].text = data[meta].shorttext;
+            oldNotes[meta].previews = data[meta].previews;
+            noteCardViewGrid.updateNote(oldNotes[meta])
+            noteCardViewGrid.msnry.layout();
+        }
+        myTask.getNext();
+    });
+    /* if (this.list[this.current] instanceof Note) {
+         var opener = new NoteOpener(this.list[this.current])
+         var myTask = this;
+         var note = this.list[this.current]
+         var fast = false;
+         //should we go fast or slow refresh ?
+         for (var i = this.current; i < this.stopAt && i < this.list.length && i < oldNotes.length; i++) {
+             if (oldNotes[this.list[i].path] == undefined) {
+                 fast = true;
+                 break;
+             }
+         }
+         setTimeout(function () {
+             try {
+                 opener.getMainTextMetadataAndPreviews(function (txt, metadata, previews) {
+                     if (myTask.continue) {
+                         if (txt != undefined)
+                             note.text = txt.substring(0, 200);
+                         if (metadata != undefined)
+                             note.metadata = metadata;
+                         note.previews = previews;
+                         oldNotes[note.path] = note;
+                         noteCardViewGrid.updateNote(note)
+                         noteCardViewGrid.msnry.layout();
+
+                         myTask.getNext();
+                     }
+                 });
+             } catch (error) {
+                 console.log(error);
+             }
+             myTask.current++;
+         }, !fast ? 1000 : 100)
+
+     } else {
+         this.current++;
+         this.getNext();
+     }*/
 
 }
+
+
 
 var NewNoteCreationTask = function (callback) {
     var path = currentPath;
@@ -119,6 +144,30 @@ String.prototype.replaceAll = function (search, replacement) {
 };
 
 function openNote(notePath) {
+    currentNotePath = notePath
+    if (writerFrame.src == "") {
+        if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1 && navigator.userAgent.toLowerCase().indexOf("android") > -1) {//open in new tab for firefox android
+            window.open(root_url + "../writer.php?path=" + encodeURIComponent(notePath), "_blank");
+        }
+        else {
+            writerFrame.src = root_url + "../writer.php?path=" + encodeURIComponent(notePath);
+            writerFrame.style.display = "block"
+            loadingView.style.display = "block"
+        }
+    }
+    else {
+        console.log("reuse old iframe");
+        writerFrame.contentWindow.loadPath(notePath);
+        writerFrame.style.display = "block"
+        loadingView.style.display = "block"
+    }
+
+
+    //window.location.assign("writer?path=" + encodeURIComponent(notePath));
+}
+
+
+function oldOpenNote(notePath) {
     currentNotePath = notePath
     const electron = require('electron')
     const remote = electron.remote;
@@ -192,8 +241,7 @@ function onDragEnd(gg) {
 }
 
 function refreshKeywords() {
-    var KeywordsDBManager = require("./keywords/keywords_db_manager").KeywordsDBManager;
-    var keywordsDBManager = new KeywordsDBManager(main.getNotePath() + "/quickdoc/keywords/" + main.getAppUid())
+    var keywordsDBManager = new KeywordsDBManager()
     keywordsDBManager.getFlatenDB(function (error, data) {
         var keywordsContainer = document.getElementById("keywords");
         keywordsContainer.innerHTML = "";
@@ -211,6 +259,7 @@ function refreshKeywords() {
             keywordElem.innerHTML = key;
             keywordElem.setAttribute("href", "");
             keywordElem.onclick = function () {
+                toggleDrawer();
                 list("keyword://" + key, false);
                 return false;
             }
@@ -221,28 +270,13 @@ function refreshKeywords() {
 
 function searchInNotes(searching) {
     resetGrid(false)
-    var settingsHelper = require("./settings/settings_helper").SettingsHelper
-    var SettingsHelper = new settingsHelper();
-    var Search = require("./browsers/search").Search
-    var browser = this;
-    notes = []
-    var callback = function () {
+    notes = [];
 
-    }
-    callback.update = function (note) {
-        console.log("found " + note.path)
-        note = new Note(note.title, note.text.substring(0, 200), note.path, note.metadata)
-        browser.noteCardViewGrid.addNote(note)
-        notes.push(note)
-
-    }
-    callback.onEnd = function (list) {
-        console.log("onEnd " + list.length)
-
-
-    }
-    search = new Search(searching, SettingsHelper.getNotePath(), callback)
-    search.start()
+    RequestBuilder.sRequestBuilder.get("/notes/search?path=." + "&query=" + encodeURIComponent(searching), function (error, data) {
+        if (!error) {
+            list("search://", true);
+        }
+    });
 
 }
 
@@ -268,6 +302,10 @@ function resetGrid(discret) {
 
     noteCardViewGrid.onMenuClick(function (note) {
         mNoteContextualDialog.show(note)
+    })
+
+    noteCardViewGrid.onFolderMenuClick(function (folder) {
+        mFolderContextualDialog.show(folder)
     })
 }
 
@@ -308,10 +346,16 @@ class NewFolderDialog extends ContextualDialog {
 
     show() {
         var context = this;
+        this.nameInput.value = "";
 
         this.ok.onclick = function () {
-            var fb = new FileBrowser(currentPath);
-            fb.createFolder(context.nameInput.value, function () {
+            RequestBuilder.sRequestBuilder.post("/browser/newfolder", {
+                path: currentPath + "/" + context.nameInput.value
+            }, function (error) {
+                if (error) {
+
+
+                }
                 list(currentPath, true)
                 context.dialog.close();
             })
@@ -330,14 +374,19 @@ class NoteContextualDialog extends ContextualDialog {
         var context = this;
         this.nameInput.value = note.title;
         this.deleteButton.onclick = function () {
-            NoteUtils.deleteNote(note.path, function () {
-                context.dialog.close();
-                list(currentPath, true)
-            })
+            var db = new RecentDBManager()
+            context.dialog.close();
+            db.removeFromDB(note.path, function (error, data) {
+                if (!error)
+                    RequestBuilder.sRequestBuilder.delete("/notes?path=" + encodeURIComponent(note.path), function () {
+                        list(currentPath, true)
+                    })
+            });
+
         }
         this.archiveButton.onclick = function () {
-            var db = new RecentDBManager(main.getNotePath() + "/quickdoc/recentdb/" + main.getAppUid())
-            db.removeFromDB(NoteUtils.getNoteRelativePath(main.getNotePath(), note.path), function () {
+            var db = new RecentDBManager()
+            db.removeFromDB(note.path, function () {
                 context.dialog.close();
                 list(currentPath, true)
             });
@@ -348,24 +397,71 @@ class NoteContextualDialog extends ContextualDialog {
         } else this.pinButton.innerHTML = "Pin"
 
         this.pinButton.onclick = function () {
-            var db = new RecentDBManager(main.getNotePath() + "/quickdoc/recentdb/" + main.getAppUid())
+            var db = new RecentDBManager()
             if (note.isPinned == true)
-                db.unpin(NoteUtils.getNoteRelativePath(main.getNotePath(), note.path), function () {
+                db.unpin(note.path, function () {
                     context.dialog.close();
                     list(currentPath, true)
                 });
 
             else
-                db.pin(NoteUtils.getNoteRelativePath(main.getNotePath(), note.path), function () {
+                db.pin(note.path, function () {
                     context.dialog.close();
                     list(currentPath, true)
                 });
         }
         this.ok.onclick = function () {
-            NoteUtils.renameNote(note.path, context.nameInput.value + ".sqd", function () {
-                list(currentPath, true)
-            })
+            var path = FileUtils.getParentFolderFromPath(note.path);
+            var hasOrigin = false;
+            for (let part of context.nameInput.value.split("/")) {
+                if (part == ".." && !hasOrigin) {
+                    path = FileUtils.getParentFolderFromPath(path)
+                } else {
+                    hasOrigin = true;
+                    path += "/" + part;
+                }
+            }
+            RequestBuilder.sRequestBuilder.post("/notes/move", {
+                from: note.path,
+                to: path + ".sqd"
+            }, function () {
+                list(currentPath, true);
+            });
+            context.dialog.close();
+        }
+        super.show()
 
+    }
+}
+
+class FolderContextualDialog extends ContextualDialog {
+    constructor() {
+        super();
+        this.showArchive = false;
+        this.showPin = false;
+    }
+
+    show(folder) {
+        var context = this;
+        this.nameInput.value = folder.name;
+
+        this.ok.onclick = function () {
+            var path = FileUtils.getParentFolderFromPath(folder.path);
+            var hasOrigin = false;
+            for (let part of context.nameInput.value.split("/")) {
+                if (part == ".." && !hasOrigin) {
+                    path = FileUtils.getParentFolderFromPath(path)
+                } else {
+                    hasOrigin = true;
+                    path += "/" + part;
+                }
+            }
+            RequestBuilder.sRequestBuilder.post("/browser/move", {
+                from: folder.path,
+                to: path
+            }, function () {
+                list(currentPath, true);
+            });
             context.dialog.close();
         }
         super.show()
@@ -374,6 +470,8 @@ class NoteContextualDialog extends ContextualDialog {
 }
 
 var mNoteContextualDialog = new NoteContextualDialog()
+var mFolderContextualDialog = new FolderContextualDialog()
+
 var mNewFolderDialog = new NewFolderDialog()
 
 
@@ -382,6 +480,10 @@ function list(pathToList, discret) {
         pathToList = currentPath;
     console.log("listing path " + pathToList);
     currentPath = pathToList;
+    var settingsHelper = {};
+    settingsHelper.getNotePath = function () {
+        return "pet"
+    };
     if (pathToList == settingsHelper.getNotePath() || pathToList == initPath || pathToList.startsWith("keyword://")) {
         if (pathToList != settingsHelper.getNotePath()) {
             $("#add-directory-button").hide()
@@ -394,18 +496,19 @@ function list(pathToList, discret) {
         $("#add-directory-button").show()
     }
 
-    resetGrid(discret);
-    var noteCardViewGrid = this.noteCardViewGrid
-    var notes = [];
-    notePath = [];
+
 
     var fb = new FileBrowser(pathToList);
-    fb.list(function (files) {
+    fb.list(function (files, endOfSearch) {
+        resetGrid(discret);
+        var noteCardViewGrid = this.noteCardViewGrid
+        var notes = [];
+        notePath = [];
         if (currentTask != undefined)
             currentTask.continue = false
         if (files.length > 0) {
             $("#emty-view").fadeOut("fast");
-        } else
+        } else if (endOfSearch)
             $("#emty-view").fadeIn("fast");
         for (let file of files) {
             var filename = getFilenameFromPath(file.path);
@@ -430,6 +533,11 @@ function list(pathToList, discret) {
         currentTask = new TextGetterTask(notes);
         console.log("stopping and starting task")
         currentTask.startList();
+        if (!endOfSearch) {
+            setTimeout(function () {
+                list(pathToList, true);
+            }, 1000);
+        }
 
     });
 
@@ -455,21 +563,36 @@ function closeW() {
 
 function toggleSearch() {
     $("#search-container").slideToggle();
+    if ($("#search-container").css("display") != "none")
+        $("#search-input").focus();
 }
 
 
-main.setMergeListener(function () {
+/*main.setMergeListener(function () {
     list(initPath, true)
-})
+})*/
 
 document.getElementById("add-note-button").onclick = function () {
-    new NewNoteCreationTask(function (path) {
+    var path = currentPath;
+    if (path == initPath || path.startsWith("keyword://"))
+        path = "";
+    RequestBuilder.sRequestBuilder.get("/note/create?path=" + encodeURIComponent(path), function (error, data) {
+        if (error) return;
+        console.log("found " + data)
+        wasNewNote = true;
+        var db = new RecentDBManager()
+        db.addToDB(data, function () {
+            openNote(data)
+        });
+
+    })
+    /*new NewNoteCreationTask(function (path) {
         console.log("found " + path)
         wasNewNote = true;
         var db = new RecentDBManager(main.getNotePath() + "/quickdoc/recentdb/" + main.getAppUid())
         db.addToDB(NoteUtils.getNoteRelativePath(main.getNotePath(), path));
         openNote(path)
-    })
+    })*/
 }
 
 document.getElementById("add-directory-button").onclick = function () {
@@ -479,12 +602,13 @@ document.getElementById("add-directory-button").onclick = function () {
 
 document.getElementById("search-input").onkeydown = function (event) {
     if (event.key === 'Enter') {
+        toggleSearch();
         searchInNotes(this.value)
     }
 }
 
 document.getElementById("back_arrow").addEventListener("click", function () {
-    list(getParentFolderFromPath(currentPath))
+    list(FileUtils.getParentFolderFromPath(currentPath))
 });
 
 function getNotePath() {
@@ -537,3 +661,157 @@ webview.addEventListener('dom-ready', () => {
 })
 var loadingView = document.getElementById("loading-view")
 //var browserElem = document.getElementById("browser")
+console.log("pet")
+
+
+for (var dia of document.getElementsByClassName("mdl-dialog")) {
+    dialogPolyfill.registerDialog(dia);
+}
+
+document.getElementById("search-button").onclick = function () {
+    toggleSearch();
+}
+
+//nav buttons
+document.getElementById("browser-button").onclick = function () {
+    toggleDrawer();
+    list("/");
+    return false;
+}
+document.getElementById("recent-button").onclick = function () {
+    toggleDrawer();
+    list("recentdb://");
+    return false;
+}
+
+function toggleDrawer() {
+    if (document.getElementsByClassName("is-small-screen").length > 0)
+        document.getElementsByClassName("mdl-layout__drawer-button")[0].click()
+}
+
+function isFullScreen() {
+    return document.fullscreenElement ||
+        document.mozFullScreenElement ||
+        document.webkitFullscreenElement ||
+        document.msFullscreenElement
+}
+document.getElementById("size-button").onclick = function () {
+    if (!isFullScreen()) {
+        const docElm = document.getElementById("content");
+        if (docElm.requestFullscreen) {
+            docElm.requestFullscreen();
+        } else if (docElm.mozRequestFullScreen) {
+            docElm.mozRequestFullScreen();
+        } else if (docElm.webkitRequestFullScreen) {
+            docElm.webkitRequestFullScreen();
+        }
+
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+        }
+    }
+}
+
+
+RequestBuilder.sRequestBuilder.get("/recentdb/merge", function (error, data) {
+    if (data == true && currentPath == "recentdb://")
+        list("recentdb://", true);
+})
+
+RequestBuilder.sRequestBuilder.get("/keywordsdb/merge", function (error, data) {
+    if (data == true)
+        refreshKeywords()
+})
+
+
+const isWeb = true;
+const right = document.getElementById("right-bar");
+if (isWeb) {
+    right.removeChild(document.getElementById("minus-button"))
+    right.removeChild(document.getElementById("close-button"))
+    document.getElementById("settings-button").href = "./settings"
+
+}
+
+
+
+
+
+//writer frame
+
+var isElectron = typeof require === "function";
+var writerFrame = undefined;
+events = []
+
+if (isElectron) {
+
+
+} else {
+    writerFrame = document.getElementById("writer-iframe");
+    //iframe events
+
+    var eventMethod = window.addEventListener ?
+        "addEventListener" :
+        "attachEvent";
+    var eventer = window[eventMethod];
+    var messageEvent = eventMethod === "attachEvent" ?
+        "onmessage" :
+        "message";
+    eventer(messageEvent, function (e) {
+        if (events[e.data] !== undefined) {
+            for (var callback of events[e.data])
+                callback();
+        }
+
+    });
+}
+
+function registerWriterEvent(event, callback) {
+    if (events[event] == null) {
+        events[event] = []
+    }
+    events[event].push(callback)
+}
+
+
+registerWriterEvent("exit", function () {
+    document.getElementById("writer-iframe").style.display = "none";
+    if (wasNewNote)
+        list();
+    else {
+        if (currentTask != undefined) {
+            const index = notePath.indexOf(currentNotePath)
+            currentTask.current = index
+            currentTask.stopAt = index + 1;
+            currentTask.startList()
+        }
+
+    }
+})
+
+registerWriterEvent("loaded", function () {
+    loadingView.style.display = "none"
+})
+
+
+setTimeout(function () {
+    RequestBuilder.sRequestBuilder.get("/settings/isfirstrun", function (error, data) {
+        if (!error && data == true) {
+            const elem = document.getElementById("firstrun-container");
+            $(elem).show();
+            $(("#firstrun")).slideToggle();
+            new Slides(elem, function () {
+                $(("#firstrun")).slideToggle(function () {
+                    $(elem).hide();
+                });
+            });
+        }
+
+    })
+}, 2000);
+initDragAreas();
