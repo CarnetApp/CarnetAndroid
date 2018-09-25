@@ -6,11 +6,13 @@ import android.net.Uri;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.Utils;
 import com.spisoft.quicknote.utils.ZipUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +30,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
@@ -204,6 +208,10 @@ public class NewHttpProxy {
                             case "note/open":
                                 openNote(mRequestedUri.getQueryParameter("path"));
                                 break;
+							case "keywordsdb":
+								getKeywordDB();
+								break;
+
                         }
 					}
 					else {
@@ -221,6 +229,24 @@ public class NewHttpProxy {
 			}
 
 		}
+
+		private void getKeywordDB() {
+			JSONObject object = null;
+			try {
+				object = KeywordsHelper.getInstance(mContext).getJson();
+				try {
+					is = new ByteArrayInputStream(object.toString().getBytes());
+					length = is.available();
+					fileMimeType = "application/json";
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
 
 		private void openNote(String path) {
 			Log.d(TAG, "opening note "+path);
