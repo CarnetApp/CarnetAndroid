@@ -111,10 +111,12 @@ public class HttpServer extends NanoHTTPD {
     }
 
     private Response saveNote(String path, String html, String metadata) {
+        FileUtils.writeToFile(extractedNotePath+"/index.html", html);
+        FileUtils.writeToFile(extractedNotePath+"/metadata.html", metadata);
         List <String> except = new ArrayList<>();
-        except.add(extractedNotePath+"reader.html");
+        except.add(extractedNotePath+"/reader.html");
         ZipUtils.zipFolder(new File(extractedNotePath), path,except);
-        return null;
+        return NanoHTTPD.newFixedLengthResponse("Saved !");
     }
 
 
