@@ -231,8 +231,8 @@ public class FileUtils {
         return sb.toString();
     }
 
-    public static void writeToFile(String s, String reader) {
-        File file= new File (s);
+    public static void writeToFile(String path, String string) {
+        File file= new File (path);
         FileWriter fw = null;
         if (!file.exists()) {
 
@@ -244,8 +244,8 @@ public class FileUtils {
             }
         }
         try {
-            fw = new FileWriter(s,false);
-            fw.append(reader + "\n");
+            fw = new FileWriter(path,false);
+            fw.append(string + "\n");
             fw.close();
 
         } catch (IOException e) {

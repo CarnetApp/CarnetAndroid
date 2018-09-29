@@ -70,7 +70,8 @@ KeywordsDBManager.prototype.action = function (keyword, path, action, callback) 
 
 KeywordsDBManager.prototype.actionArray = function (items, callback) {
     RequestBuilder.sRequestBuilder.post("/keywordsdb/action", {
-        data: items
+        data: items,
+        json: JSON.stringify(items)
     }, function (error, data) {
         console.log(data)
         callback();

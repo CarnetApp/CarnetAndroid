@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import com.spisoft.quicknote.Note;
+import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.ZipUtils;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.util.ServerRunner;
@@ -78,31 +81,45 @@ public class HttpServer extends NanoHTTPD {
             }
         }
         Log.d(TAG, "Post : "+post.toString());
+        for (Map.Entry<String, List<String>> entry : post.entrySet()) {
+            Log.d(TAG, entry.getKey());
 
+        }
+        Log.d(TAG, "Get : "+parms.toString());
+        Log.d(TAG, "query params "+                session.getQueryParameterString());
         if(path!=null){
             Log.d("pathdebug","path: "+path);
 
             if(path.startsWith("/api/")){
                 String subpath = path.substring("/api/".length());
-                switch (subpath){
-                    case "note/open":
-                        return openNote(parms.get("path").get(0));
-
-                    case "keywordsdb":
-                        return getKeywordDB();
-                    case "note/saveText":
-                        if(post.get("path")!=null && post.get("path").size()>=0 && post.get("html")!=null && post.get("html").size()>=0 && post.get("metadata")!=null && post.get("metadata").size()>=0)
-                            return saveNote(post.get("path").get(0),post.get("html").get(0),post.get("metadata").get(0));
-                    case "note/open/0/listMedia":
-                        return listOpenMedia();
-                    case "note/open/0/addMedia":
-                        if(post.get("path").size() >0 && post.get("media[]").size() >0 && files.containsKey("media[]"))
-                        return addMedia(post.get("path").get(0), files.get("media[]"), post.get("media[]").get(0));
-
+                if(Method.GET.equals(method)) {
+                    switch (subpath) {
+                        case "note/open":
+                            return openNote(parms.get("path").get(0));
+                        case "keywordsdb":
+                            return getKeywordDB();
+                        case "note/open/0/listMedia":
+                            return listOpenMedia();
+                    }
+                    if(subpath.startsWith("note/open/0/getMedia/")){
+                        return getMedia(subpath.substring("note/open/0/getMedia/".length()));
+                    }
                 }
-                if(subpath.startsWith("note/open/0/getMedia/")){
-                    return getMedia(subpath.substring("note/open/0/getMedia/".length()));
+                else if(Method.POST.equals(method)){
+                    switch (subpath) {
+                        case "keywordsdb/action":
+                            if(post.get("json") != null && post.get("json").size()>0)
+                               return keywordActionDB(post.get("json").get(0));
+                        case "note/saveText":
+                            if (post.get("path") != null && post.get("path").size() >= 0 && post.get("html") != null && post.get("html").size() >= 0 && post.get("metadata") != null && post.get("metadata").size() >= 0)
+                                return saveNote(post.get("path").get(0), post.get("html").get(0), post.get("metadata").get(0));
+                        case "note/open/0/addMedia":
+                            if (post.get("path").size() > 0 && post.get("media[]").size() > 0 && files.containsKey("media[]"))
+                                return addMedia(post.get("path").get(0), files.get("media[]"), post.get("media[]").get(0));
+
+                    }
                 }
+
             }
             else {
                 fileMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(path));
@@ -117,6 +134,22 @@ public class HttpServer extends NanoHTTPD {
         }
 
         return NanoHTTPD.newChunkedResponse(status, fileMimeType, rinput);
+    }
+
+    private Response keywordActionDB(String jason) {
+        try {
+            JSONArray object = new JSONArray(jason);
+            for (int i = 0; i < object.length(); i++){
+                if(object.getJSONObject(i).getString("action").equals("add")){
+                    KeywordsHelper.getInstance(mContext).addKeyword(object.getJSONObject(i).getString("keyword"), new Note(object.getJSONObject(i).getString("path")));
+                } else if (object.getJSONObject(i).getString("action").equals("remove")){
+                    KeywordsHelper.getInstance(mContext).removeKeyword(object.getJSONObject(i).getString("keyword"), new Note(object.getJSONObject(i).getString("path")));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return getKeywordDB();
     }
 
     private Response addMedia(String path, String tmpPath, String name) {
@@ -140,6 +173,8 @@ public class HttpServer extends NanoHTTPD {
 
     }
 
+
+
     private Response listOpenMedia() {
         JSONArray array = new JSONArray();
         File f = new File(extractedNotePath, "data");
@@ -155,11 +190,12 @@ public class HttpServer extends NanoHTTPD {
 
     private Response saveNote(String path, String html, String metadata) {
         FileUtils.writeToFile(extractedNotePath+"/index.html", html);
-        FileUtils.writeToFile(extractedNotePath+"/metadata.html", metadata);
+        FileUtils.writeToFile(extractedNotePath+"/metadata.json", metadata);
         return saveNote(path);
     }
 
     private Response saveNote(String path) {
+        path = new File(PreferenceHelper.getRootPath(mContext),path).getAbsolutePath();
         List <String> except = new ArrayList<>();
         except.add(extractedNotePath+"/reader.html");
         ZipUtils.zipFolder(new File(extractedNotePath), path,except);
@@ -181,6 +217,7 @@ public class HttpServer extends NanoHTTPD {
 
 
     private Response openNote(String path) {
+        path = new File(PreferenceHelper.getRootPath(mContext),path).getAbsolutePath();
         Log.d(TAG, "opening note "+path);
         try {
             File dir = new File(extractedNotePath);

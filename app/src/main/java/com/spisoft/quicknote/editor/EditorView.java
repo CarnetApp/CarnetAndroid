@@ -365,7 +365,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         List<String> except =new ArrayList();
         except.add(mRootPath + "/tmp/reader.html");
         FileUtils.deleteRecursive(dir, except);
-        mWebView.loadUrl("javascript:loadPath('" + Uri.encode(mNote.path) + "')");
+        mWebView.loadUrl("javascript:loadPath('" + Uri.encode(RecentHelper.getRelativePath(mNote.path, getContext())) + "')");
 
     }
 
