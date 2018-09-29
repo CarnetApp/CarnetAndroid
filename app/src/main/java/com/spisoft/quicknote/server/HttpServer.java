@@ -183,7 +183,10 @@ public class HttpServer extends NanoHTTPD {
     private Response openNote(String path) {
         Log.d(TAG, "opening note "+path);
         try {
-
+            File dir = new File(extractedNotePath);
+            List<String> except =new ArrayList();
+            except.add(extractedNotePath + "/reader.html");
+            FileUtils.deleteRecursive(dir, except);
             if(new File(path).exists()) {
                 JSONObject object = new JSONObject();
                 object.put("id","0");
