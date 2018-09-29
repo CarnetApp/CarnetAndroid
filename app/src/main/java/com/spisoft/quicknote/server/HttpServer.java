@@ -96,6 +96,9 @@ public class HttpServer extends NanoHTTPD {
                         return listOpenMedia();
 
                 }
+                if(subpath.startsWith("note/open/0/getMedia/")){
+                    getMedia(subpath.substring("note/open/0/getMedia/".length()));
+                }
             }
             else {
                 fileMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(path));
@@ -110,6 +113,16 @@ public class HttpServer extends NanoHTTPD {
         }
 
         return NanoHTTPD.newChunkedResponse(status, fileMimeType, rinput);
+    }
+
+    private Response getMedia(String name){
+        try {
+            return  NanoHTTPD.newChunkedResponse(Response.Status.OK,  MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(name)),new FileInputStream(new File(new File(extractedNotePath, "data"), "name")));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        };
+        return NanoHTTPD.newFixedLengthResponse(Response.Status.NOT_FOUND, "", "not found");
+
     }
 
     private Response listOpenMedia() {
