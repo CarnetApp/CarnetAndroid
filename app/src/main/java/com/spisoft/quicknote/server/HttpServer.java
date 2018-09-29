@@ -93,8 +93,7 @@ public class HttpServer extends NanoHTTPD {
                         if(post.get("path")!=null && post.get("path").size()>=0 && post.get("html")!=null && post.get("html").size()>=0 && post.get("metadata")!=null && post.get("metadata").size()>=0)
                             return saveNote(post.get("path").get(0),post.get("html").get(0),post.get("metadata").get(0));
                     case "note/open/0/listMedia":
-                        listOpenMedia();
-                        break;
+                        return listOpenMedia();
 
                 }
             }
