@@ -77,6 +77,7 @@ public class HttpServer extends NanoHTTPD {
                 e.printStackTrace();
             }
         }
+        Log.d(TAG, "Post : "+post.toString());
 
         if(path!=null){
             Log.d("pathdebug","path: "+path);
@@ -94,10 +95,13 @@ public class HttpServer extends NanoHTTPD {
                             return saveNote(post.get("path").get(0),post.get("html").get(0),post.get("metadata").get(0));
                     case "note/open/0/listMedia":
                         return listOpenMedia();
+                    case "note/open/0/addMedia":
+                        if(post.get("path").size() >0 && post.get("media[]").size() >0 && files.containsKey("media[]"))
+                        return addMedia(post.get("path").get(0), files.get("media[]"), post.get("media[]").get(0));
 
                 }
                 if(subpath.startsWith("note/open/0/getMedia/")){
-                    getMedia(subpath.substring("note/open/0/getMedia/".length()));
+                    return getMedia(subpath.substring("note/open/0/getMedia/".length()));
                 }
             }
             else {
@@ -115,9 +119,20 @@ public class HttpServer extends NanoHTTPD {
         return NanoHTTPD.newChunkedResponse(status, fileMimeType, rinput);
     }
 
+    private Response addMedia(String path, String tmpPath, String name) {
+        Log.d(TAG, "adding media");
+        File in = new File(tmpPath);
+        if(in.exists()){
+            new File(extractedNotePath+"/data").mkdirs();
+            in.renameTo(new File(extractedNotePath+"/data/"+name));
+            saveNote(path);
+        }
+        return listOpenMedia();
+    }
+
     private Response getMedia(String name){
         try {
-            return  NanoHTTPD.newChunkedResponse(Response.Status.OK,  MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(name)),new FileInputStream(new File(new File(extractedNotePath, "data"), "name")));
+            return  NanoHTTPD.newChunkedResponse(Response.Status.OK,  MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(name)),new FileInputStream(new File(new File(extractedNotePath, "data"), name)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         };
@@ -141,6 +156,10 @@ public class HttpServer extends NanoHTTPD {
     private Response saveNote(String path, String html, String metadata) {
         FileUtils.writeToFile(extractedNotePath+"/index.html", html);
         FileUtils.writeToFile(extractedNotePath+"/metadata.html", metadata);
+        return saveNote(path);
+    }
+
+    private Response saveNote(String path) {
         List <String> except = new ArrayList<>();
         except.add(extractedNotePath+"/reader.html");
         ZipUtils.zipFolder(new File(extractedNotePath), path,except);
