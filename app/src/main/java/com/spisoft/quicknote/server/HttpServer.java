@@ -167,7 +167,7 @@ public class HttpServer extends NanoHTTPD {
 
             if(new File(path).exists()) {
                 JSONObject object = new JSONObject();
-                object.put("id","");
+                object.put("id","0");
                 ZipUtils.unzip(path, extractedNotePath);
                 File f = new File(extractedNotePath, "index.html");
                 if (f.exists()) {
