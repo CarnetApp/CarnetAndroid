@@ -2,6 +2,7 @@ package com.spisoft.quicknote.editor;
 
 import android.animation.LayoutTransition;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -77,6 +79,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
     private static final String TAG = "EditorView";
     private static final int OPEN_MEDIA_REQUEST = 343;
+    private static final int REQUEST_SELECT_FILE = 344;
     private WebView mWebView;
     private Note mNote;
 
@@ -112,6 +115,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     private boolean mSetNoteOnLoad;
     public static EditorView sEditorView;
     private String mSelectFileCallback;
+    private ValueCallback mUploadMessage;
 
     private void rename(String stringExtra, String path) {
         mWebView.loadUrl("javascript:replace('" + StringEscapeUtils.escapeEcmaScript(stringExtra) + "','" + StringEscapeUtils.escapeEcmaScript(path) + "')");
@@ -140,9 +144,30 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
-        if(requestCode == OPEN_MEDIA_REQUEST && resultCode == Activity.RESULT_OK){
+        if((requestCode == OPEN_MEDIA_REQUEST || requestCode == REQUEST_SELECT_FILE) && resultCode == Activity.RESULT_OK){
             Log.d(TAG, data.getDataString());
 
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            {
+                if (requestCode == REQUEST_SELECT_FILE)
+                {
+                    if (mUploadMessage == null)
+                        return;
+                    mUploadMessage.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data));
+                    mUploadMessage = null;
+                }
+            }
+            else if (requestCode == OPEN_MEDIA_REQUEST)
+            {
+                if (null == mUploadMessage)
+                    return;
+                // Use MainActivity.RESULT_OK if you're implementing WebView inside Fragment
+                // Use RESULT_OK only if you're implementing WebView inside an Activity
+                Uri result = data == null || resultCode != Activity.RESULT_OK ? null : data.getData();
+                mUploadMessage.onReceiveValue(result);
+                mUploadMessage = null;
+            }
+            /*
             Cursor cursor = null;
             String displayName = data.getData().getLastPathSegment();
             try {
@@ -173,7 +198,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
 
         }
     }
