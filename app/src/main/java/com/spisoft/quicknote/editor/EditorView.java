@@ -45,6 +45,7 @@ import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.databases.page.Page;
 import com.spisoft.quicknote.editor.pages.PagesAdapter;
+import com.spisoft.quicknote.server.HttpServer;
 import com.spisoft.quicknote.server.NewHttpProxy;
 import com.spisoft.quicknote.serviceactivities.CropWrapperActivity;
 import com.spisoft.quicknote.utils.FileUtils;
@@ -111,7 +112,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     private FakeFragmentManager mFragmentManager;
 
     private String mRootPath;
-    private NewHttpProxy mServer2;
+    private HttpServer mServer2;
     private boolean mSetNoteOnLoad;
     public static EditorView sEditorView;
     private String mSelectFileCallback;
@@ -291,17 +292,60 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         mWebView.getSettings().setJavaScriptEnabled(true);
         //mWebView.getSettings().setSupportZoom(false);
         mWebView.setWebViewClient(mClient);
-        mWebView.setWebChromeClient(new WebChromeClient());
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            // For 3.0+ Devices (Start)
+            // onActivityResult attached before constructor
+            protected void openFileChooser(ValueCallback uploadMsg, String acceptType) {
+                mUploadMessage = uploadMsg;
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("image/*");
+                ((Activity)getContext()).startActivityForResult(Intent.createChooser(i, "File Browser"), OPEN_MEDIA_REQUEST);
+            }
+
+
+            // For Lollipop 5.0+ Devices
+            public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+                if (mUploadMessage != null) {
+                    mUploadMessage.onReceiveValue(null);
+                    mUploadMessage = null;
+                }
+
+                mUploadMessage = filePathCallback;
+
+                Intent intent = fileChooserParams.createIntent();
+                try {
+                    ((Activity)getContext()).startActivityForResult(intent, REQUEST_SELECT_FILE);
+                } catch (ActivityNotFoundException e) {
+                    mUploadMessage = null;
+                    Toast.makeText(((Activity)getContext()).getApplicationContext(), "Cannot Open File Chooser", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                return true;
+            }
+
+            //For Android 4.1 only
+            protected void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+                mUploadMessage = uploadMsg;
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                ((Activity)getContext()).startActivityForResult(Intent.createChooser(intent, "File Browser"), OPEN_MEDIA_REQUEST);
+            }
+
+            protected void openFileChooser(ValueCallback<Uri> uploadMsg) {
+                mUploadMessage = uploadMsg;
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("image/*");
+                ((Activity)getContext()).startActivityForResult(Intent.createChooser(i, "File Chooser"), OPEN_MEDIA_REQUEST);
+            }
+        });
         mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(getContext()), "app");
         mHasLoaded = false;
         mRootPath = getContext().getFilesDir().getAbsolutePath();
-        try {
-            mServer2 = new NewHttpProxy(getContext());
-            mWebView.loadUrl(mServer2.getUrl("/tmp/reader.html"));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mServer2 = new HttpServer(getContext());
+        mWebView.loadUrl(mServer2.getUrl("/tmp/reader.html"));
         //prepare Reader
         //extract
 
