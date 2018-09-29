@@ -8,6 +8,7 @@ import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.ZipUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -91,7 +92,9 @@ public class HttpServer extends NanoHTTPD {
                     case "note/saveText":
                         if(post.get("path")!=null && post.get("path").size()>=0 && post.get("html")!=null && post.get("html").size()>=0 && post.get("metadata")!=null && post.get("metadata").size()>=0)
                             return saveNote(post.get("path").get(0),post.get("html").get(0),post.get("metadata").get(0));
-
+                    case "note/open/0/listMedia":
+                        listOpenMedia();
+                        break;
 
                 }
             }
@@ -108,6 +111,19 @@ public class HttpServer extends NanoHTTPD {
         }
 
         return NanoHTTPD.newChunkedResponse(status, fileMimeType, rinput);
+    }
+
+    private Response listOpenMedia() {
+        JSONArray array = new JSONArray();
+        File f = new File(extractedNotePath, "data");
+        if(f.exists()) {
+            for(File c : f.listFiles()){
+                if(!c.getName().startsWith("preview_")){
+                    array.put("note/open/0/getMedia/"+c.getName());
+                }
+            }
+        }
+        return  NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/json",new ByteArrayInputStream(array.toString().getBytes()));
     }
 
     private Response saveNote(String path, String html, String metadata) {
