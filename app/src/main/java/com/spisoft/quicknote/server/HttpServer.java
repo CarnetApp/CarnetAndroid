@@ -8,6 +8,7 @@ import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.utils.FileUtils;
+import com.spisoft.quicknote.utils.PictureUtils;
 import com.spisoft.quicknote.utils.ZipUtils;
 
 import org.json.JSONArray;
@@ -156,8 +157,17 @@ public class HttpServer extends NanoHTTPD {
         Log.d(TAG, "adding media");
         File in = new File(tmpPath);
         if(in.exists()){
-            new File(extractedNotePath+"/data").mkdirs();
-            in.renameTo(new File(extractedNotePath+"/data/"+name));
+            File newF = new File(extractedNotePath+"/data/"+name);
+            newF.getParentFile().mkdirs();
+            in.renameTo(newF);
+            if(PictureUtils.isPicture(name)) {
+                File preview = new File(newF.getParentFile(), "preview_" + name);
+                try {
+                    PictureUtils.resize(newF.getAbsolutePath(), preview.getAbsolutePath(), 200, 200);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             saveNote(path);
         }
         return listOpenMedia();
