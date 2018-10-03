@@ -456,6 +456,12 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                 }
             }.execute();
         }
+
+        @JavascriptInterface
+        public void postMessage(String query, String message){
+            if(query.equals("exit"))
+                onBackPressed();
+        }
         @JavascriptInterface
         public void readdir(String path, final String callback){
             if (!path.startsWith("/"))

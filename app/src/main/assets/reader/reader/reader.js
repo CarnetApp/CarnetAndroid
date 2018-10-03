@@ -683,10 +683,17 @@ Writer.prototype.askToExit = function () {
     if (this.seriesTaskExecutor.isExecuting)
         return false;
     else {
-        parent.postMessage("exit", "*")
+        this.exit();
     }
     return false;
 }
+
+Writer.prototype.exit = function () {
+    if(window.self !== window.top) //in iframe
+        parent.postMessage("exit", "*")
+    else if(app != undefined) app.postMessage("exit", "*");
+}
+
 Writer.prototype.copy = function () {
     document.execCommand('copy');
 }
