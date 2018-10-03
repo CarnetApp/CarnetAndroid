@@ -623,6 +623,9 @@ Writer.prototype.init = function () {
                 case "paste-button":
                     writer.paste();
                     break;
+                case "select-all-button":
+                    document.execCommand("selectAll");
+                    break;
             }
         }
     }
