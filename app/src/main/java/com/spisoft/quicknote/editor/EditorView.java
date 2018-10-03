@@ -4,6 +4,8 @@ import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -428,6 +430,19 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
          */
         public WebViewJavaScriptInterface(Context context) {
             this.context = context;
+        }
+
+        @JavascriptInterface
+        public void paste() {
+            final ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = clipboard.getPrimaryClip();
+            ClipData.Item item1 = clipData.getItemAt(0);
+            final String text = item1.getText().toString();
+            mWebView.post(new Runnable() {
+                              @Override
+                              public void run() {
+                                  mWebView.loadUrl("javascript:document.execCommand('insertHTML', false, '" + StringEscapeUtils.escapeEcmaScript(text) + "');", null);
+                              }});
         }
 
         @JavascriptInterface

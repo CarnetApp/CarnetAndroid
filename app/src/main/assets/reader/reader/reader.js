@@ -617,6 +617,12 @@ Writer.prototype.init = function () {
                 case "statistics-button":
                     writer.displayCountDialog();
                     break;
+                case "copy-button":
+                    writer.copy();
+                    break;
+                case "paste-button":
+                    writer.paste();
+                    break;
             }
         }
     }
@@ -696,10 +702,36 @@ Writer.prototype.exit = function () {
 
 Writer.prototype.copy = function () {
     document.execCommand('copy');
+    this.copied = this.getSelectionHtml();
 }
 
 Writer.prototype.paste = function () {
-    document.execCommand('paste');
+    if(!document.execCommand('paste')){
+        if(app != undefined)
+            app.paste(); //for android app
+        else
+            document.execCommand('insertHTML', false, this.copied)
+    }
+
+}
+
+Writer.prototype.getSelectionHtml = function () {
+    var html = "";
+    if (typeof window.getSelection != "undefined") {
+        var sel = window.getSelection();
+        if (sel.rangeCount) {
+            var container = document.createElement("div");
+            for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+                container.appendChild(sel.getRangeAt(i).cloneContents());
+            }
+            html = container.innerHTML;
+        }
+    } else if (typeof document.selection != "undefined") {
+        if (document.selection.type == "Text") {
+            html = document.selection.createRange().htmlText;
+        }
+    }
+    return html;
 }
 
 Writer.prototype.displayCountDialog = function () {
@@ -968,4 +1000,10 @@ $(document).ready(function () {
 
         loaded = true;
     }
+    window.oldOncontextmenu = window.oncontextmenu;
+    window.oncontextmenu = function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+   };
 });
