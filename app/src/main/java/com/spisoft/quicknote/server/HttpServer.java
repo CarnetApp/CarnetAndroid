@@ -35,6 +35,7 @@ public class HttpServer extends NanoHTTPD {
     private static final String TAG = "HttpServer";
     private final Context mContext;
     private final String extractedNotePath;
+    private String mCurrentNotePath;
 
     /**
      * logger to log to.
@@ -89,6 +90,8 @@ public class HttpServer extends NanoHTTPD {
         Log.d(TAG, "Get : "+parms.toString());
         Log.d(TAG, "query params "+                session.getQueryParameterString());
         if(path!=null){
+            if(path.contains("../") || path.equals(".."))
+                return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
             Log.d("pathdebug","path: "+path);
 
             if(path.startsWith("/api/")){
@@ -137,6 +140,10 @@ public class HttpServer extends NanoHTTPD {
         return NanoHTTPD.newChunkedResponse(status, fileMimeType, rinput);
     }
 
+    public void setCurrentNotePath(String path){
+        mCurrentNotePath = path;
+    }
+
     private Response keywordActionDB(String jason) {
         try {
             JSONArray object = new JSONArray(jason);
@@ -154,6 +161,11 @@ public class HttpServer extends NanoHTTPD {
     }
 
     private Response addMedia(String path, String tmpPath, String name) {
+        if(name.contains("../") || name.equals(".."))
+            return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
+        if(!mCurrentNotePath.equals(path)){
+            return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
+        }
         Log.d(TAG, "adding media");
         File in = new File(tmpPath);
         if(in.exists()){
@@ -199,6 +211,9 @@ public class HttpServer extends NanoHTTPD {
     }
 
     private Response saveNote(String path, String html, String metadata) {
+        if(!mCurrentNotePath.equals(path)){
+            return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
+        }
         FileUtils.writeToFile(extractedNotePath+"/index.html", html);
         FileUtils.writeToFile(extractedNotePath+"/metadata.json", metadata);
         return saveNote(path);
@@ -227,6 +242,10 @@ public class HttpServer extends NanoHTTPD {
 
 
     private Response openNote(String path) {
+
+        if(!mCurrentNotePath.equals(path)){
+            return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
+        }
         path = new File(PreferenceHelper.getRootPath(mContext),path).getAbsolutePath();
         Log.d(TAG, "opening note "+path);
         try {
@@ -238,7 +257,8 @@ public class HttpServer extends NanoHTTPD {
                 JSONObject object = new JSONObject();
                 object.put("id","0");
                 ZipUtils.unzip(path, extractedNotePath);
-                File f = new File(extractedNotePath, "index.html");
+                File f = new File(extractedNotePath, "index.html")
+                        ;
                 if (f.exists()) {
                     String index = FileUtils.readFile(f.getAbsolutePath());
                     object.put("html",index);
