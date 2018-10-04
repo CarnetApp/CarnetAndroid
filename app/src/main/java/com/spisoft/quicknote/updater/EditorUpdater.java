@@ -23,7 +23,7 @@ public class EditorUpdater implements Updater{
         Log.d(TAG, "copying reader");
         copyFileOrDir(ct, rootPath,"reader/reader/reader.html");
         String reader = FileUtils.readFile(rootPath + "/reader/reader/reader.html");
-        FileUtils.writeToFile(rootPath + "/tmp/reader.html", reader.replace("<!ROOTPATH>", "../reader/").replace("<!ROOTURL>", "").replace("<!APIURL>", "../api"));
+        FileUtils.writeToFile(rootPath + "/tmp/reader.html", reader.replace("<!ROOTPATH>", "../reader/").replace("<!ROOTURL>", "../reader/").replace("<!APIURL>", "../api"));
         String firstLine = reader.substring(0,reader.indexOf("\n"));
         Log.d(TAG,"archive version "+firstLine);
         int version = Integer.parseInt(firstLine.substring("<!--".length(), firstLine.length()-"-->".length()));
