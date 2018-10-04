@@ -1,4 +1,6 @@
-﻿/* 
+"use strict";
+
+/* 
 * Webkitresize (http://editorboost.net/webkitresize)
 * Copyright 2012 Editorboost. All rights reserved. 
 *
@@ -11,15 +13,11 @@
 * REQUIRES: jquery 1.7.1+
 */
 
-; (function ($) {
+;(function ($) {
     $.fn.webkitimageresize = function (options) {
         return this.each(function () {
 
-           
-
-			
-            var settings = $.extend({
-            }, options);
+            var settings = $.extend({}, options);
 
             var lastCrc;
             var imageResizeinProgress = false;
@@ -32,13 +30,13 @@
 
             var methods = {
 
-                removeResizeElements: function (context) {
+                removeResizeElements: function removeResizeElements(context) {
                     $(".img-resize-selector").remove();
                     $(".img-resize-region").remove();
                 },
 
-                drawResizeElements: function(context, img, imgHeight, imgWidth, imgPosition){
-                    context.$docBody.append("<img onclick=\"app.editImage('"+img.src+"');\" class='img-resize-region img-edit' src=\"images/image.png\"  style='position:absolute;top:" + imgPosition.top + "px;left:" + imgPosition.left + "px;' />");
+                drawResizeElements: function drawResizeElements(context, img, imgHeight, imgWidth, imgPosition) {
+                    context.$docBody.append("<img onclick=\"app.editImage('" + img.src + "');\" class='img-resize-region img-edit' src=\"images/image.png\"  style='position:absolute;top:" + imgPosition.top + "px;left:" + imgPosition.left + "px;' />");
                     context.$docBody.append("<span class='img-resize-selector' style='margin:10px;position:absolute;top:" + (imgPosition.top + imgHeight - 10) + "px;left:" + (imgPosition.left + imgWidth - 10) + "px;border:solid 2px red;width:20px;height:20px;cursor:se-resize;z-index:1;background-color:red;opacity: 0.60;-ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=60)\";filter: alpha(opacity=60);-moz-opacity: 0.6;''></span>");
                     context.$docBody.append("<span class='img-resize-region region-top-right' style='position:absolute;top:" + imgPosition.top + "px;left:" + imgPosition.left + "px;border:dashed 1px grey;width:" + imgWidth + "px;height:0px;'></span>");
                     context.$docBody.append("<span class='img-resize-region region-top-down' style='position:absolute;top:" + imgPosition.top + "px;left:" + imgPosition.left + "px;border:dashed 1px grey;width:0px;height:" + imgHeight + "px;'></span>");
@@ -47,7 +45,7 @@
                     context.$docBody.append("<span class='img-resize-region region-down-left' style='position:absolute;top:" + (imgPosition.top + imgHeight) + "px;left:" + imgPosition.left + "px;border:dashed 1px grey;width:" + imgWidth + "px;height:0px;'></span>");
                 },
 
-                imageClick: function (context, img) {
+                imageClick: function imageClick(context, img) {
                     if (settings.beforeElementSelect) {
                         settings.beforeElementSelect(img);
                     }
@@ -61,11 +59,10 @@
 
                     methods.drawResizeElements(context, img, imgHeight, imgWidth, imgPosition);
 
-                    var dragStop = function () {                    
+                    var dragStop = function dragStop() {
                         if (imageResizeinProgress) {
 
-                                 $(currentImage).css("width", $(".region-top-right").width() + "px")
-                                .css('height', $(".region-top-down").height() + "px");
+                            $(currentImage).css("width", $(".region-top-right").width() + "px").css('height', $(".region-top-down").height() + "px");
                             methods.refresh(context);
                             $(currentImage).click();
 
@@ -79,7 +76,7 @@
                         }
                     };
 
-                    var windowMouseMove = function (e) {
+                    var windowMouseMove = function windowMouseMove(e) {
                         if (imageResizeinProgress) {
 
                             var resWidth = imgWidth;
@@ -94,65 +91,62 @@
                             if (resWidth < 1) {
                                 resWidth = 1;
                             }
-                            
-                            if(e.ctrlKey){
+
+                            if (e.ctrlKey) {
                                 var heightDiff = initialHeight - resHeight;
-                                if(heightDiff < 0){
+                                if (heightDiff < 0) {
                                     heightDiff = heightDiff * -1.0;
                                 }
                                 var widthDiff = initialWidth - resWidth;
-                                if(widthDiff < 0){
+                                if (widthDiff < 0) {
                                     widthDiff = widthDiff * -1.0;
                                 }
 
-                                if(heightDiff > widthDiff){
+                                if (heightDiff > widthDiff) {
                                     resWidth = resHeight * currentImage_WxH_Rate;
-                                }
-                                else{
+                                } else {
                                     resHeight = resWidth * currentImage_HxW_Rate;
-                                }       
-                            }                        
+                                }
+                            }
 
-                            $(".img-resize-selector").css("top", (imgPosition.top + resHeight - 10) + 'px').css("left", (imgPosition.left + resWidth - 10) + "px");
+                            $(".img-resize-selector").css("top", imgPosition.top + resHeight - 10 + 'px').css("left", imgPosition.left + resWidth - 10 + "px");
                             $(".region-top-right").css("width", resWidth + "px");
                             $(".region-top-down").css("height", resHeight + "px");
 
-                            $(".region-right-down").css("left", (imgPosition.left + resWidth) + "px").css("height", resHeight + "px");
-                            $(".region-down-left").css("top", (imgPosition.top + resHeight) + "px").css("width", resWidth + "px");
-                        }
-                        else if(imageMoveinProgress){
+                            $(".region-right-down").css("left", imgPosition.left + resWidth + "px").css("height", resHeight + "px");
+                            $(".region-down-left").css("top", imgPosition.top + resHeight + "px").css("width", resWidth + "px");
+                        } else if (imageMoveinProgress) {
                             //alert("moving");
                         }
 
                         return false;
                     };
 
-                     $(currentImage).bind('vmousedown', function(e){
+                    $(currentImage).bind('vmousedown', function (e) {
                         imageMoveinProgress = true;
-                     });
+                    });
 
-                $(".img-edit").bind('vmouseup', function(e){
+                    $(".img-edit").bind('vmouseup', function (e) {
                         app.editImage(currentImage.src, currentImage.id);
 
                         return true;
                     });
 
-                $(".img-resize-selector").bind('vmousedown', function(e){
-              
+                    $(".img-resize-selector").bind('vmousedown', function (e) {
+
                         if (settings.beforeResizeStart) {
                             settings.beforeResizeStart(currentImage);
                         }
-                        
+
                         var imgH = $(currentImage).height();
                         var imgW = $(currentImage).width();
 
                         currentImage_HxW_Rate = imgH / imgW;
                         currentImage_WxH_Rate = imgW / imgH;
-                        if(imgH > imgW){
+                        if (imgH > imgW) {
                             initialHeight = 0;
                             initialWidth = (imgH - imgW) * -1;
-                        }
-                        else{
+                        } else {
                             initialWidth = 0;
                             initialHeight = (imgW - imgH) * -1;
                         }
@@ -162,24 +156,22 @@
                         return false;
                     });
 
-                      $(window.document).bind('vmouseup', function(e){
+                    $(window.document).bind('vmouseup', function (e) {
                         imageMoveinProgress = false;
                         if (imageResizeinProgress) {
                             dragStop();
                         }
-
                     });
-					  $(window.document).bind('vmousemove', function(e){
-						 windowMouseMove(e);
-					});
-
+                    $(window.document).bind('vmousemove', function (e) {
+                        windowMouseMove(e);
+                    });
 
                     if (settings.afterElementSelect) {
                         settings.afterElementSelect(currentImage);
                     }
                 },
 
-                rebind: function (context) {
+                rebind: function rebind(context) {
                     context.$container.find("img").each(function (i, v) {
                         $(v).unbind('click');
                         $(v).draggable();
@@ -189,38 +181,38 @@
                             }
                         });
                     });
-                     context.$container.find("div").each(function (i, v) {
-                                            if($(v).hasClass('quicknote-txtzone')){
-                                                   $(v).unbind('click');
-                                                $(v).draggable({}).click(function() {  }).blur(function() { $(this).draggable({disabled: false}); });;
-                                                $(v).click(function (e) {
-                                                    if (e.target == v) {
-                                                        methods.imageClick(context, v);
-                                                        $(v).draggable({disabled: true});
-                                                    }
-                                                });
-                                            }
-
-
-                                        });
+                    context.$container.find("div").each(function (i, v) {
+                        if ($(v).hasClass('quicknote-txtzone')) {
+                            $(v).unbind('click');
+                            $(v).draggable({}).click(function () {}).blur(function () {
+                                $(this).draggable({ disabled: false });
+                            });;
+                            $(v).click(function (e) {
+                                if (e.target == v) {
+                                    methods.imageClick(context, v);
+                                    $(v).draggable({ disabled: true });
+                                }
+                            });
+                        }
+                    });
                 },
 
-                refresh: function (context) {                                                   
+                refresh: function refresh(context) {
                     methods.rebind(context);
-                    
+
                     methods.removeResizeElements();
-                    
+
                     if (!currentImage) {
                         if (settings.afterRefresh) {
                             settings.afterRefresh(null);
                         }
                         return;
                     }
-                    
+
                     var img = currentImage;
 
                     var imgHeight = $(img).outerHeight();
-                    var imgWidth = $(img).outerWidth();                    
+                    var imgWidth = $(img).outerWidth();
                     var imgPosition = $(img).offset();
 
                     methods.drawResizeElements(context, img, imgHeight, imgWidth, imgPosition);
@@ -232,10 +224,10 @@
                     }
                 },
 
-                reset: function (context) {
+                reset: function reset(context) {
                     if (currentImage != null) {
                         currentImage = null;
-                        imageResizeinProgress = false;                        
+                        imageResizeinProgress = false;
                         methods.removeResizeElements();
 
                         if (settings.afterReset) {
@@ -245,12 +237,12 @@
                     methods.rebind(context);
                 },
 
-                crc: function (str) {
+                crc: function crc(str) {
                     var hash = 0;
                     if (str == null || str.length == 0) return hash;
                     for (i = 0; i < str.length; i++) {
                         char = str.charCodeAt(i);
-                        hash = ((hash << 5) - hash) + char;
+                        hash = (hash << 5) - hash + char;
                         hash = hash & hash;
                     }
                     return hash;
@@ -259,7 +251,7 @@
 
             var container = this;
             var $container = $(this);
-            var $docBody = $("body");            
+            var $docBody = $("body");
 
             lastCrc = methods.crc($container.html());
 
@@ -274,32 +266,29 @@
             }, false);
 
             $(document).mouseup(function (e) {
-                if(!imageResizeinProgress){
+                if (!imageResizeinProgress) {
                     if (lastCrc != methods.crc($container.html())) {
                         methods.reset(context);
-                    }
-                    else {
-                        var x = (e.x) ? e.x : e.clientX;
-                        var y = (e.y) ? e.y : e.clientY;
+                    } else {
+                        var x = e.x ? e.x : e.clientX;
+                        var y = e.y ? e.y : e.clientY;
                         var mouseUpElement = document.elementFromPoint(x, y);
                         if (mouseUpElement) {
                             if (!$(mouseUpElement).is("img")) {
                                 methods.reset(context);
                             }
-                        }
-                        else {
+                        } else {
                             methods.reset(context);
                         }
                     }
                 }
-            });            
+            });
 
             $(document).keyup(function (e) {
                 if (e.keyCode == 27) {
                     methods.reset(context);
                 }
             });
-
 
             if (!container.crcChecker) {
                 container.crcChecker = setInterval(function () {
@@ -310,7 +299,7 @@
                 }, 1000);
             }
 
-            $(window).resize(function(){
+            $(window).resize(function () {
                 methods.reset(context);
             });
 
@@ -324,10 +313,8 @@
             });
 
             methods.refresh(context);
-
         });
     };
-
 
     $.fn.webkittableresize = function (options) {
         return this.each(function () {
@@ -336,9 +323,7 @@
                 return;
             }
 
-
-            var settings = $.extend({
-            }, options);
+            var settings = $.extend({}, options);
 
             var lastCrc;
             var tableResizeinProgress = false;
@@ -346,22 +331,22 @@
 
             var methods = {
 
-                removeResizeElements: function (context) {
+                removeResizeElements: function removeResizeElements(context) {
                     $(".resize-selector").remove();
                     $(".resize-region").remove();
                 },
 
-                drawResizeElements: function(context, tbl, tblHeight, tblWidth, tblPosition){
+                drawResizeElements: function drawResizeElements(context, tbl, tblHeight, tblWidth, tblPosition) {
                     context.$docBody.append("<span class='resize-selector' style='margin:10px;position:absolute;top:" + (tblPosition.top + tblHeight - 10) + "px;left:" + (tblPosition.left + tblWidth - 10) + "px;border:solid 2px red;width:6px;height:6px;cursor:se-resize;z-index:1;background-color:red;opacity: 0.60;-ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=60)\";filter: alpha(opacity=60);-moz-opacity: 0.6;''></span>");
 
-                    context.$docBody.append("<span class='resize-region region-top-right' style='position:absolute;top:" + (tblPosition.top) + "px;left:" + (tblPosition.left) + "px;border:dashed 1px grey;width:" + tblWidth + "px;height:0px;'></span>");
-                    context.$docBody.append("<span class='resize-region region-top-down' style='position:absolute;top:" + (tblPosition.top) + "px;left:" + (tblPosition.left) + "px;border:dashed 1px grey;width:0px;height:" + tblHeight + "px;'></span>");
+                    context.$docBody.append("<span class='resize-region region-top-right' style='position:absolute;top:" + tblPosition.top + "px;left:" + tblPosition.left + "px;border:dashed 1px grey;width:" + tblWidth + "px;height:0px;'></span>");
+                    context.$docBody.append("<span class='resize-region region-top-down' style='position:absolute;top:" + tblPosition.top + "px;left:" + tblPosition.left + "px;border:dashed 1px grey;width:0px;height:" + tblHeight + "px;'></span>");
 
-                    context.$docBody.append("<span class='resize-region region-right-down' style='position:absolute;top:" + (tblPosition.top) + "px;left:" + (tblPosition.left + tblWidth) + "px;border:dashed 1px grey;width:0px;height:" + tblHeight + "px;'></span>");
-                    context.$docBody.append("<span class='resize-region region-down-left' style='position:absolute;top:" + (tblPosition.top + tblHeight) + "px;left:" + (tblPosition.left) + "px;border:dashed 1px grey;width:" + tblWidth + "px;height:0px;'></span>");
+                    context.$docBody.append("<span class='resize-region region-right-down' style='position:absolute;top:" + tblPosition.top + "px;left:" + (tblPosition.left + tblWidth) + "px;border:dashed 1px grey;width:0px;height:" + tblHeight + "px;'></span>");
+                    context.$docBody.append("<span class='resize-region region-down-left' style='position:absolute;top:" + (tblPosition.top + tblHeight) + "px;left:" + tblPosition.left + "px;border:dashed 1px grey;width:" + tblWidth + "px;height:0px;'></span>");
                 },
 
-                tableClick: function (context, tbl) {
+                tableClick: function tableClick(context, tbl) {
                     if (settings.beforeElementSelect) {
                         settings.beforeElementSelect(tbl);
                     }
@@ -373,14 +358,11 @@
                     var tblWidth = $(tbl).outerWidth();
                     var tblPosition = $(tbl).offset();
 
+                    methods.drawResizeElements(context, tbl, tblHeight, tblWidth, tblPosition);
 
-                    methods.drawResizeElements(context, tbl, tblHeight, tblWidth, tblPosition); 
-
-                    var dragStop = function () {
+                    var dragStop = function dragStop() {
                         if (tableResizeinProgress) {
-                            $(currenttable)
-                                .css("width", $(".region-top-right").width() + "px")
-                                .css('height', $(".region-top-down").height() + "px");
+                            $(currenttable).css("width", $(".region-top-right").width() + "px").css('height', $(".region-top-down").height() + "px");
                             methods.refresh(context);
                             var ce = currenttable;
 
@@ -388,7 +370,7 @@
                             $container.trigger('webkitresize-table-resized');
 
                             tableResizeinProgress = false;
-                            setTimeout(function(){
+                            setTimeout(function () {
                                 methods.reset(context);
                                 methods.tableClick(context, ce);
                             }, 300);
@@ -399,14 +381,14 @@
                         }
                     };
 
-                    var windowMouseMove = function (e) {
+                    var windowMouseMove = function windowMouseMove(e) {
                         if (tableResizeinProgress) {
 
                             var resWidth = tblWidth;
                             var resHeight = tblHeight;
 
-                            resHeight = e.pageY - (tblPosition.top);
-                            resWidth = e.pageX - (tblPosition.left);
+                            resHeight = e.pageY - tblPosition.top;
+                            resWidth = e.pageX - tblPosition.left;
 
                             if (resHeight < 1) {
                                 resHeight = 1;
@@ -415,12 +397,12 @@
                                 resWidth = 1;
                             }
 
-                            $(".resize-selector").css("top", (tblPosition.top + resHeight - 10) + 'px').css("left", (tblPosition.left + resWidth - 10) + "px");
+                            $(".resize-selector").css("top", tblPosition.top + resHeight - 10 + 'px').css("left", tblPosition.left + resWidth - 10 + "px");
                             $(".region-top-right").css("width", resWidth + "px");
                             $(".region-top-down").css("height", resHeight + "px");
 
-                            $(".region-right-down").css("left", (tblPosition.left + resWidth) + "px").css("height", resHeight + "px");
-                            $(".region-down-left").css("top", (tblPosition.top + resHeight) + "px").css("width", resWidth + "px");
+                            $(".region-right-down").css("left", tblPosition.left + resWidth + "px").css("height", resHeight + "px");
+                            $(".region-down-left").css("top", tblPosition.top + resHeight + "px").css("width", resWidth + "px");
                         }
 
                         return false;
@@ -449,18 +431,18 @@
                     }
                 },
 
-                rebind: function (context) {
+                rebind: function rebind(context) {
                     context.$container.find("table").each(function (i, v) {
                         $(v).unbind('click');
                         $(v).click(function (e) {
-                            if (e.target == v || ($(e.target).is('td') && $(e.target).parents("table")[0] == v)) {
+                            if (e.target == v || $(e.target).is('td') && $(e.target).parents("table")[0] == v) {
                                 methods.tableClick(context, v);
                             }
                         });
                     });
                 },
 
-                refresh: function (context) {
+                refresh: function refresh(context) {
                     methods.rebind(context);
 
                     methods.removeResizeElements();
@@ -478,7 +460,7 @@
                     var tblWidth = $(tbl).outerWidth();
                     var tblPosition = $(tbl).offset();
 
-                    methods.drawResizeElements(context, tbl, tblHeight, tblWidth, tblPosition); 
+                    methods.drawResizeElements(context, tbl, tblHeight, tblWidth, tblPosition);
 
                     lastCrc = methods.crc(context.$container.html());
 
@@ -487,7 +469,7 @@
                     }
                 },
 
-                reset: function (context) {
+                reset: function reset(context) {
                     if (currenttable != null) {
                         currenttable = null;
                         tableResizeinProgress = false;
@@ -501,12 +483,12 @@
                     methods.rebind(context);
                 },
 
-                crc: function (str) {
+                crc: function crc(str) {
                     var hash = 0;
                     if (str == null || str.length == 0) return hash;
                     for (i = 0; i < str.length; i++) {
                         char = str.charCodeAt(i);
-                        hash = ((hash << 5) - hash) + char;
+                        hash = (hash << 5) - hash + char;
                         hash = hash & hash;
                     }
                     return hash;
@@ -531,20 +513,18 @@
             }, false);
 
             $(document).mouseup(function (e) {
-                if(!tableResizeinProgress){
+                if (!tableResizeinProgress) {
                     if (lastCrc != methods.crc($container.html())) {
                         methods.reset(context);
-                    }
-                    else {
-                        var x = (e.x) ? e.x : e.clientX;
-                        var y = (e.y) ? e.y : e.clientY;
+                    } else {
+                        var x = e.x ? e.x : e.clientX;
+                        var y = e.y ? e.y : e.clientY;
                         var mouseUpElement = document.elementFromPoint(x, y);
                         if (mouseUpElement) {
                             if (!$(mouseUpElement).is("table")) {
                                 methods.reset(context);
                             }
-                        }
-                        else {
+                        } else {
                             methods.reset(context);
                         }
                     }
@@ -566,7 +546,7 @@
                 }, 1000);
             }
 
-            $(window).resize(function(){
+            $(window).resize(function () {
                 methods.reset(context);
             });
 
@@ -580,10 +560,8 @@
             });
 
             methods.refresh(context);
-
         });
     };
-
 
     $.fn.webkittdresize = function (options) {
         return this.each(function () {
@@ -592,9 +570,7 @@
                 return;
             }
 
-
-            var settings = $.extend({
-            }, options);
+            var settings = $.extend({}, options);
 
             var lastCrc;
             var tdResizeinProgress = false;
@@ -602,22 +578,22 @@
 
             var methods = {
 
-                removeResizeElements: function (context) {
+                removeResizeElements: function removeResizeElements(context) {
                     $(".td-resize-selector").remove();
                     $(".td-resize-region").remove();
                 },
 
-                drawResizeElements: function(context, td, tdHeight, tdWidth, tdPosition){
+                drawResizeElements: function drawResizeElements(context, td, tdHeight, tdWidth, tdPosition) {
                     context.$docBody.append("<span class='td-resize-selector' style='margin:10px;position:absolute;top:" + (tdPosition.top + tdHeight - 10) + "px;left:" + (tdPosition.left + tdWidth - 10) + "px;border:solid 2px red;width:6px;height:6px;cursor:se-resize;z-index:1;background-color:red;opacity: 0.60;-ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=60)\";filter: alpha(opacity=60);-moz-opacity: 0.6;''></span>");
 
-                    context.$docBody.append("<span class='td-resize-region td-region-top-right' style='position:absolute;top:" + (tdPosition.top) + "px;left:" + (tdPosition.left) + "px;border:dashed 1px green;width:" + tdWidth + "px;height:0px;'></span>");
-                    context.$docBody.append("<span class='td-resize-region td-region-top-down' style='position:absolute;top:" + (tdPosition.top) + "px;left:" + (tdPosition.left) + "px;border:dashed 1px green;width:0px;height:" + tdHeight + "px;'></span>");
+                    context.$docBody.append("<span class='td-resize-region td-region-top-right' style='position:absolute;top:" + tdPosition.top + "px;left:" + tdPosition.left + "px;border:dashed 1px green;width:" + tdWidth + "px;height:0px;'></span>");
+                    context.$docBody.append("<span class='td-resize-region td-region-top-down' style='position:absolute;top:" + tdPosition.top + "px;left:" + tdPosition.left + "px;border:dashed 1px green;width:0px;height:" + tdHeight + "px;'></span>");
 
-                    context.$docBody.append("<span class='td-resize-region td-region-right-down' style='position:absolute;top:" + (tdPosition.top) + "px;left:" + (tdPosition.left + tdWidth) + "px;border:dashed 1px green;width:0px;height:" + tdHeight + "px;'></span>");
-                    context.$docBody.append("<span class='td-resize-region td-region-down-left' style='position:absolute;top:" + (tdPosition.top + tdHeight) + "px;left:" + (tdPosition.left) + "px;border:dashed 1px green;width:" + tdWidth + "px;height:0px;'></span>");
+                    context.$docBody.append("<span class='td-resize-region td-region-right-down' style='position:absolute;top:" + tdPosition.top + "px;left:" + (tdPosition.left + tdWidth) + "px;border:dashed 1px green;width:0px;height:" + tdHeight + "px;'></span>");
+                    context.$docBody.append("<span class='td-resize-region td-region-down-left' style='position:absolute;top:" + (tdPosition.top + tdHeight) + "px;left:" + tdPosition.left + "px;border:dashed 1px green;width:" + tdWidth + "px;height:0px;'></span>");
                 },
 
-                tdClick: function (context, td) {
+                tdClick: function tdClick(context, td) {
                     if (settings.beforeElementSelect) {
                         settings.beforeElementSelect(td);
                     }
@@ -631,11 +607,9 @@
 
                     methods.drawResizeElements(context, td, tdHeight, tdWidth, tdPosition);
 
-                    var dragStop = function () {
+                    var dragStop = function dragStop() {
                         if (tdResizeinProgress) {
-                            $(currenttd)
-                                .css("width", $(".td-region-top-right").width() + "px")
-                                .css('height', $(".td-region-top-down").height() + "px");
+                            $(currenttd).css("width", $(".td-region-top-right").width() + "px").css('height', $(".td-region-top-down").height() + "px");
                             methods.refresh(context);
                             $(currenttd).click();
 
@@ -649,14 +623,14 @@
                         }
                     };
 
-                    var windowMouseMove = function (e) {
+                    var windowMouseMove = function windowMouseMove(e) {
                         if (tdResizeinProgress) {
 
                             var resWidth = tdWidth;
                             var resHeight = tdHeight;
 
-                            resHeight = e.pageY - (tdPosition.top);
-                            resWidth = e.pageX - (tdPosition.left);
+                            resHeight = e.pageY - tdPosition.top;
+                            resWidth = e.pageX - tdPosition.left;
 
                             if (resHeight < 1) {
                                 resHeight = 1;
@@ -665,12 +639,12 @@
                                 resWidth = 1;
                             }
 
-                            $(".td-resize-selector").css("top", (tdPosition.top + resHeight - 10) + 'px').css("left", (tdPosition.left + resWidth - 10) + "px");
+                            $(".td-resize-selector").css("top", tdPosition.top + resHeight - 10 + 'px').css("left", tdPosition.left + resWidth - 10 + "px");
                             $(".td-region-top-right").css("width", resWidth + "px");
                             $(".td-region-top-down").css("height", resHeight + "px");
 
-                            $(".td-region-right-down").css("left", (tdPosition.left + resWidth) + "px").css("height", resHeight + "px");
-                            $(".td-region-down-left").css("top", (tdPosition.top + resHeight) + "px").css("width", resWidth + "px");
+                            $(".td-region-right-down").css("left", tdPosition.left + resWidth + "px").css("height", resHeight + "px");
+                            $(".td-region-down-left").css("top", tdPosition.top + resHeight + "px").css("width", resWidth + "px");
                         }
 
                         return false;
@@ -699,7 +673,7 @@
                     }
                 },
 
-                rebind: function (context) {
+                rebind: function rebind(context) {
                     context.$container.find("td").each(function (i, v) {
                         $(v).unbind('click');
                         $(v).click(function (e) {
@@ -710,7 +684,7 @@
                     });
                 },
 
-                refresh: function (context) {
+                refresh: function refresh(context) {
                     methods.rebind(context);
 
                     methods.removeResizeElements();
@@ -737,7 +711,7 @@
                     }
                 },
 
-                reset: function (context) {
+                reset: function reset(context) {
                     if (currenttd != null) {
                         currenttd = null;
                         tdResizeinProgress = false;
@@ -751,12 +725,12 @@
                     methods.rebind(context);
                 },
 
-                crc: function (str) {
+                crc: function crc(str) {
                     var hash = 0;
                     if (str == null || str.length == 0) return hash;
                     for (i = 0; i < str.length; i++) {
                         char = str.charCodeAt(i);
-                        hash = ((hash << 5) - hash) + char;
+                        hash = (hash << 5) - hash + char;
                         hash = hash & hash;
                     }
                     return hash;
@@ -766,7 +740,7 @@
 
             var container = this;
             var $container = $(this);
-            var $docBody = $("body");            
+            var $docBody = $("body");
 
             lastCrc = methods.crc($container.html());
 
@@ -784,17 +758,15 @@
                 if (!tdResizeinProgress) {
                     if (lastCrc != methods.crc($container.html())) {
                         methods.reset(context);
-                    }
-                    else {
-                        var x = (e.x) ? e.x : e.clientX;
-                        var y = (e.y) ? e.y : e.clientY;
+                    } else {
+                        var x = e.x ? e.x : e.clientX;
+                        var y = e.y ? e.y : e.clientY;
                         var mouseUpElement = document.elementFromPoint(x, y);
                         if (mouseUpElement) {
                             if (!$(mouseUpElement).is("td")) {
                                 methods.reset(context);
                             }
-                        }
-                        else {
+                        } else {
                             methods.reset(context);
                         }
                     }
@@ -816,7 +788,7 @@
                 }, 1000);
             }
 
-            $(window).resize(function(){
+            $(window).resize(function () {
                 methods.reset(context);
             });
 
@@ -834,7 +806,6 @@
             });
 
             methods.refresh(context);
-
         });
     };
 })(jQuery);

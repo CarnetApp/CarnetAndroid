@@ -1,3 +1,5 @@
+"use strict";
+
 /*
  * imgViewer
  * 
@@ -6,22 +8,22 @@
  * Licensed under the MIT license.
  */
 
-var waitForFinalEvent = (function () {
+var waitForFinalEvent = function () {
 	var timers = {};
 	return function (callback, ms, uniqueId) {
 		if (!uniqueId) {
 			uniqueId = "Don't call this twice without a uniqueId";
 		}
 		if (timers[uniqueId]) {
-			clearTimeout (timers[uniqueId]);
+			clearTimeout(timers[uniqueId]);
 		}
 		timers[uniqueId] = setTimeout(callback, ms);
 	};
-})();
+}();
 /*
  *	imgViewer plugin starts here
- */ 
-;(function($) {
+ */
+;(function ($) {
 	$.widget("wgm.imgViewer", {
 		options: {
 			zoomStep: 0.1,
@@ -33,103 +35,105 @@ var waitForFinalEvent = (function () {
 			onClick: $.noop,
 			onUpdate: $.noop
 		},
-		
-		_create: function() {
+
+		_create: function _create() {
 			var self = this;
 			if (!this.element.is("img")) {
 				$.error('imgviewer plugin can only be applied to img elements');
 			}
-//		the original img element
+			//		the original img element
 			self.img = self.element[0];
 			var $img = $(self.img);
-/*
- *		a copy of the original image to be positioned over it and manipulated to
- *		provide zoom and pan
- */
-			self.zimg = $("<img />", {"src": self.img.src}).appendTo("#fullimg_container").wrap("<div class='viewport' />");
+			/*
+    *		a copy of the original image to be positioned over it and manipulated to
+    *		provide zoom and pan
+    */
+			self.zimg = $("<img />", { "src": self.img.src }).appendTo("#fullimg_container").wrap("<div class='viewport' />");
 			var $zimg = $(self.zimg);
-//		the container or viewport for the image view
+			//		the container or viewport for the image view
 			self.view = $(self.zimg).parent();
 			var $view = $(self.view);
-//		the pixel coordinate of the original image at the center of the viewport
+			//		the pixel coordinate of the original image at the center of the viewport
 			self.vCenter = {};
-//		a flag used to decide if a mouse click is part of a drag or a proper click
+			//		a flag used to decide if a mouse click is part of a drag or a proper click
 			self.drag = false;
 			self.pinch = false;
-//		a flag used to check the target image has loaded
+			//		a flag used to check the target image has loaded
 			self.ready = false;
-			$img.one("load",function() {
-//			get and some geometry information about the image
+			$img.one("load", function () {
+				//			get and some geometry information about the image
 				self.ready = true;
-				var	width = $img.width(),
-					height = $img.height(),
-					offset = $img.offset();
-//			cache the image padding information
-					self.offsetPadding = {
-							top: parseInt($img.css('padding-top'),10),
-							left: parseInt($img.css('padding-left'),10),
-							right: parseInt($img.css('padding-right'),10),
-							bottom: parseInt($img.css('padding-bottom'),10)
-					};
-/*
- *			cache the image margin/border size information
- *			because of IE8 limitations left and right borders are assumed to be the same width 
- *			and likewise top and bottom borders
- */
-					self.offsetBorder = {
-							x: Math.round(($img.outerWidth()-$img.innerWidth())/2),
-							y: Math.round(($img.outerHeight()-$img.innerHeight())/2)
-					};
-/*
- *			define the css style for the view container using absolute positioning to
- *			put it directly over the original image
- */
-					var vTop = offset.top + self.offsetBorder.y + self.offsetPadding.top,
-						vLeft = offset.left + self.offsetBorder.x + self.offsetPadding.left;
+				var width = $img.width(),
+				    height = $img.height(),
+				    offset = $img.offset();
+				//			cache the image padding information
+				self.offsetPadding = {
+					top: parseInt($img.css('padding-top'), 10),
+					left: parseInt($img.css('padding-left'), 10),
+					right: parseInt($img.css('padding-right'), 10),
+					bottom: parseInt($img.css('padding-bottom'), 10)
+				};
+				/*
+     *			cache the image margin/border size information
+     *			because of IE8 limitations left and right borders are assumed to be the same width 
+     *			and likewise top and bottom borders
+     */
+				self.offsetBorder = {
+					x: Math.round(($img.outerWidth() - $img.innerWidth()) / 2),
+					y: Math.round(($img.outerHeight() - $img.innerHeight()) / 2)
+				};
+				/*
+     *			define the css style for the view container using absolute positioning to
+     *			put it directly over the original image
+     */
+				var vTop = offset.top + self.offsetBorder.y + self.offsetPadding.top,
+				    vLeft = offset.left + self.offsetBorder.x + self.offsetPadding.left;
 
-					$view.css({
-								position: "absolute",
-								overflow: "hidden",
-								top:  50+"%",
-								left: 50+"%",
-								marginLeft:-width/2+"px",
-								marginTop:-height/2+"px",								
-								
-					});
-//			the zoom and pan image is position relative to the view container
-					$zimg.css({
-								position: "relative",
-								top: 0+"px",
-								left: 0+"px",
-								width: width+"px",
-								height: height+"px",
-								"-webkit-tap-highlight-color": "transparent"
-					});
-//			the initial view is centered at the orignal image
-					self.vCenter = {
-									x: width/2,
-									y: height/2
-					};
-					self.update();
-			}).each(function() {
-				if (this.complete) { $(this).trigger("load"); }
+				$view.css({
+					position: "absolute",
+					overflow: "hidden",
+					top: 50 + "%",
+					left: 50 + "%",
+					marginLeft: -width / 2 + "px",
+					marginTop: -height / 2 + "px"
+
+				});
+				//			the zoom and pan image is position relative to the view container
+				$zimg.css({
+					position: "relative",
+					top: 0 + "px",
+					left: 0 + "px",
+					width: width + "px",
+					height: height + "px",
+					"-webkit-tap-highlight-color": "transparent"
+				});
+				//			the initial view is centered at the orignal image
+				self.vCenter = {
+					x: width / 2,
+					y: height / 2
+				};
+				self.update();
+			}).each(function () {
+				if (this.complete) {
+					$(this).trigger("load");
+				}
 			});
-/*
- *			Render loop code during dragging and scaling using requestAnimationFrame
- */
+			/*
+    *			Render loop code during dragging and scaling using requestAnimationFrame
+    */
 			self.render = false;
-/*
- *		Event handlers
- */
+			/*
+    *		Event handlers
+    */
 			$zimg.hammer();
-			
+
 			if (self.options.zoomable) {
 				self._bind_zoom_events();
 			}
 			if (self.options.dragable) {
 				self._bind_drag_events();
 			}
-			$zimg.on("tap", function(ev) {
+			$zimg.on("tap", function (ev) {
 				ev.preventDefault();
 				if (!self.dragging) {
 					var scoff = self._get_scroll_offset();
@@ -137,27 +141,26 @@ var waitForFinalEvent = (function () {
 					ev.pageY = ev.gesture.center.y + scoff.y;
 					self.options.onClick.call(self, ev);
 				}
-			});			
-/*
- *		Window resize handler
- */
-	
-			$(window).resize(function() {
+			});
+			/*
+    *		Window resize handler
+    */
+
+			$(window).resize(function () {
 				self._view_resize();
-				waitForFinalEvent(function(){
+				waitForFinalEvent(function () {
 					self._view_resize();
 				}, 300, $img[0].id);
-				
 			});
 			self._view_resize();
 
 			self.options.onReady.call(self);
 		},
-/*
- *	Return the window scroll offset - required to convert Hammer.js event coords to page locations
- */
-		_get_scroll_offset: function() {
-			var sx,sy;
+		/*
+   *	Return the window scroll offset - required to convert Hammer.js event coords to page locations
+   */
+		_get_scroll_offset: function _get_scroll_offset() {
+			var sx, sy;
 			if (window.scrollX === undefined) {
 				if (window.pageXOffset === undefined) {
 					sx = document.documentElement.scrollLeft;
@@ -170,34 +173,34 @@ var waitForFinalEvent = (function () {
 				sx = window.scrollX;
 				sy = window.scrollY;
 			}
-			return {x: sx, y: sy};
+			return { x: sx, y: sy };
 		},
-/*
- *	View resize - the aim is to keep the view centered on the same location in the original image
- */
-		_view_resize: function() {
+		/*
+   *	View resize - the aim is to keep the view centered on the same location in the original image
+   */
+		_view_resize: function _view_resize() {
 			if (this.ready) {
 				var $view = $(this.view),
-					$img = $(this.img),
-					width = $img.width(),
-					height = $img.height(),
-					offset = $img.offset(),
-					vTop = Math.round(offset.top + this.offsetBorder.y + this.offsetPadding.top),
-					vLeft = Math.round(offset.left + this.offsetBorder.x + this.offsetPadding.left);
-				this.vCenter.x *=$img.width()/$view.width();
-				this.vCenter.y *= $img.height()/$view.height(); 
+				    $img = $(this.img),
+				    width = $img.width(),
+				    height = $img.height(),
+				    offset = $img.offset(),
+				    vTop = Math.round(offset.top + this.offsetBorder.y + this.offsetPadding.top),
+				    vLeft = Math.round(offset.left + this.offsetBorder.x + this.offsetPadding.left);
+				this.vCenter.x *= $img.width() / $view.width();
+				this.vCenter.y *= $img.height() / $view.height();
 				$view.css({
-					top:  50+"%",
-					left: 50+"%",
+					top: 50 + "%",
+					left: 50 + "%"
 				});
 
 				this.update();
 			}
 		},
-/*
- *	Bind events
- */
-		_bind_zoom_events: function() {
+		/*
+   *	Bind events
+   */
+		_bind_zoom_events: function _bind_zoom_events() {
 			var self = this;
 			var $zimg = $(self.zimg);
 
@@ -217,41 +220,40 @@ var waitForFinalEvent = (function () {
 				self.render = false;
 			}
 
-			$zimg.on("mousewheel", function(ev) {
-                console.log("wheel")
-					ev.preventDefault();
-					var delta = ev.deltaY ;
-					self.options.zoom -= delta * self.options.zoomStep;
-					self.update();
+			$zimg.on("mousewheel", function (ev) {
+				console.log("wheel");
+				ev.preventDefault();
+				var delta = ev.deltaY;
+				self.options.zoom -= delta * self.options.zoomStep;
+				self.update();
 			});
 
-			$zimg.on("touchmove", function(e) {
+			$zimg.on("touchmove", function (e) {
 				e.preventDefault();
-//				e.stopPropagation();
+				//				e.stopPropagation();
 			});
 			$zimg.data("hammer").recognizers[1].options.enable = true;
-			
-			$zimg.on("pinchstart", function() {
-			});
-			
-			$zimg.on("pinch", function(ev) {
+
+			$zimg.on("pinchstart", function () {});
+
+			$zimg.on("pinch", function (ev) {
 				ev.preventDefault();
 				if (!self.pinch) {
 					var scoff = self._get_scroll_offset();
-					self.pinchstart = { x: ev.gesture.center.x+scoff.x, y: ev.gesture.center.y+scoff.y};
+					self.pinchstart = { x: ev.gesture.center.x + scoff.x, y: ev.gesture.center.y + scoff.y };
 					self.pinchstartrelpos = self.cursorToImg(self.pinchstart.x, self.pinchstart.y);
 					self.pinchstart_scale = self.options.zoom;
 					startRenderLoop();
 					self.pinch = true;
 				} else {
 					self.options.zoom = ev.gesture.scale * self.pinchstart_scale;
-					var npos = self.imgToCursor( self.pinchstartrelpos.x, self.pinchstartrelpos.y);
-					self.vCenter.x = self.vCenter.x + (npos.x - self.pinchstart.x)/self.options.zoom;
-					self.vCenter.y = self.vCenter.y + (npos.y - self.pinchstart.y)/self.options.zoom;
+					var npos = self.imgToCursor(self.pinchstartrelpos.x, self.pinchstartrelpos.y);
+					self.vCenter.x = self.vCenter.x + (npos.x - self.pinchstart.x) / self.options.zoom;
+					self.vCenter.y = self.vCenter.y + (npos.y - self.pinchstart.y) / self.options.zoom;
 				}
 			});
 
-			$zimg.on("pinchend", function(ev) {
+			$zimg.on("pinchend", function (ev) {
 				ev.preventDefault();
 				if (self.pinch) {
 					stopRenderLoop();
@@ -260,8 +262,8 @@ var waitForFinalEvent = (function () {
 				}
 			});
 		},
-		
-		_bind_drag_events: function() {
+
+		_bind_drag_events: function _bind_drag_events() {
 			var self = this;
 			var $zimg = $(self.zimg);
 			function doRender() {
@@ -279,13 +281,12 @@ var waitForFinalEvent = (function () {
 			function stopRenderLoop() {
 				self.render = false;
 			}
-			$zimg.on("mousedown", function(e) {
+			$zimg.on("mousedown", function (e) {
 				e.preventDefault();
 			});
-			$zimg.on("panstart", function() {
-			});
+			$zimg.on("panstart", function () {});
 
-			$zimg.on("panmove", function(ev) {
+			$zimg.on("panmove", function (ev) {
 				ev.preventDefault();
 				if (!self.drag) {
 					self.drag = true;
@@ -293,12 +294,12 @@ var waitForFinalEvent = (function () {
 					self.dragYorg = self.vCenter.y;
 					startRenderLoop();
 				} else {
-					self.vCenter.x = self.dragXorg - ev.gesture.deltaX/self.options.zoom;
-					self.vCenter.y = self.dragYorg - ev.gesture.deltaY/self.options.zoom;
+					self.vCenter.x = self.dragXorg - ev.gesture.deltaX / self.options.zoom;
+					self.vCenter.y = self.dragYorg - ev.gesture.deltaY / self.options.zoom;
 				}
 			});
 
-			$zimg.on( "panend", function(ev) {
+			$zimg.on("panend", function (ev) {
 				ev.preventDefault();
 				if (self.drag) {
 					self.drag = false;
@@ -307,10 +308,10 @@ var waitForFinalEvent = (function () {
 				}
 			});
 		},
-/*
- *	Unbind events
- */
-		_unbind_zoom_events: function() {
+		/*
+   *	Unbind events
+   */
+		_unbind_zoom_events: function _unbind_zoom_events() {
 			var self = this;
 			var $zimg = $(self.zimg);
 			$zimg.data("hammer").recognizers[1].options.enable = false;
@@ -318,19 +319,19 @@ var waitForFinalEvent = (function () {
 			$zimg.off("pinchstart");
 			$zimg.off("pinch");
 			$zimg.off("pinchend");
-		},	
+		},
 
-		_unbind_drag_events: function() {
+		_unbind_drag_events: function _unbind_drag_events() {
 			var self = this;
 			var $zimg = $(self.zimg);
 			$zimg.off("pan");
 			$zimg.off("panend");
-		},	
+		},
 
-/*
- *	Remove the plugin
- */  
-		destroy: function() {
+		/*
+   *	Remove the plugin
+   */
+		destroy: function destroy() {
 			var $zimg = $(this.zimg);
 			$zimg.unbind("click");
 			$(window).unbind("resize");
@@ -338,16 +339,16 @@ var waitForFinalEvent = (function () {
 			$(this.view).remove();
 			$.Widget.prototype.destroy.call(this);
 		},
-  
-		_setOption: function(key, value) {
-			switch(key) {
+
+		_setOption: function _setOption(key, value) {
+			switch (key) {
 				case 'zoom':
 					if (parseFloat(value) < 1 || isNaN(parseFloat(value))) {
 						return;
 					}
 					break;
 				case 'zoomStep':
-					if (parseFloat(value) <= 0 ||  isNaN(parseFloat(value))) {
+					if (parseFloat(value) <= 0 || isNaN(parseFloat(value))) {
 						return;
 					}
 					break;
@@ -363,7 +364,7 @@ var waitForFinalEvent = (function () {
 			} else {
 				$.Widget.prototype._setOption.apply(this, arguments);
 			}
-			switch(key) {
+			switch (key) {
 				case 'zoom':
 					if (this.ready) {
 						this.update();
@@ -391,79 +392,79 @@ var waitForFinalEvent = (function () {
 					break;
 			}
 		},
-		
-		addElem: function(elem) {
+
+		addElem: function addElem(elem) {
 			$(this.view).append(elem);
 		},
-/*
- *	Test if a relative image coordinate is visible in the current view
- */
-		isVisible: function(relx, rely) {
+		/*
+   *	Test if a relative image coordinate is visible in the current view
+   */
+		isVisible: function isVisible(relx, rely) {
 			var view = this.getView();
 			if (view) {
-				return (relx >= view.left && relx <= view.right && rely >= view.top && rely <= view.bottom);
+				return relx >= view.left && relx <= view.right && rely >= view.top && rely <= view.bottom;
 			} else {
 				return false;
 			}
 		},
-/*
- *	Get relative image coordinates of current view
- */
-		getView: function() {
+		/*
+   *	Get relative image coordinates of current view
+   */
+		getView: function getView() {
 			if (this.ready) {
 				var $img = $(this.img),
-					width = $img.width(),
-					height = $img.height(),
-					zoom = this.options.zoom;
+				    width = $img.width(),
+				    height = $img.height(),
+				    zoom = this.options.zoom;
 				return {
-					top: this.vCenter.y/height - 0.5/zoom,
-					left: this.vCenter.x/width - 0.5/zoom,
-					bottom: this.vCenter.y/height + 0.5/zoom,
-					right: this.vCenter.x/width + 0.5/zoom
+					top: this.vCenter.y / height - 0.5 / zoom,
+					left: this.vCenter.x / width - 0.5 / zoom,
+					bottom: this.vCenter.y / height + 0.5 / zoom,
+					right: this.vCenter.x / width + 0.5 / zoom
 				};
 			} else {
 				return null;
 			}
 		},
-/*
- *	Pan the view to be centred at the given relative image location
- */
-		panTo: function(relx, rely) {
-			if ( this.ready && relx >= 0 && relx <= 1 && rely >= 0 && rely <=1 ) {
+		/*
+   *	Pan the view to be centred at the given relative image location
+   */
+		panTo: function panTo(relx, rely) {
+			if (this.ready && relx >= 0 && relx <= 1 && rely >= 0 && rely <= 1) {
 				var $img = $(this.img),
-					width = $img.width(),
-					height = $img.height();
+				    width = $img.width(),
+				    height = $img.height();
 				this.vCenter.x = relx * width;
 				this.vCenter.y = rely * height;
 				this.update();
-				return { x: this.vCenter.x/width, y: this.vCenter.y/height };
+				return { x: this.vCenter.x / width, y: this.vCenter.y / height };
 			} else {
 				return null;
 			}
 		},
-/*
- *	Convert a relative image location to a viewport pixel location
- */  
-		imgToView: function(relx, rely) {
-			if ( this.ready && relx >= 0 && relx <= 1 && rely >= 0 && rely <=1 ) {
+		/*
+   *	Convert a relative image location to a viewport pixel location
+   */
+		imgToView: function imgToView(relx, rely) {
+			if (this.ready && relx >= 0 && relx <= 1 && rely >= 0 && rely <= 1) {
 				var $img = $(this.img),
-					width = $img.width(),
-					height = $img.height();						
-			 
-				var zLeft = width/2 - this.vCenter.x * this.options.zoom;
-				var zTop =  height/2 - this.vCenter.y * this.options.zoom;
+				    width = $img.width(),
+				    height = $img.height();
+
+				var zLeft = width / 2 - this.vCenter.x * this.options.zoom;
+				var zTop = height / 2 - this.vCenter.y * this.options.zoom;
 				var vx = relx * width * this.options.zoom + zLeft;
 				var vy = rely * height * this.options.zoom + zTop;
 				return { x: Math.round(vx), y: Math.round(vy) };
-			} else {						
-				
+			} else {
+
 				return null;
 			}
 		},
-/*
- *	Convert a relative image location to a page pixel location
- */  
-		imgToCursor: function(relx, rely) {
+		/*
+   *	Convert a relative image location to a page pixel location
+   */
+		imgToCursor: function imgToCursor(relx, rely) {
 			var pos = this.imgToView(relx, rely);
 			if (pos) {
 				var offset = $(this.img).offset();
@@ -474,20 +475,20 @@ var waitForFinalEvent = (function () {
 				return null;
 			}
 		},
-/*
- *	Convert a viewport pixel location to a relative image coordinate
- */		
-		viewToImg: function(vx, vy) {
+		/*
+   *	Convert a viewport pixel location to a relative image coordinate
+   */
+		viewToImg: function viewToImg(vx, vy) {
 			if (this.ready) {
 				var $img = $(this.img),
-					width = $img.width(),
-					height = $img.height();
-				var zLeft = width/2 - this.vCenter.x * this.options.zoom;
-				var zTop =  height/2 - this.vCenter.y * this.options.zoom;
-				var relx= (vx - zLeft)/(width * this.options.zoom);
-				var rely = (vy - zTop)/(height * this.options.zoom);
-				if (relx>=0 && relx<=1 && rely>=0 && rely<=1) {
-					return {x: relx, y: rely};
+				    width = $img.width(),
+				    height = $img.height();
+				var zLeft = width / 2 - this.vCenter.x * this.options.zoom;
+				var zTop = height / 2 - this.vCenter.y * this.options.zoom;
+				var relx = (vx - zLeft) / (width * this.options.zoom);
+				var rely = (vy - zTop) / (height * this.options.zoom);
+				if (relx >= 0 && relx <= 1 && rely >= 0 && rely <= 1) {
+					return { x: relx, y: rely };
 				} else {
 					return null;
 				}
@@ -495,22 +496,22 @@ var waitForFinalEvent = (function () {
 				return null;
 			}
 		},
-		
-/*
- *	Convert a page pixel location to a relative image coordinate
- */		
-		cursorToImg: function(cx, cy) {
+
+		/*
+   *	Convert a page pixel location to a relative image coordinate
+   */
+		cursorToImg: function cursorToImg(cx, cy) {
 			if (this.ready) {
 				var $img = $(this.img),
-					width = $img.width(),
-					height = $img.height(),
-					offset = $img.offset();
-				var zLeft = width/2 - this.vCenter.x * this.options.zoom;
-				var zTop =  height/2 - this.vCenter.y * this.options.zoom;
-				var relx = (cx - offset.left - this.offsetBorder.x - this.offsetPadding.left- zLeft)/(width * this.options.zoom);
-				var rely = (cy - offset.top - this.offsetBorder.y - this.offsetPadding.top - zTop)/(height * this.options.zoom);
-				if (relx>=0 && relx<=1 && rely>=0 && rely<=1) {
-					return {x: relx, y: rely};
+				    width = $img.width(),
+				    height = $img.height(),
+				    offset = $img.offset();
+				var zLeft = width / 2 - this.vCenter.x * this.options.zoom;
+				var zTop = height / 2 - this.vCenter.y * this.options.zoom;
+				var relx = (cx - offset.left - this.offsetBorder.x - this.offsetPadding.left - zLeft) / (width * this.options.zoom);
+				var rely = (cy - offset.top - this.offsetBorder.y - this.offsetPadding.top - zTop) / (height * this.options.zoom);
+				if (relx >= 0 && relx <= 1 && rely >= 0 && rely <= 1) {
+					return { x: relx, y: rely };
 				} else {
 					return null;
 				}
@@ -518,34 +519,38 @@ var waitForFinalEvent = (function () {
 				return null;
 			}
 		},
-/*
- * Convert relative image coordinate to Image pixel
- */
-		relposToImage: function(pos) {
+		/*
+   * Convert relative image coordinate to Image pixel
+   */
+		relposToImage: function relposToImage(pos) {
 			if (this.ready) {
 				var img = this.img,
-					width = img.naturalWidth,
-					height = img.naturalHeight;
-				return {x: Math.round(pos.x*width), y: Math.round(pos.y*height)};
+				    width = img.naturalWidth,
+				    height = img.naturalHeight;
+				return { x: Math.round(pos.x * width), y: Math.round(pos.y * height) };
 			} else {
 				return null;
 			}
 		},
-/*
- *	Adjust the display of the image  
- */
-		update: function() {
+		/*
+   *	Adjust the display of the image  
+   */
+		update: function update() {
 			if (this.ready) {
-				var zTop, zLeft, zWidth, zHeight,
-					$img = $(this.img),
-					width = $img.width(),
-					height = $img.height(),
-//					offset = $img.offset(),
-					zoom = this.options.zoom,
-					zoomMax = this.options.zoomMax,
-					half_width = width/2,
-					half_height = height/2;
-  
+				var zTop,
+				    zLeft,
+				    zWidth,
+				    zHeight,
+				    $img = $(this.img),
+				    width = $img.width(),
+				    height = $img.height(),
+
+				//					offset = $img.offset(),
+				zoom = this.options.zoom,
+				    zoomMax = this.options.zoomMax,
+				    half_width = width / 2,
+				    half_height = height / 2;
+
 				zoom = zoomMax === undefined ? zoom : Math.min(zoom, zoomMax);
 				this.options.zoom = zoom;
 
@@ -554,9 +559,9 @@ var waitForFinalEvent = (function () {
 					zLeft = 0;
 					zWidth = width;
 					zHeight = height;
-					this.vCenter = { 
-									x: half_width,
-									y: half_height
+					this.vCenter = {
+						x: half_width,
+						y: half_height
 					};
 					this.options.zoom = 1;
 					zoom = 1;
@@ -565,41 +570,41 @@ var waitForFinalEvent = (function () {
 					zLeft = Math.round(half_width - this.vCenter.x * zoom);
 					zWidth = Math.round(width * zoom);
 					zHeight = Math.round(height * zoom);
-/*
- *			adjust the view center so the image edges snap to the edge of the view
- */
+					/*
+      *			adjust the view center so the image edges snap to the edge of the view
+      */
 					if (zLeft > 0) {
-						this.vCenter.x = half_width/zoom;
+						this.vCenter.x = half_width / zoom;
 						zLeft = 0;
-					} else if (zLeft+zWidth < width) {
-						this.vCenter.x = width - half_width/zoom ;
+					} else if (zLeft + zWidth < width) {
+						this.vCenter.x = width - half_width / zoom;
 						zLeft = width - zWidth;
 					}
 					if (zTop > 0) {
-						this.vCenter.y = half_height/zoom;
+						this.vCenter.y = half_height / zoom;
 						zTop = 0;
 					} else if (zTop + zHeight < height) {
-						this.vCenter.y = height - half_height/zoom;
+						this.vCenter.y = height - half_height / zoom;
 						zTop = height - zHeight;
 					}
 				}
 				$(this.zimg).css({
-								width: zoom*width+"px",
-								height: zoom*height+"px"
+					width: zoom * width + "px",
+					height: zoom * height + "px"
 				});
 
-				var xt = -(this.vCenter.x - half_width)*zoom;
-				var yt = -(this.vCenter.y - half_height)*zoom;
-				$(this.zimg).css({transform: "translate(" + xt + "px," + yt + "px) scale(" + 1 + "," + 1 + ")" });
+				var xt = -(this.vCenter.x - half_width) * zoom;
+				var yt = -(this.vCenter.y - half_height) * zoom;
+				$(this.zimg).css({ transform: "translate(" + xt + "px," + yt + "px) scale(" + 1 + "," + 1 + ")" });
 				this.view.css({
-					marginTop:-zoom*height/2+"px",					
-					marginLeft:-zoom*width/2+"px",
-				
-		});
-/*
- *		define the onUpdate option to do something after the image is redisplayed
- *		probably shouldn't pass out the this object - need to think of something better
- */
+					marginTop: -zoom * height / 2 + "px",
+					marginLeft: -zoom * width / 2 + "px"
+
+				});
+				/*
+     *		define the onUpdate option to do something after the image is redisplayed
+     *		probably shouldn't pass out the this object - need to think of something better
+     */
 				this.options.onUpdate.call(this);
 			}
 		}

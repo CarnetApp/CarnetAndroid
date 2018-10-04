@@ -1,3 +1,7 @@
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 ;
 (function () {
 
@@ -39,7 +43,7 @@
          * @param {string=} optCssClass the name of the CSS class elements of this
          * type will have.
          */
-        upgradeDom: function (optJsClass, optCssClass) {},
+        upgradeDom: function upgradeDom(optJsClass, optCssClass) {},
         /**
          * Upgrades a specific element rather than all in the DOM.
          *
@@ -47,19 +51,19 @@
          * @param {string=} optJsClass Optional name of the class we want to upgrade
          * the element to.
          */
-        upgradeElement: function (element, optJsClass) {},
+        upgradeElement: function upgradeElement(element, optJsClass) {},
         /**
          * Upgrades a specific list of elements rather than all in the DOM.
          *
          * @param {!Element|!Array<!Element>|!NodeList|!HTMLCollection} elements
          * The elements we wish to upgrade.
          */
-        upgradeElements: function (elements) {},
+        upgradeElements: function upgradeElements(elements) {},
         /**
          * Upgrades all registered components found in the current DOM. This is
          * automatically called on window load.
          */
-        upgradeAllRegistered: function () {},
+        upgradeAllRegistered: function upgradeAllRegistered() {},
         /**
          * Allows user to be alerted to any upgrades that are performed for a given
          * component type
@@ -70,25 +74,26 @@
          * upgrade. This function should expect 1 parameter - the HTMLElement which
          * got upgraded.
          */
-        registerUpgradedCallback: function (jsClass, callback) {},
+        registerUpgradedCallback: function registerUpgradedCallback(jsClass, callback) {},
         /**
          * Registers a class for future use and attempts to upgrade existing DOM.
          *
          * @param {componentHandler.ComponentConfigPublic} config the registration configuration
          */
-        register: function (config) {},
+        register: function register(config) {},
         /**
          * Downgrade either a given node, an array of nodes, or a NodeList.
          *
          * @param {!Node|!Array<!Node>|!NodeList} nodes
          */
-        downgradeElements: function (nodes) {}
+        downgradeElements: function downgradeElements(nodes) {}
     };
 
-    componentHandler = (function () {
+    componentHandler = function () {
         'use strict';
 
         /** @type {!Array<componentHandler.ComponentConfig>} */
+
         var registeredComponents_ = [];
 
         /** @type {!Array<componentHandler.Component>} */
@@ -175,14 +180,12 @@
          * type will have.
          */
         function upgradeDomInternal(optJsClass, optCssClass) {
-            if (typeof optJsClass === 'undefined' &&
-                typeof optCssClass === 'undefined') {
+            if (typeof optJsClass === 'undefined' && typeof optCssClass === 'undefined') {
                 for (var i = 0; i < registeredComponents_.length; i++) {
-                    upgradeDomInternal(registeredComponents_[i].className,
-                        registeredComponents_[i].cssClass);
+                    upgradeDomInternal(registeredComponents_[i].className, registeredComponents_[i].cssClass);
                 }
             } else {
-                var jsClass = /** @type {string} */ (optJsClass);
+                var jsClass = /** @type {string} */optJsClass;
                 if (typeof optCssClass === 'undefined') {
                     var registeredClass = findRegisteredClass_(jsClass);
                     if (registeredClass) {
@@ -206,7 +209,7 @@
          */
         function upgradeElementInternal(element, optJsClass) {
             // Verify argument type.
-            if (!(typeof element === 'object' && element instanceof Element)) {
+            if (!((typeof element === 'undefined' ? 'undefined' : _typeof(element)) === 'object' && element instanceof Element)) {
                 throw new Error('Invalid argument provided to upgrade MDL element.');
             }
             // Allow upgrade to be canceled by canceling emitted event.
@@ -224,9 +227,7 @@
                 var classList = element.classList;
                 registeredComponents_.forEach(function (component) {
                     // Match CSS & Not to be upgraded & Not upgraded.
-                    if (classList.contains(component.cssClass) &&
-                        classesToUpgrade.indexOf(component) === -1 &&
-                        !isElementUpgraded_(element, component.className)) {
+                    if (classList.contains(component.cssClass) && classesToUpgrade.indexOf(component) === -1 && !isElementUpgraded_(element, component.className)) {
                         classesToUpgrade.push(component);
                     }
                 });
@@ -254,8 +255,7 @@
                         element[registeredClass.className] = instance;
                     }
                 } else {
-                    throw new Error(
-                        'Unable to find a registered component for the given class.');
+                    throw new Error('Unable to find a registered component for the given class.');
                 }
 
                 var upgradedEv = createEvent_('mdl-componentupgraded', true, false);
@@ -298,21 +298,20 @@
             // this method, we need to allow for both the dot and array syntax for
             // property access. You'll therefore see the `foo.bar || foo['bar']`
             // pattern repeated across this method.
-            var widgetMissing = (typeof config.widget === 'undefined' &&
-                typeof config['widget'] === 'undefined');
+            var widgetMissing = typeof config.widget === 'undefined' && typeof config['widget'] === 'undefined';
             var widget = true;
 
             if (!widgetMissing) {
                 widget = config.widget || config['widget'];
             }
 
-            var newConfig = /** @type {componentHandler.ComponentConfig} */ ({
+            var newConfig = /** @type {componentHandler.ComponentConfig} */{
                 classConstructor: config.constructor || config['constructor'],
                 className: config.classAsString || config['classAsString'],
                 cssClass: config.cssClass || config['cssClass'],
                 widget: widget,
                 callbacks: []
-            });
+            };
 
             registeredComponents_.forEach(function (item) {
                 if (item.cssClass === newConfig.cssClass) {
@@ -323,11 +322,8 @@
                 }
             });
 
-            if (config.constructor.prototype
-                .hasOwnProperty(componentConfigProperty_)) {
-                throw new Error(
-                    'MDL component classes must not have ' + componentConfigProperty_ +
-                    ' defined as a property.');
+            if (config.constructor.prototype.hasOwnProperty(componentConfigProperty_)) {
+                throw new Error('MDL component classes must not have ' + componentConfigProperty_ + ' defined as a property.');
             }
 
             var found = findRegisteredClass_(config.classAsString, newConfig);
@@ -396,7 +392,7 @@
              * Auxiliary function to downgrade a single node.
              * @param  {!Node} node the node to be downgraded
              */
-            var downgradeNode = function (node) {
+            var downgradeNode = function downgradeNode(node) {
                 createdComponents_.filter(function (item) {
                     return item.element_ === node;
                 }).forEach(deconstructComponentInternal);
@@ -423,7 +419,7 @@
             register: registerInternal,
             downgradeElements: downgradeNodesInternal
         };
-    })();
+    }();
 
     /**
      * Describes the type of a registered component type managed by
@@ -471,10 +467,8 @@
     componentHandler['upgradeDom'] = componentHandler.upgradeDom;
     componentHandler['upgradeElement'] = componentHandler.upgradeElement;
     componentHandler['upgradeElements'] = componentHandler.upgradeElements;
-    componentHandler['upgradeAllRegistered'] =
-        componentHandler.upgradeAllRegistered;
-    componentHandler['registerUpgradedCallback'] =
-        componentHandler.registerUpgradedCallback;
+    componentHandler['upgradeAllRegistered'] = componentHandler.upgradeAllRegistered;
+    componentHandler['registerUpgradedCallback'] = componentHandler.registerUpgradedCallback;
     componentHandler['register'] = componentHandler.register;
     componentHandler['downgradeElements'] = componentHandler.downgradeElements;
     window.componentHandler = componentHandler;
@@ -488,9 +482,8 @@
          * tested, adds a mdl-js class to the <html> element. It then upgrades all MDL
          * components requiring JavaScript.
          */
-        if ('classList' in document.createElement('div') &&
-            'querySelector' in document &&
-            'addEventListener' in window && Array.prototype.forEach) {
+
+        if ('classList' in document.createElement('div') && 'querySelector' in document && 'addEventListener' in window && Array.prototype.forEach) {
             document.documentElement.classList.add('mdl-js');
             componentHandler.upgradeAllRegistered();
         } else {
@@ -522,10 +515,7 @@
         };
         Date['now'] = Date.now;
     }
-    var vendors = [
-        'webkit',
-        'moz'
-    ];
+    var vendors = ['webkit', 'moz'];
     for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
         var vp = vendors[i];
         window.requestAnimationFrame = window[vp + 'RequestAnimationFrame'];
@@ -1217,7 +1207,7 @@
             container.insertBefore(outline, this.element_);
             // Find the "for" element and bind events to it.
             var forElId = this.element_.getAttribute('for') || this.element_.getAttribute('data-mdl-for');
-            console.log("for id " + forElId)
+            console.log("for id " + forElId);
             var forEl = null;
             if (forElId) {
                 forEl = document.getElementById(forElId);
@@ -1432,7 +1422,7 @@
      * @public
      */
     MaterialMenu.prototype.show = function (evt) {
-        console.log("show")
+        console.log("show");
         if (this.element_ && this.container_ && this.outline_) {
             // Measure the inner element.
             var height = this.element_.getBoundingClientRect().height;
@@ -2335,11 +2325,7 @@
         var rightClipper = document.createElement('div');
         rightClipper.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE_CLIPPER);
         rightClipper.classList.add(this.CssClasses_.MDL_SPINNER_RIGHT);
-        var circleOwners = [
-            leftClipper,
-            gapPatch,
-            rightClipper
-        ];
+        var circleOwners = [leftClipper, gapPatch, rightClipper];
         for (var i = 0; i < circleOwners.length; i++) {
             var circle = document.createElement('div');
             circle.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE);
@@ -3724,12 +3710,7 @@
      */
     MaterialDataTable.prototype.createCheckbox_ = function (row, opt_rows) {
         var label = document.createElement('label');
-        var labelClasses = [
-            'mdl-checkbox',
-            'mdl-js-checkbox',
-            'mdl-js-ripple-effect',
-            this.CssClasses_.SELECT_ELEMENT
-        ];
+        var labelClasses = ['mdl-checkbox', 'mdl-js-checkbox', 'mdl-js-ripple-effect', this.CssClasses_.SELECT_ELEMENT];
         label.className = labelClasses.join(' ');
         var checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -4006,4 +3987,4 @@
         cssClass: 'mdl-js-ripple-effect',
         widget: false
     });
-}());
+})();
