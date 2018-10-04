@@ -357,6 +357,10 @@ Writer.prototype.fillWriter = function (extractedHTML) {
     }
     if (extractedHTML != undefined)
         this.oEditor.innerHTML = extractedHTML;
+    this.oEditor.onscroll = function(){
+        lastscroll = $(writer.oEditor).scrollTop()
+        console.log("onscroll")
+    }
     this.oDoc = document.getElementById("text");
     this.oFloating = document.getElementById("floating");
     var writer = this
@@ -843,6 +847,28 @@ Writer.prototype.updateRating = function (rating) {
     };
 }
 
+
+Writer.prototype.getCaretPosition = function () {
+    var x = 0;
+    var y = 0;
+    var sel = window.getSelection();
+    if(sel.rangeCount) {
+        var range = sel.getRangeAt(0).cloneRange();
+        if(range.getClientRects()) {
+        range.collapse(true);
+        var rect = range.getClientRects()[0];
+        if(rect) {
+            y = rect.top;
+            x = rect.left;
+        }
+        }
+    }
+    return {
+        x: x,
+        y: y
+    };
+}
+
 var ToolbarManager = function () {
     this.toolbars = [];
 }
@@ -935,6 +961,7 @@ SaveNoteTask.prototype.saveTxt = function (onEnd) {
 
 SaveNoteTask.prototype.run = SaveNoteTask.prototype.saveTxt;
 
+var lastscroll = 0;
 
 function resetScreenHeight() {
     console.log("resetScreenHeight")
@@ -946,6 +973,13 @@ function resetScreenHeight() {
         content = screen;
     $("#center").height(content);
     $("#editor").height(content - 45);
+    $("#editor").scrollTop(lastscroll);
+    if(writer != undefined) {
+        var diff = content - 45 - writer.getCaretPosition().y + header
+        console.log(diff)
+        if(diff < 0)
+            $("#editor").scrollTop(lastscroll - diff);       
+    }
     console.log(content - 45)
 }
 
