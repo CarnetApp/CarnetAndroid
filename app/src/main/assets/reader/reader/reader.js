@@ -930,6 +930,9 @@ var SaveNoteTask = function (writer) {
 }
 SaveNoteTask.prototype.trySave = function (onEnd, trial) {
     const task = this;
+    if(this.writer.note.metadata.creation_date === "")
+        this.writer.note.metadata.creation_date = Date.now();
+
     this.writer.note.metadata.last_modification_date = Date.now();
     RequestBuilder.sRequestBuilder.post("/note/saveText", {
         id: this.writer.saveID,
