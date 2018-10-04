@@ -116,7 +116,11 @@ public class Note implements Serializable{
         public static Metadata fromJSONObject(JSONObject jsonObject){
             Metadata metadata = new Metadata();
             try {
-                metadata.creation_date = jsonObject.getLong("creation_date");
+                try { // sometimes creation date is on a bad format
+                    metadata.creation_date = jsonObject.getLong("creation_date");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 metadata.last_modification_date = jsonObject.getLong("last_modification_date");
                 if(jsonObject.has("rating"))
                     metadata.rating = jsonObject.getInt("rating");

@@ -2,7 +2,10 @@ package com.spisoft.quicknote.editor;
 
 import android.animation.LayoutTransition;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -27,6 +30,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -43,6 +47,7 @@ import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.databases.page.Page;
 import com.spisoft.quicknote.editor.pages.PagesAdapter;
+import com.spisoft.quicknote.server.HttpServer;
 import com.spisoft.quicknote.server.NewHttpProxy;
 import com.spisoft.quicknote.serviceactivities.CropWrapperActivity;
 import com.spisoft.quicknote.utils.FileUtils;
@@ -77,6 +82,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
     private static final String TAG = "EditorView";
     private static final int OPEN_MEDIA_REQUEST = 343;
+    private static final int REQUEST_SELECT_FILE = 344;
     private WebView mWebView;
     private Note mNote;
 
@@ -108,10 +114,11 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     private FakeFragmentManager mFragmentManager;
 
     private String mRootPath;
-    private NewHttpProxy mServer2;
+    private HttpServer mServer2;
     private boolean mSetNoteOnLoad;
     public static EditorView sEditorView;
     private String mSelectFileCallback;
+    private ValueCallback mUploadMessage;
 
     private void rename(String stringExtra, String path) {
         mWebView.loadUrl("javascript:replace('" + StringEscapeUtils.escapeEcmaScript(stringExtra) + "','" + StringEscapeUtils.escapeEcmaScript(path) + "')");
@@ -140,9 +147,30 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
-        if(requestCode == OPEN_MEDIA_REQUEST && resultCode == Activity.RESULT_OK){
+        if((requestCode == OPEN_MEDIA_REQUEST || requestCode == REQUEST_SELECT_FILE) && resultCode == Activity.RESULT_OK){
             Log.d(TAG, data.getDataString());
 
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            {
+                if (requestCode == REQUEST_SELECT_FILE)
+                {
+                    if (mUploadMessage == null)
+                        return;
+                    mUploadMessage.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data));
+                    mUploadMessage = null;
+                }
+            }
+            else if (requestCode == OPEN_MEDIA_REQUEST)
+            {
+                if (null == mUploadMessage)
+                    return;
+                // Use MainActivity.RESULT_OK if you're implementing WebView inside Fragment
+                // Use RESULT_OK only if you're implementing WebView inside an Activity
+                Uri result = data == null || resultCode != Activity.RESULT_OK ? null : data.getData();
+                mUploadMessage.onReceiveValue(result);
+                mUploadMessage = null;
+            }
+            /*
             Cursor cursor = null;
             String displayName = data.getData().getLastPathSegment();
             try {
@@ -173,7 +201,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
 
         }
     }
@@ -266,17 +294,60 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         mWebView.getSettings().setJavaScriptEnabled(true);
         //mWebView.getSettings().setSupportZoom(false);
         mWebView.setWebViewClient(mClient);
-        mWebView.setWebChromeClient(new WebChromeClient());
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            // For 3.0+ Devices (Start)
+            // onActivityResult attached before constructor
+            protected void openFileChooser(ValueCallback uploadMsg, String acceptType) {
+                mUploadMessage = uploadMsg;
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("image/*");
+                ((Activity)getContext()).startActivityForResult(Intent.createChooser(i, "File Browser"), OPEN_MEDIA_REQUEST);
+            }
+
+
+            // For Lollipop 5.0+ Devices
+            public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+                if (mUploadMessage != null) {
+                    mUploadMessage.onReceiveValue(null);
+                    mUploadMessage = null;
+                }
+
+                mUploadMessage = filePathCallback;
+
+                Intent intent = fileChooserParams.createIntent();
+                try {
+                    ((Activity)getContext()).startActivityForResult(intent, REQUEST_SELECT_FILE);
+                } catch (ActivityNotFoundException e) {
+                    mUploadMessage = null;
+                    Toast.makeText(((Activity)getContext()).getApplicationContext(), "Cannot Open File Chooser", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                return true;
+            }
+
+            //For Android 4.1 only
+            protected void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+                mUploadMessage = uploadMsg;
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                ((Activity)getContext()).startActivityForResult(Intent.createChooser(intent, "File Browser"), OPEN_MEDIA_REQUEST);
+            }
+
+            protected void openFileChooser(ValueCallback<Uri> uploadMsg) {
+                mUploadMessage = uploadMsg;
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType("image/*");
+                ((Activity)getContext()).startActivityForResult(Intent.createChooser(i, "File Chooser"), OPEN_MEDIA_REQUEST);
+            }
+        });
         mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(getContext()), "app");
         mHasLoaded = false;
         mRootPath = getContext().getFilesDir().getAbsolutePath();
-        try {
-            mServer2 = new NewHttpProxy(getContext());
-            mWebView.loadUrl(mServer2.getUrl("/tmp/reader.html"));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mServer2 = new HttpServer(getContext());
+        mWebView.loadUrl(mServer2.getUrl("/tmp/reader.html"));
         //prepare Reader
         //extract
 
@@ -296,7 +367,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         List<String> except =new ArrayList();
         except.add(mRootPath + "/tmp/reader.html");
         FileUtils.deleteRecursive(dir, except);
-        mWebView.loadUrl("javascript:loadPath('" + Uri.encode(mNote.path) + "')");
+        mWebView.loadUrl("javascript:loadPath('" + Uri.encode(RecentHelper.getRelativePath(mNote.path, getContext())) + "')");
 
     }
 
@@ -362,6 +433,19 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         }
 
         @JavascriptInterface
+        public void paste() {
+            final ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = clipboard.getPrimaryClip();
+            ClipData.Item item1 = clipData.getItemAt(0);
+            final String text = item1.getText().toString();
+            mWebView.post(new Runnable() {
+                              @Override
+                              public void run() {
+                                  mWebView.loadUrl("javascript:document.execCommand('insertHTML', false, '" + StringEscapeUtils.escapeEcmaScript(text) + "');", null);
+                              }});
+        }
+
+        @JavascriptInterface
         public void unlink(final String path, final String callback) {
 
             new AsyncTask<Void, Void, Void>() {
@@ -386,6 +470,12 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
                 }
             }.execute();
+        }
+
+        @JavascriptInterface
+        public void postMessage(String query, String message){
+            if(query.equals("exit"))
+                onBackPressed();
         }
         @JavascriptInterface
         public void readdir(String path, final String callback){

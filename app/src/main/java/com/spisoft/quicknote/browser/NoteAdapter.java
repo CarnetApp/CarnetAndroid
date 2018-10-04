@@ -87,7 +87,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                     oldNotes1.add(newPos, note);
                     notifyItemMoved(currentPos, newPos);
                 }
-                if(note instanceof Note && ((Note)note).isPinned != ((Note)notes.get(i)).isPinned){
+                if(note instanceof Note && notes.get(i) instanceof Note && ((Note)note).isPinned != ((Note)notes.get(i)).isPinned){
                     notifyItemChanged(newPos);
                 }
 

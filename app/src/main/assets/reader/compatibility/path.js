@@ -1,3 +1,5 @@
+'use strict';
+
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -18,13 +20,11 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
-var PathCompatibility = function(){};
+var PathCompatibility = function PathCompatibility() {};
 
-var splitPathRe =
-    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+var splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
 
-
-PathCompatibility.dirname = function(path) {
+PathCompatibility.dirname = function (path) {
   var result = posixSplitPath(path),
       root = result[0],
       dir = result[1];
@@ -41,8 +41,6 @@ PathCompatibility.dirname = function(path) {
 
   return root + dir;
 };
-
-
 
 function posixSplitPath(filename) {
   return splitPathRe.exec(filename).slice(1);

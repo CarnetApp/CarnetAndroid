@@ -3,24 +3,20 @@
 <html>
 
 <head>
-	<script src="<!ROOTPATH>compatibility/fs.js"></script>
-	<script src="<!ROOTPATH>compatibility/mkdirp.js"></script>
-	<script src="<!ROOTPATH>compatibility/archiver.js"></script>
-	<script src="<!ROOTPATH>compatibility/path.js"></script>
-	<script src="<!ROOTPATH>compatibility/file-opener.js"></script>
-	<script src="<!ROOTPATH>compatibility/keywords_db_manager.js"></script>
+	<script src="<!ROOTPATH>compatibility.js"></script>
 
 	<script src="<!ROOTPATH>reader/libs/jquery.min.js"></script>
-	<script src="<!ROOTPATH>utils/mdl_drawer_drag.js"></script>
+	<script src="<!ROOTPATH>libs/polyfill.js"></script>
+	<link rel="stylesheet" href="<!ROOTPATH>libs/polyfill.css">
+
 	<script>
 		var rootpath = "<!ROOTPATH>";
 		var tmppath = "tmp/";
 	</script>
-	<script src="<!ROOTPATH>compatibility.js"></script>
-
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
-	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/icon.css">
+	<!-- Material Design icon font -->
+	<link rel="stylesheet" href="<!ROOTPATH>libs/material-icons.css">
 	<link rel="stylesheet" href="<!ROOTPATH>libs/material.indigo-pink.min.css">
 	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/standalone.css">
 	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/simplecolorpicker/simple-color-picker.css">
@@ -29,25 +25,23 @@
 </head>
 
 <body>
-	<script>
-	</script>
-	<script src="<!ROOTPATH>reader/reader.js"></script>
-	<!--<script src="<!ROOTPATH>reader/libs/simplecolorpicker/index.js"></script>	-->
+
+	<script src="<!ROOTPATH>utils/mdl_drawer_drag.js"></script>
+
 	<script src="<!ROOTPATH>note/note-opener.js"></script>
-	<script src="<!ROOTPATH>compatibility/note-opener.js"></script>
-
 	<script src="<!ROOTPATH>browsers/note.js"></script>
-
 	<script src="<!ROOTPATH>browsers/file-browser.js"></script>
 	<script defer src="<!ROOTPATH>libs/material.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/jquery.webkitresize.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/jquery-ui.min.js"></script>
+	<!-- jquery mobile make nextcloud bug :(
 	<script src="<!ROOTPATH>reader/libs/jquery.mobile-min.js"></script>
-	<script src="<!ROOTPATH>reader/libs/jscolor.js"></script>
+	-->
 	<script src="<!ROOTPATH>reader/libs/jscolor.js"></script>
 	<script src="<!ROOTPATH>libs/jszip.min.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/Countable.js"></script>
 	<script src="<!ROOTPATH>utils/file_utils.js"></script>
+	<script src="<!ROOTPATH>requests/request_builder.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/jquery.ui.touch-punch.min.js"></script>
 
 	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/jquery-ui.css" media="screen">
@@ -55,21 +49,10 @@
 	<script src="<!ROOTPATH>reader/libs/jquery.hammer.js"></script>
 	<script src="<!ROOTPATH>reader/libs/jquery.mousewheel.min.js"></script>
 	<script src="<!ROOTPATH>reader/libs/imgViewer.js"></script>
-	<script type="text/javascript">
-		function resetScreenHeight() {
-			console.log("resetScreenHeight")
-			var screen = $(window).innerHeight(),
-				header = $("#header").height() + $("#toolbars").height(),
-				content = screen - header;
-			style = window.getComputedStyle(document.getElementById("header"));
-			if (style.getPropertyValue('display') == "none")
-				content = screen;
-			$("#center").height(content);
-			$("#editor").height(content - 45);
-			console.log(content - 45)
-		}
-	</script>
 
+	<script src="<!ROOTPATH>keywords/keywords_db_manager.js"></script>
+
+	<script src="<!ROOTPATH>reader/reader.js"></script>
 
 
 
@@ -130,32 +113,31 @@
 
 	<dialog class="mdl-dialog" id="color-picker-dialog" style="padding: 0;">
 		<div class="mdl-dialog__content jscolor {valueElement:'chosen-value', onFineChange:'writer.setPickerColor(this)' , shadow:false}"
-		    id="color-picker-div">
+		 id="color-picker-div">
 		</div>
 		<div class="mdl-dialog__actions">
 			<button type="button" class="mdl-button ok">OK</button>
 		</div>
 	</dialog>
 
-	<dialog class="mdl-dialog" id="new-keyword-dialog" onclick="return false;">
+	<dialog class="mdl-dialog" id="new-keyword-dialog">
 		<div class="mdl-dialog__content">
 			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
 				<input class="mdl-textfield__input" type="text" id="keyword-input">
 				<label class="mdl-textfield__label" for="sample3">Keyword</label>
 			</div>
 			<table style="width:100%;" id="keywords" class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
-
 			</table>
 
 		</div>
 		<div class="mdl-dialog__actions">
-			<button type="button" class="mdl-button ok" onclick="writer.addKeyword(document.getElementById('keyword-input').value); writer.newKeywordDialog.close(); return false;">OK</button>
+			<button type="button" id="button-add-keyword-ok" class="mdl-button ok">OK</button>
 		</div>
 	</dialog>
 
 	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
 mdl-layout--fixed-header">
-		<header id="header" class="mdl-layout__header">
+		<header id="header-carnet" class="mdl-layout__header">
 			<div class="mdl-layout__header-row" id="container-button" style="overflow-x: auto;overflow-y: hidden">
 				<button id="format-button" class="mdl-button mdl-js-button headerbar-button toolbar-button" for="format-toolbar">
 					Format
@@ -188,26 +170,22 @@ mdl-layout--fixed-header">
 			<nav class="mdl-navigation">
 				<span style="text-align:center; margin:10px;"> File</span>
 
-				<a class="mdl-navigation__link" href="" onclick="writer.warnNotYetImplemented(); return false;">Export note</a>
-				<a class="mdl-navigation__link" href="" onclick="writer.warnNotYetImplemented(); return false;">Rename</a>
-				<a class="mdl-navigation__link" href="" onclick="if(document.querySelector('.mdl-layout__drawer').classList.contains('is-visible')){ layout = document.querySelector('.mdl-layout');layout.MaterialLayout.toggleDrawer();}writer.askToExit(); return false;">Exit</a>
+				<a class="mdl-navigation__link" href="" id="export-button">Export note</a>
+				<a class="mdl-navigation__link" href="" id="rename-button">Rename</a>
+				<a class="mdl-navigation__link" id="exit">Exit</a>
 				<div class="stars">
 					<form action="">
-					  <input class="star star-5" id="star-5" type="radio" name="star" value="5"/>
-					  <label class="star star-5" for="star-5"></label>
-					  <input class="star star-4" id="star-4" type="radio" name="star" value="4"//>
-					  <label class="star star-4" for="star-4"></label>
-					  <input class="star star-3" id="star-3" type="radio" name="star" value="3"//>
-					  <label class="star star-3" for="star-3"></label>
-					  <input class="star star-2" id="star-2" type="radio" name="star" value="2"//>
-					  <label class="star star-2" for="star-2"></label>
-					  <input class="star star-1" id="star-1" type="radio" name="star" value="1"//>
-					  <label class="star star-1" for="star-1"></label>
+						<input class="star star-5" id="star-5" type="radio" name="star" value="5" />
+						<label class="star star-5" for="star-5"></label>
+						<input class="star star-4" id="star-4" type="radio" name="star" value="4" //> <label class="star star-4" for="star-4"></label>
+						<input class="star star-3" id="star-3" type="radio" name="star" value="3" //> <label class="star star-3" for="star-3"></label>
+						<input class="star star-2" id="star-2" type="radio" name="star" value="2" //> <label class="star star-2" for="star-2"></label>
+						<input class="star star-1" id="star-1" type="radio" name="star" value="1" //> <label class="star star-1" for="star-1"></label>
 					</form>
 				</div>
 				<span style="text-align:center; margin:10px;"> Keywords</span>
 
-				<a class="mdl-navigation__link" href="" onclick="writer.newKeywordDialog.showModal();return false;">Add a keyword</a>
+				<a class="mdl-navigation__link" href="" id="button-add-keyword">Add a keyword</a>
 				<span id="keywords-list">
 				</span>
 
@@ -220,45 +198,45 @@ mdl-layout--fixed-header">
 			<div id="toolbars">
 				<div id="media-toolbar" class="toolbar">
 					<div id="media-list"></div>
-
-					<button id="add-note-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button" onclick="writer.addMedia()">
+					<div class="mdl-spinner mdl-js-spinner is-active " id="media-loading"></div>
+					<button id="add-media-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button">
 						<img src="<!ROOTPATH>img/ic_add_white_24px.svg" />
 					</button>
 				</div>
 
 				<div id="format-toolbar" class="toolbar">
-					<button onclick="writer.formatDoc('bold');" class="mdl-button mdl-js-button headerbar-button">
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="bold">
 						<img src="<!ROOTPATH>img/ic_format_bold_white_24px.svg" />
 					</button>
-					<button onclick="writer.formatDoc('italic');" class="mdl-button mdl-js-button headerbar-button">
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="italic">
 						<img src="<!ROOTPATH>img/ic_format_italic_white_24px.svg" />
 					</button>
-					<button onclick="writer.formatDoc('underline');" class="mdl-button mdl-js-button headerbar-button">
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="underline">
 						<img src="<!ROOTPATH>img/ic_format_underlined_white_24px.svg" />
 					</button>
 
-					<button onclick="    writer.displayTextColorPicker();" class="mdl-button mdl-js-button headerbar-button">
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="text-color">
 						<img src="<!ROOTPATH>img/ic_format_color_text_white_24px.svg" />
 					</button>
-					<button onclick="writer.displayFillColorPicker();" class="mdl-button mdl-js-button headerbar-button">
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="fill-color">
 						<img src="<!ROOTPATH>img/ic_format_color_fill_white_24px.svg" />
 					</button>
-					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.decreaseFontSize();">
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="size-minus">
 						<img src="<!ROOTPATH>img/ic_format_size_white_24px.svg" />-
 					</button>
-					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.increaseFontSize();">
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="size-plus">
 						<img src="<!ROOTPATH>img/ic_format_size_white_24px.svg" />+
 					</button>
-					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.formatDoc('justifyleft');">
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="justifyleft">
 						<img src="<!ROOTPATH>img/ic_format_align_left_white_24px.svg" />
 					</button>
-					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.formatDoc('justifycenter');">
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="justifycenter">
 						<img src="<!ROOTPATH>img/ic_format_align_center_white_24px.svg" />
 					</button>
-					<button class="mdl-button mdl-js-button headerbar-button" onclick="writer.formatDoc('justifyright');">
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="justifyright">
 						<img src="<!ROOTPATH>img/ic_format_align_right_white_24px.svg" />
 					</button>
-					<button class="mdl-button mdl-js-button headerbar-button">
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="justify">
 						<img src="<!ROOTPATH>img/ic_format_align_justify_white_24px.svg" />
 					</button>
 					<!--<select>
@@ -270,15 +248,18 @@ mdl-layout--fixed-header">
 				-->
 				</div>
 				<div id="edit-toolbar" class="toolbar">
-					<button id="copy-button" class="mdl-button mdl-js-button headerbar-button" onclick="writer.copy()">
+					<button id="copy-button" class="mdl-button mdl-js-button headerbar-button in-toolbar-button">
 						copy
 					</button>
-					<button id="copy-button" class="mdl-button mdl-js-button headerbar-button" onclick="writer.paste()">
+					<button id="paste-button" class="mdl-button mdl-js-button headerbar-button in-toolbar-button">
 						paste
+					</button>
+					<button id="select-all-button" class="mdl-button mdl-js-button headerbar-button in-toolbar-button">
+						Select All
 					</button>
 				</div>
 				<div id="tools-toolbar" class="toolbar">
-					<button id="tools-button" onclick="writer.displayCountDialog()" class="mdl-button mdl-js-button headerbar-button">
+					<button id="statistics-button" class="mdl-button mdl-js-button headerbar-button in-toolbar-button">
 						Statistics
 					</button>
 
@@ -303,52 +284,12 @@ mdl-layout--fixed-header">
 
 	</div>
 	<script>
-		var writer = undefined;
-
-		function loadPath(path) {
-			if (writer == undefined) {
-				writer = new Writer(document);
-				writer.init();
-			}
-			writer.reset();
-			var note = new Note("", "", path, undefined);
-			writer.setNote(note);
-			console.log("extract")
-			writer.extractNote();
-		}
-		if (loaded == undefined)
-			var loaded = false; //don't know why, loaded twice on android
-		if (!loaded) {
-			console.log("loading html ");
-
-			function getParameterByName(name, url) {
-				if (!url) {
-					url = window.location.href;
-				}
-				name = name.replace(/[\[\]]/g, "\\$&");
-				var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-					results = regex.exec(url);
-				if (!results) return null;
-				if (!results[2]) return '';
-				return decodeURIComponent(results[2].replace(/\+/g, " ").replace(/%2F/g, "/"));
-			}
-
-			$(window).on('resize', resetScreenHeight);
-
-
-			var path = getParameterByName("path");
-			var tmp = getParameterByName("tmppath");
-			if (tmp != null)
-				tmppath = tmp;
-			if (path != undefined) {
-				console.log("path " + getParameterByName("path"))
-				loadPath(path)
-
-			}
-
-			loaded = true;
-		}
 	</script>
+	<input type="file" id="input_file" />
+	<span style="display:none;" id="api-url">
+		<!APIURL>/</span>
+	<span style="display:none;" id="root-url">
+		<!ROOTURL>/</span>
 
 </body>
 </head>

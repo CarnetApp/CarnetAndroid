@@ -6,12 +6,22 @@ import android.net.Uri;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
+import com.spisoft.quicknote.utils.FileUtils;
+import com.spisoft.quicknote.utils.Utils;
+import com.spisoft.quicknote.utils.ZipUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,6 +30,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
@@ -35,7 +47,7 @@ public class NewHttpProxy {
 	private final Context mContext;
 	private Uri mUri;
 	private final String mName ="";
-
+    private final String extractedNotePath;
 	private String fileMimeType;
 	private long length;
 	private static final int BUFFER_SIZE = 8192;
@@ -55,6 +67,8 @@ public class NewHttpProxy {
 
 	public NewHttpProxy(Context ct) throws IOException{
 		mContext = ct.getApplicationContext();
+        extractedNotePath = mContext.getCacheDir().getAbsolutePath()+"/currentnote";
+
 		if(serverSocket==null||serverSocket.isClosed()) {
 			Log.d("serverdebug","creating");
 			serverSocket = new ServerSocket(0);
@@ -93,6 +107,7 @@ public class NewHttpProxy {
 		private int mRlen=-1;
 		private InputStream mInS=null;
 		private String fileMimeType =""; // this might be changed we a subtitle is sent
+        private Uri mRequestedUri = null;
 
 		HttpSession(Socket s, String fileMimeType){
 			this.fileMimeType = fileMimeType;
@@ -153,6 +168,8 @@ public class NewHttpProxy {
 							startFrom = Long.parseLong(startR);
 							needsToStream = true;
 						}
+						Log.d("pathdebug","encoded path "+encodedPath);
+                        mRequestedUri = Uri.parse(encodedPath);
 						path = Uri.decode(encodedPath);
 						path = Uri.parse(path).getPath();
 					}
@@ -183,12 +200,26 @@ public class NewHttpProxy {
 					name.eng.srt
 				 */
 				if(path!=null){
-					Log.d("pathdebug","path: "+mContext.getFilesDir().getAbsolutePath()+path);
+					Log.d("pathdebug","path: "+path);
 
-					fileMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(path));
+					if(path.startsWith("/api/")){
+                        String subpath = path.substring("/api/".length());
+                        switch (subpath){
+                            case "note/open":
+                                openNote(mRequestedUri.getQueryParameter("path"));
+                                break;
+							case "keywordsdb":
+								getKeywordDB();
+								break;
 
-						is = new FileInputStream(mContext.getFilesDir().getAbsolutePath()+path);
-					length =is.available();
+                        }
+					}
+					else {
+						fileMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(path));
+
+						is = new FileInputStream(mContext.getFilesDir().getAbsolutePath() + path);
+						length = is.available();
+					}
 
 				}
 
@@ -197,6 +228,55 @@ public class NewHttpProxy {
 
 			}
 
+		}
+
+		private void getKeywordDB() {
+			JSONObject object = null;
+			try {
+				object = KeywordsHelper.getInstance(mContext).getJson();
+				try {
+					is = new ByteArrayInputStream(object.toString().getBytes());
+					length = is.available();
+					fileMimeType = "application/json";
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
+
+		private void openNote(String path) {
+			Log.d(TAG, "opening note "+path);
+			try {
+
+				if(new File(path).exists()) {
+					JSONObject object = new JSONObject();
+					object.put("id","");
+					ZipUtils.unzip(path, extractedNotePath);
+					File f = new File(extractedNotePath, "index.html");
+					if (f.exists()) {
+						String index = FileUtils.readFile(f.getAbsolutePath());
+						object.put("html",index);
+					}
+					f = new File(extractedNotePath, "metadata.json");
+					if (f.exists()) {
+						String meta = FileUtils.readFile(f.getAbsolutePath());
+						object.put("metadata",new JSONObject(meta));
+					}
+					is = new ByteArrayInputStream(object.toString().getBytes());
+					length = is.available();
+					fileMimeType = "application/json";
+				}
+
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		}
 
 		private void handleResponse(Socket socket) {
@@ -339,7 +419,8 @@ public class NewHttpProxy {
 			return path;
 		}
 	}
-	public void setUri(String uri){
+
+    public void setUri(String uri){
 		Log.d("pathdebug","setUri"+uri);
 		mUri = Uri.parse(uri);
 	}

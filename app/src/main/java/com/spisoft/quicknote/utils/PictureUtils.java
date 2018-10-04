@@ -7,6 +7,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by alexandre on 18/10/16.
@@ -44,5 +46,17 @@ public class PictureUtils {
         FileOutputStream fo = new FileOutputStream(f);
         fo.write(bytes.toByteArray());
         fo.close();
+    }
+
+    public static boolean isPicture(String name) {
+        String ext = FileUtils.getExtension(name);
+        List<String> exts = new ArrayList<>();
+        exts.add("png");
+        exts.add("jpg");
+        exts.add("bmp");
+        exts.add("gif");
+        exts.add("jpeg");
+
+        return exts.contains(ext.toLowerCase());
     }
 }

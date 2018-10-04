@@ -154,7 +154,7 @@ public class KeywordsHelper {
         return sb.toString();
     }
 
-    private JSONObject getJson() throws JSONException {
+    public JSONObject getJson() throws JSONException {
         Log.d("jsondebug", "getJson");
 
         String jsonString = read();

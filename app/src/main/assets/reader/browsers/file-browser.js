@@ -1,109 +1,187 @@
-var fs = require("fs");
-const pathTool = require('path')
-var getParentFolderFromPath = require('path').dirname;
-var FileBrowser = function (path) {
+"use strict";
+
+var FileBrowser = function FileBrowser(path) {
     this.path = path;
-}
+};
 
 FileBrowser.prototype.createFolder = function (name, callback) {
     fs.mkdir(pathTool.join(this.path, name), function (e) {
         callback();
     });
-
-}
+};
 
 FileBrowser.prototype.list = function (callback) {
-    var {
-        ipcRenderer,
-        remote
-    } = require('electron');
-    var main = remote.require("./main.js");
-    var mainPath = main.getNotePath();
 
     if (this.path == "recentdb://") {
-        console.log("getting recent")
-        var db = new RecentDBManager(mainPath + "/quickdoc/recentdb/" + main.getAppUid())
+        console.log("getting recent");
+        var db = new RecentDBManager();
         db.getFlatenDB(function (err, flaten, pin) {
-            console.log(JSON.stringify(flaten))
+            console.log(JSON.stringify(flaten));
             var files = [];
-            for (let filePath of pin) {
-                var filename = filePath;
-                filePath = mainPath + "/" + filePath
-                file = new File(filePath, true, filename);
-                file.isPinned = true;
-                files.push(file)
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = pin[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var filePath = _step.value;
+
+                    var filename = filePath;
+                    filePath = filePath;
+                    file = new File(filePath, true, filename);
+                    file.isPinned = true;
+                    files.push(file);
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
             }
-            for (let filePath of flaten) {
-                if (pin.indexOf(filePath) != -1)
-                    continue;
-                var filename = filePath;
-                filePath = mainPath + "/" + filePath
-                file = new File(filePath, true, filename);
-                files.push(file)
+
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+                for (var _iterator2 = flaten[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var _filePath = _step2.value;
+
+                    if (pin.indexOf(_filePath) != -1) continue;
+                    var filename = _filePath;
+                    _filePath = _filePath;
+                    file = new File(_filePath, true, filename);
+                    files.push(file);
+                }
+            } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
+                    }
+                } finally {
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
+                    }
+                }
             }
-            callback(files)
-        })
+
+            callback(files, true);
+        });
     } else if (this.path.startsWith("keyword://")) {
-        console.log("getting keyword")
-        var KeywordsDBManager = require("./keywords/keywords_db_manager").KeywordsDBManager;
-        var keywordsDBManager = new KeywordsDBManager(main.getNotePath() + "/quickdoc/keywords/" + main.getAppUid())
+        console.log("getting keyword");
+        var keywordsDBManager = new KeywordsDBManager();
         var filebrowser = this;
         keywordsDBManager.getFlatenDB(function (error, data) {
             var files = [];
-            console.log("keyword " + filebrowser.path.substring("keyword://".length))
-            for (let filePath of data[filebrowser.path.substring("keyword://".length)]) {
-                var filename = filePath;
-                console.log("file " + filePath)
+            console.log("keyword " + filebrowser.path.substring("keyword://".length));
+            var _iteratorNormalCompletion3 = true;
+            var _didIteratorError3 = false;
+            var _iteratorError3 = undefined;
 
-                filePath = mainPath + "/" + filePath
-                file = new File(filePath, true, filename);
-                files.push(file)
+            try {
+                for (var _iterator3 = data[filebrowser.path.substring("keyword://".length)][Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                    var filePath = _step3.value;
+
+                    var filename = filePath;
+                    console.log("file " + filePath);
+
+                    filePath = filePath;
+                    file = new File(filePath, true, filename);
+                    files.push(file);
+                }
+            } catch (err) {
+                _didIteratorError3 = true;
+                _iteratorError3 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                        _iterator3.return();
+                    }
+                } finally {
+                    if (_didIteratorError3) {
+                        throw _iteratorError3;
+                    }
+                }
             }
-            callback(files)
-        })
+
+            callback(files, true);
+        });
     } else {
-        fs.readdir(this.path, (err, dir) => {
-            //console.log(dir);
+        var fbrowser = this;
+        RequestBuilder.sRequestBuilder.get(this.path.startsWith("search://") ? "/notes/getSearchCache" : "/browser/list?path=" + encodeURIComponent(this.path), function (error, data) {
+            if (error) {
+                callback(error);
+                return;
+            }
             var files = [];
             var dirs_in = [];
             var files_in = [];
-            for (let filePath of dir) {
-                var filename = filePath;
-                if (filename == "quickdoc" || filename.startsWith("."))
-                    continue;
-                filePath = this.path + "/" + filePath
-                var stat = fs.statSync(filePath);
-                file = new File(filePath, stat.isFile(), filename);
-                console.log(filePath)
-                if (stat.isFile())
-                    files_in.push(file)
-                else
-                    dirs_in.push(file)
+            var endOfSearch = !fbrowser.path.startsWith("search://");
+            var _iteratorNormalCompletion4 = true;
+            var _didIteratorError4 = false;
+            var _iteratorError4 = undefined;
 
+            try {
+                for (var _iterator4 = data[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                    var node = _step4.value;
+
+                    console.log(node);
+                    if (node == "end_of_search") {
+                        endOfSearch = true;
+                        continue;
+                    }
+
+                    if (node.path == "quickdoc") continue;
+                    file = new File(node.path, !node.isDir, node.name);
+                    if (!node.isDir) files_in.push(file);else dirs_in.push(file);
+                }
+            } catch (err) {
+                _didIteratorError4 = true;
+                _iteratorError4 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                        _iterator4.return();
+                    }
+                } finally {
+                    if (_didIteratorError4) {
+                        throw _iteratorError4;
+                    }
+                }
             }
-            files = files.concat(dirs_in)
-            files = files.concat(files_in)
 
-            callback(files)
+            files = files.concat(dirs_in);
+            files = files.concat(files_in);
+            callback(files, endOfSearch);
         });
     }
-}
+};
 
-var File = function (path, isFile, name, extension) {
+var File = function File(path, isFile, name, extension) {
     this.path = path;
     this.isFile = isFile;
     this.name = name;
     this.extension = extension;
-
-}
+};
 File.prototype.getName = function () {
     return getFilenameFromPath(this.path);
-}
+};
 
 function getFilenameFromPath(path) {
     return path.replace(/^.*[\\\/]/, '');
 }
 
 function stripExtensionFromName(name) {
-    return name.replace(/\.[^/.]+$/, "")
+    return name.replace(/\.[^/.]+$/, "");
 }

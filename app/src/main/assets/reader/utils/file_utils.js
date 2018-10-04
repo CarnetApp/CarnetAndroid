@@ -1,4 +1,6 @@
-var FileUtils = function () {}
+"use strict";
+
+var FileUtils = function FileUtils() {};
 FileUtils.base64MimeType = function (encoded) {
   var result = null;
 
@@ -13,55 +15,56 @@ FileUtils.base64MimeType = function (encoded) {
   }
 
   return result;
-}
+};
 
 FileUtils.isFileImage = function (filePath) {
-  filePath = filePath.toLowerCase()
-  return filePath.endsWith(".png") || filePath.endsWith(".jpg") || filePath.endsWith(".jpeg") || filePath.endsWith(".gif") || filePath.endsWith(".bmp")
-}
+  filePath = filePath.toLowerCase();
+  return filePath.endsWith(".png") || filePath.endsWith(".jpg") || filePath.endsWith(".jpeg") || filePath.endsWith(".gif") || filePath.endsWith(".bmp");
+};
 
 FileUtils.getExtensionFromMimetype = function (mimetype) {
   switch (mimetype) {
     case "audio/3gpp":
-      return "3gpp"
+      return "3gpp";
     case "image/jpeg":
-      return "jpg"
+      return "jpg";
     case "image/png":
       return "png";
   }
-}
+};
 
 FileUtils.geMimetypeFromExtension = function (extension) {
   switch (extension) {
     case "3gpp":
-      return "audio/3gpp"
+      return "audio/3gpp";
     case "jpg":
-      return "image/jpeg"
+      return "image/jpeg";
     case "png":
       return "image/png";
   }
-}
+};
 
-FileUtils.getExtensionFromPath = function(path){
+FileUtils.getExtensionFromPath = function (path) {
   return path.split('.').pop().toLowerCase();
-}
+};
 
-var fs = require('fs');
 FileUtils.deleteFolderRecursive = function (path) {
+  var fs = require('fs');
   var utils = this;
   if (fs.existsSync(path)) {
     fs.readdirSync(path).forEach(function (file, index) {
       var curPath = path + "/" + file;
-      if (fs.lstatSync(curPath).isDirectory()) { // recurse
+      if (fs.lstatSync(curPath).isDirectory()) {
+        // recurse
         utils.deleteFolderRecursive(curPath);
-      } else { // delete file
+      } else {
+        // delete file
         fs.unlinkSync(curPath);
       }
     });
     fs.rmdirSync(path);
   }
 };
-
 
 FileUtils.base64ToBlob = function (base64) {
   var binary = atob(base64);
@@ -77,12 +80,34 @@ FileUtils.base64ToBlob = function (base64) {
 
 FileUtils.getFilename = function (filepath) {
   return filepath.replace(/^.*[\\\/]/, '');
-}
+};
 
 FileUtils.stripExtensionFromName = function (name) {
-  return name.replace(/\.[^/.]+$/, "")
-}
+  return name.replace(/\.[^/.]+$/, "");
+};
 
-FileUtils.getParentFolderFromPath = require('path').dirname;
+FileUtils.splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+
+FileUtils.posixSplitPath = function (filename) {
+  return FileUtils.splitPathRe.exec(filename).slice(1);
+};
+
+FileUtils.getParentFolderFromPath = function (path) {
+  var result = FileUtils.posixSplitPath(path),
+      root = result[0],
+      dir = result[1];
+
+  if (!root && !dir) {
+    // No dirname whatsoever
+    return '.';
+  }
+
+  if (dir) {
+    // It has a dirname, strip trailing slash
+    dir = dir.substr(0, dir.length - 1);
+  }
+
+  return root + dir;
+};
 
 exports.FileUtils = FileUtils;
