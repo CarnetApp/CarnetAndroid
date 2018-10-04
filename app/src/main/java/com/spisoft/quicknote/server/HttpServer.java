@@ -258,7 +258,7 @@ public class HttpServer extends NanoHTTPD {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return NanoHTTPD.newFixedLengthResponse(Response.Status.NOT_FOUND,"","");
+        return NanoHTTPD.newFixedLengthResponse(Response.Status.OK,"","");
     }
 
     public String getUrl(String path){
