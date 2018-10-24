@@ -1,5 +1,6 @@
 package com.spisoft.quicknote.editor;
 
+import android.Manifest;
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -9,6 +10,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -21,6 +23,8 @@ import android.os.Handler;
 import android.os.Message;
 
 import android.provider.OpenableColumns;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.Log;
@@ -29,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
+import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -83,6 +88,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     private static final String TAG = "EditorView";
     private static final int OPEN_MEDIA_REQUEST = 343;
     private static final int REQUEST_SELECT_FILE = 344;
+    private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 345;
     private WebView mWebView;
     private Note mNote;
 
@@ -119,6 +125,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     public static EditorView sEditorView;
     private String mSelectFileCallback;
     private ValueCallback mUploadMessage;
+    private PermissionRequest myRequest;
 
     private void rename(String stringExtra, String path) {
         mWebView.loadUrl("javascript:replace('" + StringEscapeUtils.escapeEcmaScript(stringExtra) + "','" + StringEscapeUtils.escapeEcmaScript(path) + "')");
@@ -143,6 +150,24 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     public EditorView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
+    }
+
+    public boolean onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_RECORD_AUDIO: {
+                Log.d("WebView", "PERMISSION FOR AUDIO");
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    myRequest.grant(myRequest.getResources());
+
+                } else {
+
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -295,6 +320,20 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         //mWebView.getSettings().setSupportZoom(false);
         mWebView.setWebViewClient(mClient);
         mWebView.setWebChromeClient(new WebChromeClient() {
+
+            @Override
+            public void onPermissionRequest(final PermissionRequest request) {
+                myRequest = request;
+
+                for(String permission : request.getResources()) {
+                    switch(permission) {
+                        case "android.webkit.resource.AUDIO_CAPTURE": {
+                            askForPermission(request.getOrigin().toString(), Manifest.permission.RECORD_AUDIO, PERMISSIONS_REQUEST_RECORD_AUDIO);
+                            break;
+                        }
+                    }
+                }
+            }
             // For 3.0+ Devices (Start)
             // onActivityResult attached before constructor
             protected void openFileChooser(ValueCallback uploadMsg, String acceptType) {
@@ -358,7 +397,22 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
     }
 
+    public void askForPermission(String origin, String permission, int requestCode) {
+        Log.d("WebView", "inside askForPermission for" + origin + "with" + permission);
 
+        if (ContextCompat.checkSelfPermission(getContext().getApplicationContext(),
+                permission)
+                != PackageManager.PERMISSION_GRANTED) {
+           // No explanation needed, we can request the permission.
+            ActivityCompat.requestPermissions((Activity) getContext(),
+                    new String[]{permission},
+                    requestCode);
+
+        } else {
+            if(Build.VERSION.SDK_INT>=21)
+                myRequest.grant(myRequest.getResources());
+        }
+    }
 
     public void loadNote(){
         Log.d(TAG, "loadNote");

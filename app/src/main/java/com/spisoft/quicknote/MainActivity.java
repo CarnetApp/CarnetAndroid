@@ -130,7 +130,8 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
-        mPermissionChecker.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        if(!(EditorView.sEditorView != null && EditorView.sEditorView.onRequestPermissionsResult(requestCode, permissions, grantResults)))
+            mPermissionChecker.onRequestPermissionsResult(requestCode,permissions,grantResults);
     }
 
     public void setTitle(int str){

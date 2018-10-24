@@ -122,6 +122,13 @@ public class HttpServer extends NanoHTTPD {
                                 return addMedia(post.get("path").get(0), files.get("media[]"), post.get("media[]").get(0));
 
                     }
+                } else if(Method.DELETE.equals(method)){
+                    switch (subpath) {
+                        case "note/open/0/media":
+                            return deleteMedia(parms.get("path").get(0), parms.get("media").get(0));
+
+                    }
+
                 }
 
             }
@@ -138,6 +145,17 @@ public class HttpServer extends NanoHTTPD {
         }
 
         return NanoHTTPD.newChunkedResponse(status, fileMimeType, rinput);
+    }
+
+    private Response deleteMedia(String path, String media) {
+        if(media.contains("../") || media.equals(".."))
+            return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
+        if(!mCurrentNotePath.equals(path)){
+            return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
+        }
+        new File(extractedNotePath+"/data/"+media).delete();
+        saveNote(path);
+        return listOpenMedia();
     }
 
     public void setCurrentNotePath(String path){
@@ -203,7 +221,7 @@ public class HttpServer extends NanoHTTPD {
         if(f.exists()) {
             for(File c : f.listFiles()){
                 if(!c.getName().startsWith("preview_")){
-                    array.put("note/open/0/getMedia/"+c.getName());
+                    array.put("/api/note/open/0/getMedia/"+c.getName());
                 }
             }
         }
@@ -253,9 +271,10 @@ public class HttpServer extends NanoHTTPD {
             List<String> except =new ArrayList();
             except.add(extractedNotePath + "/reader.html");
             FileUtils.deleteRecursive(dir, except);
+            JSONObject object = new JSONObject();
+            object.put("id","0");
             if(new File(path).exists()) {
-                JSONObject object = new JSONObject();
-                object.put("id","0");
+
                 ZipUtils.unzip(path, extractedNotePath);
                 File f = new File(extractedNotePath, "index.html")
                         ;
@@ -268,9 +287,11 @@ public class HttpServer extends NanoHTTPD {
                     String meta = FileUtils.readFile(f.getAbsolutePath());
                     object.put("metadata",new JSONObject(meta));
                 }
-                return  NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/json",new ByteArrayInputStream(object.toString().getBytes()));
 
-            }
+            } else object.put("error","not found");
+
+            return  NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/json",new ByteArrayInputStream(object.toString().getBytes()));
+
 
 
         } catch (IOException e) {

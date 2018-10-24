@@ -1,0 +1,8 @@
+.mdl-layout__container {
+    height: calc(100% - 50px) !important;
+}
+
+#writer-iframe {
+    top: 50px;
+    height: calc(100% - 50px) !important;
+}

@@ -3,7 +3,10 @@
 <html>
 
 <head>
-	<script src="<!ROOTPATH>compatibility.js"></script>
+	<script src="<!ROOTPATH>requests/request_builder.js"></script>
+	<script src="<!ROOTPATH>compatibility/electron/request_builder.js"></script>
+	<script src="<!ROOTPATH>compatibility/compatibility.js"></script>
+	<script src="<!ROOTPATH>compatibility/compatibility-editor.js"></script>
 
 	<script src="<!ROOTPATH>reader/libs/jquery.min.js"></script>
 	<script src="<!ROOTPATH>libs/polyfill.js"></script>
@@ -19,16 +22,15 @@
 	<link rel="stylesheet" href="<!ROOTPATH>libs/material-icons.css">
 	<link rel="stylesheet" href="<!ROOTPATH>libs/material.indigo-pink.min.css">
 	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/standalone.css">
+	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/recorder.css">
+
 	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/simplecolorpicker/simple-color-picker.css">
-	<script>
-	</script>
+
 </head>
 
 <body>
 
 	<script src="<!ROOTPATH>utils/mdl_drawer_drag.js"></script>
-
-	<script src="<!ROOTPATH>note/note-opener.js"></script>
 	<script src="<!ROOTPATH>browsers/note.js"></script>
 	<script src="<!ROOTPATH>browsers/file-browser.js"></script>
 	<script defer src="<!ROOTPATH>libs/material.js"></script>
@@ -41,7 +43,6 @@
 	<script src="<!ROOTPATH>libs/jszip.min.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/Countable.js"></script>
 	<script src="<!ROOTPATH>utils/file_utils.js"></script>
-	<script src="<!ROOTPATH>requests/request_builder.js"></script>
 	<script src="<!ROOTPATH>reader/assets/scripts/jquery.ui.touch-punch.min.js"></script>
 
 	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/jquery-ui.css" media="screen">
@@ -49,6 +50,10 @@
 	<script src="<!ROOTPATH>reader/libs/jquery.hammer.js"></script>
 	<script src="<!ROOTPATH>reader/libs/jquery.mousewheel.min.js"></script>
 	<script src="<!ROOTPATH>reader/libs/imgViewer.js"></script>
+
+	<script src="<!ROOTPATH>reader/libs/recorder/recorder.min.js"></script>
+	<script src="<!ROOTPATH>reader/carnet-recorder.js"></script>
+	<script src="<!ROOTPATH>reader/libs/wavesurfer.min.js"></script>
 
 	<script src="<!ROOTPATH>keywords/keywords_db_manager.js"></script>
 
@@ -127,6 +132,7 @@
 				<label class="mdl-textfield__label" for="sample3">Keyword</label>
 			</div>
 			<table style="width:100%;" id="keywords" class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+
 			</table>
 
 		</div>
@@ -202,6 +208,10 @@ mdl-layout--fixed-header">
 					<button id="add-media-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button">
 						<img src="<!ROOTPATH>img/ic_add_white_24px.svg" />
 					</button>
+					<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" id="add-media-menu" for="add-media-button">
+						<li class="mdl-menu__item" id="add-file-button">File/Photo</li>
+						<li class="mdl-menu__item" id="add-recording-button">Recording</li>
+					</ul>
 				</div>
 
 				<div id="format-toolbar" class="toolbar">
@@ -279,17 +289,42 @@ mdl-layout--fixed-header">
 		</main>
 	</div>
 	<div id="fullscreen-viewer"></div>
+	<dialog class="mdl-dialog" id="recorder-container">
+		<div id="recorder-file-buttons">
+			<button id="delete-button" class="mdl-button mdl-js-button"><i class="material-icons">
+					delete
+				</i></button>
+			<button id="save-button" class="mdl-button mdl-js-button"><i class="material-icons">
+					save
+				</i></button>
+		</div>
+		<div style="clear: right;"></div>
+		<canvas id="analyser"></canvas>
+		<div id="waveform"></div>
+		<div id="controller">
+			<span id="current-time">0:00</span>
+
+			<button class="mdl-button mdl-js-button" id="start"><i class="material-icons" id="startIcon">
+					mic
+				</i></button>
+			<button class="mdl-button mdl-js-button" id="stopButton" disabled><i class="material-icons">stop</i>
+			</button>
+
+
+			<span id="total-time">0:00</span>
+		</div>
+	</dialog>
+
 	<div id="loading">
 		<div class="mdl-spinner mdl-js-spinner is-active" style="width:200px; height:200px; top:50%; left:50%; margin-top:-150px; margin-left:-100px;"></div>
 
 	</div>
-	<script>
-	</script>
+
 	<input type="file" id="input_file" />
 	<span style="display:none;" id="api-url">
-		<!APIURL>/</span>
+		<!APIURL></span>
 	<span style="display:none;" id="root-url">
-		<!ROOTURL>/</span>
+		<!ROOTURL></span>
 
 </body>
 </head>
