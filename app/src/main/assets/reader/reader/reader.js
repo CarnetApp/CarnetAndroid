@@ -389,38 +389,19 @@ Writer.prototype.init = function () {
 
   this.statsDialog = this.elem.querySelector('#statsdialog');
   this.showDialogButton = this.elem.querySelector('#show-dialog');
+  var dias = document.getElementsByClassName("mdl-dialog");
 
-  if (!this.statsDialog.showModal) {
-    dialogPolyfill.registerDialog(this.statsDialog);
+  for (var i = 0; i < dias.length; i++) {
+    if (!dias[i].showModal) dialogPolyfill.registerDialog(dias[i]);
   }
 
   this.statsDialog.querySelector('.ok').addEventListener('click', function () {
     writer.statsDialog.close();
   });
   this.colorPickerDialog = this.elem.querySelector('#color-picker-dialog');
-
-  if (!this.colorPickerDialog.showModal) {
-    dialogPolyfill.registerDialog(this.colorPickerDialog);
-  }
-
   this.styleDialog = this.elem.querySelector('#style-dialog');
-
-  if (!this.styleDialog.showModal) {
-    dialogPolyfill.registerDialog(this.styleDialog);
-  }
-
   this.recorderDialog = this.elem.querySelector('#recorder-container');
-
-  if (!this.recorderDialog.showModal) {
-    dialogPolyfill.registerDialog(this.recorderDialog);
-  }
-
   this.newKeywordDialog = this.elem.querySelector('#new-keyword-dialog');
-
-  if (!this.newKeywordDialog.showModal) {
-    dialogPolyfill.registerDialog(this.newKeywordDialog);
-  }
-
   this.oEditor = document.getElementById("editor");
   this.mediaList = document.getElementById("media-list");
   this.fullscreenViewer = document.getElementById("fullscreen-viewer");
@@ -743,6 +724,11 @@ Writer.prototype.reset = function () {
 <div id="floating">\
 \
 </div>';
+  var dias = document.getElementsByClassName("mdl-dialog");
+
+  for (var i = 0; i < dias.length; i++) {
+    dias[i].close();
+  }
 };
 
 Writer.prototype.setColor = function (color) {

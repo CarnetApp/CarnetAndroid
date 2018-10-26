@@ -69,6 +69,7 @@ CarnetRecorder.prototype.init = function () {
       monitorGain: 0,
       recordingGain: 1,
       numberOfChannels: 2,
+      encoderBitRate: 192000,
       encoderSampleRate: 48000,
       encoderPath: rootpath + "reader/libs/recorder/encoderWorker.min.js"
     };
