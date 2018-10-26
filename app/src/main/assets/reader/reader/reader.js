@@ -728,7 +728,7 @@ Writer.prototype.reset = function () {
   var dias = document.getElementsByClassName("mdl-dialog");
 
   for (var i = 0; i < dias.length; i++) {
-    dias[i].close();
+    if (dias[i].open) dias[i].close();
   }
 };
 
