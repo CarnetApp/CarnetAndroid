@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
             //not set but already start  : V1
             PreferenceHelper.setCurrentNoteVersion(getApplicationContext(),1);
         }
-
+        setContentView(R.layout.activity_main);
+        mLockLayout = (FrameLayout)findViewById(R.id.lock_layout);
         if(!UpdaterActivity.startUpdateIfNeeded(this, UPDATE_REQUEST_CODE)){
             onUpdateDone();
         }
@@ -75,8 +76,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
             }
         mPermissionChecker = new PermissionChecker();
 
-        setContentView(R.layout.activity_main);
-        mLockLayout = (FrameLayout)findViewById(R.id.lock_layout);
+
 
 
         mPermissionChecker.checkAndRequestPermission(this);
