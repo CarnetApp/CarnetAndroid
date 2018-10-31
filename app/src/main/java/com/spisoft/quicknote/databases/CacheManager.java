@@ -74,7 +74,7 @@ public class CacheManager {
     }
 
     public synchronized void addToCache(Note note){
-
+        if(cache == null ) return;
         cache.put(note.path, note);
     }
 
