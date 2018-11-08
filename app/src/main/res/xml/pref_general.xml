@@ -36,7 +36,11 @@
 
         <Preference
             android:key="pref_remove_ad_pay"
-            android:title="@string/remove_ad"
+            android:title="@string/donate_liberapay"
+            />
+        <Preference
+            android:key="pref_paypal"
+            android:title="@string/donate_paypal"
             />
 
     </PreferenceCategory>

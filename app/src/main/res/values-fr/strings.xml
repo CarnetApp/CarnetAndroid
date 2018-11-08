@@ -28,7 +28,8 @@
     <string name="title_activity_settings">Paramètres</string>
     <string name="general_header">Général</string>
     <string name="paiement_header">Paiement</string>
-    <string name="remove_ad">Faire un don</string>
+    <string name="donate_liberapay">Faire un don (Liberapay)</string>
+    <string name="donate_paypal">Faire un don (PayPal)</string>
     <string name="remove_ad_description">Financer l\'application et supprimer la pub</string>
     <string name="remove_ad_free">Supprimer la pub gratuitement</string>
     <string name="report_bug_or_propose">Bogue / Idée</string>

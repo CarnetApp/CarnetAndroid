@@ -72,6 +72,10 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://liberapay.com/~34946"));
             startActivity(browserIntent);
             return true;
+        }else if(preference==findPreference("pref_paypal")){
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YMHT55NSCLER6"));
+            startActivity(browserIntent);
+            return true;
         }else if(preference==findPreference("pref_set_password")){
             PasswordDialog dialog = new PasswordDialog();
             dialog.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(),"" );

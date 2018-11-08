@@ -28,7 +28,8 @@
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="general_header">General</string>
     <string name="paiement_header">Paiement</string>
-    <string name="remove_ad">Donate</string>
+    <string name="donate_liberapay">Donate (Liberapay)</string>
+    <string name="donate_paypal">Donate (PayPal)</string>
     <string name="remove_ad_description">Help improving by funding me</string>
     <string name="remove_ad_free">Remove ad for free</string>
     <string name="report_bug_or_propose">Bug / feature</string>
