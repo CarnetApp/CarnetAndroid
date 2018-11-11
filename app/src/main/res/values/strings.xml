@@ -10,7 +10,7 @@
     <string name="delete">Delete</string>
     <string name="remove_recent">Remove from recent</string>
     <string name="storage_preference">Main storage</string>
-    <string name="recent">Recents</string>
+    <string name="recent">Recent</string>
     <string name="browser">Browser</string>
     <string name="parent_folder">Parent folder</string>
     <string name="title_activity_img_picker">ImgPickerActivity</string>
