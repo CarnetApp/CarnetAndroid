@@ -162,7 +162,12 @@ public class HttpServer extends NanoHTTPD {
         if(!mCurrentNotePath.equals(path)){
             return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
         }
-        new File(extractedNotePath+"/data/"+media).delete();
+        File f = new File(extractedNotePath+"/data/"+media);
+        if(f.delete()){
+            if(PictureUtils.isPicture(f.getName())) {
+                new File(f.getParentFile(), "preview_" + f.getName() + ".jpg").delete();
+            }
+        }
         saveNote(path);
         return listOpenMedia();
     }
@@ -193,14 +198,18 @@ public class HttpServer extends NanoHTTPD {
         if(!mCurrentNotePath.equals(path)){
             return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
         }
-        Log.d(TAG, "adding media");
+        Log.d(TAG, "adding media "+name);
+        //TODO fix data.... workaround until better idea
+        File data = new File(extractedNotePath+"/data");
+        if(data.exists() && !data.isDirectory())
+            data.delete();
         File in = new File(tmpPath);
         if(in.exists()){
-            File newF = new File(extractedNotePath+"/data/"+name);
+            File newF = new File(data, name);
             newF.getParentFile().mkdirs();
-            in.renameTo(newF);
+            Log.d(TAG, "rename "+tmpPath+ " to "+newF.getAbsolutePath()+": "+ in.renameTo(newF));
             if(PictureUtils.isPicture(name)) {
-                File preview = new File(newF.getParentFile(), "preview_" + name);
+                File preview = new File(data, "preview_" + name +".jpg");
                 try {
                     PictureUtils.resize(newF.getAbsolutePath(), preview.getAbsolutePath(), 200, 200);
                 } catch (IOException e) {

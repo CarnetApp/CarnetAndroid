@@ -78,6 +78,28 @@ Writer.prototype.displayMediaFullscreen = function (index) {
   imgD.src = rootpath + "/img/ic_file_download_white_24px.svg";
   downloadButton.appendChild(imgD);
   a.appendChild(downloadButton);
+  toolbar.appendChild(a); //delete
+
+  var a = document.createElement("a");
+  a.href = "#";
+  a.target = "_blank";
+
+  a.onclick = function (e) {
+    e.stopPropagation();
+    writer.deleteMedia(FileUtils.getFilename(writer.fullscreenableMedia[index]));
+    $(writer.fullscreenViewer).hide("slow");
+    return false;
+  };
+
+  var deleteButton = document.createElement("button");
+  deleteButton.classList.add('mdl-button');
+  deleteButton.classList.add('mdl-js-button');
+  deleteButton.classList.add('mdl-button--icon');
+  var imgDelete = document.createElement("i");
+  imgDelete.classList.add("material-icons");
+  imgDelete.innerHTML = "delete";
+  deleteButton.appendChild(imgDelete);
+  a.appendChild(deleteButton);
   toolbar.appendChild(a); //close
 
   var closeButton = document.createElement("button");
@@ -742,7 +764,7 @@ Writer.prototype.reset = function () {
 
   var snackbarContainer = document.querySelector('#snackbar');
 
-  if (snackbarContainer != undefined && !(_typeof(snackbarContainer.MaterialSnackbar) == undefined)) {
+  if (snackbarContainer != undefined && snackbarContainer.MaterialSnackbar != undefined) {
     snackbarContainer.queuedNotifications_ = [];
     snackbarContainer.MaterialSnackbar.cleanup_();
   }
