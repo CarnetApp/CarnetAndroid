@@ -38,7 +38,8 @@ public class MyApplication extends Application implements Configuration.PathObse
                 startAccountConfigActivity(accountId, accountType);
             }
         };
-        Configuration.dontDisplayNotification = true;
+        Configuration.dontDisplayNotification = false;
+        Configuration.icon = R.mipmap.ic_launcher_foreground;
         Configuration.addPathObserver(PreferenceHelper.getRootPath(this), this);
         Configuration.addPathObserver(PreferenceHelper.getRootPath(this)+"/untitled.sqd", this);
         try {
