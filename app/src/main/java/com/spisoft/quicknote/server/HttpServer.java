@@ -7,6 +7,7 @@ import android.webkit.MimeTypeMap;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.databases.KeywordsHelper;
+import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.PictureUtils;
 import com.spisoft.quicknote.utils.ZipUtils;
@@ -111,6 +112,14 @@ public class HttpServer extends NanoHTTPD {
                 }
                 else if(Method.POST.equals(method)){
                     switch (subpath) {
+                        case "notes/move":
+                            String from = post.get("from").get(0);
+                            String to = post.get("to").get(0);
+                            if(from.startsWith("./"))
+                                from = from.substring(2);
+                            if(to.startsWith("./"))
+                                to = to.substring(2);
+                            return moveNote(from, to);
                         case "keywordsdb/action":
                             if(post.get("json") != null && post.get("json").size()>0)
                                return keywordActionDB(post.get("json").get(0));
@@ -237,6 +246,7 @@ public class HttpServer extends NanoHTTPD {
         return saveNote(path);
     }
 
+
     private Response saveNote(String path) {
         path = new File(PreferenceHelper.getRootPath(mContext),path).getAbsolutePath();
         List <String> except = new ArrayList<>();
@@ -245,6 +255,20 @@ public class HttpServer extends NanoHTTPD {
         return NanoHTTPD.newFixedLengthResponse("Saved !");
     }
 
+    private Response moveNote(String from, String to) {
+        Log.d(TAG, "MoveNote "+from +" to "+to);
+        if(!mCurrentNotePath.equals(from)){
+            Log.d(TAG, "Forbidden");
+
+            return NanoHTTPD.newFixedLengthResponse(Response.Status.INTERNAL_ERROR,"","");
+        }
+        boolean success = NoteManager.moveNote(mContext, new Note(new File(PreferenceHelper.getRootPath(mContext),from).getAbsolutePath()),  new File(PreferenceHelper.getRootPath(mContext),to).getAbsolutePath()) != null;
+        if(success)
+            mCurrentNotePath = to;
+        Log.d(TAG, "MoveNote "+success);
+
+        return success?NanoHTTPD.newFixedLengthResponse("Saved !"):NanoHTTPD.newFixedLengthResponse(Response.Status.INTERNAL_ERROR,"","");
+    }
 
     private Response getKeywordDB() {
         JSONObject object = null;

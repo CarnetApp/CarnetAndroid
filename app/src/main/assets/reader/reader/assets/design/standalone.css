@@ -27,7 +27,7 @@ html {
 #loading {
 	display: none;
 	position: fixed;
-	background: rgb(63, 81, 181);
+	background: rgb(63, 81, 181,0.3);
 	width: 100%;
 	height: 100%;
 	z-index: 10;
@@ -280,9 +280,20 @@ label.star:before {
 div#container-button::-webkit-scrollbar {
 	display: none;
 }
+#name-container{
+	margin-top:5px;
+}
+#name-container label{
+	padding-left: 40px;
+	width: calc(100% - 40px);
+}
 
-
-
+#name-input{
+	padding: 10px;
+    padding-left: 40px;
+	padding-right: 20px;
+	width: calc(100% - 60px);
+}
 /* Nextcloud */
 
 #text {

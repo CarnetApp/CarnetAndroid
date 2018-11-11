@@ -175,9 +175,11 @@ mdl-layout--fixed-header">
 		<div class="mdl-layout__drawer">
 			<nav class="mdl-navigation">
 				<span style="text-align:center; margin:10px;"> File</span>
-
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="name-container">
+					<input class="mdl-textfield__input" type="text" name="name" id="name-input" value="Untitled">
+					<label class="mdl-textfield__label" for="name">Note name</label>
+				</div>
 				<a class="mdl-navigation__link" href="" id="export-button">Export note</a>
-				<a class="mdl-navigation__link" href="" id="rename-button">Rename</a>
 				<a class="mdl-navigation__link" id="exit">Exit</a>
 				<div class="stars">
 					<form action="">

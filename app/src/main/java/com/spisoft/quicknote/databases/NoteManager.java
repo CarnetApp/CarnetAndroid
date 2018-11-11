@@ -3,6 +3,7 @@ package com.spisoft.quicknote.databases;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
@@ -43,6 +44,7 @@ public class NoteManager
     public static final String NEW_PATH = "new_path";
     public static final int NEW_VERSION = 2;
     private static final String KEYWORDS = "keywords";
+    private static final String TAG = "NoteManager";
     public static String EXTENSION = "sqd";
     public static final String ACTION_UPDATE_END = "update_note_end";
 
@@ -62,11 +64,9 @@ public class NoteManager
     public static Note createNewNote(String rootPath){
         int i = 0;
 
-        File []children = new File(rootPath).listFiles();
-        boolean exists = false;
         File f = new File(new File(rootPath), "untitled"+".sqd");
         while(f.exists()){
-            f = new File(new File(rootPath), "untitled"+i+".sqd");
+            f = new File(new File(rootPath), "untitled "+i+".sqd");
             i++;
 
         }
@@ -75,18 +75,21 @@ public class NoteManager
         return new Note(path);
     }
     public static String renameNote(Context context,Note note, String newName){
-        File notFile = new File(note.path);
-        File toFile = new File(notFile.getParentFile(), newName);
-        if(!toFile.exists()){
+        File toFile = new File(new File(note.path).getParentFile(), newName);
+        return moveNote(context, note, toFile.getAbsolutePath());
+    }
 
+    public static String moveNote(Context context,Note note, String to){
+        File notFile = new File(note.path);
+        File toFile = new File(to);
+        Log.d(TAG,"renaming to "+to+" "+toFile.exists());
+        if(!toFile.exists()){
             notFile.renameTo(toFile);
             RecentHelper.getInstance(context).moveNote(note,toFile.getAbsolutePath());
             KeywordsHelper.getInstance(context).moveNote(note, toFile.getAbsolutePath());
             note.setPath(toFile.getAbsolutePath());
             return toFile.getAbsolutePath();
-
         }
-
         return null;
     }
 

@@ -215,6 +215,7 @@ Writer.prototype.addMedia = function () {
 
 Writer.prototype.setDoNotEdit = function (b) {
   document.getElementById("text").contentEditable = !b;
+  document.getElementById("name-input").disabled = b;
 };
 
 Writer.prototype.displayErrorLarge = function (error) {};
@@ -255,6 +256,7 @@ var saveTextIfChanged = function saveTextIfChanged() {
 Writer.prototype.fillWriter = function (extractedHTML) {
   console.log("fill");
   if (extractedHTML != undefined) this.oEditor.innerHTML = extractedHTML;
+  document.getElementById("name-input").value = FileUtils.stripExtensionFromName(FileUtils.getFilename(this.note.path));
 
   this.oEditor.onscroll = function () {
     lastscroll = $(writer.oEditor).scrollTop();
@@ -591,12 +593,21 @@ Writer.prototype.init = function () {
     writer.recorderDialog.showModal();
   };
 
-  document.getElementById("rename-button").onclick = document.getElementById("export-button").onclick = function () {
+  document.getElementById("export-button").onclick = function () {
     writer.toggleDrawer();
     writer.warnNotYetImplemented();
     return false;
-  }; // $("#editor").webkitimageresize().webkittableresize().webkittdresize();
+  };
 
+  writer.nameTimout = undefined;
+  document.getElementById("name-input").addEventListener("input", function () {
+    if (writer.nameTimout != undefined) clearTimeout(writer.nameTimout);
+    writer.nameTimout = setTimeout(function () {
+      writer.seriesTaskExecutor.addTask(writer.saveNoteTask); // first, save.
+
+      writer.seriesTaskExecutor.addTask(new RenameNoteTask(writer));
+    }, 1000);
+  }); // $("#editor").webkitimageresize().webkittableresize().webkittdresize();
 };
 
 Writer.prototype.toggleDrawer = function () {
@@ -694,9 +705,7 @@ Writer.prototype.addKeyword = function (word) {
   var writer = this;
 
   if (this.note.metadata.keywords.indexOf(word) < 0 && word.length > 0) {
-    console.log(this.note.metadata.keywords);
     this.note.metadata.keywords.push(word);
-    console.log(this.note.metadata.keywords);
     keywordsDBManager.addToDB(word, this.note.path, function () {
       writer.refreshKeywords();
     });
@@ -730,6 +739,15 @@ Writer.prototype.reset = function () {
   for (var i = 0; i < dias.length; i++) {
     if (dias[i].open) dias[i].close();
   }
+
+  var snackbarContainer = document.querySelector('#snackbar');
+
+  if (snackbarContainer != undefined && !(_typeof(snackbarContainer.MaterialSnackbar) == undefined)) {
+    snackbarContainer.queuedNotifications_ = [];
+    snackbarContainer.MaterialSnackbar.cleanup_();
+  }
+
+  this.setDoNotEdit(false);
 };
 
 Writer.prototype.setColor = function (color) {
@@ -802,6 +820,78 @@ ToolbarManager.prototype.toggleToolbar = function (elem) {
 
   if ($(elem).is(":visible")) $(elem).slideUp("fast", resetScreenHeight);else $(elem).slideDown("fast", resetScreenHeight);
   resetScreenHeight();
+};
+
+var RenameNoteTask = function RenameNoteTask(writer) {
+  this.writer = writer;
+};
+
+RenameNoteTask.prototype.run = function (callback) {
+  console.log("RenameNoteTask.run");
+  $("#loading").fadeIn();
+  this.writer.setDoNotEdit(true);
+  var task = this;
+  var path = FileUtils.getParentFolderFromPath(this.writer.note.path);
+  var hasOrigin = false;
+  var nameInput = document.getElementById("name-input");
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = nameInput.value.split("/")[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var part = _step.value;
+
+      if (part == ".." && !hasOrigin) {
+        path = FileUtils.getParentFolderFromPath(path);
+      } else {
+        hasOrigin = true;
+        path += "/" + part;
+      }
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return != null) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  path += ".sqd";
+  if (path.startsWith("./")) path = path.substr(2);
+  RequestBuilder.sRequestBuilder.post("/notes/move", {
+    from: this.writer.note.path,
+    to: path
+  }, function (error, data) {
+    if (!error) {
+      task.writer.note.path = path;
+      task.writer.setDoNotEdit(false);
+      $("#loading").fadeOut();
+      var data = {
+        message: 'Note correctly renamed',
+        timeout: 2000
+      };
+      task.writer.displaySnack(data);
+      callback();
+    } else {
+      task.writer.setDoNotEdit(false);
+      $("#loading").fadeOut();
+      nameInput.value = FileUtils.stripExtensionFromName(FileUtils.getFilename(task.writer.note.path));
+      var data = {
+        message: 'Note couldn\'t be renamed',
+        timeout: 2000
+      };
+      task.writer.displaySnack(data);
+      callback();
+    }
+  });
 };
 
 var SeriesTaskExecutor = function SeriesTaskExecutor() {
