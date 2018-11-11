@@ -168,65 +168,6 @@ public class NoteManager
 
     }
 
-    private static void writeNoteMetadata(Context context, Note note){
-
-        try {
-            JSONObject jsonObject = new JSONObject();
-            JSONArray jsArray = new JSONArray(note.keywords);
-            jsonObject.put(KEYWORDS,jsArray);
-            ZipUtils.changeText(context, note, getMetadataPath(), jsonObject.toString(), new ZipUtils.WriterListener() {
-                @Override
-                public void onError() {
-
-                }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-    private static Note fillNoteMetadata(ZipReaderAndHttpProxy server, Note note){
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-        server.setUri(note.path);
-        String path = getMetadataPath();
-
-        try {
-            br = new BufferedReader(  br = new BufferedReader(new InputStreamReader(server.getZipInputStream(server.getZipEntry(path)))));
-            String line = br.readLine();
-            while (line != null) {
-                sb.append(line);
-                sb.append("\n");
-                line = br.readLine();
-            }
-            JSONObject jsonObject = new JSONObject(sb.toString());
-            ArrayList<String> keywords = new ArrayList<>();
-            if(jsonObject.has(KEYWORDS)){
-                JSONArray keywordsJSONArray = jsonObject.getJSONArray(KEYWORDS);
-                for(int i = 0; i<keywordsJSONArray.length(); i++){
-                    keywords.add(keywordsJSONArray.getString(i));
-                }
-            }
-            note.keywords = keywords;
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if(br!=null)
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-        }
-
-        return note;
-    }
-
-
-
     private static int getNoteVersion(File file) {
         if(file.isDirectory()){
             File[] files = file.listFiles();

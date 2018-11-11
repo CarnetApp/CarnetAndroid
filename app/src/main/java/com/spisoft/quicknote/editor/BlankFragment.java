@@ -31,41 +31,13 @@ import com.spisoft.quicknote.R;
 
 import java.util.Stack;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link BlankFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class BlankFragment extends Fragment implements View.OnClickListener, EditorView.HideListener, FakeFragmentManager {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+public class BlankFragment extends Fragment implements View.OnClickListener, EditorView.HideListener {
     public static final String NOTE = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private Note mNote;
     private View mRoot;
-    private WebView mWebView;
-    private String mNoteString;
-    private Stack<FloatingFragment> mFragments ;
-    private Handler mHandler = new Handler(){
-
-    };
     private boolean mHasAskedMinimize;
     private EditorView mEditor;
-    private ViewGroup mOptionMenuContainer;
-    private FrameLayout mfragmentContainer;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @return A new instance of fragment BlankFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static BlankFragment newInstance(Note param1) {
         BlankFragment fragment = new BlankFragment();
         Bundle args = new Bundle();
@@ -78,32 +50,7 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
-        super.onCreateOptionsMenu( menu,  inflater);
-                // Inflate the menu; this adds items to the action bar if it is present.
-                menu.add(0, R.string.floating, 0, R.string.floating);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id ==R.string.floating) {
-            Intent intent = new Intent(getActivity(), FloatingService.class);
-            intent.putExtra(FloatingService.NOTE, mNote);
-            getActivity().startService(intent);
-            getActivity().finish();
-            return true;
-        }
-
-
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,20 +138,4 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
         getActivity().onBackPressed();
     }
 
-    public void addFragment(FloatingFragment fragment){
-        mfragmentContainer.removeAllViews();
-        mFragments.push(fragment);
-        mfragmentContainer.addView(fragment.getView());
-        mOptionMenuContainer.removeAllViews();
-        fragment.setOptionMenu(mOptionMenuContainer);
-
-    }
-    public void removeFragment(){
-        mfragmentContainer.removeAllViews();
-        mFragments.pop();
-        FloatingFragment fragment = mFragments.peek();
-        mfragmentContainer.addView(fragment.getView());
-        mOptionMenuContainer.removeAllViews();
-        fragment.setOptionMenu(mOptionMenuContainer);
-    }
 }

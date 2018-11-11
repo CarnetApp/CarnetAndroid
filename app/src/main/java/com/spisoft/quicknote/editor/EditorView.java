@@ -82,7 +82,7 @@ import static com.spisoft.quicknote.browser.NoteListFragment.ACTION_RELOAD;
 /**
  * Created by phoenamandre on 01/02/16.
  */
-public class EditorView extends FrameLayout implements View.OnClickListener, CropWrapperActivity.CroperResultListener, FloatingFragment, PictureEditorFloatingFragment.OnEditEndListener, ZipUtils.WriterListener, PagesAdapter.OnPageSelectedListener {
+public class EditorView extends FrameLayout implements CropWrapperActivity.CroperResultListener, FloatingFragment, ZipUtils.WriterListener, PagesAdapter.OnPageSelectedListener {
 
 
     private static final String TAG = "EditorView";
@@ -153,7 +153,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     }
 
     public boolean onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                              String permissions[], int[] grantResults) {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_RECORD_AUDIO: {
                 Log.d("WebView", "PERMISSION FOR AUDIO");
@@ -195,39 +195,6 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                 mUploadMessage.onReceiveValue(result);
                 mUploadMessage = null;
             }
-            /*
-            Cursor cursor = null;
-            String displayName = data.getData().getLastPathSegment();
-            try {
-                cursor = getContext().getContentResolver().query(data.getData(), null, null, null, null);
-                if (cursor != null && cursor.moveToFirst()) {
-                    displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                }
-            } finally {
-                cursor.close();
-            }
-            Log.d(TAG, displayName);
-            try {
-                final File outF = new File(getContext().getExternalCacheDir(), displayName);
-                InputStream in = getContext().getContentResolver().openInputStream(data.getData());
-                OutputStream out = new FileOutputStream(outF);
-                FileUtils.copy(in, out);
-                mWebView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String retFunction = "FileOpener.selectFileResult('"+mSelectFileCallback+"','" + outF.getAbsolutePath() + "')";
-                        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT)
-                            mWebView.evaluateJavascript(retFunction,null);
-                        else
-                            mWebView.loadUrl("javascript:"+retFunction);
-                    }
-                });
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
-
         }
     }
 
@@ -245,18 +212,6 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     public void setOptionMenu(ViewGroup container) {
         LayoutInflater.from(getContext()).inflate(R.layout.editor_option_menu, container);
 
-    }
-
-    @Override
-    public void onEditEnd(String id, String path, boolean reload) {
-
-        mWebView.loadUrl("javascript:reloadImage('" + id + "', '" + StringEscapeUtils.escapeEcmaScript(path) + "')");
-    }
-
-    @Override
-    public void onDelete(String id, String path) {
-        Log.d("deletedebug", "delete " + id);
-        mWebView.loadUrl("javascript:deleteImage('" + id + "')");
     }
 
     public Note getNote() {
@@ -403,7 +358,7 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         if (ContextCompat.checkSelfPermission(getContext().getApplicationContext(),
                 permission)
                 != PackageManager.PERMISSION_GRANTED) {
-           // No explanation needed, we can request the permission.
+            // No explanation needed, we can request the permission.
             ActivityCompat.requestPermissions((Activity) getContext(),
                     new String[]{permission},
                     requestCode);
@@ -449,27 +404,6 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         mHasRequestedSave = true;
         editedAbsolutePath = null;
         getContext().sendBroadcast(new Intent(ACTION_RELOAD_KEYWORDS));
-        /*Intent intent = new Intent(ACTION_RELOAD);
-        List<Note> notes = new ArrayList<>();
-        notes.add(mNote);
-        intent.putExtra("notes",mNote);
-        getContext().sendBroadcast(intent);*/
-    }
-
-    private void sendAction(String string) {
-        mWebView.loadUrl("javascript:formatDoc('" + StringEscapeUtils.escapeEcmaScript(string) + "')");
-    }
-
-    private void sendAction(String string, String value) {
-
-
-        mWebView.loadUrl("javascript:formatDoc('" + StringEscapeUtils.escapeEcmaScript(string) + "', '" + StringEscapeUtils.escapeEcmaScript(value) + "')");
-    }
-
-
-    @Override
-    public void onClick(View view) {
-
     }
 
 
@@ -478,7 +412,6 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
     public class WebViewJavaScriptInterface {
 
         private Context context;
-
 
         /*
          * Need a reference to the context in order to sent a post message
@@ -494,83 +427,17 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
             ClipData.Item item1 = clipData.getItemAt(0);
             final String text = item1.getText().toString();
             mWebView.post(new Runnable() {
-                              @Override
-                              public void run() {
-                                  mWebView.loadUrl("javascript:document.execCommand('insertHTML', false, '" + StringEscapeUtils.escapeEcmaScript(text) + "');", null);
-                              }});
-        }
-
-        @JavascriptInterface
-        public void unlink(final String path, final String callback) {
-
-            new AsyncTask<Void, Void, Void>() {
-
                 @Override
-                protected Void doInBackground(Void... voids) {
-                    String pathNotFi = path;
-                    if(pathNotFi.equals("tmp/reader.html")){
-                        Log.d(TAG,"skip deleting reader..."); //will be cchanged when aligning with nextcloud
-                        return null;
-                    }
-                    if (!pathNotFi.startsWith("/"))
-                        pathNotFi = mRootPath + "/" + pathNotFi;
-                    Log.d(TAG, "deleting " + pathNotFi);
-                    Log.d(TAG, "not skiping " + mRootPath+"/tmp/reader.html");
-                    FileUtils.deleteRecursive(new File(pathNotFi));
-                    return null;
-                }
-
-                protected void onPostExecute(Void result) {
-                    mWebView.loadUrl("javascript:FSCompatibility.unlinkResult('" + callback + "')");
-
-                }
-            }.execute();
+                public void run() {
+                    mWebView.loadUrl("javascript:document.execCommand('insertHTML', false, '" + StringEscapeUtils.escapeEcmaScript(text) + "');", null);
+                }});
         }
+
 
         @JavascriptInterface
         public void postMessage(String query, String message){
             if(query.equals("exit"))
                 onBackPressed();
-        }
-        @JavascriptInterface
-        public void readdir(String path, final String callback){
-            if (!path.startsWith("/"))
-                path = mRootPath + "/" + path;
-            final JSONObject object = new JSONObject();
-            JSONArray array = new JSONArray();
-            final File file = new File(path);
-            File[] files = file.listFiles();
-            if(files!=null)
-            for(File f : files){
-                Log.d(TAG, "read dir ");
-                Log.d(TAG, "read dir"+ f.getAbsolutePath());
-
-                array.put(f.getAbsolutePath().substring(path.length()));
-            }
-            try {
-                object.put("data",array);
-
-                mWebView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "read dir"+ file.getAbsolutePath());
-                        mWebView.loadUrl("javascript:FSCompatibility.resultReaddir('" + callback + "',false,'"
-                                +StringEscapeUtils.escapeEcmaScript(object.toString())+"')");
-
-                    }
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        @JavascriptInterface
-        public void addKeyword(String word, String path){
-            KeywordsHelper.getInstance(getContext()).addKeyword(word, new Note(path));
-        }
-
-        @JavascriptInterface
-        public void removeKeyword(String word, String path){
-            KeywordsHelper.getInstance(getContext()).removeKeyword(word, new Note(path));
         }
 
         @JavascriptInterface
@@ -587,109 +454,6 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
                 }
             });
         }
-        @JavascriptInterface
-        public void extractTo(String from, String to, final String callback){
-            boolean error;
-            if (!from.startsWith("/"))
-                from = mRootPath + "/" + from;
-            if (!to.startsWith("/"))
-                to = mRootPath + "/" + to;
-            try {
-                ZipUtils.unzip(from, to);
-                error = false;
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                error = true;
-            }
-            final boolean finalError = error;
-            mWebView.post(new Runnable() {
-                              @Override
-                              public void run() {
-                                  mWebView.loadUrl("javascript:NoteOpenerResultReceiver.extractResult('" + callback + "',"+ finalError +");");
-                              }
-                          }
-            );
-        }
-
-        @JavascriptInterface
-        public void readFile(final String callback, String path) {
-            if (!path.startsWith("/")&& ! path.startsWith("content"))
-                path = mRootPath + "/" + path;
-            File f = new File(path);
-            Log.d(TAG, "read " + path);
-
-            InputStream in = null;
-            try {
-                int length = -1;
-                if(!path.startsWith("content")) {
-                    in = new FileInputStream(f);
-                    length = (int)f.length();
-                }
-                else {
-                    in = getContext().getContentResolver().openInputStream(Uri.parse("content://com.android.providers.media.documents/document/image%3A116742"));
-                    length = in.available();
-                    Log.d(TAG, "readdiiiing " + in.available());
-                }
-                final byte[] content = new byte[length];
-
-                for (int off = 0, read;
-                     (read = in.read(content, off, content.length - off)) > 0;
-                     off += read){
-                    Log.d(TAG,"readdiiiing");
-                }
-                    ;
-                Log.d(TAG, "result " + Base64.encodeToString(content, 0));
-
-                mWebView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        final String retFunction = "FSCompatibility.resultFileRead('" + callback + "',false,'" + StringEscapeUtils.escapeEcmaScript(Base64.encodeToString(content, 0)) + "');";
-                        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT)
-                            mWebView.evaluateJavascript(retFunction,null);
-                        else
-                            mWebView.loadUrl("javascript:"+retFunction);
-
-                    }
-                });
-            } catch (IOException e) {
-                // Some error occured
-                e.printStackTrace();
-                mWebView.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        mWebView.loadUrl("javascript:FSCompatibility.resultFileRead('" + callback + "',true,'')");
-
-                    }
-                });
-            } finally {
-                if (in != null)
-                    try {
-                        in.close();
-                    } catch (IOException e) {
-                    }
-            }
-
-        }
-
-        @JavascriptInterface
-        public void onBackPressed() {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mRenameListener.onExit();
-                }
-            });
-        }
-
-        @JavascriptInterface
-        public void mkdirs(String path) {
-            Log.d(TAG, path);
-            if (!path.startsWith("/"))
-                path = mRootPath + "/" + path;
-            new File(path).mkdirs();
-        }
 
         @JavascriptInterface
         public void hideProgress() {
@@ -703,107 +467,14 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         }
 
         @JavascriptInterface
-        public void zipDir(String dir, String out, final String callback) {
-            if (!dir.startsWith("/"))
-                dir = mRootPath + "/" + dir;
-            if (!out.startsWith("/"))
-                out = mRootPath + "/" + dir;
-            Log.d(TAG, "zipping " + dir + " to " + out);
-
-            final String finalDir = dir;
-            final String finalOut = out;
-            new AsyncTask<Void, Void, Void>() {
-
+        public void onBackPressed() {
+            mHandler.post(new Runnable() {
                 @Override
-                protected Void doInBackground(Void... voids) {
-                    List <String> except = new ArrayList<>();
-                    except.add(mRootPath+"/tmp/reader.html");
-                    ZipUtils.zipFolder(new File(finalDir), finalOut,except);
-
-                    return null;
+                public void run() {
+                    mRenameListener.onExit();
                 }
-
-                protected void onPostExecute(Void result) {
-                    mWebView.loadUrl("javascript:ArchiverCompatibility.finalizeResult('" + callback + "')");
-
-                }
-            }.execute();
+            });
         }
-        @JavascriptInterface
-        public void getFlatenKeywordsDB(final String callback) {
-
-            new AsyncTask<Void, Void, String>() {
-
-                @Override
-                protected String doInBackground(Void... voids) {
-                    Map<String, List<String>> keywords = KeywordsHelper.getInstance(getContext()).getFlattenDB(-1);
-                    JSONObject object = new JSONObject();
-                    for(Map.Entry<String, List<String>> entry : keywords.entrySet()){
-                        JSONArray keyArray = new JSONArray();
-                        for(String path : entry.getValue()){
-                            keyArray.put(path);
-                        }
-                        try {
-                            object.put(entry.getKey(), keyArray);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                    return object.toString();
-                }
-
-                protected void onPostExecute(String result) {
-                    mWebView.loadUrl("javascript:KeywordDBManagerCompatibility.getFlatenDBResult('" + callback + "','"+StringEscapeUtils.escapeEcmaScript(result)+"')");
-
-                }
-            }.execute();
-        }
-
-
-        @JavascriptInterface
-        public void writeFileSync(String path, String content, String encoding) {
-            byte[] data = null;
-            if (encoding.equals("base64")) {
-                try {
-                    data = Base64.decode(content, 0);
-                } catch (java.lang.IllegalArgumentException e) {
-
-                }
-            } else try {
-                data = content.getBytes(encoding);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            try {
-                OutputStream stream = new FileOutputStream(mRootPath + "/" + path);
-                stream.write(data);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @JavascriptInterface
-        public void writeFile(final String path, final String content, final String callback, final String encoding) {
-
-            new AsyncTask<Void, Void, Void>() {
-
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    writeFileSync(path, content, encoding);
-                    return null;
-                }
-
-                protected void onPostExecute(Void result) {
-                    mWebView.loadUrl("javascript:FSCompatibility.writeFileResult('" + callback + "')");
-                }
-            }.execute();
-
-        }
-
-
 
         @JavascriptInterface
         public void alert(final String path) {
@@ -823,9 +494,9 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
         }
 
         /*
-        **  Manage if the url should be load or not, and get the result of the request
-        **
-        */
+         **  Manage if the url should be load or not, and get the result of the request
+         **
+         */
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
@@ -835,9 +506,9 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
 
         /*
-        **  Catch the error if an error occurs
-        **
-        */
+         **  Catch the error if an error occurs
+         **
+         */
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             super.onReceivedError(view, errorCode, description, failingUrl);
@@ -846,9 +517,9 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
 
         /*
-        **  Display a dialog when the page start
-        **
-        */
+         **  Display a dialog when the page start
+         **
+         */
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
@@ -856,9 +527,9 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
 
         /*
-        **  Remove the dialog when the page finish loading
-        **
-        */
+         **  Remove the dialog when the page finish loading
+         **
+         */
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
@@ -870,9 +541,5 @@ public class EditorView extends FrameLayout implements View.OnClickListener, Cro
 
         }
     };
-
-    private void onNoteAndPageReady() {
-    }
-
 
 }
