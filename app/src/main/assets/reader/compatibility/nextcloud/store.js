@@ -9,5 +9,5 @@ NextcloudStore.prototype.get = function (key) {
 };
 
 NextcloudStore.prototype.set = function (key, value) {
-  localStorage.setItem("note_cache", JSON.stringify(oldNotes));
+  localStorage.setItem(key, value);
 };

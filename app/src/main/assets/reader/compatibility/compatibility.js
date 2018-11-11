@@ -4,15 +4,40 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Compatibility = function Compatibility() {
-  _classCallCheck(this, Compatibility);
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  this.isElectron = typeof require === "function";
-  this.isAndroid = (typeof app === "undefined" ? "undefined" : _typeof(app)) === "object";
-  console.log("is electron ?" + this.isElectron);
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-  if (this.isElectron) {
-    RequestBuilder = ElectronRequestBuilder;
-    console.log("set resquest builder");
+var Compatibility =
+/*#__PURE__*/
+function () {
+  function Compatibility() {
+    _classCallCheck(this, Compatibility);
+
+    this.isElectron = typeof require === "function";
+    this.isAndroid = (typeof app === "undefined" ? "undefined" : _typeof(app)) === "object";
+    console.log("is electron ?" + this.isElectron);
+
+    if (this.isElectron) {
+      RequestBuilder = ElectronRequestBuilder;
+      console.log("set resquest builder");
+    }
   }
-};
+
+  _createClass(Compatibility, [{
+    key: "openUrl",
+    value: function openUrl(url) {
+      if (compatibility.isElectron) {
+        var _require = require('electron'),
+            shell = _require.shell;
+
+        shell.openExternal(url);
+      } else {
+        var win = window.open(url, '_blank');
+        win.focus();
+      }
+    }
+  }]);
+
+  return Compatibility;
+}();

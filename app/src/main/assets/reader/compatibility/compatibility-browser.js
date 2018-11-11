@@ -64,23 +64,91 @@ function (_Compatibility) {
         var _require = require('electron'),
             remote = _require.remote;
 
-        document.getElementById("minus-button").onclick = function () {
-          remote.BrowserWindow.getFocusedWindow().minimize();
-        };
+        var SettingsHelper = require("./settings/settings_helper").SettingsHelper;
 
-        document.getElementById("size-button").onclick = function () {
-          if (remote.BrowserWindow.getFocusedWindow().isMaximized()) remote.BrowserWindow.getFocusedWindow().unmaximize();else remote.BrowserWindow.getFocusedWindow().maximize();
-        };
+        var settingsHelper = new SettingsHelper();
 
-        document.getElementById("close-button").onclick = function () {
-          remote.app.exit(0);
-        };
+        if (settingsHelper.displayFrame()) {
+          document.getElementById("minus-button").style.display = "none";
+          document.getElementById("size-button").style.display = "none";
+          document.getElementById("close-button").style.display = "none";
+        } else {
+          document.getElementById("minus-button").onclick = function () {
+            remote.BrowserWindow.getFocusedWindow().minimize();
+          };
+
+          document.getElementById("size-button").onclick = function () {
+            if (remote.BrowserWindow.getFocusedWindow().isMaximized()) remote.BrowserWindow.getFocusedWindow().unmaximize();else remote.BrowserWindow.getFocusedWindow().maximize();
+          };
+
+          document.getElementById("close-button").onclick = function () {
+            remote.app.exit(0);
+          };
+        }
+
+        document.getElementById("settings-button").href = "settings.html";
+        setTimeout(function () {
+          RequestBuilder.sRequestBuilder.get("/settings/current_version", function (error, version) {
+            if (!error) {
+              console.log("current version " + version);
+              $.ajax({
+                url: "https://qn.phie.ovh/binaries/desktop/current_version",
+                type: "GET",
+                success: function success(newVersion) {
+                  console.log("new version " + newVersion);
+
+                  if (version != newVersion) {
+                    displaySnack({
+                      message: "New version available",
+                      timeout: 10000,
+                      actionHandler: function actionHandler() {
+                        var _require2 = require('electron'),
+                            shell = _require2.shell;
+
+                        shell.openExternal("https://qn.phie.ovh/binaries/desktop/");
+                      },
+                      actionText: 'Download'
+                    });
+                  }
+                },
+                fail: function fail() {},
+                error: function error(e) {}
+              });
+            }
+          });
+        }, 5000);
       }
     });
     return _this;
   }
 
   _createClass(BrowserCompatibility, [{
+    key: "onFirstrunEnds",
+    value: function onFirstrunEnds() {
+      if (this.isElectron) {
+        var _require3 = require('electron'),
+            remote = _require3.remote;
+
+        var BrowserWindow = remote.BrowserWindow;
+        var win = new BrowserWindow({
+          width: 500,
+          height: 500,
+          frame: true
+        });
+
+        var url = require('url');
+
+        var path = require('path');
+
+        win.loadURL(url.format({
+          pathname: path.join(__dirname, 'settings/webdav_dialog.html'),
+          protocol: 'file:',
+          slashes: true
+        }));
+        win.setMenu(null);
+      }
+    }
+  }, {
     key: "getEditorUrl",
     value: function getEditorUrl() {
       if (this.isElectron) return "";else if (!this.isAndroid) return "writer";

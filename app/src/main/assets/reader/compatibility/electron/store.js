@@ -11,5 +11,5 @@ ElectronStore.prototype.get = function (key) {
 };
 
 ElectronStore.prototype.set = function (key, value) {
-  this.store.set("note_cache", JSON.stringify(oldNotes));
+  this.store.set(key, value);
 };

@@ -2,7 +2,7 @@
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var MaterialMenu = undefined;
+;
 
 (function () {
   /**
@@ -1247,7 +1247,7 @@ var MaterialMenu = undefined;
    * @param {HTMLElement} element The element that will be upgraded.
    */
 
-  MaterialMenu = function MaterialMenu(element) {
+  var MaterialMenu = function MaterialMenu(element) {
     this.element_ = element; // Initialize instance.
 
     this.init();
