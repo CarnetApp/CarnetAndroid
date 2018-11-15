@@ -26,3 +26,16 @@ git clone git@github.com:PhieF/GoogleSync.git
 cd CarnetAndroid
 bash build.gradle
 ```
+
+
+Even for Android, Carnet editor is written in html / Css / JS, from the CarnetElectron repository
+So update with the latest editor
+```
+cd Carnet
+git clone git@github.com:PhieF/CarnetElectron.git
+cd CarnetElectron
+npm install --only=dev
+bash compile.sh android ../CarnetAndroid/
+```
+
+This will build and copy every JS html css files needed by the android app
