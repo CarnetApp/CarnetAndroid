@@ -1,18 +1,83 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="CarnetTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:actionBarStyle">@style/CarnetTheme.Blue.Toolbar</item>
+        <item name="actionBarStyle">@style/CarnetTheme.Blue.Toolbar</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+    <style name="CarnetTheme.Blue" parent="CarnetTheme.Light">
         <!-- Main theme colors -->
         <!--   your app branding color for the app bar -->
         <item name="colorPrimary">@color/blue_500</item>
         <!--   darker variant for the status bar and contextual app bars -->
-        <item name="colorPrimaryDark">@color/blue_500</item>
+        <item name="colorPrimaryDark">@color/blue_darker</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">@color/blue_400</item>
-        <item name="android:actionBarStyle">@style/GalaxyZooThemeToolbarDarkOverflow</item>
-        <item name="actionBarStyle">@style/GalaxyZooThemeToolbarDarkOverflow</item>
-        <item name="windowActionModeOverlay">true</item>
+        <item name="PinButton">@style/CarnetTheme.Blue.PinButton</item>
+        <item name="MainViewBackground">@android:color/white</item>
+        <item name="MainNoteBackground">@android:color/white</item>
+        <item name="InNoteKeywordBackground">@color/blue_50</item>
+        <item name="InNoteKeywordColor">@android:color/black</item>
 
+        <item name="MainNoteTextColor">@android:color/black</item>
+        <item name="MainTextColor">@android:color/black</item>
+        <item name="SecondaryTextColor">@android:color/darker_gray</item>
+        <item name="CardElevation">5dp</item>
+        <item name="CardInsideMargin">0dp</item>
+
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="CarnetTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:actionBarStyle">@style/CarnetTheme.Dark.Toolbar</item>
+        <item name="actionBarStyle">@style/CarnetTheme.Dark.Toolbar</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/dark_500</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryDark">@color/dark_darker</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/dark_400</item>
+        <item name="PinButton">@style/CarnetTheme.Blue.PinButton</item>
+        <item name="MainViewBackground">#393c44</item>
+        <item name="MainNoteBackground">@color/dark_500</item>
+        <item name="MainNoteTextColor">@android:color/white</item>
+        <item name="MainTextColor">@android:color/white</item>
+        <item name="SecondaryTextColor">@android:color/darker_gray</item>
+        <item name="CardElevation">5dp</item>
+        <item name="CardInsideMargin">0dp</item>
+        <item name="InNoteKeywordBackground">@color/dark_300</item>
+        <item name="InNoteKeywordColor">@android:color/white</item>
+    </style>
+
+    <style name="CarnetTheme.Darkest" parent="CarnetTheme.Dark">
+        <item name="android:actionBarStyle">@style/CarnetTheme.Darkest.Toolbar</item>
+        <item name="actionBarStyle">@style/CarnetTheme.Darkest.Toolbar</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/dark_500</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryDark">@color/dark_darker</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/dark_400</item>
+        <item name="PinButton">@style/CarnetTheme.Blue.PinButton</item>
+        <item name="MainViewBackground">@android:color/black</item>
+        <item name="MainNoteBackground">@android:color/black</item>
+        <item name="MainNoteTextColor">@android:color/white</item>
+        <item name="MainTextColor">@android:color/white</item>
+        <item name="SecondaryTextColor">@android:color/darker_gray</item>
+        <item name="CardBorder">@color/blue_darker</item>
+        <item name="CardElevation">0dp</item>
+        <item name="CardInsideMargin">5dp</item>
+
+    </style>
+
+    <style name="PinButton" >
+        <item name="android:layout_height">50sp</item>
+        <item name="android:layout_width">64sp</item>
+    </style>
+
+    <style name="CarnetTheme.Blue.PinButton" parent="PinButton">
+        <item name="android:background">@drawable/blue_ripple_selector</item>
     </style>
     <!-- Base application theme. -->
     <style name="MainActivityTheme" parent="AppTheme">
@@ -30,7 +95,7 @@
 
     </style>
 
-    <style name="GalaxyZooThemeToolbarDarkOverflow" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="CarnetTheme.Blue.Toolbar" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- android:textColorPrimary is the  color of the title text
              in the Toolbar, in the Theme.AppCompat theme:  -->
         <item name="actionModeBackground">@color/blue_400</item>
@@ -59,12 +124,27 @@
         <!-- <item name="android:background">@color/color_primary</item> -->
     </style>
 
-    <style name="pin_button">
-        <item name="android:layout_height">50sp</item>
-        <item name="android:layout_width">64sp</item>
+    <style name="CarnetTheme.Dark.Toolbar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionModeBackground">@color/dark_400</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
 
-        <item name="android:background">@drawable/blue_ripple_selector</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:windowBackground">@color/dark_500</item>
+        <item name="android:background">@color/dark_500</item>
     </style>
+
+    <style name="CarnetTheme.Darkest.Toolbar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionModeBackground">@android:color/black</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
+
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:background">@android:color/black</item>
+    </style>
+
+
 
     <style name="pin_tv">
 
@@ -80,8 +160,9 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
 
 
 </resources>

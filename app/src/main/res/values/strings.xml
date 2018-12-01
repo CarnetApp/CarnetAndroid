@@ -110,5 +110,7 @@
     <string name="open_for_registrations">Open for registrations</string>
     <string name="reliability">Reliability</string>
     <string name="updating">Updating...</string>
-
+    <string name="theme">Theme</string>
+    <string name="blue">Blue</string>
+    <string name="dark">Dark</string>
 </resources>

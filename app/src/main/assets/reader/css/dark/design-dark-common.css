@@ -1,0 +1,48 @@
+:root{
+    --header-bg:#22252f;
+    --drawer-bg: #22252f;
+    --drawer-text-color:white;
+    --dialog-bg: #22252f;
+    --dialog-text-color: white;
+    --body-bg: #393c44;
+}
+
+.mdl-layout__drawer {
+    border-right-color:grey;
+}
+
+
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
+    color:white;
+}
+
+.keyword {
+    color:white;
+    background:  #4d4d4d;
+}
+
+.mdl-button{
+    color:white;
+}
+.mdl-textfield__label{
+    color: white !important;
+}
+
+.mdl-textfield__label:after {
+    background-color: white;
+}
+.mdl-dialog__content {
+    color:rgba(255, 255, 255, .54);
+}
+
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover {
+    background-color: #3b3b3b;
+}
+.mdl-button--fab {
+
+    background: rgba(158, 158, 158, .8);
+}
+.mdl-button--fab:hover {
+
+    background: rgba(158, 158, 158, .9);
+}

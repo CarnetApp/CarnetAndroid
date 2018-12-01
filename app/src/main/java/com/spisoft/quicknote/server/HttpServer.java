@@ -1,6 +1,8 @@
 package com.spisoft.quicknote.server;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -103,7 +105,23 @@ public class HttpServer extends NanoHTTPD {
                             return openNote(parms.get("path").get(0));
                         case "keywordsdb":
                             return getKeywordDB();
-                        case "note/open/0/listMedia":
+                        case "settings/editor_css":
+                            String theme = PreferenceManager.getDefaultSharedPreferences(mContext).getString("theme","carnet");
+                            String metadata = FileUtils.readFile(mContext.getFilesDir().getAbsolutePath() +"/reader/css/"+theme+"/metadata.json");
+                            try {
+                                JSONObject metadatajson = new JSONObject(metadata);
+                                JSONArray array = metadatajson.getJSONArray("editor");
+                                for (int i = 0; i<array.length(); i++){
+                                    array.put(i, "../reader/css/"+theme+"/"+array.getString(i));
+                                }
+                                Log.d(TAG, metadata);
+                                return NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/json",new ByteArrayInputStream(array.toString().getBytes()));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                              case "note/open/0/listMedia":
                             return listOpenMedia();
                     }
                     if(subpath.startsWith("note/open/0/getMedia/")){

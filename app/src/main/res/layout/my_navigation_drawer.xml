@@ -3,7 +3,7 @@
     android:id="@+id/left_drawer"
     android:layout_gravity="left|start"
     android:orientation="vertical"
-    android:background="@android:color/white"
+    android:background="?attr/MainViewBackground"
     android:layout_width="250dip"
     android:layout_height="match_parent"
     android:paddingTop="22dp"
@@ -16,6 +16,7 @@
         android:text="@string/recent"
         android:id="@+id/recent_button"
         android:background="@drawable/transparent_ripple"
+        android:textColor="?attr/MainTextColor"
         android:paddingTop="5dip"
         android:paddingBottom="5dip"
         android:textAllCaps="false"
@@ -28,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/browser"
+        android:textColor="?attr/MainTextColor"
         android:paddingTop="5dip"
         android:paddingBottom="5dip"
         android:textAllCaps="false"
@@ -45,6 +47,7 @@
         android:paddingTop="5dip"
         android:textAllCaps="false"
         android:paddingBottom="5dip"
+        android:textColor="?attr/MainTextColor"
         android:paddingLeft="20dip"
         android:id="@+id/settings_button"
         android:background="@drawable/transparent_ripple"
@@ -55,6 +58,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="60dip"
+        android:textColor="?attr/SecondaryTextColor"
         android:gravity="center"
         android:text="@string/keywords"/>
     <ScrollView
@@ -65,7 +69,6 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:background="@android:color/white"
             android:layout_width="300dip"
             android:id="@+id/keywords"
             android:layout_height="wrap_content"

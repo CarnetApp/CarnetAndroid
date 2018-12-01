@@ -4,9 +4,14 @@
     <color name="blue_500">#3F51B5</color>
     <color name="blue_400">#5C6BC0</color>
     <color name="blue_300">#7986CB</color>
-    <color name="colorPrimaryDark">#27326e</color>
-
-
+    <color name="blue_darker">#27326e</color>
     <color name="blue_50">#E8EAF6</color>
- <color name="transparent">#00000000</color>
+
+
+    <color name="dark_500">#22252f</color>
+    <color name="dark_400">#4d4d4d</color>
+    <color name="dark_300">#717171</color>
+    <color name="dark_darker">#000000</color>
+    <color name="dark_50">#c7c7c7</color>
+    <color name="transparent">#00000000</color>
 </resources>

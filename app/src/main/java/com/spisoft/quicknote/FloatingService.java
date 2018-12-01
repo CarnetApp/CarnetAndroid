@@ -94,7 +94,6 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
         mEditor = (EditorView) image.findViewById(R.id.editor_view);
         mFragments.push(mEditor);
         mEditor.setHideListener(this);
-        mEditor.setOptionMenu(mOptionMenuContainer);
 
         mShadowButton.setVisibility(View.GONE);
         mShadowButton.setOnClickListener(this);
@@ -111,7 +110,6 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
         mFragments.push(fragment);
         mfragmentContainer.addView(fragment.getView());
         mOptionMenuContainer.removeAllViews();
-        fragment.setOptionMenu(mOptionMenuContainer);
 
     }
 
@@ -121,7 +119,6 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
         FloatingFragment fragment = mFragments.peek();
         mfragmentContainer.addView(fragment.getView());
         mOptionMenuContainer.removeAllViews();
-        fragment.setOptionMenu(mOptionMenuContainer);
     }
 
 

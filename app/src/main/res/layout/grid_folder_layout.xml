@@ -11,6 +11,7 @@
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:layout_margin="5dp"
         card_view:cardElevation="5dp"
+        card_view:cardBackgroundColor="?attr/MainNoteBackground"
 
        >
         <LinearLayout
@@ -40,6 +41,7 @@
                 android:layout_weight="1"
                 android:text="Titre"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?attr/MainNoteTextColor"
                 android:id="@+id/name_tv"
                 android:padding="5dp" />
 

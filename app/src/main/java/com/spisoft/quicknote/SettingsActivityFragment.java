@@ -1,15 +1,21 @@
 package com.spisoft.quicknote;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 
 import com.spisoft.quicknote.intro.HelpActivity;
 import com.spisoft.quicknote.utils.PinView;
@@ -21,7 +27,7 @@ import com.spisoft.sync.account.DBAccountHelper;
  */
 public class SettingsActivityFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
-
+    private SharedPreferences.OnSharedPreferenceChangeListener changeListener;
     public SettingsActivityFragment() {
     }
 
@@ -40,7 +46,29 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
         findPreference("pref_desktop_version").setOnPreferenceClickListener(this);
 
     }
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        changeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                Log.d("prefdebug", "key "+key);
+                if(key.equals("theme")) {
+                    getView().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            getActivity().startActivity(intent);
+                            Runtime.getRuntime().exit(0);
+                        }
+                    },1000);
 
+                }
+            }
+        };
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(changeListener);
+
+    }
     private void setFreeStatus() {
 
     }

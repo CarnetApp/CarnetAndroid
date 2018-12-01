@@ -25,7 +25,12 @@
         android:title="@string/report_bug_or_propose"
         android:summary="@string/report_bug_or_propose_description"
         />
-
+    <ListPreference
+        android:title="@string/theme"
+        android:key="theme"
+        android:defaultValue="carnet"
+        android:entries="@array/theme_entries"
+        android:entryValues="@array/theme_values" />
     <Preference
         android:key="pref_desktop_version"
         android:title="@string/desktop_version"

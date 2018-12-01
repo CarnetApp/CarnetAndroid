@@ -56,6 +56,13 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String theme = PreferenceManager.getDefaultSharedPreferences(this).getString("theme","carnet");
+        switch(theme){
+            case "dark":
+                setTheme(R.style.CarnetTheme_Dark);
+                break;
+
+        }
         mSavedInstanceState = savedInstanceState;
         if(PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.NOTE_VERSION_PREF, -1)==-1){
             //not set but already start  : V1

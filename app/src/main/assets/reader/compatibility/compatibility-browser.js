@@ -62,7 +62,19 @@ function (_Compatibility) {
         };
       } else {
         var _require = require('electron'),
-            remote = _require.remote;
+            remote = _require.remote,
+            ipcRenderer = _require.ipcRenderer;
+
+        ipcRenderer.on('sync-start', function (event, arg) {
+          document.getElementById("right-bar-text").innerHTML = "Syncing...";
+        });
+        ipcRenderer.on('sync-stop', function (event, arg) {
+          document.getElementById("right-bar-text").innerHTML = "";
+        });
+
+        var main = remote.require("./main.js");
+
+        if (main.isSyncing()) document.getElementById("right-bar-text").innerHTML = "Syncing...";
 
         var SettingsHelper = require("./settings/settings_helper").SettingsHelper;
 

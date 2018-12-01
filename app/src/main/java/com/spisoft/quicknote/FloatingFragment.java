@@ -8,6 +8,5 @@ import android.view.ViewGroup;
  */
 public interface FloatingFragment {
     public View getView();
-    public void setOptionMenu(ViewGroup container);
 
 }

@@ -1,0 +1,50 @@
+:root{
+    --grid-bg: #fafafa;
+    --note-text-color: black;
+    --note-bg: white;
+    --note-bg-hover: white;
+    --carnet-icon-view-bg:rgb(36, 46, 100);
+    --loading-view-bg:rgb(36, 46, 100);
+}   
+
+
+body{
+    background: var(--grid-bg)
+}
+
+#carnet-icon-view{
+    background: var(--carnet-icon-view-bg);
+}
+
+#loading-view{
+    background: var(--loading-view-bg);
+}
+
+#page-container {
+    background: var(--grid-bg);
+}
+.mdl-card__supporting-text{
+    color:var(--note-text-color);
+}
+
+.mdl-card{
+    background: var(--note-bg);
+
+}
+
+
+.note-card-view :hover,
+.folder-card-view :hover {
+    background-color: var(--note-bg-hover);
+    -webkit-transition: background-color 250ms linear;
+    -ms-transition: background-color 250ms linear;
+    transition: background-color 250ms linear;
+    cursor: pointer;
+}
+.card-text{
+    color:var(--note-text-color);
+}
+
+.card-title {
+    color:var(--note-text-color);
+}

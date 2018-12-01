@@ -1021,6 +1021,35 @@ $(document).ready(function () {
   rootpath = document.getElementById("root-url").innerHTML;
   api_url = document.getElementById("api-url").innerHTML;
   new RequestBuilder(api_url);
+  RequestBuilder.sRequestBuilder.get("/settings/editor_css", function (error, data) {
+    if (!error) {
+      console.log("data " + data);
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = data[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var sheet = _step2.value;
+          console.log("sheet " + sheet);
+          Utils.applyCss(sheet);
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+    }
+  });
 
   if (writer == undefined) {
     writer = new Writer(document);

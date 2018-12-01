@@ -4,4 +4,16 @@
         <attr name="supportsAlpha"
               format="boolean"/>
     </declare-styleable>
+    <attr name="PinButton" format="reference" />
+    <attr name="MainViewBackground" format="reference|color" />
+    <attr name="InNoteKeywordBackground" format="reference|color" />
+    <attr name="InNoteKeywordColor" format="reference|color" />
+    <attr name="MainNoteBackground" format="reference" />
+    <attr name="MainNoteTextColor" format="reference" />
+    <attr name="MainTextColor" format="reference" />
+    <attr name="SecondaryTextColor" format="reference" />
+    <attr name="CardBorder" format="reference" />
+    <attr name="CardElevation" format="dimension" />
+    <attr name="CardInsideMargin" format="dimension" />
+
 </resources>

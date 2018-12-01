@@ -17,3 +17,17 @@ Utils.srt = function (desc) {
     return desc ? ~~(a < b) : ~~(a > b);
   };
 };
+
+Utils.applyCss = function (url) {
+  var head = document.getElementsByTagName('head')[0];
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = url;
+  head.appendChild(link);
+};
+
+Utils.removeCss = function (url) {
+  $('link[href="' + url + '"]').attr('disabled', 'true');
+  $('link[href="' + url + '"]').remove();
+};

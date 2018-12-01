@@ -208,12 +208,6 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         return this;
     }
 
-    @Override
-    public void setOptionMenu(ViewGroup container) {
-        LayoutInflater.from(getContext()).inflate(R.layout.editor_option_menu, container);
-
-    }
-
     public Note getNote() {
         return mNote;
     }

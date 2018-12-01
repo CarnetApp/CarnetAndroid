@@ -144,9 +144,4 @@ public class PinView extends FrameLayout implements View.OnClickListener, Floati
         return this;
     }
 
-    @Override
-    public void setOptionMenu(ViewGroup container) {
-
-    }
-
 }

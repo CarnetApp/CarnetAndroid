@@ -1,0 +1,14 @@
+{
+    "name": "Dark",
+    "browser": [
+        "design-dark-common.css",
+        "design-dark-browser.css"
+    ],
+    "editor": [
+        "design-dark-common.css",
+        "design-dark-editor.css"
+    ],
+    "settings": [
+        "design-dark-common.css"
+    ]
+}
