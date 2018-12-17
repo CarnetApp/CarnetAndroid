@@ -59,7 +59,7 @@ public class SearchFragment extends NoteListFragment implements BrowserAdapter.O
     public void onViewCreated(View v, Bundle save) {
         super.onViewCreated(v, save);
         mRoot.findViewById(R.id.add_note_button).setOnClickListener(this);
-        mRoot.findViewById(R.id.add_folder_button).setOnClickListener(this);
+        mRoot.findViewById(R.id.add_folder_button).setVisibility(View.GONE);
         getActivity().setTitle(R.string.browser);
         mPath = getArguments().getString(PATH);
         doSearch(getArguments().getString(SEARCH));

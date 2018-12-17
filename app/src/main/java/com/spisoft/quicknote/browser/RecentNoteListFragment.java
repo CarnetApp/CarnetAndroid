@@ -121,6 +121,7 @@ public class RecentNoteListFragment extends NoteListFragment {
         super.onViewCreated(view, savedInstanceState);
         ItemTouchHelper touchHelper = new ItemTouchHelper(mSimpleItemTouchHelperCallback);
         touchHelper.attachToRecyclerView(mRecyclerView);
+        mRoot.findViewById(R.id.add_folder_button).setVisibility(View.GONE);
     }
 
     @Override
