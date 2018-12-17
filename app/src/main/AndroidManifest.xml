@@ -17,7 +17,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/CarnetTheme.Blue">
+        android:theme="@style/CarnetTheme.White">
 
         <service android:name=".noise.NoiseService" />
 
@@ -82,7 +82,7 @@
         <activity
             android:name=".intro.HelpActivity"
             android:label="@string/title_activity_help"
-            android:theme="@style/CarnetTheme.Blue" />
+            android:theme="@style/CarnetTheme.White" />
 
         <service
             android:name=".databases.DBMergerService"
@@ -96,7 +96,7 @@
         <activity
             android:name=".synchro.AccountConfigActivity"
             android:label="@string/title_activity_account_config"
-            android:theme="@style/CarnetTheme.Blue" />
+            android:theme="@style/CarnetTheme.White" />
         <activity android:name=".updater.UpdaterActivity"></activity>
     </application>
 

@@ -18,12 +18,23 @@ Utils.srt = function (desc) {
   };
 };
 
-Utils.applyCss = function (url) {
-  var head = document.getElementsByTagName('head')[0];
+Utils.applyCss = function (url, onloaded) {
+  //content is for nextcloud..
+  var head = document.getElementById("content") != undefined ? document.getElementById("content") : document.getElementsByTagName('head')[0];
   var link = document.createElement('link');
   link.rel = 'stylesheet';
   link.type = 'text/css';
   link.href = url;
+
+  if (onloaded != undefined) {
+    link.addEventListener('load', function () {
+      onloaded(url);
+    });
+    link.addEventListener('error', function () {
+      onloaded(url);
+    });
+  }
+
   head.appendChild(link);
 };
 

@@ -1,11 +1,32 @@
 :root{
     --header-bg:#22252f;
+    --header-text-color:white;
     --drawer-bg: #22252f;
     --drawer-text-color:white;
     --dialog-bg: #22252f;
     --dialog-text-color: white;
     --body-bg: #393c44;
+    --drawer-text-button-hover:#2f3341;
 }
+
+html {
+    scrollbar-face-color: #646464;
+    scrollbar-base-color: #646464;
+    scrollbar-3dlight-color: #646464;
+    scrollbar-highlight-color: #646464;
+    scrollbar-track-color: #22252f;
+    scrollbar-arrow-color: #22252f;
+    scrollbar-shadow-color: #646464;
+    scrollbar-dark-shadow-color: #646464;
+  }
+  
+  ::-webkit-scrollbar { width: 8px; height: 3px;}
+  ::-webkit-scrollbar-button {  height: 0px; background-color: #666; }
+  ::-webkit-scrollbar-track {  background-color: #646464;}
+  ::-webkit-scrollbar-track-piece { background-color: #22252f;}
+  ::-webkit-scrollbar-thumb { height: 1px; background-color: #666; }
+  ::-webkit-scrollbar-corner { background-color: #646464;}
+  ::-webkit-resizer { background-color: #666;}
 
 .mdl-layout__drawer {
     border-right-color:grey;
@@ -14,6 +35,10 @@
 
 .mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
     color:white;
+}
+
+.mdl-button[disabled][disabled], .mdl-button.mdl-button--disabled.mdl-button--disabled{
+    color:rgb(175, 175, 175);
 }
 
 .keyword {
@@ -35,9 +60,6 @@
     color:rgba(255, 255, 255, .54);
 }
 
-.mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover {
-    background-color: #3b3b3b;
-}
 .mdl-button--fab {
 
     background: rgba(158, 158, 158, .8);
@@ -46,3 +68,18 @@
 
     background: rgba(158, 158, 158, .9);
 }
+
+
+
+:root{
+    --note-none: #2f3341;
+    --note-red: rgb(78, 40, 40);
+    --note-orange: rgb(68, 44, 28);
+    --note-yellow: rgb(70, 59, 26);
+    --note-green: rgb(37, 59, 42);
+    --note-teal: rgb(5, 66, 63);
+    --note-blue: rgb(37, 52, 63);
+    --note-violet: rgb(65, 57, 83);
+    --note-purple: rgb(62, 43, 68);
+    --note-pink: rgb(63, 26, 47);
+  }

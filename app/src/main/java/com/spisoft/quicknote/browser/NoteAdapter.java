@@ -1,7 +1,15 @@
 package com.spisoft.quicknote.browser;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.support.annotation.ColorInt;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -37,6 +45,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
 
     private final Handler mHandler;
     private final String mLoadingText;
+    private final Resources.Theme mTheme;
     protected List<Object> mNotes;
     private ArrayList<Object> mSelelectedNotes;
 
@@ -52,6 +61,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         mNoteInfoRetriever = new NoteInfoRetriever(this, context);
         mNoteThumbnailEngine = new NoteThumbnailEngine(context);
         mLoadingText = context.getResources().getString(R.string.loading);
+        mTheme = context.getTheme();
 
     }
 
@@ -159,17 +169,19 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
     public class NoteViewHolder extends RecyclerView.ViewHolder {
 
 
-        private final View mCard;
+        private final View mMainView;
         private final TextView mTitleView;
         private final TextView mTextView;
         private final TextView mMarkView;
         private final ImageView mPreview1;
         private final ImageView mPreview2;
+        private final CardView mCard;
         private Note mNote;
 
         public NoteViewHolder(View itemView) {
             super(itemView);
-            mCard = itemView.findViewById(R.id.cardview);
+            mMainView = itemView.findViewById(R.id.cardview);
+            mCard = itemView.findViewById(R.id.rootcardview);
             mTitleView = (TextView) itemView.findViewById(R.id.name_tv);
             mTextView = (TextView) itemView.findViewById(R.id.text_tv);
             mMarkView = (TextView) itemView.findViewById(R.id.mark_tv);
@@ -193,7 +205,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                 setPreview2(null);
             }
             mNote = note;
-            mCard.setOnClickListener(new View.OnClickListener() {
+            mMainView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mSelelectedNotes != null && mSelelectedNotes.size() > 0)
@@ -202,7 +214,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                         mOnNoteClick.onNoteClick(note, view);
                 }
             });
-            mCard.setOnLongClickListener(new View.OnLongClickListener() {
+            mMainView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
                     mOnNoteClick.onLongClick(note, view);
@@ -220,8 +232,63 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             setRating(note.mMetadata.rating);
             setDate(note.mMetadata.last_modification_date);
             setKeywords(note.mMetadata.keywords);
+            setBackground(note.mMetadata.color);
         }
 
+        public void setBackground(String color) {
+            int attr = R.attr.NoteBGNone;
+            if(color!=null)
+            switch (color){
+                case "red":
+                    attr = R.attr.NoteBGRed;
+                    break;
+                case "orange":
+                    attr = R.attr.NoteBGOrange;
+                    break;
+                case "yellow":
+                    attr = R.attr.NoteBGYellow;
+                    break;
+                case "green":
+                    attr = R.attr.NoteBGGreen;
+                    break;
+                case "teal":
+                    attr = R.attr.NoteBGTeal;
+                    break;
+                case "blue":
+                    attr = R.attr.NoteBGBlue;
+                    break;
+                case "violet":
+                    attr = R.attr.NoteBGViolet;
+                    break;
+                case "purple":
+                    attr = R.attr.NoteBGPurple;
+                    break;
+                case "pink":
+                    attr = R.attr.NoteBGPink;
+                    break;
+            }
+            TypedValue typedValue = new TypedValue();
+
+            mTheme.resolveAttribute(attr, typedValue, true);
+            @ColorInt int colorInt = typedValue.data;
+            mCard.setCardBackgroundColor(colorInt);
+
+            Drawable background = mMainView.getBackground();
+            if (background instanceof ShapeDrawable) {
+                // cast to 'ShapeDrawable'
+                ShapeDrawable shapeDrawable = (ShapeDrawable) background;
+                shapeDrawable.getPaint().setColor(colorInt);
+            } else if (background instanceof GradientDrawable) {
+                // cast to 'GradientDrawable'
+                GradientDrawable gradientDrawable = (GradientDrawable) background;
+                gradientDrawable.setColor(colorInt);
+            } else if (background instanceof ColorDrawable) {
+                // alpha value may need to be set again after this call
+                ColorDrawable colorDrawable = (ColorDrawable) background;
+                colorDrawable.setColor(colorInt);
+            }
+
+        }
         public void setPreview1(Bitmap bitmap) {
             if(bitmap == null)
                 mPreview1.setVisibility(View.GONE);
@@ -279,7 +346,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         }
 
         public void setSelected(boolean contains) {
-            mCard.setSelected(contains);
+            mMainView.setSelected(contains);
 
         }
 

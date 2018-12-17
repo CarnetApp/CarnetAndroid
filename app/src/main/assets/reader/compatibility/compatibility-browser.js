@@ -65,16 +65,48 @@ function (_Compatibility) {
             remote = _require.remote,
             ipcRenderer = _require.ipcRenderer;
 
+        var syncButton = document.getElementById("sync-button");
+        syncButton.style.display = "inline";
         ipcRenderer.on('sync-start', function (event, arg) {
-          document.getElementById("right-bar-text").innerHTML = "Syncing...";
+          syncButton.classList.add("rotation");
+          syncButton.disabled = true;
         });
         ipcRenderer.on('sync-stop', function (event, arg) {
-          document.getElementById("right-bar-text").innerHTML = "";
+          syncButton.classList.remove("rotation");
+          syncButton.disabled = false;
         });
 
         var main = remote.require("./main.js");
 
-        if (main.isSyncing()) document.getElementById("right-bar-text").innerHTML = "Syncing...";
+        if (main.isSyncing()) {
+          syncButton.classList.add("rotation");
+          syncButton.disabled = true;
+        }
+
+        syncButton.onclick = function () {
+          if (!main.startSync()) {
+            var _require2 = require('electron'),
+                remote = _require2.remote;
+
+            var BrowserWindow = remote.BrowserWindow;
+            var win = new BrowserWindow({
+              width: 500,
+              height: 500,
+              frame: true
+            });
+
+            var url = require('url');
+
+            var path = require('path');
+
+            win.loadURL(url.format({
+              pathname: path.join(__dirname, 'settings/webdav_dialog.html'),
+              protocol: 'file:',
+              slashes: true
+            }));
+            win.setMenu(null);
+          }
+        };
 
         var SettingsHelper = require("./settings/settings_helper").SettingsHelper;
 
@@ -98,6 +130,9 @@ function (_Compatibility) {
           };
         }
 
+        registerWriterEvent("exit", function () {
+          main.syncOneNote(currentNotePath);
+        });
         document.getElementById("settings-button").href = "settings.html";
         setTimeout(function () {
           RequestBuilder.sRequestBuilder.get("/settings/current_version", function (error, version) {
@@ -114,8 +149,8 @@ function (_Compatibility) {
                       message: "New version available",
                       timeout: 10000,
                       actionHandler: function actionHandler() {
-                        var _require2 = require('electron'),
-                            shell = _require2.shell;
+                        var _require3 = require('electron'),
+                            shell = _require3.shell;
 
                         shell.openExternal("https://qn.phie.ovh/binaries/desktop/");
                       },
@@ -138,8 +173,8 @@ function (_Compatibility) {
     key: "onFirstrunEnds",
     value: function onFirstrunEnds() {
       if (this.isElectron) {
-        var _require3 = require('electron'),
-            remote = _require3.remote;
+        var _require4 = require('electron'),
+            remote = _require4.remote;
 
         var BrowserWindow = remote.BrowserWindow;
         var win = new BrowserWindow({

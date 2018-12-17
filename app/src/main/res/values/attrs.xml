@@ -8,12 +8,28 @@
     <attr name="MainViewBackground" format="reference|color" />
     <attr name="InNoteKeywordBackground" format="reference|color" />
     <attr name="InNoteKeywordColor" format="reference|color" />
-    <attr name="MainNoteBackground" format="reference" />
-    <attr name="MainNoteTextColor" format="reference" />
-    <attr name="MainTextColor" format="reference" />
-    <attr name="SecondaryTextColor" format="reference" />
+    <attr name="MainNoteBackground" format="reference|color" />
+    <attr name="MainNoteTextColor" format="reference|color" />
+    <attr name="MainTextColor" format="reference|color" />
+    <attr name="SecondaryTextColor" format="reference|color" />
     <attr name="CardBorder" format="reference" />
     <attr name="CardElevation" format="dimension" />
     <attr name="CardInsideMargin" format="dimension" />
+
+    <attr name="NoteBGNone" format="reference|color" />
+    <attr name="NoteBGRed" format="reference|color" />
+    <attr name="NoteBGOrange" format="reference|color" />
+    <attr name="NoteBGYellow" format="reference|color" />
+    <attr name="NoteBGGreen" format="reference|color" />
+    <attr name="NoteBGTeal" format="reference|color" />
+    <attr name="NoteBGBlue" format="reference|color" />
+    <attr name="NoteBGViolet" format="reference|color" />
+    <attr name="NoteBGPurple" format="reference|color" />
+    <attr name="NoteBGPink" format="reference|color" />
+    <attr name="ActionButtonBackground" format="reference|color" />
+    <attr name="ActionButtonBorderColor" format="reference|color" />
+    <attr name="AddFolderIcon" format="reference" />
+    <attr name="AddNoteIcon" format="reference" />
+    <attr name="DotsIcon" format="reference" />
 
 </resources>

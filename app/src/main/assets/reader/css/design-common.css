@@ -10,7 +10,7 @@
     --dialog-text-color: black;
     --button-text-color: black;
     --label-text-color: rgb(63, 81, 181);
-    --fab-button-bg: rgba(158, 158, 158, .5);
+    --fab-button-bg: #fafafa;
     --fab-button-hover-bg: rgba(158, 158, 158, .6);
 
 }
@@ -21,6 +21,7 @@ body{
 
 .mdl-layout__header-row, .mdl-layout__header {
     background: var(--header-bg);
+    color: var(--header-text-color);
 }
 
 .mdl-layout__drawer {
@@ -67,5 +68,37 @@ dialog{
     background: var(--fab-button-hover-bg);
 }
 .headerbar-button{
-    color:var(--header-text-color)
+    color:var(--header-text-color);
 }
+.mdl-layout__drawer-button{
+    color: var(--header-text-color) !important;
+
+}
+.mdl-layout-title{
+    color:var(--header-text-color);
+
+}
+
+.rotation{
+    -webkit-animation:spin 4s linear infinite;
+    -moz-animation:spin 4s linear infinite;
+    animation:spin 4s linear infinite;
+}
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(-360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(-360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(-360deg); transform:rotate(-360deg); } }
+
+/* note color */
+:root{
+    --note-none: white;
+    --note-red: rgb(241, 166, 166);
+    --note-orange: rgb(241, 195, 165);
+    --note-yellow: rgb(255, 230, 157);
+    --note-green: rgb(174, 243, 190);
+    --note-teal: rgb(108, 247, 240);
+    --note-blue: rgb(122, 167, 201);
+    --note-violet: rgb(155, 135, 199);
+    --note-purple: rgb(178, 137, 192);
+    --note-pink: rgb(207, 157, 185);
+  }

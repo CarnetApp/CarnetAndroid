@@ -49,8 +49,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     protected List<Object> mNotes;
     protected Note mLastSelected;
     private BroadcastReceiver mReceiver;
-    private ViewGroup mSecondaryButtonsContainer;
-    private boolean mHasSecondaryButtons;
 
     private TextView mEmptyViewMessage;
     protected View mEmptyView;
@@ -103,8 +101,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             mRecyclerView = (RecyclerView) mRoot.findViewById(R.id.recyclerView);
             mEmptyView = mRoot.findViewById(R.id.empty_view);
             mEmptyViewMessage = (TextView) mRoot.findViewById(R.id.empty_message);
-            mRoot.findViewById(R.id.add_button).setOnClickListener(this);
-            mSecondaryButtonsContainer = (ViewGroup)mRoot.findViewById(R.id.secondary_buttons);
+            mRoot.findViewById(R.id.add_note_button).setOnClickListener(this);
             mNoteAdapter = getAdapter();
             mNoteAdapter.setOnNoteClickListener(this);
             mGridLayout = new StaggeredGridLayoutManager( 2, StaggeredGridLayoutManager.VERTICAL);
@@ -123,13 +120,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         mEmptyView.setVisibility(View.VISIBLE);
         if(message!=null)
             mEmptyViewMessage.setText(message);
-    }
-    public void addSecondaryButton(View v){
-        mHasSecondaryButtons = true;
-        mSecondaryButtonsContainer.addView(v);
-    } public void addSecondaryButton(int resourceId){
-        mHasSecondaryButtons = true;
-        LayoutInflater.from(getActivity()).inflate(resourceId, mSecondaryButtonsContainer);
     }
 
     public void onViewCreated(View v, Bundle save){
@@ -367,26 +357,8 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
     @Override
     public void onClick(View view) {
-        if(view==mRoot.findViewById(R.id.add_button)) {
-            if(mHasSecondaryButtons){
-                mSecondaryButtonsContainer.setVisibility(mSecondaryButtonsContainer.getVisibility()==View.GONE?View.VISIBLE:View.GONE);
-            }
-            else {
-
-              /*  if(Build.VERSION.SDK_INT>=  Build.VERSION_CODES.M&&!Settings.canDrawOverlays(getActivity())){
-                    Intent intent = new Intent(getContext(), HelpAuthorizeFloatingWindowActivity.class);
-                    intent.putExtra(FloatingService.NOTE, NoteManager.createNewNote(PreferenceHelper.getRootPath(getActivity())));
-                    startActivity(intent);
-
-                    return;
-                }else {*/
+        if(view==mRoot.findViewById(R.id.add_note_button)) {
               createAndOpenNewNote(PreferenceHelper.getRootPath(getActivity()));
-                    /*Intent intent = new Intent(getActivity(), FloatingService.class);
-                    intent.putExtra(FloatingService.NOTE, NoteManager.createNewNote(PreferenceHelper.getRootPath(getActivity())));
-                    getActivity().startService(intent);*/
-               // }
-
-            }
         }
     }
 

@@ -11,8 +11,8 @@
         android:layout_margin="5dp"
         card_view:cardElevation="?attr/CardElevation"
         card_view:cardCornerRadius="5dp"
-
-        card_view:cardBackgroundColor="?attr/MainNoteBackground"
+        android:id="@+id/rootcardview"
+        card_view:cardBackgroundColor="?attr/NoteBGGreen"
 
        >
         <FrameLayout
@@ -44,7 +44,7 @@
                 />
 
                 <ImageButton
-                    android:src="@drawable/threedots"
+                    android:src="?attr/DotsIcon"
                     android:layout_width="30dp"
                     android:padding="5dp"
                     android:background="@drawable/transparent_ripple"

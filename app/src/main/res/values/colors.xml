@@ -5,10 +5,11 @@
     <color name="blue_400">#5C6BC0</color>
     <color name="blue_300">#7986CB</color>
     <color name="blue_darker">#27326e</color>
-    <color name="blue_50">#E8EAF6</color>
+    <color name="blue_50">#a0e8eaf6</color>
 
 
-    <color name="dark_500">#22252f</color>
+    <color name="dark_500">#2f3341</color>
+    <color name="toolbar">#22252f</color>
     <color name="dark_400">#4d4d4d</color>
     <color name="dark_300">#717171</color>
     <color name="dark_darker">#000000</color>

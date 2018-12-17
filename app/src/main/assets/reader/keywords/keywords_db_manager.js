@@ -20,13 +20,17 @@ KeywordsDBManager.prototype.getFlatenDB = function (callback) {
       for (var _iterator = fullDB[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         var item = _step.value;
         var keyword = item.keyword;
-        if (keyword == undefined) continue;
+
+        if (keyword == undefined && item.action !== "remove" && item.action !== "move") {
+          continue;
+        }
 
         if (keyword != undefined && flaten[keyword] == undefined) {
           flaten[keyword] = [];
         }
 
-        var index = flaten[keyword].indexOf(item.path);
+        var index = -1;
+        if (keyword !== undefined) index = flaten[keyword].indexOf(item.path);
 
         if (item.action == "add") {
           if (index == -1) {
@@ -36,11 +40,18 @@ KeywordsDBManager.prototype.getFlatenDB = function (callback) {
           if (index > -1) {
             flaten[keyword].splice(index, 1);
           }
-        } else if (item.action == "move") {
-          for (var _key in flaten) {
-            var indexBis = flaten[_key].indexOf(item.path);
 
-            flaten[_key][indexBis] = item.newPath;
+          if (keyword == undefined) {
+            for (var key in flaten) {
+              var indexBis = flaten[key].indexOf(item.path);
+              if (indexBis >= -1) flaten[key].splice(indexBis, 1);
+            }
+          }
+        } else if (item.action == "move") {
+          for (var _key2 in flaten) {
+            var indexBis = flaten[_key2].indexOf(item.path);
+
+            flaten[_key2][indexBis] = item.newPath;
           }
         }
       }
@@ -59,8 +70,9 @@ KeywordsDBManager.prototype.getFlatenDB = function (callback) {
       }
     }
 
-    for (var key in flaten) {
-      flaten[key].reverse(); //unshift seems slower...
+    for (var _key in flaten) {
+      flaten[_key].reverse(); //unshift seems slower...
+
     }
 
     callback(false, flaten);
@@ -68,14 +80,10 @@ KeywordsDBManager.prototype.getFlatenDB = function (callback) {
 };
 
 KeywordsDBManager.prototype.addToDB = function (keyword, path, callback) {
-  console.log("path 1 " + path);
-  if (path.startsWith("/")) path = NoteUtils.getNoteRelativePath(settingsHelper.getNotePath(), path);
-  console.log("path 2 " + path);
   this.action(keyword, path, "add", callback);
 };
 
 KeywordsDBManager.prototype.removeFromDB = function (keyword, path, callback) {
-  if (path.startsWith("/")) path = NoteUtils.getNoteRelativePath(settingsHelper.getNotePath(), path);
   this.action(keyword, path, "remove", callback);
 };
 

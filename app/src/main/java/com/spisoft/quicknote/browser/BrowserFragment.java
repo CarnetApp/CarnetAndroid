@@ -31,7 +31,6 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
 
     private static final String PATH = "path";
     private String mPath;
-    private boolean hasAddedButton;
     private  ActionMode.Callback mActionCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
@@ -124,9 +123,6 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
     public void onViewCreated(View v, Bundle save) {
         super.onViewCreated(v, save);
         setHasOptionsMenu(true);
-        if(mRoot.findViewById(R.id.add_note_button) == null)
-            addSecondaryButton(R.layout.browser_secondary_buttons);
-        hasAddedButton = true;
         mRoot.findViewById(R.id.add_note_button).setOnClickListener(this);
         mRoot.findViewById(R.id.add_folder_button).setOnClickListener(this);
         getActivity().setTitle(R.string.browser);
@@ -134,13 +130,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
     }
     @Override
     public void onClick(View view) {
-        if(view==mRoot.findViewById(R.id.add_button)) {
-            super.onClick(view);
-            /*File file = new File(PreferenceHelper.getRootPath(getActivity()));
-            String path = mPath + (!mPath.endsWith("/")?"/":"")+"untitled";
-            Fragment fragment = BlankFragment.newInstance(new Note(path));
-            ((MainActivity) getActivity()).setFragment(fragment);*/
-        }else if(view == mRoot.findViewById(R.id.add_note_button)){
+        if(view == mRoot.findViewById(R.id.add_note_button)){
             createAndOpenNewNote(mPath);
         }else if(view == mRoot.findViewById(R.id.add_folder_button)){
             RenameDialog dialog = new RenameDialog();

@@ -79,6 +79,7 @@ public class Note implements Serializable{
         public long last_modification_date = -1;
         public List<String> keywords = new ArrayList();
         public int rating = -1;
+        public String color = "none";
 
         @Override
         public boolean equals(Object o) {
@@ -90,6 +91,7 @@ public class Note implements Serializable{
             if (creation_date != metadata.creation_date) return false;
             if (last_modification_date != metadata.last_modification_date) return false;
             if (rating != metadata.rating) return false;
+            if (color != metadata.color) return false;
             return keywords != null ? keywords.equals(metadata.keywords) : metadata.keywords == null;
         }
 
@@ -99,6 +101,7 @@ public class Note implements Serializable{
             result = 31 * result + (int) (last_modification_date ^ (last_modification_date >>> 32));
             result = 31 * result + (keywords != null ? keywords.hashCode() : 0);
             result = 31 * result + rating;
+            result = 31 * result + color.hashCode();
             return result;
         }
 
@@ -124,6 +127,8 @@ public class Note implements Serializable{
                 metadata.last_modification_date = jsonObject.getLong("last_modification_date");
                 if(jsonObject.has("rating"))
                     metadata.rating = jsonObject.getInt("rating");
+                if(jsonObject.has("color"))
+                    metadata.color = jsonObject.getString("color");
                 JSONArray array =  jsonObject.getJSONArray("keywords");
                 for (int i = 0; i < array.length(); i++) {
                     metadata.keywords.add(array.getString(i));
@@ -140,6 +145,7 @@ public class Note implements Serializable{
                 object.put("creation_date",creation_date);
                 object.put("last_modification_date",last_modification_date);
                 object.put("rating",rating);
+                object.put("color",color);
                 JSONArray keywordsJson = new JSONArray();
                 for(String keyword : keywords){
                     keywordsJson.put(keyword);

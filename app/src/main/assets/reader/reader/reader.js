@@ -266,6 +266,7 @@ Writer.prototype.extractNote = function () {
 
     ;
     writer.updateRating(writer.note.metadata.rating);
+    writer.updateNoteColor(writer.note.metadata.color != undefined ? writer.note.metadata.color : "none");
   });
 };
 
@@ -495,6 +496,15 @@ Writer.prototype.init = function () {
     ratingStars[i].onclick = function () {
       writer.saveRating(this.value);
       writer.updateRating(this.value);
+    };
+  }
+
+  ;
+  var inputs = document.querySelectorAll("input[name='color']");
+
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].onclick = function () {
+      writer.saveNoteColor(this.id);
     };
   }
 
@@ -800,6 +810,25 @@ Writer.prototype.updateRating = function (rating) {
   ;
 };
 
+Writer.prototype.saveNoteColor = function (color) {
+  this.note.metadata.color = color;
+  console.log("new color " + this.note.metadata.color);
+  writer.hasTextChanged = true;
+};
+
+Writer.prototype.updateNoteColor = function (color) {
+  console.log("color " + color);
+  var inputs = document.querySelectorAll("input[name='color']");
+
+  for (var i = 0; i < inputs.length; i++) {
+    if (inputs[i].id == color) {
+      inputs[i].checked = true;
+    }
+  }
+
+  ;
+};
+
 Writer.prototype.getCaretPosition = function () {
   var x = 0;
   var y = 0;
@@ -1022,7 +1051,7 @@ $(document).ready(function () {
   api_url = document.getElementById("api-url").innerHTML;
   new RequestBuilder(api_url);
   RequestBuilder.sRequestBuilder.get("/settings/editor_css", function (error, data) {
-    if (!error) {
+    if (!error && data != null && data != undefined) {
       console.log("data " + data);
       var _iteratorNormalCompletion2 = true;
       var _didIteratorError2 = false;
