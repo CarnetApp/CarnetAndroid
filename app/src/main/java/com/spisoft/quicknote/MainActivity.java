@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -81,11 +83,23 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
             if(!DBMergerService.isJobScheduledOrRunning(this)){
                 DBMergerService.scheduleJob(this,true, DBMergerService.ALL_DATABASES);
             }
+        int count = PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.LAUNCH_COUNT, 1);
+        if(count%3 == 0 && !PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(PreferenceHelper.HAS_DONATE, false)){
+            Snackbar.make(findViewById(R.id.root), R.string.donation_ask,
+                    Snackbar.LENGTH_LONG)
+                    .setDuration(15000)
+                    .setAction(R.string.donate, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean(PreferenceHelper.HAS_DONATE, true).commit();
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YMHT55NSCLER6"));
+                            startActivity(browserIntent);
+                        }
+                    })
+                    .show();
+        }
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(PreferenceHelper.LAUNCH_COUNT, count+1).commit();
         mPermissionChecker = new PermissionChecker();
-
-
-
-
         mPermissionChecker.checkAndRequestPermission(this);
 
         // startService(new Intent(this, FloatingService.class));
