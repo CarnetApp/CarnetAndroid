@@ -15,7 +15,13 @@
 
 }
 
+@font-face {
+    font-family: 'Ubuntu';
+    src: url(../fonts/ubuntu.woff2) format('woff2');
+}
+
 body{
+    font-family: Ubuntu;
     background: var(--body-bg);
 }
 

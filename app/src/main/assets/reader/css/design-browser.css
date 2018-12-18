@@ -33,7 +33,6 @@
 }
 
 body{
-    font-family: Ubuntu;
     background: var(--grid-bg)
 }
 
@@ -85,7 +84,7 @@ body{
 }
 
 .medium-text{
-    line-height: 1.3em;
+    line-height: 1.2em;
 }
 
 .big-text{
@@ -107,6 +106,7 @@ body{
     left:0px;
     display: none; 
     width:100%;
+    height:100%;
     z-index:100; 
     right:0;
     bottom:0;
@@ -183,4 +183,21 @@ body{
 
 .mdl-card:hover{
     box-shadow: var(--note-shadow-hover);
+}
+
+/* nextcloud */
+
+#search-input {
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, .12);
+    display: block;
+    font-size: 16px;
+    font-family: "Ubuntu";
+    margin: 0;
+    padding: 4px 0;
+    width: 100%;
+    background: 0 0;
+    background-color: rgba(0, 0, 0, 0);
+    text-align: left;
+    color: inherit;
 }
