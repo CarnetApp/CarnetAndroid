@@ -24,18 +24,11 @@ public class EditorUpdater implements Updater{
         copyFileOrDir(ct, rootPath,"reader/reader/reader.html");
         String reader = FileUtils.readFile(rootPath + "/reader/reader/reader.html");
         FileUtils.writeToFile(rootPath + "/tmp/reader.html", reader.replace("<!ROOTPATH>", "../reader/").replace("<!ROOTURL>", "../reader/").replace("<!APIURL>", "../api"));
-        String firstLine = reader.substring(0,reader.indexOf("\n"));
-        Log.d(TAG,"archive version "+firstLine);
-        int version = Integer.parseInt(firstLine.substring("<!--".length(), firstLine.length()-"-->".length()));
-        int currentVersion = PreferenceHelper.getCurrentReaderVersion(ct);
-        Log.d(TAG,"current version "+currentVersion);
-        Log.d(TAG,"archive version "+version);
         File dir = new File(rootPath + "/reader");
         if (dir.exists())
             FileUtils.deleteRecursive(dir);
         dir.mkdirs();
         copyFileOrDir(ct, rootPath,"reader");
-        PreferenceHelper.setCurrentReaderVersion(ct, version);
 
     }
 

@@ -68,12 +68,19 @@
                     android:text="texttexttexttexttexttexttexttexttexttexttexttext "
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textSize="10sp" />
+            <LinearLayout
+                android:layout_below="@id/text_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical"
+                android:id="@+id/todolist_items_container"></LinearLayout>
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/keywords"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_tv"
+                android:layout_below="@id/todolist_items_container"
                 app:flexWrap="wrap"
                 app:alignItems="stretch"
                 app:alignContent="stretch" >

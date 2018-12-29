@@ -16,11 +16,15 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.R;
+import com.spisoft.quicknote.databases.NoteManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -233,6 +237,34 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             setDate(note.mMetadata.last_modification_date);
             setKeywords(note.mMetadata.keywords);
             setBackground(note.mMetadata.color);
+            setTodoLists(note.mMetadata.todolists);
+        }
+
+        private void setTodoLists(List<Note.TodoList> todolists) {
+            ViewGroup container = mMainView.findViewById(R.id.todolist_items_container);
+            container.removeAllViews();
+            for(final Note.TodoList todoList:todolists){
+                for(final String item : todoList.todo){
+                    final CheckBox checkBox = new CheckBox(mContext);
+                    checkBox.setText(item);
+                    container.addView(checkBox);
+                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            todoList.todo.remove(item);
+                            todoList.done.add(item);
+                            NoteManager.updateMetadata(mContext, mNote);
+                            checkBox.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ((LinearLayout)checkBox.getParent()).removeView(checkBox);
+                                }
+                            });
+                        }
+                    });
+
+                }
+            }
         }
 
         public void setBackground(String color) {
@@ -309,9 +341,9 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             if(s==null)
                 s = "";
             mTextView.setText(s);
-            if(s.length()<40){
+            if(s.length()<40 && mNote.mMetadata.todolists.size() == 0){
                 mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,mBigText);
-            } else if(s.length()<100){
+            } else if(s.length()<100 && mNote.mMetadata.todolists.size() == 0){
                 mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,mMediumText);
             }else
                 mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,mSmallText);

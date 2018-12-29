@@ -73,11 +73,66 @@ public class Note implements Serializable{
     public void setMetaData(Metadata metadata) {
         mMetadata = metadata;
     }
+    public static class TodoList implements Serializable{
+        public List<String> todo = new ArrayList<>();
+        public List<String> done = new ArrayList<>();
+        public String id = "";
+        public static TodoList fromString(String string){
+            TodoList todoList = new TodoList();
+            try {
+                JSONObject jsonObject = new JSONObject(string);
+                return fromJSONObject(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return todoList;
+        }
 
+        public static TodoList fromJSONObject(JSONObject jsonObject){
+            TodoList todoList = new TodoList();
+            try {
+                todoList.id = jsonObject.getString("id");
+                JSONArray array =  jsonObject.getJSONArray("todo");
+                for (int i = 0; i < array.length(); i++) {
+                    todoList.todo.add(array.getString(i));
+                }
+                array =  jsonObject.getJSONArray("done");
+                for (int i = 0; i < array.length(); i++) {
+                    todoList.done.add(array.getString(i));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return todoList;
+        }
+
+        public JSONObject toJsonObject(){
+            JSONObject object = new JSONObject();
+            try {
+                object.put("id",id);
+                JSONArray todo = new JSONArray();
+                for(String item : this.todo){
+                    todo.put(item);
+                }
+                object.put("todo",todo);
+
+                JSONArray done = new JSONArray();
+                for(String item : this.done){
+                    done.put(item);
+                }
+                object.put("done",done);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+    }
     public static class Metadata implements Serializable{
         public long creation_date = -1;
         public long last_modification_date = -1;
         public List<String> keywords = new ArrayList();
+        public List<TodoList> todolists = new ArrayList();
         public int rating = -1;
         public String color = "none";
 
@@ -133,6 +188,12 @@ public class Note implements Serializable{
                 for (int i = 0; i < array.length(); i++) {
                     metadata.keywords.add(array.getString(i));
                 }
+                if(jsonObject.has("todolists")) {
+                    array = jsonObject.getJSONArray("todolists");
+                    for (int i = 0; i < array.length(); i++) {
+                        metadata.todolists.add(TodoList.fromJSONObject(array.getJSONObject(i)));
+                    }
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -151,6 +212,12 @@ public class Note implements Serializable{
                     keywordsJson.put(keyword);
                 }
                 object.put("keywords",keywordsJson);
+                JSONArray todolists = new JSONArray();
+                for(TodoList todoList : this.todolists){
+                    todolists.put(todoList.toJsonObject());
+                }
+                object.put("todolists",todolists);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

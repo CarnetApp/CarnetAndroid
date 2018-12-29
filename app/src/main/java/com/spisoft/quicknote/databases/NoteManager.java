@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,6 +49,18 @@ public class NoteManager
     public static String EXTENSION = "sqd";
     public static final String ACTION_UPDATE_END = "update_note_end";
 
+
+    public static void updateMetadata(final Context context, final Note note){
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                ZipUtils.addEntry(context, note, "metadata.json", new ByteArrayInputStream(note.mMetadata.toJsonObject().toString().getBytes()));
+
+                return null;
+            }
+        }.execute();
+    }
 
     public static String getHtmlPath(int page){
 
