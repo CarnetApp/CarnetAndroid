@@ -18,6 +18,7 @@ var NoteMetadata = function NoteMetadata() {
   this.last_modification_date = "";
   this.keywords = [];
   this.rating = -1;
+  this.color = "none";
 };
 
 if (typeof exports !== 'undefined') exports.Note = Note;

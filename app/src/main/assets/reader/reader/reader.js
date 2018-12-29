@@ -10,6 +10,7 @@ var Writer = function Writer(elem) {
   this.seriesTaskExecutor = new SeriesTaskExecutor();
   this.saveNoteTask = new SaveNoteTask(this);
   this.hasTextChanged = false;
+  this.manager = new TodoListManager(document.getElementById("text"));
   resetScreenHeight();
   console.log("create Writer");
 };
@@ -74,8 +75,9 @@ Writer.prototype.displayMediaFullscreen = function (index) {
   downloadButton.classList.add('mdl-button');
   downloadButton.classList.add('mdl-js-button');
   downloadButton.classList.add('mdl-button--icon');
-  var imgD = document.createElement("img");
-  imgD.src = rootpath + "/img/ic_file_download_white_24px.svg";
+  var imgD = document.createElement("i");
+  imgD.classList.add("material-icons");
+  imgD.innerHTML = "file_download";
   downloadButton.appendChild(imgD);
   a.appendChild(downloadButton);
   toolbar.appendChild(a); //delete
@@ -113,8 +115,9 @@ Writer.prototype.displayMediaFullscreen = function (index) {
   closeButton.classList.add('mdl-button');
   closeButton.classList.add('mdl-js-button');
   closeButton.classList.add('mdl-button--icon');
-  var imgC = document.createElement("img");
-  imgC.src = rootpath + "/img/ic_close_white_24px.svg";
+  var imgC = document.createElement("i");
+  imgC.classList.add("material-icons");
+  imgC.innerHTML = "close";
   closeButton.appendChild(imgC);
   toolbar.appendChild(closeButton);
   this.fullscreenViewer.appendChild(toolbar);
@@ -236,7 +239,30 @@ Writer.prototype.addMedia = function () {
 };
 
 Writer.prototype.setDoNotEdit = function (b) {
-  document.getElementById("text").contentEditable = !b;
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = document.getElementsByClassName("edit-zone")[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var edit = _step.value;
+      edit.contentEditable = !b;
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return != null) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
   document.getElementById("name-input").disabled = b;
 };
 
@@ -256,6 +282,14 @@ Writer.prototype.extractNote = function () {
     writer.saveID = data.id;
     writer.fillWriter(data.html);
     if (data.metadata == null) writer.note.metadata = new NoteMetadata();else writer.note.metadata = data.metadata;
+    writer.manager = new TodoListManager(document.getElementById("text"));
+    writer.oDoc.addEventListener('remove-todolist', function (e) {
+      e.previous.innerHTML += "<br />" + e.next.innerHTML;
+      $(e.next).remove();
+    }, false);
+    if (writer.note.metadata.todolists != undefined) writer.manager.fromData(writer.note.metadata.todolists);
+    console.log("todo " + writer.note.metadata.todolists);
+    console.log(writer.note.metadata.todolists);
     writer.refreshKeywords();
     writer.refreshMedia();
     var ratingStars = document.querySelectorAll("input.star");
@@ -276,8 +310,35 @@ var saveTextIfChanged = function saveTextIfChanged() {
   writer.hasTextChanged = false;
 };
 
+Writer.prototype.createEditableZone = function () {
+  var div = document.createElement("div");
+  div.classList.add("edit-zone");
+  div.contentEditable = true;
+  this.oDoc.appendChild(div);
+  return div;
+};
+
+Writer.prototype.placeCaretAtEnd = function (el) {
+  el.focus();
+
+  if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
+    var range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  } else if (typeof document.body.createTextRange != "undefined") {
+    var textRange = document.body.createTextRange();
+    textRange.moveToElementText(el);
+    textRange.collapse(false);
+    textRange.select();
+  }
+};
+
 Writer.prototype.fillWriter = function (extractedHTML) {
-  console.log("fill");
+  console.log("fill " + extractedHTML);
+  var writer = this;
   if (extractedHTML != undefined) this.oEditor.innerHTML = extractedHTML;
   document.getElementById("name-input").value = FileUtils.stripExtensionFromName(FileUtils.getFilename(this.note.path));
 
@@ -287,6 +348,23 @@ Writer.prototype.fillWriter = function (extractedHTML) {
   };
 
   this.oDoc = document.getElementById("text");
+  this.oDoc.contentEditable = false;
+
+  if (this.oDoc.getElementsByClassName("edit-zone").length == 0) {
+    //old note...
+    var toCopy = this.oDoc.innerHTML;
+    this.oDoc.innerHTML = "";
+    this.createEditableZone().innerHTML = toCopy;
+  }
+
+  this.oDoc.onclick = function (event) {
+    if (event.target.id == "text") {
+      //focus on last editable element
+      var elements = event.target.getElementsByClassName("edit-zone");
+      writer.placeCaretAtEnd(elements[elements.length - 1]);
+    }
+  };
+
   this.oFloating = document.getElementById("floating");
   var writer = this;
   this.oDoc.addEventListener("input", function () {
@@ -559,6 +637,11 @@ Writer.prototype.init = function () {
           writer.displayCountDialog();
           break;
 
+        case "todolist-button":
+          writer.manager.createTodolist().createItem("");
+          writer.createEditableZone();
+          break;
+
         case "copy-button":
           writer.copy();
           break;
@@ -759,9 +842,10 @@ Writer.prototype.removeKeyword = function (word) {
 
 Writer.prototype.reset = function () {
   if (this.saveInterval !== undefined) clearInterval(this.saveInterval);
-  this.oEditor.innerHTML = '<div id="text" contenteditable="true" style="height:100%;">\
+  this.oEditor.innerHTML = '<div id="text" style="height:100%;">\
     <!-- be aware that THIS will be modified in java -->\
     <!-- soft won\'t save note if contains donotsave345oL -->\
+    <div class="edit-zone" contenteditable></div>\
 </div>\
 <div id="floating">\
 \
@@ -885,13 +969,13 @@ RenameNoteTask.prototype.run = function (callback) {
   var path = FileUtils.getParentFolderFromPath(this.writer.note.path);
   var hasOrigin = false;
   var nameInput = document.getElementById("name-input");
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
+  var _iteratorNormalCompletion2 = true;
+  var _didIteratorError2 = false;
+  var _iteratorError2 = undefined;
 
   try {
-    for (var _iterator = nameInput.value.split("/")[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var part = _step.value;
+    for (var _iterator2 = nameInput.value.split("/")[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      var part = _step2.value;
 
       if (part == ".." && !hasOrigin) {
         path = FileUtils.getParentFolderFromPath(path);
@@ -901,16 +985,16 @@ RenameNoteTask.prototype.run = function (callback) {
       }
     }
   } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion && _iterator.return != null) {
-        _iterator.return();
+      if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+        _iterator2.return();
       }
     } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
+      if (_didIteratorError2) {
+        throw _iteratorError2;
       }
     }
   }
@@ -983,11 +1067,20 @@ var SaveNoteTask = function SaveNoteTask(writer) {
 SaveNoteTask.prototype.trySave = function (onEnd, trial) {
   var task = this;
   if (this.writer.note.metadata.creation_date === "") this.writer.note.metadata.creation_date = Date.now();
+  var tmpElem = this.writer.oEditor.cloneNode(true);
+  var todolists = tmpElem.getElementsByClassName("todo-list");
+  console.log("todolists length " + todolists.length);
+
+  for (var i = 0; i < todolists.length; i++) {
+    todolists[i].innerHTML = "";
+  }
+
+  this.writer.note.metadata.todolists = this.writer.manager.toData();
   this.writer.note.metadata.last_modification_date = Date.now();
   RequestBuilder.sRequestBuilder.post("/note/saveText", {
     id: this.writer.saveID,
     path: this.writer.note.path,
-    html: this.writer.oEditor.innerHTML,
+    html: tmpElem.innerHTML,
     metadata: JSON.stringify(this.writer.note.metadata)
   }, function (error, data) {
     if (error) {
@@ -1053,27 +1146,27 @@ $(document).ready(function () {
   RequestBuilder.sRequestBuilder.get("/settings/editor_css", function (error, data) {
     if (!error && data != null && data != undefined) {
       console.log("data " + data);
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
 
       try {
-        for (var _iterator2 = data[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var sheet = _step2.value;
+        for (var _iterator3 = data[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var sheet = _step3.value;
           console.log("sheet " + sheet);
           Utils.applyCss(sheet);
         }
       } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-            _iterator2.return();
+          if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+            _iterator3.return();
           }
         } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
+          if (_didIteratorError3) {
+            throw _iteratorError3;
           }
         }
       }

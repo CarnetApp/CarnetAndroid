@@ -73,7 +73,7 @@ body {
 }
 
 .medium-text {
-    font-size: 30px;
+    font-size: 25px;
 }
 
 @media (min-width: 1314px) {
@@ -137,7 +137,7 @@ body {
     margin-right: 3px;
     margin-top: 3px;
     padding: 3px;
-    background: #D2D2D2;
+    background: rgba(210, 210, 210, 0.555);
     display: inline-block;
 }
 

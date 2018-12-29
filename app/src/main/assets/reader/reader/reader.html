@@ -1,4 +1,3 @@
-<!--9-->
 <!DOCTYPE html>
 <html>
 
@@ -8,7 +7,7 @@
 	<script src="<!ROOTPATH>compatibility/compatibility.js"></script>
 	<script src="<!ROOTPATH>compatibility/compatibility-editor.js"></script>
 
-	<script src="<!ROOTPATH>reader/libs/jquery.min.js"></script>
+	<script src="<!ROOTPATH>libs/jquery.min.js"></script>
 	<script src="<!ROOTPATH>libs/polyfill.js"></script>
 	<link rel="stylesheet" href="<!ROOTPATH>libs/polyfill.css">
 
@@ -21,8 +20,7 @@
 	<!-- Material Design icon font -->
 	<link rel="stylesheet" href="<!ROOTPATH>libs/material-icons.css">
 	<link rel="stylesheet" href="<!ROOTPATH>libs/material.indigo-pink.min.css">
-	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/standalone.css">
-	<link rel="stylesheet" href="<!ROOTPATH>reader/assets/design/recorder.css">
+	<link rel="stylesheet" href="<!ROOTPATH>reader/css/recorder.css">
 
 	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/simplecolorpicker/simple-color-picker.css">
 	<link rel="stylesheet" href="<!ROOTPATH>css/design-common.css">
@@ -37,16 +35,16 @@
 	<script src="<!ROOTPATH>browsers/note.js"></script>
 	<script src="<!ROOTPATH>browsers/file-browser.js"></script>
 	<script defer src="<!ROOTPATH>libs/material.js"></script>
-	<script src="<!ROOTPATH>reader/assets/scripts/jquery.webkitresize.js"></script>
-	<script src="<!ROOTPATH>reader/assets/scripts/jquery-ui.min.js"></script>
+	<script src="<!ROOTPATH>reader/libs/jquery.webkitresize.js"></script>
+	<script src="<!ROOTPATH>reader/libs/jquery-ui.min.js"></script>
 	<!-- jquery mobile make nextcloud bug :(
 	<script src="<!ROOTPATH>reader/libs/jquery.mobile-min.js"></script>
 	-->
 	<script src="<!ROOTPATH>reader/libs/jscolor.js"></script>
 	<script src="<!ROOTPATH>libs/jszip.min.js"></script>
-	<script src="<!ROOTPATH>reader/assets/scripts/Countable.js"></script>
+	<script src="<!ROOTPATH>reader/libs/Countable.js"></script>
 	<script src="<!ROOTPATH>utils/file_utils.js"></script>
-	<script src="<!ROOTPATH>reader/assets/scripts/jquery.ui.touch-punch.min.js"></script>
+	<script src="<!ROOTPATH>reader/libs/jquery.ui.touch-punch.min.js"></script>
 
 	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/jquery-ui.css" media="screen">
 	<script src="<!ROOTPATH>reader/libs/hammer.min.js"></script>
@@ -61,7 +59,8 @@
 	<script src="<!ROOTPATH>keywords/keywords_db_manager.js"></script>
 
 	<script src="<!ROOTPATH>reader/reader.js"></script>
-
+	<link rel="stylesheet" href="<!ROOTPATH>reader/css/todolist.css">
+	<script src="<!ROOTPATH>reader/todolist.js"></script>
 
 
 	<!-- dialogs declaration -->
@@ -167,7 +166,7 @@ mdl-layout--fixed-header">
 				<div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
 			mdl-textfield--floating-label mdl-textfield--align-right">
 					<label class="mdl-button mdl-js-button mdl-button--icon" for="search-input">
-						<img src="<!ROOTPATH>img/ic_search_white_24px.svg" />
+						<i class="material-icons">search</i>
 					</label>
 					<div class="mdl-textfield__expandable-holder">
 						<input class="mdl-textfield__input" type="text" name="sample" id="search-input">
@@ -243,7 +242,7 @@ mdl-layout--fixed-header">
 					<div id="media-list"></div>
 					<div class="mdl-spinner mdl-js-spinner is-active " id="media-loading"></div>
 					<button id="add-media-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button">
-						<img src="<!ROOTPATH>img/ic_add_white_24px.svg" />
+						<i class="material-icons">add</i>
 					</button>
 					<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" id="add-media-menu" for="add-media-button">
 						<li class="mdl-menu__item" id="add-file-button">File/Photo</li>
@@ -253,38 +252,38 @@ mdl-layout--fixed-header">
 
 				<div id="format-toolbar" class="toolbar">
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="bold">
-						<img src="<!ROOTPATH>img/ic_format_bold_white_24px.svg" />
+						<i class="material-icons">format_bold</i>
 					</button>
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="italic">
-						<img src="<!ROOTPATH>img/ic_format_italic_white_24px.svg" />
+						<i class="material-icons">format_italic</i>
 					</button>
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="underline">
-						<img src="<!ROOTPATH>img/ic_format_underlined_white_24px.svg" />
+						<i class="material-icons">format_underline</i>
 					</button>
 
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="text-color">
-						<img src="<!ROOTPATH>img/ic_format_color_text_white_24px.svg" />
+						<i class="material-icons">format_color_text</i>
 					</button>
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="fill-color">
-						<img src="<!ROOTPATH>img/ic_format_color_fill_white_24px.svg" />
+						<i class="material-icons">format_color_fill</i>
 					</button>
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="size-minus">
-						<img src="<!ROOTPATH>img/ic_format_size_white_24px.svg" />-
+						<i class="material-icons">format_size</i>-
 					</button>
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="size-plus">
-						<img src="<!ROOTPATH>img/ic_format_size_white_24px.svg" />+
+						<i class="material-icons">format_size</i>+
 					</button>
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="justifyleft">
-						<img src="<!ROOTPATH>img/ic_format_align_left_white_24px.svg" />
+						<i class="material-icons">format_align_left</i>
 					</button>
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="justifycenter">
-						<img src="<!ROOTPATH>img/ic_format_align_center_white_24px.svg" />
+						<i class="material-icons">format_align_center</i>
 					</button>
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="justifyright">
-						<img src="<!ROOTPATH>img/ic_format_align_right_white_24px.svg" />
+						<i class="material-icons">format_align_right</i>
 					</button>
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="justify">
-						<img src="<!ROOTPATH>img/ic_format_align_justify_white_24px.svg" />
+						<i class="material-icons">format_align_justify</i>
 					</button>
 					<!--<select>
 						<option>test</option>
@@ -308,6 +307,9 @@ mdl-layout--fixed-header">
 				<div id="tools-toolbar" class="toolbar">
 					<button id="statistics-button" class="mdl-button mdl-js-button headerbar-button in-toolbar-button">
 						Statistics
+					</button>
+					<button id="todolist-button" class="mdl-button mdl-js-button headerbar-button in-toolbar-button">
+						Todo-List
 					</button>
 
 				</div>

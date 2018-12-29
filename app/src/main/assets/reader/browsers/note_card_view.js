@@ -1,8 +1,62 @@
 "use strict";
 
-var NoteCardView = function NoteCardView(elem) {
+var NoteCardView = function NoteCardView(elem, onTodoListChange) {
   this.elem = elem;
   this.init();
+  this.onTodoListChange = onTodoListChange;
+};
+
+NoteCardView.prototype.refreshTodoList = function () {
+  console.oldlog("refreshTodoList");
+  this.cardTodoLists.innerHTML = "";
+
+  for (var i = 0; i < this.note.metadata.todolists.length; i++) {
+    console.oldlog("arr");
+    var todolist = this.note.metadata.todolists[i];
+    if (todolist.todo == undefined) continue;
+    var todolistDiv = document.createElement("div");
+    todolistDiv.classList.add("todo-list");
+
+    for (var j = 0; j < todolist.todo.length; j++) {
+      var id = Utils.generateUID();
+      var label = document.createElement("label");
+      label.classList.add("mdl-checkbox");
+      label.classList.add("mdl-js-checkbox");
+      label.classList.add("mdl-js-ripple-effect");
+      label.for = id;
+      var input = document.createElement("input");
+      input.type = "checkbox";
+      input.id = id;
+      input.classList.add("mdl-checkbox__input");
+      label.appendChild(input);
+      var span = document.createElement("span");
+      span.classList.add("mdl-checkbox__label");
+      span.classList.add("todo-item-text");
+      span.innerHTML = todolist.todo[j];
+      label.appendChild(span);
+      var noteCard = this;
+      label.i = i;
+      label.j = j;
+      label.checkbox = new window['MaterialCheckbox'](label);
+
+      label.onclick = function () {
+        noteCard.elem.classList.add("noclick");
+        this.checkbox.check();
+        var item = noteCard.note.metadata.todolists[this.i].todo[this.j];
+        noteCard.note.metadata.todolists[this.i].todo.splice(this.j, 1);
+        noteCard.note.metadata.todolists[this.i].done.push(item);
+        noteCard.onTodoListChange(noteCard.note);
+        setTimeout(function () {
+          noteCard.refreshTodoList();
+        }, 500);
+        return false;
+      };
+
+      todolistDiv.appendChild(label);
+    }
+
+    this.cardTodoLists.appendChild(todolistDiv);
+  }
 };
 
 NoteCardView.prototype.setNote = function (note) {
@@ -20,14 +74,20 @@ NoteCardView.prototype.setNote = function (note) {
   if (note.title.indexOf("untitled") == 0) this.cardTitleText.innerHTML = "";else this.cardTitleText.innerHTML = note.title;
   var date = new Date(note.metadata.last_modification_date).toLocaleDateString();
   this.cardText.innerHTML = note.text;
+  this.cardText.classList.remove("big-text");
+  this.cardText.classList.remove("medium-text");
+
+  if (note.metadata.todolists != undefined) {
+    this.refreshTodoList();
+  } else {
+    if (note.text.length < 40 && this.cardTitleText.innerHTML == "") this.cardText.classList.add("big-text");else if (note.text.length < 100 && this.cardTitleText.innerHTML == "") {
+      this.cardText.classList.add("medium-text");
+    }
+  }
+
   this.cardDate.innerHTML = date;
   if (note.metadata.rating > 0) this.cardRating.innerHTML = note.metadata.rating + "★";
   this.cardKeywords.innerHTML = "";
-  this.cardText.classList.remove("big-text");
-  this.cardText.classList.remove("medium-text");
-  if (note.text.length < 40 && this.cardTitleText.innerHTML == "") this.cardText.classList.add("big-text");else if (note.text.length < 100 && this.cardTitleText.innerHTML == "") {
-    this.cardText.classList.add("medium-text");
-  }
 
   if (typeof note.metadata.keywords[Symbol.iterator] === 'function') {
     var _iteratorNormalCompletion = true;
@@ -108,10 +168,12 @@ NoteCardView.prototype.init = function () {
   this.cardContent.appendChild(this.menuButton);
   this.cardText = document.createElement('div');
   this.cardText.classList.add("card-text");
+  this.cardTodoLists = document.createElement('div');
   this.cardTitleText = document.createElement('h2');
   this.cardTitleText.classList.add("card-title");
   this.cardContent.appendChild(this.cardTitleText);
   this.cardContent.appendChild(this.cardText);
+  this.cardContent.appendChild(this.cardTodoLists);
   this.cardRating = document.createElement('div');
   this.cardRating.classList.add("card-rating");
   this.cardContent.appendChild(this.cardRating);
@@ -206,7 +268,7 @@ NoteCardViewGrid.prototype.addNext = function (num) {
       noteElem.classList.add("demo-card-wide");
       noteElem.classList.add("isotope-item");
       noteElem.style.width = this.width + "px";
-      var noteCard = new NoteCardView(noteElem);
+      var noteCard = new NoteCardView(noteElem, this.onTodoListChange);
       noteCard.setNote(note);
       noteElem.note = note;
       this.noteCards.push(noteCard);
@@ -220,6 +282,8 @@ NoteCardViewGrid.prototype.addNext = function (num) {
           var data = event.data;
           data.callback(data.note);
         }
+
+        this.classList.remove("noclick");
       });
       $(noteCard.menuButton).bind('click', {
         note: note,
@@ -276,9 +340,10 @@ FolderView.prototype.init = function () {
   this.elem.classList.add("mdl-shadow--2dp");
   this.cardContent = document.createElement('div');
   this.cardContent.classList.add("mdl-card__supporting-text");
-  this.img = document.createElement('img');
+  this.img = document.createElement('i');
   this.img.classList.add("folder-icon");
-  this.img.src = root_url + "img/directory.png";
+  this.img.classList.add("material-icons");
+  this.img.innerHTML = "folder";
   this.cardContent.appendChild(this.img);
   this.cardTitle = document.createElement('h2');
   this.cardTitle.classList.add("card-title");

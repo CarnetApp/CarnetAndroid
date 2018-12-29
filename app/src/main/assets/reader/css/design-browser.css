@@ -23,6 +23,16 @@
     -webkit-app-region: drag;
 }
 
+.todo-list{
+    margin-top:15px;
+    max-width: 300px;
+    width:100%;  
+}
+.todo-list .mdl-checkbox{
+    height: auto;
+}
+
+
 #grid-button-container{
     background: var(--fab-button-bg);
     box-shadow: var(--grid-button-shadow);

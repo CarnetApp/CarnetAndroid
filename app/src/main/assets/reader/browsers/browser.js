@@ -132,77 +132,6 @@ var displaySnack = function displaySnack(data) {
   if (!(_typeof(snackbarContainer.MaterialSnackbar) == undefined)) snackbarContainer.MaterialSnackbar.showSnackbar(data);
 };
 
-function oldOpenNote(notePath) {
-  currentNotePath = notePath;
-
-  var electron = require('electron');
-
-  var remote = electron.remote;
-  var BrowserWindow = remote.BrowserWindow;
-
-  var path = require('path'); //var win = new BrowserWindow({ width: 800, height: 600 });
-
-
-  if (!hasLoadedOnce) $(loadingView).fadeIn(); //$(browserElem).faceOut();
-
-  var rimraf = require('rimraf');
-
-  var tmp = path.join(main.getPath("temp"), "tmpquicknote");
-  rimraf(tmp, function () {
-    var fs = require('fs');
-
-    fs.mkdir(tmp, function (e) {
-      fs.readFile(__dirname + '/reader/reader.html', 'utf8', function (err, data) {
-        if (err) {
-          fs.rea;
-          console.log("error ");
-          return console.log(err);
-        }
-
-        var index = path.join(tmp, 'reader.html');
-        fs.writeFileSync(index, data.replace(new RegExp('<!ROOTPATH>', 'g'), __dirname + '/'));
-        /* var size = remote.getCurrentWindow().getSize();
-         var pos = remote.getCurrentWindow().getPosition();
-         var win = new BrowserWindow({
-             width: size[0],
-             height: size[1],
-             x: pos[0],
-             y: pos[1],
-             frame: false
-         });
-         console.log("w " + remote.getCurrentWindow().getPosition()[0])
-         const url = require('url')
-         win.loadURL(url.format({
-             pathname: path.join(__dirname, 'tmp/reader.html'),
-             protocol: 'file:',
-             query: {
-                 'path': notePath
-             },
-             slashes: true
-         }))*/
-
-        var url = require('url');
-
-        if (!hasLoadedOnce) {
-          webview.setAttribute("src", url.format({
-            pathname: index,
-            protocol: 'file:',
-            query: {
-              'path': notePath,
-              'tmppath': tmp + "/"
-            },
-            slashes: true
-          }));
-        } else webview.send('loadnote', notePath);
-
-        webview.style = "position:fixed; top:0px; left:0px; height:100%; width:100%; z-index:100; right:0; bottom:0;"; //to resize properly
-
-        hasLoadedOnce = true;
-      });
-    });
-  });
-}
-
 function onDragEnd(gg) {
   console.log("ondragend");
   dontOpen = true;
@@ -266,8 +195,22 @@ function resetGrid(discret) {
   noteCardViewGrid.onFolderClick(function (folder) {
     list(folder.path);
   });
+
+  noteCardViewGrid.onTodoListChange = function (note) {
+    RequestBuilder.sRequestBuilder.post("/notes/metadata", {
+      path: note.path,
+      metadata: JSON.stringify(note.metadata)
+    }, function (error) {});
+  };
+
   noteCardViewGrid.onNoteClick(function (note) {
-    if (!dontOpen) openNote(note.path);
+    if (!dontOpen) {
+      if (note.path != "untitleddonotedit.sqd") openNote(note.path);else displaySnack({
+        message: "Fake notes are not editable",
+        timeout: 2000
+      });
+    }
+
     dontOpen = false; // var reader = new Writer(note,"");
     // reader.extractNote()
   });
@@ -537,6 +480,50 @@ function list(pathToList, discret) {
             throw _iteratorError2;
           }
         }
+      }
+
+      if (files.length == 0 && pathToList === "recentdb://") {
+        $("#emty-view").fadeOut("fast");
+        var noteTestTxt = new Note("untitleddonotedit.sqd", "These fake notes will disappear as soon as you create a new note by selecting the bottom right button", "untitleddonotedit.sqd", {
+          creation_date: new Date().getTime(),
+          last_modification_date: new Date().getTime(),
+          keywords: [],
+          rating: 5,
+          color: "none"
+        }, oldNote != undefined ? oldNote.previews : undefined);
+        notes.push(noteTestTxt);
+        var noteTestTxt = new Note("untitleddonotedit.sqd", "Choose note/text colors, add keywords           ", "untitleddonotedit.sqd", {
+          creation_date: new Date().getTime(),
+          last_modification_date: new Date().getTime(),
+          keywords: ["keyword"],
+          rating: -1,
+          color: "orange"
+        }, oldNote != undefined ? oldNote.previews : undefined);
+        notes.push(noteTestTxt);
+        var noteTestTxt = new Note("untitleddonotedit.sqd", "Rate your notes or texts", "untitleddonotedit.sqd", {
+          creation_date: new Date().getTime(),
+          last_modification_date: new Date().getTime(),
+          keywords: [],
+          rating: 3,
+          color: "none"
+        }, oldNote != undefined ? oldNote.previews : undefined);
+        notes.push(noteTestTxt);
+        var noteTestTxt = new Note("untitleddonotedit.sqd", "Sync with your devices", "untitleddonotedit.sqd", {
+          creation_date: new Date().getTime(),
+          last_modification_date: new Date().getTime(),
+          keywords: [],
+          rating: -1,
+          color: "green"
+        }, oldNote != undefined ? oldNote.previews : undefined);
+        notes.push(noteTestTxt);
+        var noteTestTxt = new Note("untitleddonotedit.sqd", "Format your notes and documents, add pictures and audio records", "untitleddonotedit.sqd", {
+          creation_date: new Date().getTime(),
+          last_modification_date: new Date().getTime(),
+          keywords: [],
+          rating: -1,
+          color: "red"
+        }, oldNote != undefined ? oldNote.previews : undefined);
+        notes.push(noteTestTxt);
       }
 
       noteCardViewGrid.setNotesAndFolders(notes);

@@ -24,6 +24,10 @@ html {
 	background-color: rgba(199, 196, 196, 0.452);
 }
 
+#header-carnet i{
+	color:white;
+}
+
 #loading {
 	display: none;
 	position: fixed;
@@ -61,6 +65,10 @@ html {
 	padding: 10px;
 	width: 100%;
 	text-align: right;
+}
+
+#add-media-button{
+	color:white;
 }
 
 #fullscreen-viewer button {
@@ -369,6 +377,15 @@ div#container-button::-webkit-scrollbar {
   #note-color :hover span{
 	  transform: scale(1.25); 
   }
+
+  .edit-zone{
+	  width:100%;
+  }
+
+  .edit-zone:focus {
+     outline: 0px solid transparent;
+  }
+
 
 
 /* Nextcloud */
