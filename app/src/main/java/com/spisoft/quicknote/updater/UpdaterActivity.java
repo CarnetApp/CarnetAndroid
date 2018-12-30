@@ -96,6 +96,7 @@ public class UpdaterActivity extends AppCompatActivity {
             protected void onPostExecute(Void result){
                 if(findViewById(R.id.changelog_fragment).getVisibility() == View.VISIBLE){
                     findViewById(R.id.update_button).setEnabled(true);
+                    findViewById(R.id.progressBar).setVisibility(GONE);
                     Message msg = new Message();
                     msg.what = 0;
                     msg.arg1 = 5;
