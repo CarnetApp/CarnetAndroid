@@ -286,6 +286,10 @@ Writer.prototype.extractNote = function () {
     writer.oDoc.addEventListener('remove-todolist', function (e) {
       e.previous.innerHTML += "<br />" + e.next.innerHTML;
       $(e.next).remove();
+      writer.hasTextChanged = true;
+    }, false);
+    writer.oDoc.addEventListener('todolist-changed', function (e) {
+      writer.hasTextChanged = true;
     }, false);
     if (writer.note.metadata.todolists != undefined) writer.manager.fromData(writer.note.metadata.todolists);
     console.log("todo " + writer.note.metadata.todolists);
@@ -301,12 +305,16 @@ Writer.prototype.extractNote = function () {
     ;
     writer.updateRating(writer.note.metadata.rating);
     writer.updateNoteColor(writer.note.metadata.color != undefined ? writer.note.metadata.color : "none");
+    writer.setDoNotEdit(false);
   });
 };
 
 var saveTextIfChanged = function saveTextIfChanged() {
   console.log("has text changed ? " + writer.hasTextChanged);
-  if (writer.hasTextChanged) writer.seriesTaskExecutor.addTask(writer.saveNoteTask);
+  if (writer.hasTextChanged) writer.seriesTaskExecutor.addTask(writer.saveNoteTask);else if (writer.exitOnSaved) {
+    writer.exitOnSaved = false;
+    writer.askToExit();
+  }
   writer.hasTextChanged = false;
 };
 
@@ -337,7 +345,7 @@ Writer.prototype.placeCaretAtEnd = function (el) {
 };
 
 Writer.prototype.fillWriter = function (extractedHTML) {
-  console.log("fill " + extractedHTML);
+  console.log("fill");
   var writer = this;
   if (extractedHTML != undefined) this.oEditor.innerHTML = extractedHTML;
   document.getElementById("name-input").value = FileUtils.stripExtensionFromName(FileUtils.getFilename(this.note.path));
@@ -730,10 +738,16 @@ Writer.prototype.toggleDrawer = function () {
 };
 
 Writer.prototype.askToExit = function () {
+  this.setDoNotEdit(true);
   console.log("exec? " + this.seriesTaskExecutor.isExecuting);
-  if (this.seriesTaskExecutor.isExecuting) return false;else {
+
+  if (this.seriesTaskExecutor.isExecuting || this.hasTextChanged) {
+    this.exitOnSaved = true;
+    return false;
+  } else {
     compatibility.exit();
   }
+
   return false;
 };
 
@@ -841,6 +855,7 @@ Writer.prototype.removeKeyword = function (word) {
 };
 
 Writer.prototype.reset = function () {
+  this.exitOnSaved = false;
   if (this.saveInterval !== undefined) clearInterval(this.saveInterval);
   this.oEditor.innerHTML = '<div id="text" style="height:100%;">\
     <!-- be aware that THIS will be modified in java -->\

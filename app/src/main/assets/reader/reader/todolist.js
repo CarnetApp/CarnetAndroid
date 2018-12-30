@@ -178,11 +178,14 @@ TodoList.prototype.fromData = function (data) {
 };
 
 TodoList.prototype.removeItem = function (item) {
+  var todolist = this;
   $(item).animate({
     height: '0px'
   }, 150, function () {
     if (item.previousSibling != undefined && item.previousSibling.span != undefined) item.previousSibling.span.focus();
     $(item).remove();
+    var event = new Event('todolist-changed');
+    todolist.element.parentNode.dispatchEvent(event);
   });
 };
 
@@ -297,6 +300,8 @@ TodoList.prototype.check = function (item) {
   item.label.classList.add("is-checked");
   item.material.check();
   if (this.done != undefined) this.done.appendChild(item);
+  var event = new Event('todolist-changed');
+  this.element.parentNode.dispatchEvent(event);
 };
 
 TodoList.prototype.uncheck = function (item, after) {
@@ -305,4 +310,6 @@ TodoList.prototype.uncheck = function (item, after) {
     this.todo.appendChild(item);
   }
   item.material.uncheck();
+  var event = new Event('todolist-changed');
+  this.element.parentNode.dispatchEvent(event);
 };

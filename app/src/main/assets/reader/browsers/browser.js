@@ -776,6 +776,20 @@ setTimeout(function () {
           compatibility.onFirstrunEnds();
         });
       });
+    } else {
+      RequestBuilder.sRequestBuilder.get("/settings/changelog", function (error, data) {
+        if (data.shouldDisplayChangelog) {
+          var dialog = document.getElementById("changelog-dialog");
+          dialog.getElementsByClassName("mdl-dialog__content")[0].innerHTML = "Changelog <br /><br />" + data.changelog.replace(/\n/g, "<br />");
+          ;
+
+          dialog.getElementsByClassName("ok")[0].onclick = function () {
+            dialog.close();
+          };
+
+          dialog.showModal();
+        }
+      });
     }
   });
 }, 2000);
