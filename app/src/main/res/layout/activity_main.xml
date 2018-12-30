@@ -21,9 +21,9 @@
         android:onClick="onClick"
         android:background="@android:color/white"
         android:visibility="gone"
-
         >
 
     </FrameLayout>
+
 </FrameLayout>
 

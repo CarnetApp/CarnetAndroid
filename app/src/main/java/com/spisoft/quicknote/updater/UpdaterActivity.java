@@ -8,11 +8,15 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.PreferenceHelper;
@@ -25,14 +29,45 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static android.view.View.GONE;
+
 public class UpdaterActivity extends AppCompatActivity {
 
     private static final String TAG = "UpdaterActivity";
+    private Handler mHandler = new Handler(){
+        public void handleMessage(Message msg) {
+            if(msg.what == 0){
+                if(msg.arg1 <=0)
+                    end();
+                else{
+                    ((Button)findViewById(R.id.update_button)).setText(getResources().getString(R.string.skip)+" ("+msg.arg1+")");
+                    Message nmsg = new Message();
+                    nmsg.what = 0;
+                    nmsg.arg1 = msg.arg1 - 1;
+                    sendMessageDelayed(nmsg,1000);
+                }
+            }
+        }
 
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_updater);
+        if(getOldVersion(this) == -1    ){
+            findViewById(R.id.changelog_fragment).setVisibility(View.GONE);
+            findViewById(R.id.first_start).setVisibility(View.VISIBLE);
+        }
+        else{
+            findViewById(R.id.changelog_fragment).setVisibility(View.VISIBLE);
+            findViewById(R.id.first_start).setVisibility(View.GONE);
+        }
+        findViewById(R.id.update_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                end();
+            }
+        });
     }
 
     @Override
@@ -40,7 +75,11 @@ public class UpdaterActivity extends AppCompatActivity {
         super.onStart();
         startUpdate();
     }
-
+    private void end(){
+        mHandler.removeMessages(0);
+        setResult(RESULT_OK);
+        finish();
+    }
     private void startUpdate() {
         new AsyncTask<Void, Void, Void>(){
 
@@ -55,8 +94,14 @@ public class UpdaterActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(Void result){
-                setResult(RESULT_OK);
-                finish();
+                if(findViewById(R.id.changelog_fragment).getVisibility() == View.VISIBLE){
+                    findViewById(R.id.update_button).setEnabled(true);
+                    Message msg = new Message();
+                    msg.what = 0;
+                    msg.arg1 = 5;
+                    mHandler.sendMessage(msg);
+                }else
+                    end();
             }
         }.execute();
         onBackPressed();
