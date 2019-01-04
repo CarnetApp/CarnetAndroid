@@ -99,6 +99,13 @@
             android:label="@string/title_activity_account_config"
             android:theme="@style/CarnetTheme.White" />
         <activity android:name=".updater.UpdaterActivity"></activity>
+        <activity
+            android:name="com.spisoft.sync.wrappers.nextcloud.CertificateActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="user"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
     </application>
 
 </manifest>

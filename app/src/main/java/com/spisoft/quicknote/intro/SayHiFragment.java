@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
 
-import org.apache.commons.httpclient.util.HttpURLConnection;
 
 import java.io.BufferedReader;
 import java.io.IOException;

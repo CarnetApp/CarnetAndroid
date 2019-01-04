@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -215,6 +216,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
     @Override
     public void onRefresh() {
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean("refuse_certificate", false).apply();
         getActivity().startService(new Intent(getActivity(), SynchroService.class));
     }
 
