@@ -79,21 +79,19 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     }
 
     private void onUpdateDone() {
+
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
             if(!DBMergerService.isJobScheduledOrRunning(this)){
                 DBMergerService.scheduleJob(this,true, DBMergerService.ALL_DATABASES);
             }
         int count = PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.LAUNCH_COUNT, 1);
-        if(count%3 == 0 && !PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(PreferenceHelper.HAS_DONATE, false)){
+        if(count%30 == 0 && !PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(PreferenceHelper.HAS_DONATE, false) || true){
             Snackbar.make(findViewById(R.id.root), R.string.donation_ask,
                     Snackbar.LENGTH_LONG)
-                    .setDuration(15000)
                     .setAction(R.string.donate, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean(PreferenceHelper.HAS_DONATE, true).commit();
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YMHT55NSCLER6"));
-                            startActivity(browserIntent);
+                            openDonation(null);
                         }
                     })
                     .show();
@@ -146,6 +144,12 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         if(FileManagerService.sIsCopying)
             displayPasteDialog();
         mSavedInstanceState = null;
+    }
+
+    public void openDonation(View view) {
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean(PreferenceHelper.HAS_DONATE, true).commit();
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YMHT55NSCLER6"));
+        startActivity(browserIntent);
     }
 
 

@@ -21,9 +21,6 @@
         android:paddingBottom="5dip"
         android:textAllCaps="false"
         android:paddingLeft="20dip"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:gravity="left|center_vertical" />
     <Button
         android:layout_width="match_parent"
@@ -36,9 +33,6 @@
         android:paddingLeft="20dip"
         android:id="@+id/browser_button"
         android:background="@drawable/transparent_ripple"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:gravity="left|center_vertical" />
     <Button
         android:layout_width="match_parent"
@@ -51,9 +45,19 @@
         android:paddingLeft="20dip"
         android:id="@+id/settings_button"
         android:background="@drawable/transparent_ripple"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
+        android:gravity="left|center_vertical" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/donate"
+        android:paddingTop="5dip"
+        android:textAllCaps="false"
+        android:paddingBottom="5dip"
+        android:textColor="?attr/MainTextColor"
+        android:paddingLeft="20dip"
+        android:id="@+id/donate_button"
+        android:onClick="openDonation"
+        android:background="@drawable/transparent_ripple"
         android:gravity="left|center_vertical" />
     <TextView
         android:layout_width="match_parent"

@@ -70,6 +70,6 @@
     <string name="add_screenshot"></string>
     <string name="say_hi">Say hi !</string>
     <string name="donation_ask">Carnet a été créée gratuitement, n\'hésitez pas à faire un don :)</string>
-    <string name="donate">Paypal</string>
+    <string name="donate">Faire un don</string>
 
 </resources>
