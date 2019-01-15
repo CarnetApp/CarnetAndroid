@@ -1,4 +1,8 @@
-# Version 0.13
+# Version 0.12.3
+
+Multiple bug fixes on synchronisation
+
+# Version 0.12.1 (ex 0.13)
 
 Handling certificate issues
 
