@@ -21,7 +21,7 @@ import com.spisoft.sync.wrappers.nextcloud.NextCloudAuthorizeFragment;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudCredentialsHelper;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudWrapper;
 
-public class HelpActivity extends AppCompatActivity implements NextCloudAuthorizeFragment.OnConnectClickListener {
+public class HelpActivity extends AppCompatActivity implements NextCloudAuthorizeFragment.OnConnectedListener {
 
     private static final String SHOULD_START_ACTIVITY = "should_start_gdrive_act";
 
@@ -58,7 +58,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
     }
 
     @Override
-    public void onConnectClick(String remote, String username, String password) {
+    public void onConnected(boolean isSSoLogin, String remote, String username, String password) {
         com.spisoft.sync.account.DBAccountHelper.Account account = com.spisoft.sync.account.DBAccountHelper.getInstance(this)
                 .addOrReplaceAccount(new com.spisoft.sync.account.DBAccountHelper.Account(-1, NextCloudWrapper.ACCOUNT_TYPE, "NextCloud"));
         NextCloudCredentialsHelper.getInstance(this).addOrReplaceAccount(new NextCloudCredentialsHelper.Credentials(-1, account.accountID, remote, username, password));
@@ -132,6 +132,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
 
                 break;
         }
+        super.onActivityResult(requestCode,resultCode, data);
 
     }
     public void skip(View v){
