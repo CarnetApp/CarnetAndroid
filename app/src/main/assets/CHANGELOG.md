@@ -1,3 +1,7 @@
+# Version 0.12.4
+
+Faster sync
+
 # Version 0.12.3
 
 Multiple bug fixes on synchronisation
