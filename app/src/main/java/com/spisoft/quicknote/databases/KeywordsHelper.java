@@ -277,7 +277,8 @@ public class KeywordsHelper {
                 }
             });
             myJSON.put("data", new JSONArray(array));
-            write(myJSON.toString());
+            if(hasChanged)
+                write(myJSON.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
