@@ -345,4 +345,9 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
         }
     }
+
+    public void superOnBackPressed() {
+        getSupportFragmentManager().popBackStackImmediate();
+        this.fragment  = getSupportFragmentManager().getFragments().get(0);
+    }
 }

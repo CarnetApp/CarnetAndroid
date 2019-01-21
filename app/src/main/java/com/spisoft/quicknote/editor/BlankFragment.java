@@ -85,8 +85,8 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
     }
 
     public boolean onBackPressed(){
-
-        return false;
+        askToExit();
+        return true;
     }
 
     @Override
@@ -132,11 +132,16 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
 
     }
 
+    public void askToExit(){
+        mEditor.askToExit();
+    }
+
     @Override
     public void onExit() {
         Log.d("exitdebug", "onExit");
+        getActivity().startService(new Intent(getActivity(), SynchroService.class));
         if(getActivity()!=null)
-        getActivity().onBackPressed();
+            ((MainActivity)getActivity()).superOnBackPressed();
     }
 
 }

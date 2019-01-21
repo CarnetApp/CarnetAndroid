@@ -233,6 +233,10 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
     public void onPageSelected(Page page){
     }
 
+    public void askToExit() {
+        mWebView.loadUrl("javascript:writer.askToExit()");
+    }
+
     public interface HideListener {
         public void onHide(boolean hide);
 
