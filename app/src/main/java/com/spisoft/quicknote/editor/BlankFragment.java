@@ -28,6 +28,7 @@ import com.spisoft.quicknote.FloatingService;
 import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.R;
+import com.spisoft.sync.synchro.SynchroService;
 
 import java.util.Stack;
 

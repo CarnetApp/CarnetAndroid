@@ -82,7 +82,7 @@ public class SearchFragment extends NoteListFragment implements BrowserAdapter.O
                     boolean isOk = !(newFolder).exists();
                     if (isOk) {
                         newFolder.mkdir();
-                        reload(mLastSelected);
+                        reload(mLastSelected, false);
                     }
                     return isOk;
 

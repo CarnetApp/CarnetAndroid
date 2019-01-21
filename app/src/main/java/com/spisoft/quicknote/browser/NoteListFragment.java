@@ -154,24 +154,14 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                 if(intent.getAction().equals(ACTION_RELOAD)||intent.getAction().equals(NoteManager.ACTION_UPDATE_END)){
                     boolean reloadAll = false;
                     if(intent.getAction().equals(ACTION_RELOAD) && intent.getSerializableExtra("notes")!=null && mNotes!=null){//reload only specified notes
-                        List<Note> notes = (List<Note>) intent.getSerializableExtra("notes");
-                        for(Note note : notes){
-                            int index;
-                            if((index = mNotes.indexOf(note))>=0){
-                                ((Note)mNotes.get(index)).needsUpdateInfo = true;
-                                mNoteAdapter.notifyItemChanged(index);
-                            }else{
-                                reloadAll = true;
-                                break;
-                            }
-                        }
+                        refreshNotes((List<Note>) intent.getSerializableExtra("notes"));
                     } else reloadAll = true;
 
                     if(reloadAll)
                     mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            reload(mLastSelected);
+                            reload(null, true);
 
                         }
                     }, 500);
@@ -189,17 +179,37 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
     protected  void onReady(){}
 
-    protected void reload(Note scrollTo) {
+    protected void refreshNotes(List<Note> notes){
+        boolean reloadAll = false;
+        for(Note note : notes){
+            int index;
+            if((index = mNotes.indexOf(note))>=0){
+                ((Note)mNotes.get(index)).needsUpdateInfo = true;
+                mNoteAdapter.notifyItemChanged(index);
+            }else{
+                reloadAll = true;
+                break;
+            }
+        }
+        if(reloadAll){
+            reload(mLastSelected, false);
+
+        }
+    }
+
+    protected void reload(Note scrollTo, boolean keepCurrentScroll) {
         mNotes = getNotes();
         if(mNotes!=null) {
             mNoteAdapter.setNotes(mNotes);
+            mNoteAdapter.invalidateNotesMetadata();
             if (mNotes != null) {
                 if(mNotes.isEmpty())
                     showEmptyMessage(null);
                 else
                     hideEmptyView();
             }
-            if (scrollTo != null && mNotes.indexOf(scrollTo) > 0)
+            if(keepCurrentScroll) {
+            } else if (scrollTo != null && mNotes.indexOf(scrollTo) > 0)
                 mGridLayout.scrollToPosition(mNotes.indexOf(scrollTo));
             else
                 mGridLayout.scrollToPosition(0);
@@ -261,7 +271,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
             }
             else
-                reload(mLastSelected);
+                reload(mLastSelected, false);
             mLastSelected = null;
         }
     }
@@ -330,7 +340,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                         @Override
                         public boolean renameTo(String name) {
                             boolean success = NoteManager.renameNote(getContext(), note, name+".sqd") != null;
-                            reload(mLastSelected);
+                            reload(mLastSelected, false);
                             return success;
 
                         }

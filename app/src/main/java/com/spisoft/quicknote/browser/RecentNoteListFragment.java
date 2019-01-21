@@ -15,13 +15,14 @@ import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.utils.SpiDebugUtils;
+import com.spisoft.sync.Configuration;
 
 import java.util.List;
 
 /**
  * Created by alexandre on 03/02/16.
  */
-public class RecentNoteListFragment extends NoteListFragment {
+public class RecentNoteListFragment extends NoteListFragment implements Configuration.PathObserver {
     private Note mTestNote;
 
     public RecentNoteListFragment(){
@@ -40,6 +41,19 @@ public class RecentNoteListFragment extends NoteListFragment {
 
 
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Configuration.addPathObserver(PreferenceHelper.getRootPath(getContext()), this);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        Configuration.removePathOserver(PreferenceHelper.getRootPath(getContext()), this);
+    }
+
     protected  void onReady(){
         if(SpiDebugUtils.IS_TEST_MODE){
             if(mTestNote == null)
@@ -63,11 +77,11 @@ public class RecentNoteListFragment extends NoteListFragment {
         }
         else if(menuItem.getItemId()==R.string.pin){
             RecentHelper.getInstance(getContext()).pin(note);
-            reload(mLastSelected);
+            reload(mLastSelected, false);
         }
         else if(menuItem.getItemId()==R.string.unpin){
             RecentHelper.getInstance(getContext()).unpin(note);
-            reload(mLastSelected);
+            reload(mLastSelected, false);
         }
         return false;
     }
@@ -127,5 +141,15 @@ public class RecentNoteListFragment extends NoteListFragment {
     @Override
     public void onLongClick(Note note, View v) {
 
+    }
+
+    @Override
+    public void onPathChanged(String path) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                reload(mLastSelected, true);
+            }
+        });
     }
 }

@@ -98,7 +98,10 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                 if(newPos != currentPos) {
                     newNotes.remove(note);
                     oldNotes1.remove(currentPos);
-                    oldNotes1.add(newPos, note);
+                    if(newPos<oldNotes1.size())
+                        oldNotes1.add(newPos, note);
+                    else
+                        oldNotes1.add(note);
                     notifyItemMoved(currentPos, newPos);
                 }
                 if(note instanceof Note && notes.get(i) instanceof Note && ((Note)note).isPinned != ((Note)notes.get(i)).isPinned){
@@ -111,9 +114,17 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
 
             i++;
         }
-
-
     }
+
+    public void invalidateNotesMetadata(){
+        for(Object note: mNotes){
+            if(note instanceof Note){
+                ((Note) note).needsUpdateInfo = true;
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 
     public void addNote(Object note) {
         mNotes.add(note);

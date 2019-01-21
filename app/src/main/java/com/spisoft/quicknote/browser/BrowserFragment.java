@@ -18,7 +18,9 @@ import com.spisoft.quicknote.MainFragment;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
+import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.utils.FileUtils;
+import com.spisoft.sync.Configuration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ import java.util.List;
 /**
  * Created by alexandre on 05/02/16.
  */
-public class BrowserFragment extends NoteListFragment implements BrowserAdapter.OnFolderClickListener {
+public class BrowserFragment extends NoteListFragment implements BrowserAdapter.OnFolderClickListener, Configuration.PathObserver {
 
     private static final String PATH = "path";
     private String mPath;
@@ -92,9 +94,22 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        mPath = getArguments().getString(PATH);
+        Configuration.addPathObserver(mPath, this);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        Configuration.removePathOserver(mPath, this);
+    }
+
     @Override
     protected List<Object> getNotes() {
-        mPath = getArguments().getString(PATH);
         boolean avoidDbFolder = mPath.equals(PreferenceHelper.getRootPath(getActivity()));
         File file = new File(mPath);
         List<Object> ret = new ArrayList<>();
@@ -107,7 +122,11 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
                     if(file1.getName().startsWith(".")||avoidDbFolder&&file1.getName().equals("quickdoc"))
                         continue;
                     if(file1.isFile()&&file1.getName().endsWith(".sqd")){
-                        notes.add(new Note(file1.getAbsolutePath()));
+                        Note note = CacheManager.getInstance(getActivity()).get(file1.getAbsolutePath());
+                        if(note == null){
+                            new Note(file1.getAbsolutePath());
+                        }
+                        notes.add(note);
                     }
                     else if(file1.isDirectory())
                         dir.add(file1);
@@ -142,7 +161,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
                     boolean isOk = !(newFolder).exists();
                     if (isOk) {
                         newFolder.mkdir();
-                        reload(mLastSelected);
+                        reload(mLastSelected, false);
                     }
                     return isOk;
 
@@ -188,7 +207,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
                         return true;
                     }
                     FileUtils.deleteRecursive(new File(note.getAbsolutePath()));
-                    reload(mLastSelected);
+                    reload(mLastSelected, false);
                 }else if(menuItem.getItemId() == R.string.rename){
                     if(FloatingService.sService!=null&&FloatingService.sService.getNote()!=null&&FloatingService.sService.getNote().path.startsWith(note.getAbsolutePath())){
 
@@ -201,7 +220,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
                         @Override
                         public boolean renameTo(String name) {
                             boolean success = FileUtils.renameDirectory(getContext(), note, name) != null;
-                            reload(mLastSelected);
+                            reload(mLastSelected,false);
                             return true;
 
                         }
@@ -247,4 +266,16 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
     }
 
 
+    @Override
+    public void onPathChanged(String path) {
+        Log.d("pathdebug","onpath changed "+path);
+        final List<Note> notes = new ArrayList<>();
+        notes.add(new Note(path));
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                refreshNotes(notes);
+            }
+        });
+    }
 }
