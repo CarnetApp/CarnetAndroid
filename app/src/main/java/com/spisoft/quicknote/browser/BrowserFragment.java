@@ -124,7 +124,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
                     if(file1.isFile()&&file1.getName().endsWith(".sqd")){
                         Note note = CacheManager.getInstance(getActivity()).get(file1.getAbsolutePath());
                         if(note == null){
-                            new Note(file1.getAbsolutePath());
+                            note = new Note(file1.getAbsolutePath());
                         }
                         notes.add(note);
                     }
