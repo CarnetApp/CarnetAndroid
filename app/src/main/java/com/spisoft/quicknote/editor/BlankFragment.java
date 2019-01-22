@@ -138,10 +138,9 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
 
     @Override
     public void onExit() {
-        Log.d("exitdebug", "onExit");
+        if(getActivity()==null) return;
         getActivity().startService(new Intent(getActivity(), SynchroService.class));
-        if(getActivity()!=null)
-            ((MainActivity)getActivity()).superOnBackPressed();
+        ((MainActivity)getActivity()).superOnBackPressed();
     }
 
 }
