@@ -19,6 +19,7 @@ public class RenameDialog extends DialogFragment implements View.OnClickListener
     private EditText mTextView;
     private String mName;
     private OnRenameListener mRenameListener;
+    private String mHint;
 
     @Override
     public void onClick(View v) {
@@ -36,6 +37,9 @@ public class RenameDialog extends DialogFragment implements View.OnClickListener
     public void setName(String name){
         mName = name;
     }
+    public void setHint(String hint){
+        mHint = hint;
+    }
 
 
     @Override
@@ -43,9 +47,12 @@ public class RenameDialog extends DialogFragment implements View.OnClickListener
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.name);
         mTextView = new EditText(getActivity());
-        mTextView.setText(mName);
+        if(mName!=null)
+            mTextView.setText(mName);
+        mTextView.setHint(mHint);
         builder.setView(mTextView);
         builder.setPositiveButton(android.R.string.ok, null);
+        builder.setNegativeButton(android.R.string.cancel, null);
         final AlertDialog d = builder.create();
         d.setOnShowListener(new DialogInterface.OnShowListener() {
 
