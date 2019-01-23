@@ -43,6 +43,7 @@
         <item name="NoteBGPurple">#b289c0</item>
         <item name="NoteBGPink">#cf9db9</item>
         <item name="SyncIcon">@drawable/sync_black</item>
+        <item name="SyncDisabled">@drawable/sync_black_disabled</item>
 
     </style>
 
@@ -72,6 +73,7 @@
         <item name="AddNoteIcon">@drawable/ic_note_add_white</item>
         <item name="DotsIcon">@drawable/threedots_white</item>
         <item name="SyncIcon">@drawable/sync_white</item>
+        <item name="SyncDisabled">@drawable/sync_white_disabled</item>
 
 
         <item name="NoteBGNone">#2f3341</item>

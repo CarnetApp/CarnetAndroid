@@ -92,7 +92,10 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         MenuItem item = menu.findItem(R.string.sync);
         item.setEnabled(!SynchroService.isSyncing);
         if(SynchroService.isSyncing){
-            item.setIcon(R.drawable.sync_dim);
+            TypedArray a = getTheme().obtainStyledAttributes(new int[] {R.attr.SyncDisabled});
+            int attributeResourceId = a.getResourceId(0, 0);
+            Drawable drawable = getResources().getDrawable(attributeResourceId);
+            item.setIcon(drawable);
         } else {
             TypedArray a = getTheme().obtainStyledAttributes(new int[] {R.attr.SyncIcon});
             int attributeResourceId = a.getResourceId(0, 0);
