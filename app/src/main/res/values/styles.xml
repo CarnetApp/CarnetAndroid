@@ -42,6 +42,7 @@
         <item name="NoteBGViolet">#9b87c7</item>
         <item name="NoteBGPurple">#b289c0</item>
         <item name="NoteBGPink">#cf9db9</item>
+        <item name="SyncIcon">@drawable/sync_black</item>
 
     </style>
 
@@ -70,6 +71,7 @@
         <item name="AddFolderIcon">@drawable/ic_create_new_folder_white</item>
         <item name="AddNoteIcon">@drawable/ic_note_add_white</item>
         <item name="DotsIcon">@drawable/threedots_white</item>
+        <item name="SyncIcon">@drawable/sync_white</item>
 
 
         <item name="NoteBGNone">#2f3341</item>

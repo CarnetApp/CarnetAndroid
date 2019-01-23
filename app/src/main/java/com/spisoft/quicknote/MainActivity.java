@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.TypedArray;
+import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,19 +16,15 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.spisoft.quicknote.browser.NoteListFragment;
 import com.spisoft.quicknote.browser.PasteDialog;
 import com.spisoft.quicknote.browser.PermissionChecker;
 import com.spisoft.quicknote.databases.DBMergerService;
@@ -35,9 +34,11 @@ import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.intro.HelpActivity;
 import com.spisoft.quicknote.updater.UpdaterActivity;
 import com.spisoft.quicknote.utils.PinView;
+import com.spisoft.sync.Configuration;
+import com.spisoft.sync.account.DBAccountHelper;
 import com.spisoft.sync.synchro.SynchroService;
 
-public class MainActivity extends AppCompatActivity implements PinView.PasswordListener, NoteManager.UpdaterListener {
+public class MainActivity extends AppCompatActivity implements PinView.PasswordListener, NoteManager.UpdaterListener, Configuration.SyncStatusListener {
     public static final String ACTION_RELOAD_KEYWORDS = "action_reload_keywords";
 
     private static final String WAS_LOCKED = "was_locked";
@@ -75,7 +76,55 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         if(!UpdaterActivity.startUpdateIfNeeded(this, UPDATE_REQUEST_CODE)){
             onUpdateDone();
         }
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        super.onCreateOptionsMenu(menu);
+        MenuItem item = menu.add(0, R.string.sync, 1, R.string.sync);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem item = menu.findItem(R.string.sync);
+        item.setEnabled(!SynchroService.isSyncing);
+        if(SynchroService.isSyncing){
+            item.setIcon(R.drawable.sync_dim);
+        } else {
+            TypedArray a = getTheme().obtainStyledAttributes(new int[] {R.attr.SyncIcon});
+            int attributeResourceId = a.getResourceId(0, 0);
+            Drawable drawable = getResources().getDrawable(attributeResourceId);
+            item.setIcon(drawable);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId() == R.string.sync){
+            Cursor cursor = DBAccountHelper.getInstance(this).getCursor();
+            if(cursor == null || cursor.getCount() == 0){
+                startActivity(new Intent(this, HelpActivity.class));
+            }
+            else {
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("refuse_certificate", false).apply();
+                startService(new Intent(this, SynchroService.class));
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onSyncStatusChanged(boolean isSyncing) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                invalidateOptionsMenu();            }
+        });
     }
 
     private void onUpdateDone() {
@@ -194,11 +243,13 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
                     onPasswordOk();
             }
         }
+        Configuration.addSyncStatusListener(this);
     }
     protected void  onPause(){
         super.onPause();
         if(PreferenceHelper.shouldLockOnMinimize(this)&&!isChangingConfigurations())
             lock();
+        Configuration.removeSyncStatusListener(this);
     }
 
     private void lock() {
