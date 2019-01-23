@@ -268,7 +268,6 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
 
     @Override
     public void onPathChanged(String path) {
-        Log.d("pathdebug","onpath changed "+path);
         final List<Note> notes = new ArrayList<>();
         notes.add(new Note(path));
         mHandler.post(new Runnable() {
