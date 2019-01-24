@@ -1,5 +1,6 @@
 package com.spisoft.quicknote;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -50,6 +51,7 @@ public class MyApplication extends Application implements Configuration.PathObse
     }
     private void startAccountConfigActivity(int accountId, int accountType){
         Intent intent = new Intent(MyApplication.this, AccountConfigActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(AccountConfigActivity.EXTRA_ACCOUNT_ID, accountId);
         intent.putExtra(AccountConfigActivity.EXTRA_ACCOUNT_TYPE, accountType);
         startActivity(intent);
