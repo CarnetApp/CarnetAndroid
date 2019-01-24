@@ -34,7 +34,7 @@
     <string name="remove_ad_free">Supprimer la pub gratuitement</string>
     <string name="report_bug_or_propose">Bogue / Idée</string>
     <string name="report_bug_or_propose_description">Report a bug or ask for a feature</string>
-    <string name="delete_confirm">Êtes-vous sûr de vouloir supprimer cette image ?</string>
+    <string name="delete_confirm">Action non réversible: confirmez-vous la suppression ?</string>
     <string name="crop">Couper</string>
     <string name="wrong_password">Wrong pin code: default 0000</string>
     <string name="checking_password">Vérification...</string>
