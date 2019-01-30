@@ -27,11 +27,10 @@
         android:layout_below="@id/imageView"
         android:id="@+id/first_start"
         android:textColor="@android:color/white"
-        android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_above="@id/update_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/first_start"/>
 
     <Button
