@@ -1,5 +1,6 @@
 # Version 0.12.5
 
+Share text / link to Carnet
 Delete account
 Change credentials
 Sync button on titlebar
