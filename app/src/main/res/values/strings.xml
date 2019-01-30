@@ -103,7 +103,7 @@
     <string name="unpin">Unpin</string>
     <string name="say_hi">Say hi !</string>
     <string name="say_hi_subtitle">You can help me know how many people are using this app by pressing \"Say Hi !\" button \n:)</string>
-    <string name="say_hi_subtitle2"> I will understand the app was downloaded once more (not mandatory at all but helpful).</string>
+    <string name="say_hi_subtitle2">I will understand the app was downloaded once more (not mandatory at all but helpful).</string>
     <string name="not_available_on_fdroid">Not available on fdroid</string>
     <string name="desktop_version">Desktop Version</string>
     <string name="sync_intro_text_carnet_instance">Carnet can automatically backup your notes online.\nChoose a Carnet provider to be able to edit them on your web browser, from both your mobile phone and your computer</string>
@@ -118,4 +118,7 @@
     <string name="first_start">First start, please wait</string>
     <string name="sync">Sync</string>
     <string name="change_credentials">Change Credentials</string>
+    <string name="carnet_doesnt_spy">Carnet doesn\'t spy on you and contains no ads</string>
+    <string name="carnet_open">Carnet is free and open source</string>
+    <string name="carnet_note_taking_app">Carnet is a versatile note application</string>
 </resources>

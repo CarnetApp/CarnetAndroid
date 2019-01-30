@@ -26,4 +26,11 @@ public class WelcomeIntroductionFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_welcome_introduction, container, false);
     }
+
+    @Override
+    public void onViewCreated(final View v, Bundle saved){
+        v.findViewById(R.id.versatile_tv).animate().alpha(1).setDuration(500).setStartDelay(500).start();
+        v.findViewById(R.id.open_tv).animate().alpha(1).setDuration(500).setStartDelay(1000).start();
+        v.findViewById(R.id.doesnt_spy_tv).animate().alpha(1).setDuration(500).setStartDelay(1500).start();
+    }
 }

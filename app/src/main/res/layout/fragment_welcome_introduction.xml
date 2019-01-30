@@ -31,8 +31,47 @@
         android:textColor="@android:color/white"
         android:layout_width="match_parent"
         android:gravity="center"
+        android:id="@+id/discover_tv"
         android:layout_height="wrap_content"
         android:text="@string/welcome_subtitle"
+        />
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:id="@+id/versatile_tv"
+        android:alpha="0"
+        android:layout_below="@+id/discover_tv"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/carnet_note_taking_app"
+        />
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:id="@+id/open_tv"
+        android:alpha="0"
+        android:layout_below="@+id/versatile_tv"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/carnet_open"
+        />
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:layout_below="@+id/open_tv"
+        android:alpha="0"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:id="@+id/doesnt_spy_tv"
+        android:text="@string/carnet_doesnt_spy"
+        />
+
         />
     <Button
         android:layout_width="wrap_content"

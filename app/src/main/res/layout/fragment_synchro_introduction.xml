@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -20,13 +20,15 @@
             android:layout_height="wrap_content"
             android:text="@string/sync_intro_title"
             android:textSize="40dp"
-
+            android:paddingBottom="10dp"
             style="@style/Base.TextAppearance.AppCompat.Headline"/>
 
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             style="@style/Base.TextAppearance.AppCompat.Medium"
             android:text="@string/sync_intro_text" />
         <LinearLayout
@@ -60,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
 
-                    style="@style/Base.TextAppearance.AppCompat.Medium"
+                    style="@style/Base.TextAppearance.AppCompat.Small"
                     android:text="@string/sync_intro_nextcloud_text" />
             </LinearLayout>
 
@@ -96,18 +98,22 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
 
-                    style="@style/Base.TextAppearance.AppCompat.Medium"
+                    style="@style/Base.TextAppearance.AppCompat.Small"
                     android:text="@string/sync_intro_gdrive_text" />
             </LinearLayout>
 
 
         </LinearLayout>
-        <TextView
-            android:onClick="skip"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:text="@string/skip"/>
-    </LinearLayout>
 
-</FrameLayout>
+    </LinearLayout>
+    <Button
+        android:id="@+id/skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/skip"
+        android:background="@null"
+        android:onClick="skip"
+        android:layout_alignParentRight="true"
+        android:layout_margin="0dp"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

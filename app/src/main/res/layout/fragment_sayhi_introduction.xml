@@ -16,28 +16,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/say_hi"
-        android:gravity="center"
-        android:layout_marginTop="50dp"
+        android:padding="10dp"
         android:textSize="40dp" />
 
     <TextView
         android:id="@+id/subtitle1"
-        android:textSize="30dp"
-        style="@style/Base.TextAppearance.AppCompat.Large"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_below="@+id/textView"
         android:textColor="@android:color/white"
         android:layout_width="match_parent"
-        android:gravity="center"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="@string/say_hi_subtitle"
         />
     <TextView
-        style="@style/Base.TextAppearance.AppCompat.Large"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_below="@+id/subtitle1"
         android:textColor="@android:color/white"
         android:layout_width="match_parent"
-        android:gravity="center"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/say_hi_subtitle2" />
