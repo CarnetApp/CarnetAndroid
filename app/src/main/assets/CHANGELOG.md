@@ -1,3 +1,13 @@
+# Version 0.12.5
+
+Sync via Nextcloud App
+Delete account
+Change credentials
+Sync button on titlebar
+Sync immediately after close a note
+Better update of overview
+Fix crash when opening online account settings
+
 # Version 0.12.4
 
 Faster sync
