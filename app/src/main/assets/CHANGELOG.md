@@ -1,6 +1,5 @@
 # Version 0.12.5
 
-Sync via Nextcloud App
 Delete account
 Change credentials
 Sync button on titlebar
