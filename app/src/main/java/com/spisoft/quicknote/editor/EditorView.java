@@ -126,6 +126,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
     private String mSelectFileCallback;
     private ValueCallback mUploadMessage;
     private PermissionRequest myRequest;
+    private String mSharedText;
 
     private void rename(String stringExtra, String path) {
         mWebView.loadUrl("javascript:replace('" + StringEscapeUtils.escapeEcmaScript(stringExtra) + "','" + StringEscapeUtils.escapeEcmaScript(path) + "')");
@@ -200,7 +201,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
 
 
     public void createNewNote() {
-        setNote(NoteManager.createNewNote(new File(mNote.path).getParent()));
+        setNote(NoteManager.createNewNote(new File(mNote.path).getParent()), null);
     }
 
     @Override
@@ -379,8 +380,9 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
 
     }
 
-    public void setNote(Note note) {
+    public void setNote(Note note, String sharedText) {
         mProgressLayout.setAlpha(1);
+        mSharedText = sharedText;
         try {
             getContext().registerReceiver(mBroadcastReceiver, mFilter);
         } catch (Exception e) {
@@ -460,6 +462,10 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
                 @Override
                 public void run() {
                     mProgressLayout.animate().alpha(0).setDuration(500).start();
+                    if (mSharedText != null) {
+                        mWebView.loadUrl("javascript:document.execCommand('insertHTML', false, '" + StringEscapeUtils.escapeEcmaScript(mSharedText) + "');");
+                        mSharedText = null;
+                    }
                 }
             },1);
         }

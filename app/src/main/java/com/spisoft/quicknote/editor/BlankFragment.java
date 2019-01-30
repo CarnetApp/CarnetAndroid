@@ -1,48 +1,34 @@
 package com.spisoft.quicknote.editor;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.webkit.WebView;
-import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
-import android.widget.Toast;
 
-import com.spisoft.quicknote.FloatingFragment;
 import com.spisoft.quicknote.FloatingService;
-import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.R;
 import com.spisoft.sync.synchro.SynchroService;
 
-import java.util.Stack;
-
 public class BlankFragment extends Fragment implements View.OnClickListener, EditorView.HideListener {
     public static final String NOTE = "param1";
+    public static final String TEXT_TO_SHARE = "text_to_share";
     private Note mNote;
     private View mRoot;
     private boolean mHasAskedMinimize;
     private EditorView mEditor;
+    private String mTextToShare;
 
-    public static BlankFragment newInstance(Note param1) {
+    public static BlankFragment newInstance(Note param1, String textToShare) {
         BlankFragment fragment = new BlankFragment();
         Bundle args = new Bundle();
         args.putSerializable(NOTE, param1);
+        args.putSerializable(TEXT_TO_SHARE, textToShare);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,6 +43,7 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mNote = (Note) getArguments().getSerializable(NOTE);
+            mTextToShare = getArguments().getString(TEXT_TO_SHARE);
         }
         setHasOptionsMenu(true);
 
@@ -71,13 +58,13 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
         // Inflate the layout for this fragment
         if(mRoot!=null) {
             if(mNote!=null)
-                mEditor.setNote(mNote);
+                mEditor.setNote(mNote, mTextToShare);
             return mRoot;
         }
         mRoot = inflater.inflate(R.layout.floating_note, container, false);
         mEditor = ((EditorView) mRoot.findViewById(R.id.editor_view));
         if(mNote!=null)
-            mEditor.setNote(mNote);
+            mEditor.setNote(mNote, mTextToShare);
         mEditor.reset();
         mEditor.setHideListener(this);
 
@@ -140,7 +127,9 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
     public void onExit() {
         if(getActivity()==null) return;
         getActivity().startService(new Intent(getActivity(), SynchroService.class));
-        ((MainActivity)getActivity()).superOnBackPressed();
+        ((EditorActivity)getActivity()).superOnBackPressed();
+
+
     }
 
 }

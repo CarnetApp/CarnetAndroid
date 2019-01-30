@@ -31,6 +31,7 @@ import com.spisoft.quicknote.databases.DBMergerService;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.editor.EditorView;
+import com.spisoft.quicknote.editor.EditorActivity;
 import com.spisoft.quicknote.intro.HelpActivity;
 import com.spisoft.quicknote.updater.UpdaterActivity;
 import com.spisoft.quicknote.utils.PinView;
@@ -38,7 +39,7 @@ import com.spisoft.sync.Configuration;
 import com.spisoft.sync.account.DBAccountHelper;
 import com.spisoft.sync.synchro.SynchroService;
 
-public class MainActivity extends AppCompatActivity implements PinView.PasswordListener, NoteManager.UpdaterListener, Configuration.SyncStatusListener {
+public class MainActivity extends AppCompatActivity implements PinView.PasswordListener, NoteManager.UpdaterListener, Configuration.SyncStatusListener, EditorActivity {
     public static final String ACTION_RELOAD_KEYWORDS = "action_reload_keywords";
 
     private static final String WAS_LOCKED = "was_locked";
@@ -312,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
             if(mEditorFrag==null) {
                 mShouldRemove = true;
-                mEditorFrag = BlankFragment.newInstance(null);
+                mEditorFrag = BlankFragment.newInstance(null, null);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .addToBackStack(mEditorFrag.getClass().getName())
@@ -400,6 +401,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         }
     }
 
+    @Override
     public void superOnBackPressed() {
         getSupportFragmentManager().popBackStackImmediate();
         this.fragment  = getSupportFragmentManager().getFragments().get(0);

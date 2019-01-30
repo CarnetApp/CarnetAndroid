@@ -144,7 +144,7 @@ function (_Compatibility) {
                 success: function success(newVersion) {
                   console.log("new version " + newVersion);
 
-                  if (version != newVersion) {
+                  if (parseInt(version.replace(/\./g, "")) < parseInt(newVersion.replace(/\./g, ""))) {
                     displaySnack({
                       message: "New version available",
                       timeout: 10000,

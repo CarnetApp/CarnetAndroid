@@ -125,7 +125,7 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
     @Override
     public int onStartCommand(Intent intent, int flags, int startID) {
         int ret = super.onStartCommand(intent, flags, startID);
-        mEditor.setNote((Note) intent.getSerializableExtra(NOTE));
+        mEditor.setNote((Note) intent.getSerializableExtra(NOTE), null);
         addFloatingView();
         if (!intent.getBooleanExtra(START_MINIMIZE, false))
             invert();

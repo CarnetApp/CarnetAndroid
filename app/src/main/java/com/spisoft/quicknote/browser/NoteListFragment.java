@@ -303,7 +303,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         if(NoteManager.needToUpdate(note.path))
             Toast.makeText(getContext(), R.string.please_wait_update, Toast.LENGTH_LONG).show();
         else
-            ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(note));
+            ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(note, null));
 
           /*  Intent intent = new Intent(getActivity(), FloatingService.class);
             intent.putExtra(FloatingService.NOTE, note);
@@ -364,7 +364,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         Note note = NoteManager.createNewNote(path);
         RecentHelper.getInstance(getContext()).addNote(note);
         mLastSelected = note;
-        ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(note));
+        ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(note, null));
     }
 
     @Override

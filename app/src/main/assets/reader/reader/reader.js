@@ -371,8 +371,11 @@ Writer.prototype.fillWriter = function (extractedHTML) {
       var elements = event.target.getElementsByClassName("edit-zone");
       writer.placeCaretAtEnd(elements[elements.length - 1]);
     }
-  };
+  }; //focus on last editable element
 
+
+  var elements = this.oDoc.getElementsByClassName("edit-zone");
+  writer.placeCaretAtEnd(elements[elements.length - 1]);
   this.oFloating = document.getElementById("floating");
   var writer = this;
   this.oDoc.addEventListener("input", function () {

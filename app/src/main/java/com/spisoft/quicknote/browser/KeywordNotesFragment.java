@@ -45,7 +45,7 @@ public class KeywordNotesFragment extends NoteListFragment {
         if(SpiDebugUtils.IS_TEST_MODE){
             if(mTestNote == null)
                 mTestNote = NoteManager.createNewNote(PreferenceHelper.getRootPath(getActivity()));
-        ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(mTestNote));
+        ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(mTestNote, null));
 
         }
 
