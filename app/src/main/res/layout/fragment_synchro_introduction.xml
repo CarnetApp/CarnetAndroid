@@ -73,6 +73,7 @@
             android:background="@drawable/transparent_ripple"
             android:id="@+id/gdrive_button"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="100dp"
             android:orientation="horizontal">
 

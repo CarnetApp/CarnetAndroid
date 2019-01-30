@@ -82,7 +82,7 @@
     <string name="remote_folder">Dossier distant</string>
     <string name="keywords">Mots clefs</string>
     <string name="sync_intro_title">Synchroniser Carnet</string>
-    <string name="sync_intro_text">Carnet peut se synchroniser avec NextCloud et Google Drive. N\'hésitez pas à télécharger le client pour ordinateur pour y retrouver toutes vos notes</string>
+    <string name="sync_intro_text">Carnet peut se synchroniser avec NextCloud. N\'hésitez pas à télécharger le client pour ordinateur pour y retrouver toutes vos notes</string>
     <string name="sync_intro_nextcloud_text">Open Source, avec plusieurs fournisseurs</string>
     <string name="sync_intro_gdrive_text">Facile, la plupart d\'entre vous ont une adresse Gmail, pas OpenSource</string>
     <string name="skip">Passer</string>
