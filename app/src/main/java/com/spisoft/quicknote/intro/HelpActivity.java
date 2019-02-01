@@ -23,6 +23,7 @@ import com.spisoft.sync.wrappers.nextcloud.NextCloudWrapper;
 
 public class HelpActivity extends AppCompatActivity implements NextCloudAuthorizeFragment.OnConnectedListener {
 
+    public static final String SYNC_ONLY = "sync_only";
     private static final String SHOULD_START_ACTIVITY = "should_start_gdrive_act";
 
     private  int NUM_PAGES = 5;
@@ -32,12 +33,14 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
     private NextCloudAuthorizeFragment mNextCloudFragment;
     private Wrapper mDriveWrapper;
     private String mInstance;
+    private boolean mSyncOnly;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
+        mSyncOnly = getIntent().getBooleanExtra(SYNC_ONLY, false);
         PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(SHOULD_START_ACTIVITY, false).commit();
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -88,6 +91,8 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
 
         @Override
         public Fragment getItem(int position) {
+            if(mSyncOnly)
+                position = position + 2;
             if(position == 0)
                 return new WelcomeIntroductionFragment();
             else if (position == 1){
@@ -109,12 +114,12 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
 
         @Override
         public int getCount() {
-            return NUM_PAGES;
+            return mSyncOnly?NUM_PAGES-2:NUM_PAGES;
         }
     }
 
     public void goToNextcloudFrag(String instance){
-        mPager.setCurrentItem(4);
+        mPager.setCurrentItem(mSyncOnly?2:4);
         if(mNextCloudFragment == null)
             mInstance = instance;
         else

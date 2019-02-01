@@ -88,7 +88,9 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
         if(preference==findPreference("pref_google_drive")){
             Cursor cursor = DBAccountHelper.getInstance(getActivity()).getCursor();
             if(cursor == null || cursor.getCount() == 0){
-                startActivity(new Intent(getActivity(), HelpActivity.class));
+                Intent intent = new Intent(getActivity(), HelpActivity.class);
+                intent.putExtra(HelpActivity.SYNC_ONLY, true);
+                startActivity(intent);
             }
             else
                 startActivity(new Intent(getActivity(),AccountListActivity.class));

@@ -89,7 +89,7 @@
     <string name="remote_folder">Remote folder</string>
     <string name="keywords">Keywords</string>
     <string name="sync_intro_title">Sync Carnet</string>
-    <string name="sync_intro_text">Carnet supports synchronisation with NextCloud, don\'t forget to download Desktop version to find your notes back on your computer</string>
+    <string name="sync_intro_text">Carnet supports synchronisation with NextCloud, don\'t forget to download Desktop version to find your notes back on your computer. Carnet is also available online on the NextCloud App Store.</string>
     <string name="sync_intro_nextcloud_text">OpenSource, with multiple providers</string>
     <string name="google_drive">Google Drive</string>
     <string name="sync_intro_gdrive_text">Easy, most of you already have a gmail address, not OpenSource</string>
@@ -121,4 +121,6 @@
     <string name="carnet_doesnt_spy">Carnet doesn\'t spy on you and contains no ads</string>
     <string name="carnet_open">Carnet is free and open source</string>
     <string name="carnet_note_taking_app">Carnet is a versatile note application</string>
+    <string name="nextcloud_connect">Connect with Nexctloud</string>
+    <string name="other_sync_options">Other sync options</string>
 </resources>

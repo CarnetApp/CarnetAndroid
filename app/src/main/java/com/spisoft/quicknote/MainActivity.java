@@ -111,7 +111,9 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         if(item.getItemId() == R.string.sync){
             Cursor cursor = DBAccountHelper.getInstance(this).getCursor();
             if(cursor == null || cursor.getCount() == 0){
-                startActivity(new Intent(this, HelpActivity.class));
+                Intent intent = new Intent(this, HelpActivity.class);
+                intent.putExtra(HelpActivity.SYNC_ONLY, true);
+                startActivity(intent);
             }
             else {
                 PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("refuse_certificate", false).apply();

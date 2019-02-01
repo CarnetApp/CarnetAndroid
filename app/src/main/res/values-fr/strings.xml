@@ -82,7 +82,7 @@
     <string name="remote_folder">Dossier distant</string>
     <string name="keywords">Mots clefs</string>
     <string name="sync_intro_title">Synchroniser Carnet</string>
-    <string name="sync_intro_text">Carnet peut se synchroniser avec NextCloud. N\'hésitez pas à télécharger le client pour ordinateur pour y retrouver toutes vos notes</string>
+    <string name="sync_intro_text">Carnet peut se synchroniser avec NextCloud. N\'hésitez pas à télécharger le client pour ordinateur pour y retrouver toutes vos notes. Carnet est aussi disponible en ligne sur le magasin d\'applications de NextCloud</string>
     <string name="sync_intro_nextcloud_text">Open Source, avec plusieurs fournisseurs</string>
     <string name="sync_intro_gdrive_text">Facile, la plupart d\'entre vous ont une adresse Gmail, pas OpenSource</string>
     <string name="skip">Passer</string>
@@ -110,5 +110,7 @@
     <string name="carnet_note_taking_app">Carnet est une application de prise de notes polyvalente</string>
     <string name="say_hi_subtitle">Cliquer sur \"Me prévenir\" m\'aidera à déterminer combien d\'utilisateurices ont téléchargé Carnet. Ce n\'est bien sûr pas obligatoire :)</string>
     <string name="say_hi_subtitle2">" "</string>
+    <string name="nextcloud_connect">Se connecter avec Nexctloud</string>
+    <string name="other_sync_options">Autres options</string>
 
 </resources>

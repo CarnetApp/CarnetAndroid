@@ -50,20 +50,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/nextcloud_hint"
+                    android:text="@string/nextcloud_connect"
 
                     style="@style/Base.TextAppearance.AppCompat.Headline"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-
-                    style="@style/Base.TextAppearance.AppCompat.Small"
-                    android:text="@string/sync_intro_nextcloud_text" />
             </LinearLayout>
 
 
