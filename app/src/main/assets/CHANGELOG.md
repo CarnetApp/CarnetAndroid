@@ -1,3 +1,7 @@
+# Version 0.12.6
+
+Enable sync through NextCloud app
+
 # Version 0.12.5
 
 Share text / link to Carnet
