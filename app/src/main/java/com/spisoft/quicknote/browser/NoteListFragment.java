@@ -374,6 +374,16 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         }
     }
 
+    @Override
+    public void onSyncFailure(String errorMessage){
+
+    }
+
+    @Override
+    public void onSyncSuccess(){
+
+    }
+
 
 
 }

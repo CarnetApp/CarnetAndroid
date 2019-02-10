@@ -133,6 +133,16 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         });
     }
 
+    @Override
+    public void onSyncFailure(String errorMessage) {
+
+    }
+
+    @Override
+    public void onSyncSuccess() {
+
+    }
+
     private void onUpdateDone() {
 
 
