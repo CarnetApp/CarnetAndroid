@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +44,7 @@ public class Note implements Serializable{
     }
 
     public Note(String path){
-        String name = Uri.parse(path).getLastPathSegment();
-        if(name.endsWith(".sqd"))
-            name = name.substring(0, name.length()-".sqd".length());
+        String name = new File(path).getName();
         this.path = path;
         this.title = name;
         this.keywords = null;
@@ -59,9 +58,7 @@ public class Note implements Serializable{
 
 
     public void setPath(String path) {
-        String name = Uri.parse(path).getLastPathSegment();
-        if(name.endsWith(".sqd"))
-            name = name.substring(0, name.length()-".sqd".length());
+        String name = new File(path).getName();
         this.path = path;
         this.title = name;
     }
