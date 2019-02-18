@@ -1,3 +1,8 @@
+# Version 0.12.8
+
+Fix Nextcloud SSO with android 7
+Note title with random letters
+
 # Version 0.12.6
 
 Enable sync through NextCloud app
