@@ -75,18 +75,39 @@ public class NoteManager
 
 
     public static Note createNewNote(String rootPath){
-        int i = 0;
-
-        File f = new File(new File(rootPath), "untitled"+".sqd");
-        while(f.exists()){
-            f = new File(new File(rootPath), "untitled "+i+".sqd");
-            i++;
-
+        File rootFile = new File(rootPath);
+        String name  = "untitled";
+        if(rootFile.exists()){
+            File [] children = rootFile.listFiles();
+            if(children!=null) {
+                boolean found = true;
+                int i = 0;
+                while (found) {
+                    found = false;
+                    for(File child : children){
+                        if(child.getName().startsWith(name)){
+                            found = true;
+                            i++;
+                            name = "untitled "+i;
+                            continue;
+                        }
+                    }
+                }
+            }
         }
 
-        String path = rootPath + (!rootPath.endsWith("/")?"/":"")+f.getName();
+
+        String path = rootPath + (!rootPath.endsWith("/")?"/":"")+name+" "+randomChar()+randomChar()+".sqd";
         return new Note(path);
     }
+
+    private static char randomChar () {
+        int rnd = (int) (Math.random() * 52);
+        char base = (rnd < 26) ? 'A' : 'a';
+        return (char) (base + rnd % 26);
+
+    }
+
     public static String renameNote(Context context,Note note, String newName){
         File toFile = new File(new File(note.path).getParentFile(), newName);
         return moveNote(context, note, toFile.getAbsolutePath());
