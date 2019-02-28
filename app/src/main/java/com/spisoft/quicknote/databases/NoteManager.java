@@ -48,6 +48,8 @@ public class NoteManager
     private static final String TAG = "NoteManager";
     public static String EXTENSION = "sqd";
     public static final String ACTION_UPDATE_END = "update_note_end";
+    public static final int PREVIEW_WIDTH = 400;
+    public static final int PREVIEW_HEIGHT = 400;
 
 
     public static void updateMetadata(final Context context, final Note note){
@@ -237,12 +239,7 @@ public class NoteManager
         return false;
     }
 
-    public static String update(String ret) {
-
-        if(!ret.startsWith("<div id=\"text\" contenteditable=\"true\">")){
-            ret="<div id=\"text\" contenteditable=\"true\">"+ret+"</div>\n" +
-                    "    <div id=\"floating\"></div>";
-        }
-        return ret;
+    public static String getDefaultHTML() {
+        return "<div id=\"text\" style=\"height:100%;\"> \n<!-- be aware that THIS will be modified in java -->\n<!-- soft won't save note if contains donotsave345oL -->\n<div class=\"edit-zone\" contenteditable></div>\n</div>\n<div id=\"floating\">\n\n</div>";
     }
 }

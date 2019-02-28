@@ -33,6 +33,9 @@ import java.util.StringTokenizer;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.util.ServerRunner;
 
+import static com.spisoft.quicknote.databases.NoteManager.PREVIEW_HEIGHT;
+import static com.spisoft.quicknote.databases.NoteManager.PREVIEW_WIDTH;
+
 public class HttpServer extends NanoHTTPD {
 
     private static final String TAG = "HttpServer";
@@ -229,7 +232,7 @@ public class HttpServer extends NanoHTTPD {
             if(PictureUtils.isPicture(name)) {
                 File preview = new File(data, "preview_" + name +".jpg");
                 try {
-                    PictureUtils.resize(newF.getAbsolutePath(), preview.getAbsolutePath(), 200, 200);
+                    PictureUtils.resize(newF.getAbsolutePath(), preview.getAbsolutePath(), PREVIEW_WIDTH, PREVIEW_HEIGHT);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
