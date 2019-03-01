@@ -2,12 +2,14 @@ package com.spisoft.quicknote.editor;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -67,47 +70,17 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
         @Override
         public void onPictureTaken(CameraView cameraView, final byte[] data) {
             super.onPictureTaken(cameraView, data);
-            new AsyncTask<Void, Void, View>() {
+            new AsyncTask<Void, Void, Bitmap>() {
 
                 @Override
-                protected View doInBackground(Void... voids) {
+                protected Bitmap doInBackground(Void... voids) {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    if (bitmap != null) {
-                        File dataF = new File(mTmpDir, "data/");
-                        dataF.mkdirs();
-                        File file = new File(dataF, System.currentTimeMillis() + ".jpg");
-                        try {
-                            FileOutputStream fileOutputStream = new FileOutputStream(file);
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-                            fileOutputStream.flush();
-                            fileOutputStream.close();
-                            bitmap.recycle();
-                            ImageView v = new ImageView(ImageActivity.this);
-                            v.setAdjustViewBounds(true);
-                            File preview = new File(dataF, "preview_" + file.getName());
-
-                            try {
-                                PictureUtils.resize(file.getAbsolutePath(), preview.getAbsolutePath(), PREVIEW_WIDTH, PREVIEW_HEIGHT);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            v.setImageURI(Uri.fromFile(preview));
-                            v.setTag(file.getName());
-                            v.setOnClickListener(ImageActivity.this);
-                            v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                            return v;
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (Exception exception) {
-                            exception.printStackTrace();
-                        }
-
-                    }
-                    return null;
+                    return bitmap;
                 }
-                protected void onPostExecute(View v) {
-                    if(v!=null)
-                     mImageListView.addView(v);
+                protected void onPostExecute(Bitmap b) {
+                    if(b != null)
+                        handlePhotoBitmap(b);
+
 
                 }
 
@@ -123,6 +96,8 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
     private EditText mKeywordET;
     private View mCreateButton;
     private View mNextButton;
+    private ImageButton mFlashButton;
+    private View mExternalCameraButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,9 +132,14 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
         mImageListView = findViewById(R.id.image_list);
         mCameraView = findViewById(R.id.camera);
         mCameraView.addCallback(mCallback);
+        mCameraView.setFlash(PreferenceManager.getDefaultSharedPreferences(this).getInt("last_camera_flash", CameraView.FLASH_TORCH));
+        mExternalCameraButton = findViewById(R.id.external_camera_button);
+        mExternalCameraButton.setOnClickListener(this);
         mNextButton = findViewById(R.id.next);
         mNextButton.setOnClickListener(this);
-
+        mFlashButton = findViewById(R.id.flash_button);
+        mFlashButton.setOnClickListener(this);
+        refreshFlashButton();
         mShootButton = findViewById(R.id.shoot_button);
         mShootButton.setOnClickListener(this);
         mCreateButton = findViewById(R.id.create_button);
@@ -220,10 +200,83 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
 
 
     }
+    private void refreshFlashButton(){
+        if(mCameraView.getFlash() == CameraView.FLASH_OFF){
+            mFlashButton.setImageResource(R.drawable.flash_off);
+        } else {
+            mFlashButton.setImageResource(R.drawable.flash_on);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1002 && resultCode == RESULT_OK) {
+            handlePhotoBitmap((Bitmap) data.getExtras().get("data"));
+        }
+    }
+
+    private void handlePhotoBitmap(final Bitmap bitmap) {
+        new AsyncTask<Void, Void, View>() {
+            @Override
+            protected View doInBackground(Void... voids) {
+                File dataF = new File(mTmpDir, "data/");
+                dataF.mkdirs();
+                File file = new File(dataF, System.currentTimeMillis() + ".jpg");
+                try {
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
+                    bitmap.recycle();
+                    ImageView v = new ImageView(ImageActivity.this);
+                    v.setAdjustViewBounds(true);
+                    File preview = new File(dataF, "preview_" + file.getName());
+
+                    try {
+                        PictureUtils.resize(file.getAbsolutePath(), preview.getAbsolutePath(), PREVIEW_WIDTH, PREVIEW_HEIGHT);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    v.setImageURI(Uri.fromFile(preview));
+                    v.setTag(file.getName());
+                    v.setOnClickListener(ImageActivity.this);
+                    v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    return v;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+                return null;
+            }
+            protected void onPostExecute(View v) {
+                if(v!=null)
+                    mImageListView.addView(v);
+            }
+        }.execute();
+
+    }
+
 
     @Override
     public void onClick(final View v) {
-        if(v == mShootButton){
+        if(v == mFlashButton){
+            if(mCameraView.getFlash() == CameraView.FLASH_OFF){
+                mCameraView.setFlash(CameraView.FLASH_TORCH);
+            } else {
+                mCameraView.setFlash(CameraView.FLASH_OFF);
+            }
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("last_camera_flash", mCameraView.getFlash()).apply();
+            refreshFlashButton();
+        }
+        else if (v ==  mExternalCameraButton){
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, 1002);
+            }
+
+        }
+        else if(v == mShootButton){
             mCameraView.takePicture();
         }
         else if(v == mNextButton){

@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-
+        android:background="@android:color/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -47,15 +47,40 @@
             app:facing="back"
             app:flash="auto"/>
         <ImageButton
-            android:background="@drawable/transparent_ripple"
+            android:backgroundTint="#aaffffff"
             android:id="@+id/shoot_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Shoot"
             android:src="@drawable/camera_shot"
             android:layout_marginBottom="20dp"
             android:layout_alignBottom="@+id/camera"
             android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:id="@+id/flash_button"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:layout_alignTop="@+id/camera"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:adjustViewBounds="true"
+            android:backgroundTint="#aaffffff"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/flash_on"/>
+        <ImageButton
+            android:id="@+id/external_camera_button"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:layout_alignTop="@+id/camera"
+            android:layout_toLeftOf="@+id/flash_button"
+            android:layout_marginTop="10dp"
+            android:adjustViewBounds="true"
+            android:backgroundTint="#aaffffff"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/camera_black"/>
     </RelativeLayout>
 
     <RelativeLayout
