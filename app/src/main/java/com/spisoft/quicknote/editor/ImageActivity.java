@@ -65,41 +65,54 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
         }
 
         @Override
-        public void onPictureTaken(CameraView cameraView, byte[] data) {
+        public void onPictureTaken(CameraView cameraView, final byte[] data) {
             super.onPictureTaken(cameraView, data);
-          ;
-            Bitmap bitmap = BitmapFactory.decodeByteArray(data , 0, data .length);
-            if(bitmap!=null) {
-                File dataF = new File(mTmpDir, "data/");
-                dataF.mkdirs();
-                File file = new File(dataF, System.currentTimeMillis() + ".jpg");
-                try {
-                    FileOutputStream fileOutputStream = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-                    fileOutputStream.flush();
-                    fileOutputStream.close();
-                    bitmap.recycle();
-                    ImageView v = new ImageView(ImageActivity.this);
-                    v.setAdjustViewBounds(true);
-                    File preview = new File(dataF, "preview_" + file.getName());
+            new AsyncTask<Void, Void, View>() {
 
-                    try {
-                        PictureUtils.resize(file.getAbsolutePath(), preview.getAbsolutePath(),  PREVIEW_WIDTH, PREVIEW_HEIGHT);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                @Override
+                protected View doInBackground(Void... voids) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    if (bitmap != null) {
+                        File dataF = new File(mTmpDir, "data/");
+                        dataF.mkdirs();
+                        File file = new File(dataF, System.currentTimeMillis() + ".jpg");
+                        try {
+                            FileOutputStream fileOutputStream = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+                            fileOutputStream.flush();
+                            fileOutputStream.close();
+                            bitmap.recycle();
+                            ImageView v = new ImageView(ImageActivity.this);
+                            v.setAdjustViewBounds(true);
+                            File preview = new File(dataF, "preview_" + file.getName());
+
+                            try {
+                                PictureUtils.resize(file.getAbsolutePath(), preview.getAbsolutePath(), PREVIEW_WIDTH, PREVIEW_HEIGHT);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            v.setImageURI(Uri.fromFile(preview));
+                            v.setTag(file.getName());
+                            v.setOnClickListener(ImageActivity.this);
+                            v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                            return v;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+                        }
+
                     }
-                    v.setImageURI(Uri.fromFile(preview));
-                    v.setTag(file.getName());
-                    v.setOnClickListener(ImageActivity.this);
-                    v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                    mImageListView.addView(v);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
+                    return null;
+                }
+                protected void onPostExecute(View v) {
+                    if(v!=null)
+                     mImageListView.addView(v);
+
                 }
 
-            }
+
+            }.execute();
 
         }
     };
