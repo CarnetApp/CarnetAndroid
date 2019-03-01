@@ -18,6 +18,7 @@
         <item name="MainViewBackground">@android:color/white</item>
         <item name="AddFolderIcon">@drawable/ic_create_new_folder_black</item>
         <item name="AddNoteIcon">@drawable/ic_note_add_black</item>
+        <item name="AddPhotoIcon">@drawable/camera_black</item>
         <item name="DotsIcon">@drawable/threedots</item>
         <item name="MainNoteBackground">@android:color/white</item>
         <item name="InNoteKeywordBackground">@color/blue_50</item>
@@ -71,6 +72,7 @@
         <item name="ActionButtonBorderColor">@color/blue_500</item>
         <item name="AddFolderIcon">@drawable/ic_create_new_folder_white</item>
         <item name="AddNoteIcon">@drawable/ic_note_add_white</item>
+        <item name="AddPhotoIcon">@drawable/camera_white</item>
         <item name="DotsIcon">@drawable/threedots_white</item>
         <item name="SyncIcon">@drawable/sync_white</item>
         <item name="SyncDisabled">@drawable/sync_white_disabled</item>

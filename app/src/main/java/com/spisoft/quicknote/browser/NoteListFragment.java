@@ -28,6 +28,7 @@ import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.editor.BlankFragment;
+import com.spisoft.quicknote.editor.ImageActivity;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.Log;
 import com.spisoft.sync.synchro.SynchroService;
@@ -103,6 +104,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             mEmptyView = mRoot.findViewById(R.id.empty_view);
             mEmptyViewMessage = (TextView) mRoot.findViewById(R.id.empty_message);
             mRoot.findViewById(R.id.add_note_button).setOnClickListener(this);
+            mRoot.findViewById(R.id.add_photos_button).setOnClickListener(this);
             mNoteAdapter = getAdapter();
             mNoteAdapter.setOnNoteClickListener(this);
             mGridLayout = new StaggeredGridLayoutManager( 2, StaggeredGridLayoutManager.VERTICAL);
@@ -371,6 +373,8 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     public void onClick(View view) {
         if(view==mRoot.findViewById(R.id.add_note_button)) {
               createAndOpenNewNote(PreferenceHelper.getRootPath(getActivity()));
+        } else if (view == mRoot.findViewById(R.id.add_photos_button)){
+            startActivity(new Intent(getActivity(), ImageActivity.class));
         }
     }
 
