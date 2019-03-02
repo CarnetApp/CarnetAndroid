@@ -351,14 +351,19 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         public void setText(String s) {
             if(s==null)
                 s = "";
-            mTextView.setText(s);
-            if(s.length()<40 && mNote.mMetadata.todolists.size() == 0){
-                mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,mBigText);
-            } else if(s.length()<100 && mNote.mMetadata.todolists.size() == 0){
-                mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,mMediumText);
-            }else
-                mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,mSmallText);
-
+            if(s.isEmpty()){
+                mTextView.setVisibility(View.GONE);
+            }
+            else {
+                mTextView.setVisibility(View.VISIBLE);
+                mTextView.setText(s);
+                if (s.length() < 40 && mNote.mMetadata.todolists.size() == 0) {
+                    mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mBigText);
+                } else if (s.length() < 100 && mNote.mMetadata.todolists.size() == 0) {
+                    mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mMediumText);
+                } else
+                    mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSmallText);
+            }
 
         }
         public void setRating(int rating){
