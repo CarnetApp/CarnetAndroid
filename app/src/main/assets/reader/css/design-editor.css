@@ -28,6 +28,8 @@ html {
 	color:white;
 }
 
+
+
 #loading {
 	display: none;
 	position: fixed;
@@ -403,4 +405,60 @@ div#container-button::-webkit-scrollbar {
 	border: unset;
 	outline: none;
 	border-radius: unset;
+}
+#back-to-text-button{
+	display: none;
+}
+@media screen and (max-width: 600px) {
+	#media-header{
+		position: fixed;
+		height:60px;
+		width: 100%;
+		background: rgba(0, 0, 0, 0.479);
+	}
+	#media-toolbar {
+		position: fixed;
+		height: 100%;
+		width: calc(100% );
+		top: 0;
+		background: rgb(41, 40, 40);
+		z-index: 3;
+	}
+	.mdl-layout__drawer-button{
+		background: unset !important;
+	}
+	#back-to-text-button{
+		display: inline;
+		margin-top: 13px;
+		margin-left: 60px;
+	}
+	#media-list {
+		display: block;
+		margin-top: 70px;
+		
+	}
+	.media {
+		display: block;	
+		text-align: center;
+		
+	}
+	.media img{
+		max-width: 100%;
+	}
+
+	#add-media-button {
+		color: white;
+		position: fixed;
+		z-index: 1;
+		top: 10px;
+		right: 20px;
+	}
+	#add-media-button ~ .mdl-menu__container{
+		position:fixed;
+		right:20px !important;
+		margin-top:10px;
+		left:unset !important;
+	}
+	
+	
 }

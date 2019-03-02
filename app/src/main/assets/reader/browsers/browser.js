@@ -32,7 +32,8 @@ var wasNewNote = false;
 var dontOpen = false;
 var currentNotePath = undefined;
 var root_url = document.getElementById("root-url") != undefined ? document.getElementById("root-url").innerHTML : "";
-new RequestBuilder();
+var api_url = document.getElementById("api-url").innerHTML !== "!API_URL" ? document.getElementById("api-url").innerHTML : "./";
+new RequestBuilder(api_url);
 /*const {
     ipcRenderer,
     remote,
@@ -98,6 +99,7 @@ String.prototype.replaceAll = function (search, replacement) {
 };
 
 function openNote(notePath) {
+  isLoadCanceled = false;
   currentNotePath = notePath;
   RequestBuilder.sRequestBuilder.get("/note/open/prepare", function (error, data) {
     console.log("opening " + data);
@@ -113,10 +115,10 @@ function openNote(notePath) {
           writerFrame.style.display = "inline-flex";
         });
       }
-      /*setTimeout(function () {
-          writerFrame.openDevTools()
-      }, 1000)*/
 
+      setTimeout(function () {
+        writerFrame.openDevTools();
+      }, 1000);
     } else {
       console.log("reuse old iframe");
       $(loadingView).fadeIn(function () {
@@ -760,10 +762,29 @@ registerWriterEvent("exit", function () {
   list(currentPath, true);
   wasNewNote = false;
 });
+var isLoadCanceled = false;
 registerWriterEvent("loaded", function () {
-  $(loadingView).fadeOut();
-  $("#no-drag-bar").show();
+  if (!isLoadCanceled) {
+    $(loadingView).fadeOut();
+    $("#no-drag-bar").show();
+  }
 });
+registerWriterEvent("error", function () {
+  cancelLoad();
+});
+
+function cancelLoad() {
+  isLoadCanceled = true;
+  $(loadingView).fadeOut();
+  $(writerFrame).fadeOut();
+  $("#no-drag-bar").hide();
+}
+
+document.getElementById("cancel-load-button").onclick = function () {
+  cancelLoad();
+  return false;
+};
+
 setTimeout(function () {
   RequestBuilder.sRequestBuilder.get("/settings/isfirstrun", function (error, data) {
     if (!error && data == true) {

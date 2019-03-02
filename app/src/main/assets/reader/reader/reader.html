@@ -55,7 +55,7 @@
 	<script src="<!ROOTPATH>reader/libs/recorder/recorder.min.js"></script>
 	<script src="<!ROOTPATH>reader/carnet-recorder.js"></script>
 	<script src="<!ROOTPATH>reader/libs/wavesurfer.min.js"></script>
-
+	<script src="<!ROOTPATH>reader/libs/jquery.printElement.min.js"></script>
 	<script src="<!ROOTPATH>keywords/keywords_db_manager.js"></script>
 
 	<script src="<!ROOTPATH>reader/reader.js"></script>
@@ -239,6 +239,11 @@ mdl-layout--fixed-header">
 		<main class="mdl-layout__content" style="overflow-y: hidden">
 			<div id="toolbars">
 				<div id="media-toolbar" class="toolbar">
+					<div id="media-header">
+						<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="back-to-text-button">
+							Back to text
+						</button>
+					</div>
 					<div id="media-list"></div>
 					<div class="mdl-spinner mdl-js-spinner is-active " id="media-loading"></div>
 					<button id="add-media-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button">
@@ -311,6 +316,9 @@ mdl-layout--fixed-header">
 					<button id="todolist-button" class="mdl-button mdl-js-button headerbar-button in-toolbar-button">
 						Todo-List
 					</button>
+					<button id="print-button" class="mdl-button mdl-js-button headerbar-button in-toolbar-button">
+						Print
+					</button>
 
 				</div>
 			</div>
@@ -351,6 +359,29 @@ mdl-layout--fixed-header">
 
 
 			<span id="total-time">0:00</span>
+		</div>
+	</dialog>
+
+	<dialog class="mdl-dialog" id="print-dialog">
+		<div>
+			<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="title-checkbox">
+				<input type="checkbox" id="title-checkbox" class="mdl-checkbox__input">
+				<span class="mdl-checkbox__label">Print title</span>
+			</label>
+			<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="mod-checkbox">
+				<input type="checkbox" id="mod-checkbox" class="mdl-checkbox__input" checked>
+				<span class="mdl-checkbox__label">Print modification date</span>
+			  </label>
+			  <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="creation-checkbox">
+				<input type="checkbox" id="creation-checkbox" class="mdl-checkbox__input" checked>
+				<span class="mdl-checkbox__label">Print creation date</span>
+			  </label>
+		</div>
+		<div>
+
+			<button class="mdl-button mdl-js-button" id="cancel">Cancel</button>
+			<button class="mdl-button mdl-js-button" id="print">Print</button>
+
 		</div>
 	</dialog>
 

@@ -326,6 +326,20 @@ Writer.prototype.createEditableZone = function () {
   return div;
 };
 
+Writer.prototype.openPrintDialog = function () {
+  var writer = this;
+  this.printDialog.showModal();
+
+  this.printDialog.querySelector("#cancel").onclick = function () {
+    writer.printDialog.close();
+  };
+
+  this.printDialog.querySelector("#print").onclick = function () {
+    compatibility.print(writer.printDialog.querySelector("#title-checkbox").checked, writer.printDialog.querySelector("#mod-checkbox").checked, writer.printDialog.querySelector("#creation-checkbox").checked, writer.note);
+  }; //compatibility.print();
+
+};
+
 Writer.prototype.placeCaretAtEnd = function (el) {
   el.focus();
 
@@ -345,9 +359,9 @@ Writer.prototype.placeCaretAtEnd = function (el) {
 };
 
 Writer.prototype.fillWriter = function (extractedHTML) {
-  console.log("fill");
+  console.log("fill " + extractedHTML);
   var writer = this;
-  if (extractedHTML != undefined) this.oEditor.innerHTML = extractedHTML;
+  if (extractedHTML != undefined && extractedHTML != "") this.oEditor.innerHTML = extractedHTML;else this.putDefaultHTML();
   document.getElementById("name-input").value = FileUtils.stripExtensionFromName(FileUtils.getFilename(this.note.path));
 
   this.oEditor.onscroll = function () {
@@ -517,6 +531,7 @@ Writer.prototype.init = function () {
   this.styleDialog = this.elem.querySelector('#style-dialog');
   this.recorderDialog = this.elem.querySelector('#recorder-container');
   this.newKeywordDialog = this.elem.querySelector('#new-keyword-dialog');
+  this.printDialog = this.elem.querySelector('#print-dialog');
   this.oEditor = document.getElementById("editor");
   this.mediaList = document.getElementById("media-list");
   this.fullscreenViewer = document.getElementById("fullscreen-viewer");
@@ -663,6 +678,14 @@ Writer.prototype.init = function () {
 
         case "select-all-button":
           document.execCommand("selectAll");
+          break;
+
+        case "print-button":
+          writer.openPrintDialog();
+          break;
+
+        case "back-to-text-button":
+          writer.toolbarManager.toggleToolbar(document.getElementById("media-toolbar"));
           break;
       }
     };
@@ -860,14 +883,7 @@ Writer.prototype.removeKeyword = function (word) {
 Writer.prototype.reset = function () {
   this.exitOnSaved = false;
   if (this.saveInterval !== undefined) clearInterval(this.saveInterval);
-  this.oEditor.innerHTML = '<div id="text" style="height:100%;">\
-    <!-- be aware that THIS will be modified in java -->\
-    <!-- soft won\'t save note if contains donotsave345oL -->\
-    <div class="edit-zone" contenteditable></div>\
-</div>\
-<div id="floating">\
-\
-</div>';
+  this.putDefaultHTML();
   var dias = document.getElementsByClassName("mdl-dialog");
 
   for (var i = 0; i < dias.length; i++) {
@@ -881,7 +897,21 @@ Writer.prototype.reset = function () {
     snackbarContainer.MaterialSnackbar.cleanup_();
   }
 
-  this.setDoNotEdit(false);
+  this.setDoNotEdit(false); //close all toolbars
+
+  if (this.toolbarManager != undefined) this.toolbarManager.toggleToolbar(undefined);
+  if (writer.fullscreenViewer != undefined) $(writer.fullscreenViewer).hide();
+};
+
+Writer.prototype.putDefaultHTML = function () {
+  this.oEditor.innerHTML = '<div id="text" style="height:100%;">\
+    <!-- be aware that THIS will be modified in java -->\
+    <!-- soft won\'t save note if contains donotsave345oL -->\
+    <div class="edit-zone" contenteditable></div>\
+</div>\
+<div id="floating">\
+\
+</div>';
 };
 
 Writer.prototype.setColor = function (color) {
@@ -971,7 +1001,12 @@ ToolbarManager.prototype.toggleToolbar = function (elem) {
     if (toolbar != elem) $(toolbar).slideUp("fast", resetScreenHeight);
   }
 
-  if ($(elem).is(":visible")) $(elem).slideUp("fast", resetScreenHeight);else $(elem).slideDown("fast", resetScreenHeight);
+  if (elem != undefined && elem.id == "media-toolbar" && !$(elem).is(":visible")) document.getElementsByTagName("header")[0].style.zIndex = "unset";else document.getElementsByTagName("header")[0].style.zIndex = 3;
+
+  if (elem != undefined) {
+    if ($(elem).is(":visible")) $(elem).slideUp("fast", resetScreenHeight);else $(elem).slideDown("fast", resetScreenHeight);
+  }
+
   resetScreenHeight();
 };
 
@@ -1162,6 +1197,8 @@ $(document).ready(function () {
   api_url = document.getElementById("api-url").innerHTML;
   new RequestBuilder(api_url);
   RequestBuilder.sRequestBuilder.get("/settings/editor_css", function (error, data) {
+    console.log("received css data " + data);
+
     if (!error && data != null && data != undefined) {
       console.log("data " + data);
       var _iteratorNormalCompletion3 = true;

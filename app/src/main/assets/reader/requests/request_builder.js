@@ -71,6 +71,7 @@ RequestBuilder.prototype.postFiles = function (path, data, files, callback) {
   for (var i = 0; i < files.length; i++) {
     var file = files[i]; // Add the file to the request.
 
+    console.log("name: " + file.name);
     formData.append('media[]', file, file.name);
   }
 

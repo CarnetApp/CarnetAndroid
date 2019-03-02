@@ -16,6 +16,7 @@ function () {
 
     this.isElectron = typeof require === "function";
     this.isAndroid = (typeof app === "undefined" ? "undefined" : _typeof(app)) === "object";
+    this.isGtk = false;
     console.log("is electron ?" + this.isElectron);
 
     if (this.isElectron) {

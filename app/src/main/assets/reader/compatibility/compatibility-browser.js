@@ -33,7 +33,10 @@ function (_Compatibility) {
     var compatibility = _assertThisInitialized(_assertThisInitialized(_this));
 
     $(document).ready(function () {
-      if (!compatibility.isElectron) {
+      if (compatibility.isGtk) {
+        document.getElementsByClassName('mdl-layout__header')[0].style.display = "none";
+        document.getElementById('grid-button-container').style.display = "none";
+      } else if (!compatibility.isElectron) {
         var right = document.getElementById("right-bar");
         right.removeChild(document.getElementById("minus-button"));
         right.removeChild(document.getElementById("close-button"));

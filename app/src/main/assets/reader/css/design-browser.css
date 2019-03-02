@@ -52,6 +52,11 @@ body{
 
 #loading-view{
     background: var(--loading-view-bg);
+    color:white;
+}
+
+#loading-view button{
+    color:white;
 }
 
 #page-container {
