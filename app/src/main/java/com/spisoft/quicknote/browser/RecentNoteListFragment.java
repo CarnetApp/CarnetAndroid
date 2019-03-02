@@ -144,7 +144,7 @@ public class RecentNoteListFragment extends NoteListFragment implements Configur
     }
 
     @Override
-    public void onPathChanged(String path) {
+    public void onPathChanged(String path, List<String> modifiedPaths) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.spisoft.quicknote.Note;
+import com.spisoft.quicknote.browser.NoteInfoRetriever;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,8 +79,22 @@ public class CacheManager {
         cache.put(note.path, note);
     }
 
+    public synchronized void addToCache(String notePath){
+        if(cache == null ) return;
+        File f = new File(notePath);
+        if(f.exists()){
+            NoteInfoRetriever retriever = new NoteInfoRetriever(new NoteInfoRetriever.NoteInfoListener() {
+                @Override
+                public void onNoteInfo(Note note) {
+
+                }
+            }, mContext);
+            Note note = retriever.getNoteInfo(notePath);
+            cache.put(note.path, note);
+        }
+    }
+
     private JSONObject getJson() throws JSONException {
-        Log.d("jsondebug", "getJson");
 
         String jsonString = read();
         if(jsonString==null||jsonString.isEmpty())
@@ -128,6 +143,7 @@ public class CacheManager {
             for(Note note : cache.values()){
                 JSONObject noteObj = new JSONObject();
                 noteObj.put("path", note.path);
+                noteObj.put("lastmodification", note.file_lastmodification);
                 noteObj.put("metadata",note.mMetadata.toJsonObject());
                 noteObj.put("shorttext",note.shortText);
                 JSONArray previewsJson = new JSONArray();

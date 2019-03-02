@@ -64,7 +64,7 @@ public class NoteInfoRetriever {
         }
     }
 
-    protected Note getNoteInfo(String path){
+    public Note getNoteInfo(String path){
         Note note = new Note(path);
         ZipFile zp = null;
         try {
@@ -87,7 +87,7 @@ public class NoteInfoRetriever {
                     Log.d(TAG, "preview found");
                 }
             }
-
+            note.file_lastmodification = new File(path).lastModified();
             note.setMetaData(metadata);
         } catch (IOException e) {
             e.printStackTrace();

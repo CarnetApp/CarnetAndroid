@@ -8,8 +8,10 @@ import android.webkit.MimeTypeMap;
 
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
+import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
+import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.PictureUtils;
 import com.spisoft.quicknote.utils.ZipUtils;
@@ -273,7 +275,16 @@ public class HttpServer extends NanoHTTPD {
         }
         FileUtils.writeToFile(extractedNotePath+"/index.html", html);
         FileUtils.writeToFile(extractedNotePath+"/metadata.json", metadata);
-        return saveNote(path);
+        //we update metadata cache
+        Note note = new Note(path);
+        note.mMetadata = Note.Metadata.fromString(metadata);
+
+        Response res = saveNote(path);
+        note.file_lastmodification = new File(PreferenceHelper.getRootPath(mContext),path).lastModified();
+        CacheManager.getInstance(mContext).addToCache(note);
+        CacheManager.getInstance(mContext).writeCache();
+
+        return res;
     }
 
 

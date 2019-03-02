@@ -1,16 +1,19 @@
 package com.spisoft.quicknote;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.synchro.AccountConfigActivity;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.utils.Utils;
 import com.spisoft.sync.wrappers.WrapperFactory;
+
+import java.util.List;
 
 /**
  * Created by alexandre on 22/02/16.
@@ -42,7 +45,6 @@ public class MyApplication extends Application implements Configuration.PathObse
         Configuration.dontDisplayNotification = false;
         Configuration.icon = R.mipmap.ic_launcher_foreground;
         Configuration.addPathObserver(PreferenceHelper.getRootPath(this), this);
-        Configuration.addPathObserver(PreferenceHelper.getRootPath(this)+"/untitled.sqd", this);
         try {
             WrapperFactory.wrappers.add(Class.forName("com.spisoft.gsync.wrappers.googledrive.GDriveWrapper"));
         } catch (ClassNotFoundException e) {
@@ -58,7 +60,24 @@ public class MyApplication extends Application implements Configuration.PathObse
     }
 
     @Override
-    public void onPathChanged(String path) {
+    public void onPathChanged(String path, final List<String> modifiedPaths) {
         Log.d(TAG, "onPathChanged "+path);
+        new AsyncTask<Void, Void, Void>(){
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                boolean hasAddedSmt = false;
+                for (String filepath : modifiedPaths){
+                    if(filepath.endsWith(".sqd")){
+                        CacheManager.getInstance(MyApplication.this).loadCache();//won't load twice
+                        CacheManager.getInstance(MyApplication.this).addToCache(filepath);
+                        hasAddedSmt = true;
+                    }
+                }
+                if(hasAddedSmt)
+                    CacheManager.getInstance(MyApplication.this).writeCache();
+                return null;
+            }
+        }.execute();
     }
 }

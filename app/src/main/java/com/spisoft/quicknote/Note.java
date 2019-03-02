@@ -18,6 +18,7 @@ public class Note implements Serializable{
     public String path;
     public String title;
     public String shortText = "";
+    public long file_lastmodification = -1;
     public static final String PAGE_INDEX_PATH = "page_index.json";
     public long lastModified = -1;
     public ArrayList<String> keywords;
