@@ -230,7 +230,7 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
                     bitmap.recycle();
                     ImageView v = new ImageView(ImageActivity.this);
                     v.setAdjustViewBounds(true);
-                    File preview = new File(dataF, "preview_" + file.getName());
+                    File preview = new File(dataF, "preview_" + file.getName()+ ".jpg"); //previews have twice .jpg .... not changing that otherwise deleted from editor will fail...
 
                     try {
                         PictureUtils.resize(file.getAbsolutePath(), preview.getAbsolutePath(), PREVIEW_WIDTH, PREVIEW_HEIGHT);
@@ -302,10 +302,13 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
                             continue;
 
                         File noteFolder = new File(mTmpDir, "note");
+                        if(noteFolder.exists())
+                            FileUtils.deleteRecursive(noteFolder);
+
                         File data = new File(noteFolder, "data/");
                         data.mkdirs();
                         image.renameTo(new File(data, image.getName()));
-                        File preview = new File(image.getParentFile(), "preview_"+image.getName());
+                        File preview = new File(image.getParentFile(), "preview_"+image.getName() + ".jpg"); //previews have twice .jpg .... not changing that otherwise deleted from editor will fail...
                         if(preview.exists()){
                             preview.renameTo(new File(data, preview.getName()));
                         }
@@ -321,6 +324,8 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        if(noteFolder.exists())
+                            FileUtils.deleteRecursive(noteFolder);
                     }
                 }
             }
@@ -342,7 +347,7 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
                         public void onClick(DialogInterface dialog, int which) {
                             String name = (String) v.getTag();
                             new File(mTmpDir, "data/"+name).delete();
-                            new File(mTmpDir, "data/preview_"+name).delete();
+                            new File(mTmpDir, "data/preview_"+name + ".jpg").delete(); //previews have twice .jpg .... not changing that otherwise deleted from editor will fail...
                             ((LinearLayout)v.getParent()).removeView(v);
                         }
                     })
