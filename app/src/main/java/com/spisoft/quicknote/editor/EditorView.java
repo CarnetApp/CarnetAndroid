@@ -2,6 +2,7 @@ package com.spisoft.quicknote.editor;
 
 import android.Manifest;
 import android.animation.LayoutTransition;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -45,44 +46,27 @@ import android.widget.Toast;
 
 import com.spisoft.quicknote.FloatingFragment;
 import com.spisoft.quicknote.Note;
-import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
-import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
-import com.spisoft.quicknote.databases.page.Page;
-import com.spisoft.quicknote.editor.pages.PagesAdapter;
 import com.spisoft.quicknote.server.HttpServer;
-import com.spisoft.quicknote.server.NewHttpProxy;
 import com.spisoft.quicknote.serviceactivities.CropWrapperActivity;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.ZipUtils;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.spisoft.quicknote.MainActivity.ACTION_RELOAD_KEYWORDS;
-import static com.spisoft.quicknote.browser.NoteListFragment.ACTION_RELOAD;
 
 
 /**
  * Created by phoenamandre on 01/02/16.
  */
-public class EditorView extends FrameLayout implements CropWrapperActivity.CroperResultListener, FloatingFragment, ZipUtils.WriterListener, PagesAdapter.OnPageSelectedListener {
+public class EditorView extends FrameLayout implements CropWrapperActivity.CroperResultListener, FloatingFragment, ZipUtils.WriterListener{
 
 
     private static final String TAG = "EditorView";
@@ -206,6 +190,72 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         setNote(NoteManager.createNewNote(new File(mNote.path).getParent()), null);
     }
 
+
+    private void doWebViewPrint(String ss) {
+        WebView printWebView = new WebView(getContext());
+        printWebView.setWebViewClient(new WebViewClient() {
+
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return false;
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+
+                createWebPrintJob(view);
+                super.onPageFinished(view, url);
+            }
+        });
+        // Generate an HTML document on the fly:
+        printWebView.loadDataWithBaseURL(null, ss, "text/html", "UTF-8", null);
+    }
+
+    // Thank you https://github.com/402d/TextToPrint/blob/master/app/src/main/java/ru/a402d/texttoprint/MainActivity.java#L327
+    @TargetApi(19)
+    public class PrintDocumentAdapterWrapper extends PrintDocumentAdapter {
+
+        private final PrintDocumentAdapter delegate;
+        PrintDocumentAdapterWrapper(PrintDocumentAdapter adapter){
+            super();
+            this.delegate = adapter;
+        }
+
+        @Override
+        public void onLayout(PrintAttributes oldAttributes, PrintAttributes newAttributes, CancellationSignal cancellationSignal, LayoutResultCallback callback, Bundle extras) {
+            delegate.onLayout(oldAttributes, newAttributes,  cancellationSignal, callback,  extras);
+            Log.d("ANTSON","onLayout");
+        }
+
+        @Override
+        public void onWrite(PageRange[] pages, ParcelFileDescriptor destination, CancellationSignal cancellationSignal, WriteResultCallback callback) {
+            delegate.onWrite( pages, destination,cancellationSignal,callback);
+            Log.d("ANTSON","onWrite");
+        }
+
+        public void onFinish(){
+            delegate.onFinish();
+            Log.d("ANTSON","onFinish");
+        }
+
+    }
+    @TargetApi(19)
+    private void createWebPrintJob(WebView webView) {
+
+        //create object of print manager in your device
+        PrintManager printManager = (PrintManager) getContext().getSystemService(Context.PRINT_SERVICE);
+
+        //create object of print adapter
+        PrintDocumentAdapterWrapper printAdapter = new PrintDocumentAdapterWrapper(webView.createPrintDocumentAdapter());
+
+        //provide name to your newly generated pdf file
+        String jobName = "Text2Print";
+
+        //open print dialog
+        if (printManager != null) {
+            printManager.print(jobName, printAdapter, new PrintAttributes.Builder().setMinMargins(new PrintAttributes.Margins(0, 0, 0, 0)).build());
+        }
+    }
+
     @Override
     public View getView() {
         return this;
@@ -230,10 +280,6 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
 
     public void reset() {
         mWebView.requestFocus();
-    }
-
-    @Override
-    public void onPageSelected(Page page){
     }
 
     public void askToExit() {
@@ -434,7 +480,17 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
                     mWebView.loadUrl("javascript:document.execCommand('insertHTML', false, '" + StringEscapeUtils.escapeEcmaScript(text) + "');", null);
                 }});
         }
+        @JavascriptInterface
+        public void print(final String data) {
+            mHandler.post(new Runnable() {
 
+                @Override
+                public void run() {
+                    doWebViewPrint(data);
+
+                }
+            });
+        }
 
         @JavascriptInterface
         public void postMessage(String query, String message){
