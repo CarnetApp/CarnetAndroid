@@ -435,13 +435,13 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             },500);
 
             if(note.previews.size()>0){
-                mHandler.postDelayed(new Runnable() {
+                mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         if(note.equals(viewHolder.getNote()))
                             mNoteThumbnailEngine.addNote(note, viewHolder);
                     }
-                },1000);
+                });
             }
 
         }
