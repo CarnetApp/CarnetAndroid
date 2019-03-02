@@ -43,7 +43,7 @@
     <string name="pref_set_password">Wachtwoord instellen</string>
     <string name="new_password">Nieuw wachtwoord</string>
     <string name="old_password">Huidig wachtwoord</string>
-    <string name="empty_message">Geen notities\nCreëer een notitie met de knop \'+'\</string>
+    <string name="empty_message">Geen notities\nCreëer een notitie met de knop \'+\'</string>
     <string name="drawer_open">Navigatiemenu openen</string>
     <string name="drawer_close">Navigatiemenu sluiten</string>
     <string name="default_password"></string>
@@ -54,7 +54,7 @@
     <string name="authorize_description">Carnet vereist een speciale machtiging om een venster te kunnen tonen. Verleen de machtiging "superposition in front of other apps"</string>
     <string name="authorisation_issue">Machtigingsprobleem</string>
     <string name="error">Fout</string>
-    <string name="error_permission_storage">Vanwege het nieuwe Android-machtigingssysteem, moet je de machtiging 'opslag' verlenen om notities op te kunnen slaan (op zowel je interne opslag als je SD-kaart).</string>
+    <string name="error_permission_storage">Vanwege het nieuwe Android-machtigingssysteem, moet je de machtiging \'opslag\' verlenen om notities op te kunnen slaan (op zowel je interne opslag als je SD-kaart).</string>
     <string name="allow">Toestaan</string>
     <string name="exit">Afsluiten</string>
     <string name="title_activity_noise_selector">Ruiskiezer</string>
@@ -80,7 +80,7 @@
     <string name="later">Later</string>
     <string name="move">Verplaatsen</string>
     <string name="paste">Plakken</string>
-    <string name="paste_how_to">Blader naar de gewenste map en druk dan op \'Plakken'\</string>
+    <string name="paste_how_to">Blader naar de gewenste map en druk dan op \'Plakken\'</string>
     <string name="file_operation_in_progress">Bestandsoperatie</string>
     <string name="please_wait">Even geduld...</string>
     <string name="pages">Pagina\'s</string>
