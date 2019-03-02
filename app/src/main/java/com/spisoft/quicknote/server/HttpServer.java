@@ -228,7 +228,13 @@ public class HttpServer extends NanoHTTPD {
             data.delete();
         File in = new File(tmpPath);
         if(in.exists()){
+            if(FileUtils.getExtension(name) == null){
+                //bad fix to retieve extension...
+                name = System.currentTimeMillis()+"."+EditorView.sNextExtension;
+
+            }
             File newF = new File(data, name);
+
             newF.getParentFile().mkdirs();
             Log.d(TAG, "rename "+tmpPath+ " to "+newF.getAbsolutePath()+": "+ in.renameTo(newF));
             if(PictureUtils.isPicture(name)) {

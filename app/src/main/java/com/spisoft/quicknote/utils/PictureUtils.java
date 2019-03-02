@@ -50,6 +50,8 @@ public class PictureUtils {
 
     public static boolean isPicture(String name) {
         String ext = FileUtils.getExtension(name);
+        if(ext == null)
+            return false;
         List<String> exts = new ArrayList<>();
         exts.add("png");
         exts.add("jpg");

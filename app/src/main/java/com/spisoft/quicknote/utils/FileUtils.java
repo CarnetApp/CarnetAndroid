@@ -38,7 +38,10 @@ public class FileUtils {
 
     public static String getNameWithoutExtension(String path){
         String name = Uri.parse(path).getLastPathSegment();
-        name = name.substring(0, name.length()-getExtension(name).length());
+        String ext = getExtension(name);
+        if(ext == null)
+            return path;
+        name = name.substring(0, name.length()-ext.length());
         return name;
     }
 

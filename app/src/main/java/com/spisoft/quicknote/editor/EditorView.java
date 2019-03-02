@@ -11,28 +11,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.os.Handler;
 import android.os.Message;
-
-import android.provider.OpenableColumns;
+import android.os.ParcelFileDescriptor;
+import android.print.PageRange;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
+import android.webkit.MimeTypeMap;
 import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
@@ -127,6 +127,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
     private ValueCallback mUploadMessage;
     private PermissionRequest myRequest;
     private String mSharedText;
+    public static String sNextExtension;
 
     private void rename(String stringExtra, String path) {
         mWebView.loadUrl("javascript:replace('" + StringEscapeUtils.escapeEcmaScript(stringExtra) + "','" + StringEscapeUtils.escapeEcmaScript(path) + "')");
@@ -180,6 +181,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
             {
                 if (requestCode == REQUEST_SELECT_FILE)
                 {
+                    sNextExtension = MimeTypeMap.getSingleton().getExtensionFromMimeType(getContext().getContentResolver().getType(data.getData()));
                     if (mUploadMessage == null)
                         return;
                     mUploadMessage.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data));
