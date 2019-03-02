@@ -200,6 +200,12 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
 
 
     }
+
+    public void onPause(){
+        super.onPause();
+        if(mCameraView.isCameraOpened())
+            mCameraView.stop();
+    }
     private void refreshFlashButton(){
         if(mCameraView.getFlash() == CameraView.FLASH_OFF){
             mFlashButton.setImageResource(R.drawable.flash_off);
