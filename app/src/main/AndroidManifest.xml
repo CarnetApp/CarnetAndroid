@@ -31,8 +31,7 @@
                 <action android:name="com.google.android.gms.drive.events.HANDLE_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".FileManagerService"></service>
-
+        <service android:name=".FileManagerService" />
 
         <activity
             android:name=".MainActivity"
@@ -62,22 +61,12 @@
 
         <service android:name=".FloatingService" />
 
-        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".serviceactivities.CropWrapperActivity"
-            android:label="@string/title_activity_img_picker" />
-        <activity
             android:name=".HelpAuthorizeFloatingWindowActivity"
             android:label="@string/title_activity_help_authorize_floating_window" />
-        <activity
-            android:name=".noise.NoiseSelector"
-            android:label="@string/title_activity_noise_selector" />
-        <activity
-            android:name=".noise.NoisePlayer"
-            android:label="@string/title_activity_noise_player" />
         <activity
             android:name="com.spisoft.sync.wrappers.googledrive.AuthorizeActivity"
             android:theme="@style/Theme.Transparent" />
