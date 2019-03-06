@@ -281,6 +281,14 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
         return true;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : getChildFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
     private class KeywordRefreshTask extends AsyncTask<Void, Void, Map<String, List<String>>> {
 
         @Override

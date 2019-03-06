@@ -203,8 +203,13 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
 
     public void onPause(){
         super.onPause();
-        if(mCameraView.isCameraOpened())
-            mCameraView.stop();
+        new Thread(){
+            public void run(){
+                if(mCameraView.isCameraOpened())
+                    mCameraView.stop();
+            }
+
+        }.start();
     }
     private void refreshFlashButton(){
         if(mCameraView.getFlash() == CameraView.FLASH_OFF){
@@ -288,6 +293,13 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
         else if(v == mNextButton){
             findViewById(R.id.note_params).setVisibility(View.VISIBLE);
             findViewById(R.id.photo_taking_container).setVisibility(View.GONE);
+            new Thread(){
+                public void run(){
+                    if(mCameraView.isCameraOpened())
+                        mCameraView.stop();
+                }
+
+            }.start();
         }
         else if(v == mCreateButton){
             Note.Metadata metadata = new Note.Metadata();
@@ -344,6 +356,8 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
                 }
 
             }
+            setResult(RESULT_OK);
+            finish();
 
         } else if(v instanceof ImageView){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

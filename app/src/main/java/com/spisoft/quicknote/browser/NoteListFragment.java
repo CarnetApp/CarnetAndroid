@@ -1,5 +1,6 @@
 package com.spisoft.quicknote.browser;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -374,7 +375,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         if(view==mRoot.findViewById(R.id.add_note_button)) {
               createAndOpenNewNote(PreferenceHelper.getRootPath(getActivity()));
         } else if (view == mRoot.findViewById(R.id.add_photos_button)){
-            startActivity(new Intent(getActivity(), ImageActivity.class));
+            startActivityForResult(new Intent(getActivity(), ImageActivity.class), 1002);
         }
     }
 
@@ -386,6 +387,12 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     @Override
     public void onSyncSuccess(){
 
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 1002 && resultCode == Activity.RESULT_OK){
+            reload(null, false);
+        }
     }
 
 

@@ -32,7 +32,7 @@
             android:id="@+id/next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Valider"
+            android:text="@android:string/ok"
             android:layout_marginTop="15dp"
             android:layout_alignParentRight="true"/>
         <com.google.android.cameraview.CameraView

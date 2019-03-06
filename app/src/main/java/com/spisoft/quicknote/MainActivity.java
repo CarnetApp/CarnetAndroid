@@ -315,11 +315,15 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
         if(requestCode == UPDATE_REQUEST_CODE){
             onUpdateDone();
         }
         else if(EditorView.sEditorView!=null)
             EditorView.sEditorView.onActivityResult(requestCode, resultCode, data);
+
     }
     public void setPreloadBlankFragment() {
 
