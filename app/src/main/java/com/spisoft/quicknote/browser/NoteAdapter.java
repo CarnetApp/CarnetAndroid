@@ -243,7 +243,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                 }
             });
             setName(note.title);
-            setText(note.shortText.isEmpty() && note.needsUpdateInfo ? mLoadingText:note.shortText);
+            setText(note.shortText);
             setRating(note.mMetadata.rating);
             setDate(note.mMetadata.last_modification_date);
             setKeywords(note.mMetadata.keywords);
