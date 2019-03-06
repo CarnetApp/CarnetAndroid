@@ -263,6 +263,7 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
             protected void onPostExecute(View v) {
                 if(v!=null)
                     mImageListView.addView(v);
+                mNextButton.setEnabled(true);
             }
         }.execute();
 
