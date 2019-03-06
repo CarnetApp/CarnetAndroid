@@ -46,6 +46,8 @@ public class Note implements Serializable{
 
     public Note(String path){
         String name = new File(path).getName();
+        if(name.endsWith(".sqd"))
+            name = name.substring(0, name.length()-".sqd".length());
         this.path = path;
         this.title = name;
         this.keywords = null;
