@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -17,6 +18,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.util.SparseIntArray;
+import android.view.Surface;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -33,6 +37,7 @@ import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
+import com.spisoft.quicknote.utils.CustomOrientationEventListener;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.PictureUtils;
 import com.spisoft.quicknote.utils.ZipUtils;
@@ -45,6 +50,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +77,8 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
         @Override
         public void onPictureTaken(CameraView cameraView, final byte[] data) {
             super.onPictureTaken(cameraView, data);
+            setOrientation(0);
+            mCameraView.animate().alpha(1).setDuration(100).start();
             new AsyncTask<Void, Void, Bitmap>() {
 
                 @Override
@@ -98,6 +107,17 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
     private View mNextButton;
     private ImageButton mFlashButton;
     private View mExternalCameraButton;
+    private CustomOrientationEventListener customOrientationEventListener;
+    static final SparseIntArray DISPLAY_ORIENTATIONS = new SparseIntArray();
+
+    static {
+        DISPLAY_ORIENTATIONS.put(Surface.ROTATION_0, 0);
+        DISPLAY_ORIENTATIONS.put(Surface.ROTATION_90, 90);
+        DISPLAY_ORIENTATIONS.put(Surface.ROTATION_180, 180);
+        DISPLAY_ORIENTATIONS.put(Surface.ROTATION_270, 270);
+    }
+
+    private int mCurrentOrientation = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,18 +211,61 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        new Thread(){
+            public void run(){
+                if(mCameraView.isCameraOpened())
+                    mCameraView.stop();
+            }
+
+        }.start();
+    }
+    @Override
     public void onResume(){
         super.onResume();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED)
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 1001);
         else mCameraView.start();
+        customOrientationEventListener = new CustomOrientationEventListener(this) {
+            @Override
+            public void onSimpleOrientationChanged(int orientation) {
+                if(orientation == 1)
+                    orientation = 3;
+                else if(orientation == 3)
+                    orientation = 1;
+                mCurrentOrientation = orientation;
 
+            }
+        };
 
+        customOrientationEventListener.enable();
+
+    }
+
+    private void setOrientation(int orientation){
+        try {
+            Field f = CameraView.class.getDeclaredField("mDisplayOrientationDetector");
+            f.setAccessible(true);
+            Object mDisplayOrientationDetector = f.get(mCameraView);
+            mDisplayOrientationDetector.getClass().getDeclaredMethod("onDisplayOrientationChanged", int.class).setAccessible(true);
+            mDisplayOrientationDetector.getClass().getDeclaredMethod("onDisplayOrientationChanged", int.class).invoke(mDisplayOrientationDetector, DISPLAY_ORIENTATIONS.get(orientation));
+            mCameraView.setRotation(DISPLAY_ORIENTATIONS.get(orientation));
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onPause(){
         super.onPause();
+        customOrientationEventListener.disable();
         new Thread(){
             public void run(){
                 if(mCameraView.isCameraOpened())
@@ -289,7 +352,15 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
 
         }
         else if(v == mShootButton){
-            mCameraView.takePicture();
+            mCameraView.animate().alpha(0).setDuration(100).withEndAction(new Runnable() {
+                @Override
+                public void run() {
+                    setOrientation(mCurrentOrientation);
+                    mCameraView.takePicture();
+                }
+            }).start();
+
+
         }
         else if(v == mNextButton){
             findViewById(R.id.note_params).setVisibility(View.VISIBLE);

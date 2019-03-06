@@ -104,7 +104,7 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".editor.ImageActivity" android:exported="true"></activity>
+        <activity android:name=".editor.ImageActivity" android:exported="true" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
