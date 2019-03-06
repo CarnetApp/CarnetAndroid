@@ -115,6 +115,7 @@ public class NoteInfoRetriever {
                     Log.d(TAG, "getNoteInfo");
 
                     note.lastModified = file.lastModified();
+                    note.file_lastmodification = file.lastModified();
                     if (note.mMetadata.creation_date == -1)
                         note.mMetadata.creation_date = file.lastModified();
                     if (note.mMetadata.last_modification_date == -1)

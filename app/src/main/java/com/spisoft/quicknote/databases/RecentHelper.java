@@ -208,10 +208,7 @@ public class RecentHelper {
                 JSONObject obj = object.getJSONArray("data").getJSONObject(i);
                 String action = obj.getString("action");
                 String path = obj.getString("path");
-                Note note = CacheManager.getInstance(mContext).get(rootPath+path);
-
-                if(note == null)
-                    note = new Note(rootPath+path);
+                Note note = new Note(rootPath + path);
                 if(action.equals("add")){
                     notes.remove(note);
                     notes.add(0,note);
@@ -239,11 +236,23 @@ public class RecentHelper {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        for(Note note : notes){
-            if(!pin.contains(note))
-                pin.add(note);
+        ArrayList<Object> toReturn = new ArrayList<>(pin);
+        for(int i = 0; i < toReturn.size(); i++){
+            Note note = CacheManager.getInstance(mContext).get(((Note)toReturn.get(i)).path);
+            if(note != null)
+                toReturn.set(i, note);
         }
-        return pin;
+        for(Note note : notes){
+            Note cached = CacheManager.getInstance(mContext).get(note.path);
+            if(cached != null)
+                note = cached;
+            if(!toReturn.contains(note))
+                toReturn.add(note);
+        }
+
+
+
+        return toReturn;
     }
 
     private JSONObject getJson() throws JSONException {

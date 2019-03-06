@@ -22,12 +22,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/card_background"
             android:id="@+id/cardview"
             android:orientation="vertical">
             <RelativeLayout
                 android:orientation="vertical"
                 android:layout_margin="?attr/CardInsideMargin"
-                android:background="@drawable/card_background"
                 android:padding="5dp"
                 android:layout_width="match_parent" android:layout_height="match_parent"
                 >
