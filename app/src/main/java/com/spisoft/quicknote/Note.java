@@ -27,6 +27,7 @@ public class Note implements Serializable{
     public ArrayList<String> previews;
     public ArrayList<String> medias;
     public boolean needsUpdateInfo = true;
+    public boolean hasFound;
 
     @Override
     public boolean equals(Object o) {
@@ -73,6 +74,11 @@ public class Note implements Serializable{
     public void setMetaData(Metadata metadata) {
         mMetadata = metadata;
     }
+
+    public void hasFound(Boolean hasFound) {
+        this.hasFound = hasFound;
+    }
+
     public static class TodoList implements Serializable{
         public List<String> todo = new ArrayList<>();
         public List<String> done = new ArrayList<>();

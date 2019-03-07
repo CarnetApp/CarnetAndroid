@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
+import android.util.Pair;
 
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.databases.CacheManager;
@@ -26,7 +27,7 @@ import java.util.zip.ZipFile;
 public class NoteInfoRetriever {
     private static final String TAG = "NoteInfoRetriever";
     private final NoteInfoSearchHelper mNoteInfoSearchHelper;
-    private final Handler mHandler;
+    private Handler mHandler;
     private final Stack<String> mNoteStack;
     private final NoteInfoListener mListener;
     private final Context mContext;
@@ -36,7 +37,11 @@ public class NoteInfoRetriever {
     public NoteInfoRetriever(NoteInfoListener listener, Context context){
         super();
         mContext = context;
-        mHandler = new Handler();
+        try {
+            mHandler = new Handler();
+        } catch(java.lang.RuntimeException e){
+            mHandler = null; //not ui, so no need
+        }
         mListener = listener;
         mNoteInfoSearchHelper = new NoteInfoSearchHelper(context);
         mNoteStack = new Stack<>();
@@ -64,19 +69,29 @@ public class NoteInfoRetriever {
         }
     }
 
-    public Note getNoteInfo(String path){
+    public Note getNoteInfo(String path, String toSearch, int length){
+        if(toSearch != null)
+            toSearch = NoteInfoSearchHelper.cleanText(toSearch);
         Note note = new Note(path);
         ZipFile zp = null;
         try {
             zp = new ZipFile(note.path);
-            note.setShortText(mNoteInfoSearchHelper.read(zp, zp.getEntry(NoteManager.getHtmlPath(0)), 100, 10, null).first);
-
+            Pair<String, Boolean> result = mNoteInfoSearchHelper.read(zp, zp.getEntry(NoteManager.getHtmlPath(0)), length, 10, toSearch);
+            note.setShortText(result.first);
+            note.hasFound(result.second);
             Note.Metadata metadata = new Note.Metadata();
             String metadataStr = mNoteInfoSearchHelper.readZipEntry(zp, zp.getEntry("metadata.json"), -1,-1, null).first;
             if(metadataStr!=null && metadataStr.length()>0){
                 metadata = Note.Metadata.fromString(metadataStr);
             }
-
+            if(!result.second){
+                for(String keyword : metadata.keywords){
+                    if(NoteInfoSearchHelper.cleanText(keyword).contains(toSearch)){
+                        note.hasFound(true);
+                        break;
+                    }
+                }
+            }
             Enumeration<? extends ZipEntry> entries = zp.entries();
             while(entries.hasMoreElements()){
                 ZipEntry entry = entries.nextElement();
@@ -111,7 +126,7 @@ public class NoteInfoRetriever {
                 if(file.exists()) {
                     Log.d(TAG, "exists");
 
-                    Note note= getNoteInfo(path);
+                    Note note= getNoteInfo(path, null, 100);
                     Log.d(TAG, "getNoteInfo");
 
                     note.lastModified = file.lastModified();

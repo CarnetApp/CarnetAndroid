@@ -89,7 +89,7 @@ public class CacheManager {
 
                 }
             }, mContext);
-            Note note = retriever.getNoteInfo(notePath);
+            Note note = retriever.getNoteInfo(notePath, null, 100);
             cache.put(note.path, note);
         }
     }

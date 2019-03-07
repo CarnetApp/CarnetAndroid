@@ -8,6 +8,7 @@ import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.server.ZipReaderAndHttpProxy;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 
 import java.io.BufferedReader;
@@ -27,6 +28,11 @@ public class NoteInfoSearchHelper {
 
     }
 
+    public static String cleanText(String text){
+
+        return StringUtils.stripAccents(text.toLowerCase());
+    }
+
 
     protected Pair<String, Boolean> readZipEntry(ZipFile zp, ZipEntry entry, long length, int maxLines, String toFind){
         String sb = new String();
@@ -34,7 +40,7 @@ public class NoteInfoSearchHelper {
 
         boolean hasFound = toFind == null;
         if(toFind!=null)
-            toFind = toFind.toLowerCase();
+            toFind = cleanText(toFind);
         try {
             br = new BufferedReader(  br = new BufferedReader(new InputStreamReader(zp.getInputStream(entry))));
 
@@ -49,7 +55,7 @@ public class NoteInfoSearchHelper {
                 }
                 total = Jsoup.parse(sb).text().length();
                 if(!hasFound){
-                    if(line.toLowerCase().contains(toFind)){
+                    if(cleanText(line).contains(toFind)){
                         hasFound = true;
                     }
                 }
@@ -57,11 +63,13 @@ public class NoteInfoSearchHelper {
                 lines++;
                 if((total<length||length==-1)&&(lines==-1||lines<maxLines)||!hasFound)
                     line = br.readLine();
+                else
+                    break;
 
             }
             sb = Jsoup.parse(sb).text();
             if(!hasFound){
-                if(sb.toLowerCase().contains(toFind)){
+                if(cleanText(sb).contains(toFind)){
                     hasFound = true;
                 }
             }

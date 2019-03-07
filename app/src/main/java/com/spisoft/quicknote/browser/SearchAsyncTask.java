@@ -22,14 +22,14 @@ import java.util.zip.ZipFile;
 public class SearchAsyncTask extends AsyncTask<String,Map.Entry<Object,Pair<String, Long>>, HashMap<Note,String>> {
 
     private final NoteAdapter mNoteAdapter;
-    private final NoteInfoSearchHelper mNoteInfoSearchHelper;
+    private final NoteInfoRetriever mNoteInfoSearchHelper;
     private final String mPath;
     private final View mEmptyView;
 
     public SearchAsyncTask(NoteAdapter adapter, String path, Context context, View emptyView) {
         super();
         mNoteAdapter = adapter;
-        mNoteInfoSearchHelper = new NoteInfoSearchHelper(context);
+        mNoteInfoSearchHelper = new NoteInfoRetriever(null, context);
         mPath = path;
         mEmptyView = emptyView;
     }
@@ -77,11 +77,11 @@ public class SearchAsyncTask extends AsyncTask<String,Map.Entry<Object,Pair<Stri
                     ZipFile zp = null;
                     try {
                         zp = new ZipFile(file.getAbsolutePath());
-                        Pair<String, Boolean> result = mNoteInfoSearchHelper.read(zp, zp.getEntry(NoteManager.getHtmlPath(0)), 100, 10,!nameToBeAdded?toSearch:null);
-                        if(result.second||nameToBeAdded) {
-                            final String txt = result.first;
-                            final Note note = new Note(file.getAbsolutePath());
-                            note.setShortText(result.first);
+                        boolean hasFound = nameToBeAdded;
+                        final Note note = mNoteInfoSearchHelper.getNoteInfo(file.getAbsolutePath(), toSearch, 100);
+                        hasFound = hasFound||note.hasFound;
+                        if(hasFound) {
+
                             publishProgress(new Map.Entry<Object, Pair<String, Long>>() {
                                 @Override
                                 public Object getKey() {
@@ -90,12 +90,12 @@ public class SearchAsyncTask extends AsyncTask<String,Map.Entry<Object,Pair<Stri
 
                                 @Override
                                 public Pair<String, Long> getValue() {
-                                    return new Pair<String, Long>(txt, file.lastModified());
+                                    return new Pair<String, Long>(note.shortText, file.lastModified());
                                 }
 
                                 @Override
                                 public Pair<String, Long> setValue(Pair<String, Long> s) {
-                                    return new Pair<String, Long>(txt, file.lastModified());
+                                    return new Pair<String, Long>(note.shortText, file.lastModified());
                                 }
                             });
                         }
