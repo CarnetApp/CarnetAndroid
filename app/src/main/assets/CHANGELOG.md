@@ -10,6 +10,10 @@ Spanish + Dutch translations (not yet for editor)
 
 Better search (ignoring accents + search amoung keywords)
 
+Rename after 10 secs instead of 2 in editor
+
+Print option
+
 Fix:
 
 Don't display sqd on title
