@@ -81,7 +81,7 @@ NoteCardView.prototype.setNote = function (note) {
 
   if (note.metadata.todolists != undefined) {
     this.refreshTodoList();
-  } else {
+  } else if (note.text != undefined) {
     if (note.text.length < 40 && this.cardTitleText.innerHTML == "") this.cardText.classList.add("big-text");else if (note.text.length < 100 && this.cardTitleText.innerHTML == "") {
       this.cardText.classList.add("medium-text");
     }

@@ -285,7 +285,18 @@ public class HttpServer extends NanoHTTPD {
         //we update metadata cache
         Note note = new Note(path);
         note.mMetadata = Note.Metadata.fromString(metadata);
-
+        File f = new File(extractedNotePath, "data");
+        if(f.exists()) {
+            for (File c : f.listFiles()) {
+                if (c.getName().startsWith("preview_")) {
+                    note.previews.add(c.getName());
+                }
+            }
+        }
+        String txt = Jsoup.parse(html).text();
+        if(txt.length()>100)
+            txt = txt.substring(0, 100);
+        note.shortText = txt;
         Response res = saveNote(path);
         note.file_lastmodification = new File(PreferenceHelper.getRootPath(mContext),path).lastModified();
         CacheManager.getInstance(mContext).addToCache(note);
