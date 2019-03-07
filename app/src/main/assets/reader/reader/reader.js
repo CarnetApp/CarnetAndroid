@@ -148,6 +148,11 @@ Writer.prototype.setMediaList = function (list) {
 
   if (list.length > 0) {
     this.addMediaMenu.parentNode.style.left = "unset";
+
+    if (this.oDoc.innerText.trim() == "") {
+      var mediaBar = document.getElementById("media-toolbar");
+      if (!$(mediaBar).is(":visible")) this.toolbarManager.toggleToolbar(mediaBar);
+    }
   } else {
     this.addMediaMenu.parentNode.style.left = "0px";
   }
@@ -686,6 +691,13 @@ Writer.prototype.init = function () {
 
         case "back-to-text-button":
           writer.toolbarManager.toggleToolbar(document.getElementById("media-toolbar"));
+
+          if (writer.oDoc.innerText.trim() == "") {
+            //put focus
+            var elements = writer.oDoc.getElementsByClassName("edit-zone");
+            writer.placeCaretAtEnd(elements[elements.length - 1]);
+          }
+
           break;
       }
     };
@@ -755,7 +767,16 @@ Writer.prototype.init = function () {
       writer.seriesTaskExecutor.addTask(writer.saveNoteTask); // first, save.
 
       writer.seriesTaskExecutor.addTask(new RenameNoteTask(writer));
-    }, 1000);
+      writer.nameTimout = undefined;
+    }, 10000);
+  });
+  document.getElementById("name-input").addEventListener("focusout", function () {
+    if (writer.nameTimout != undefined) {
+      clearTimeout(writer.nameTimout);
+      writer.seriesTaskExecutor.addTask(writer.saveNoteTask); // first, save.
+
+      writer.seriesTaskExecutor.addTask(new RenameNoteTask(writer));
+    }
   }); // $("#editor").webkitimageresize().webkittableresize().webkittdresize();
 };
 
@@ -966,7 +987,7 @@ Writer.prototype.getCaretPosition = function () {
   var y = 0;
   var sel = window.getSelection();
 
-  if (sel.rangeCount) {
+  if (sel != null && sel.rangeCount) {
     var range = sel.getRangeAt(0).cloneRange();
 
     if (range.getClientRects()) {
@@ -1004,7 +1025,9 @@ ToolbarManager.prototype.toggleToolbar = function (elem) {
   if (elem != undefined && elem.id == "media-toolbar" && !$(elem).is(":visible")) document.getElementsByTagName("header")[0].style.zIndex = "unset";else document.getElementsByTagName("header")[0].style.zIndex = 3;
 
   if (elem != undefined) {
-    if ($(elem).is(":visible")) $(elem).slideUp("fast", resetScreenHeight);else $(elem).slideDown("fast", resetScreenHeight);
+    if ($(elem).is(":visible")) {
+      $(elem).slideUp("fast", resetScreenHeight);
+    } else $(elem).slideDown("fast", resetScreenHeight);
   }
 
   resetScreenHeight();
@@ -1197,8 +1220,6 @@ $(document).ready(function () {
   api_url = document.getElementById("api-url").innerHTML;
   new RequestBuilder(api_url);
   RequestBuilder.sRequestBuilder.get("/settings/editor_css", function (error, data) {
-    console.log("received css data " + data);
-
     if (!error && data != null && data != undefined) {
       console.log("data " + data);
       var _iteratorNormalCompletion3 = true;

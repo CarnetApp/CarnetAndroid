@@ -28,8 +28,6 @@ html {
 	color:white;
 }
 
-
-
 #loading {
 	display: none;
 	position: fixed;
@@ -440,10 +438,12 @@ div#container-button::-webkit-scrollbar {
 	.media {
 		display: block;	
 		text-align: center;
+		max-height: unset;
 		
 	}
 	.media img{
 		max-width: 100%;
+		max-height: 100%;
 	}
 
 	#add-media-button {

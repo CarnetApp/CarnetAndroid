@@ -72,8 +72,6 @@ NoteCardView.prototype.setNote = function (note) {
   }
 
   if (note.title.indexOf("untitled") == 0) this.cardTitleText.innerHTML = "";else this.cardTitleText.innerHTML = note.title;
-  console.oldlog(note.metadata);
-  console.oldlog(new Date(note.metadata.last_modification_date).toLocaleDateString());
   var date = new Date(note.metadata.last_modification_date).toLocaleDateString();
   this.cardText.innerHTML = note.text;
   this.cardText.classList.remove("big-text");
