@@ -39,3 +39,10 @@ bash compile.sh android ../CarnetAndroid/
 ```
 
 This will build and copy every JS html css files needed by the android app
+
+
+## Help
+
+You can help with translations on the dedicated platform
+
+[weblate](https://weblate.lostpod.me)
