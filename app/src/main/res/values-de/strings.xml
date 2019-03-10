@@ -43,4 +43,40 @@
     <string name="drawer_close">Schliesse Navigationsleiste</string>
     <string name="authorize">Berechtigen</string>
     <string name="authorize_description">Carnet benötigt spezielle Berechtigung, um als Fenster angezeigt zu werden. Bitte durch Aktivierung von \"Über allen Anwendungen anzeigen\" erteilen</string>
+    <string name="title_activity_img_picker">Bild auswählen</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="crop">ausschneiden</string>
+    <string name="authorisation_issue">Berechtigungsproblem</string>
+    <string name="error">Fehler</string>
+    <string name="error_permission_storage">Aufgrund des neuen Android-Berechtigungssystems benötigen wir die Erlaubnis auf den Speicher zuzugreifen, um Notizen auf Ihrem Gerät zu speichern (diese wird zum Speichern von Texten auf Ihrem internen Speicher und auf der SD-Karte benötigt).</string>
+    <string name="allow">Erlauben</string>
+    <string name="exit">Beenden</string>
+    <string name="stop">Stopp</string>
+    <string name="unable_to_rename_use">Dokument kann während der Verwendung nicht umbenannt werden</string>
+    <string name="unable_to_delete_use">Ein geöffnetes Dokument kann nicht gelöscht werden</string>
+    <string name="remove_ad_free_confirm">Anzeigen helfen mir bei der Finanzierung der App. Sie können sie deaktivieren, aber denken Sie dann doch bitte an eine Spende, wenn Sie können.</string>
+    <string name="add_screenshot">Screenshot zur Notiz hinzufügen\?</string>
+    <string name="statistics">Statistiken</string>
+    <string name="error_reading">Fehler beim Lesen der Notizdatei</string>
+    <string name="please_wait_update">Bitte einen Moment warten, Ihre Notizen werden aktualisiert</string>
+    <string name="write_error">Fehler beim Speichern des Textes</string>
+    <string name="title_activity_authorize">Autorisieren</string>
+    <string name="google_drive_preference">Mit Google Drive synchronisieren</string>
+    <string name="sync_cloud_preference">Mit Cloud-Speicher synchronisieren</string>
+
+    <string name="title_activity_help">Hilfe</string>
+    <string name="sync_drive_activity">Sicher ist sicher:
+\nSpeicher Sie Ihre Dokumente mit Google Drive!</string>
+    <string name="add_account">Account hinzufügen</string>
+    <string name="later">Später</string>
+    <string name="move">Bewegen</string>
+    <string name="paste">Einfügen</string>
+    <string name="paste_how_to">Navigieren Sie zu dem Ordner, in den Sie verschieben möchten und wählen Sie dann Einfügen</string>
+    <string name="please_wait">Bitte warten</string>
+    <string name="pages">Seiten</string>
+    <string name="new_keyword">Neues Schlüsselwort</string>
+    <string name="title_activity_account_config">Kontokonfiguration</string>
+    <string name="keywords">Schlüsselwörter</string>
+    <string name="sync_intro_title">Carnet synchronisieren</string>
+    <string name="google_drive">Google Drive</string>
     </resources>
