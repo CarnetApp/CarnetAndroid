@@ -46,3 +46,7 @@ This will build and copy every JS html css files needed by the android app
 You can help with translations on the dedicated platform
 
 [weblate](https://weblate.lostpod.me)
+
+## Thanks
+
+https://github.com/PhieF/CarnetDocumentation/blob/master/THANKS.md
