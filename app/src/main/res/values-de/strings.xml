@@ -1,2 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="hello_world">Hallo Welt!</string>
+    <string name="action_settings">Einstellungen</string>
+
+    <string name="hello_blank_fragment">Hallo leeres Fragment</string>
+    <string name="floating">Schwebende Notiz</string>
+    <string name="rename">Umbenennen</string>
+    <string name="delete">Löschen</string>
+    <string name="remove_recent">Entferne aus kürzlich verwendeten</string>
+    <string name="storage_preference">Hauptspeicherort</string>
+    <string name="recent">Kürzlich verwendet</string>
+    <string name="browser">Browser</string>
+    <string name="parent_folder">Übergeordneter Ordner</string>
+    <string name="toast_on_minimize">Zum Maximieren anklicken</string>
+    <string name="loading">Lade</string>
+    <string name="add_note">Notiz hinzufügen</string>
+    <string name="format">Format</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="text_zone">Textbereich</string>
+    <string name="image">Bild</string>
+    <string name="add_folder">Ordner hinzufügen</string>
+    <string name="name">Name</string>
+    <string name="new_folder_name">neuer Ordner</string>
+    <string name="general_header">Allgemein</string>
+    <string name="paiement_header">Bezahlart</string>
+    <string name="donate_liberapay">Spenden (Liberapay)</string>
+    <string name="donate_paypal">Spenden (PayPal)</string>
+    <string name="donate">Spenden</string>
+    <string name="remove_ad_description">Verbessern helfen durch Unterstützung</string>
+    <string name="remove_ad_free">Werbung kostenlos entfernen</string>
+    <string name="report_bug_or_propose">Bug/Feature</string>
+    <string name="report_bug_or_propose_description">Fehler melden oder neue Funktion anfordern</string>
+    <string name="delete_confirm">Sind Sie sicher, daß Sie das löschen wollen\?</string>
+    <string name="wrong_password">Falsche PIN: Vorgabe 0000</string>
+    <string name="checking_password">Überprüfung...</string>
+    <string name="password_on_minimize">PIN beim Minimieren</string>
+    <string name="pref_set_password">Passwort festlegen</string>
+    <string name="new_password">Neues Passwort</string>
+    <string name="old_password">Aktuelles Passwort</string>
+    <string name="empty_message">Keine Notiz gefunden
+\nBitte neue Notiz mit + Taste erstellen</string>
+    <string name="drawer_open">Öffne Navigationsleiste</string>
+    <string name="drawer_close">Schliesse Navigationsleiste</string>
+    <string name="authorize">Berechtigen</string>
+    <string name="authorize_description">Carnet benötigt spezielle Berechtigung, um als Fenster angezeigt zu werden. Bitte durch Aktivierung von \"Über allen Anwendungen anzeigen\" erteilen</string>
+    </resources>
