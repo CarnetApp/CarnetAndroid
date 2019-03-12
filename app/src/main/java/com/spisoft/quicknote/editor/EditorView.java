@@ -529,6 +529,21 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         }
 
         @JavascriptInterface
+        public void openUrl(String url){
+            if(!url.startsWith("http"))
+                url = "http://"+url;
+            final String finalUrl = url;
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(finalUrl));
+                    getContext().startActivity(browserIntent);
+                }
+            });
+        }
+
+        @JavascriptInterface
         public void onBackPressed() {
             mHandler.post(new Runnable() {
                 @Override
