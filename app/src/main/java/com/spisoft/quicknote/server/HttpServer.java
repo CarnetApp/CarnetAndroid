@@ -129,6 +129,13 @@ public class HttpServer extends NanoHTTPD {
 
                               case "note/open/0/listMedia":
                             return listOpenMedia();
+                        case "settings/lang/json":
+                            String lang = parms.get("lang").get(0);
+                            if(lang.contains("../"))
+                                return null;
+                            File f = new File(mContext.getFilesDir(), "reader/i18n/"+lang+".json");
+                            return NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/json",new ByteArrayInputStream(FileUtils.readFile(f.getAbsolutePath()).getBytes()));
+
                     }
                     if(subpath.startsWith("note/open/0/getMedia/")){
                         return getMedia(subpath.substring("note/open/0/getMedia/".length()));
