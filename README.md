@@ -7,7 +7,7 @@ For feature request, see [Carnet Documentation](../../../CarnetDocumentation) fo
 
 What is Carnet ?
 
-<a href="https://framagit.org/PhieF/CarnetDocumentation">See</a>
+<a href="https://framagit.org/PhieF/CarnetDocumentation">Documentation about Carnet is available here</a>
 
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Get it on Google Play" height="60">](https://play.google.com/store/apps/details?id=com.spisoft.quicknote)	 
