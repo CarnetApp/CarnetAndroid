@@ -46,6 +46,8 @@
         <item name="SyncIcon">@drawable/sync_black</item>
         <item name="SyncDisabled">@drawable/sync_black_disabled</item>
 
+        <item name="UrlColor">#e33d78</item>
+
     </style>
 
     <!-- Base application theme. -->
@@ -89,6 +91,8 @@
         <item name="NoteBGViolet">#413953</item>
         <item name="NoteBGPurple">#3e2b44</item>
         <item name="NoteBGPink">#3f1a2f</item>
+        <item name="UrlColor">#e33d78</item>
+
     </style>
 
     <style name="CarnetTheme.Darkest" parent="CarnetTheme.Dark">

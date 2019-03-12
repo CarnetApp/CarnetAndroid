@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -313,6 +314,15 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             getActivity().startService(intent);*/
         //}
     }
+
+    @Override
+    public void onUrlClick(String url){
+        if(!url.startsWith("http"))
+            url = "http://"+url;
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
+    }
+
     @Override
     public void onInfoClick(final Note note, View view){
         PopupMenu menu = new PopupMenu(getActivity(), view);

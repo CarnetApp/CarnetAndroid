@@ -11,6 +11,7 @@ import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -31,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
+
 import android.os.Handler;
 
 /**
@@ -191,6 +194,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         private final ImageView mPreview1;
         private final ImageView mPreview2;
         private final CardView mCard;
+        private final LinearLayout mUrlContainer;
         private Note mNote;
 
         public NoteViewHolder(View itemView) {
@@ -202,6 +206,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             mMarkView = (TextView) itemView.findViewById(R.id.mark_tv);
             mPreview1= (ImageView) itemView.findViewById(R.id.preview1);
             mPreview2 = (ImageView) itemView.findViewById(R.id.preview2);
+            mUrlContainer = (LinearLayout) itemView.findViewById(R.id.url_container);
         }
 
         public void setName(String title) {
@@ -249,6 +254,23 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             setKeywords(note.mMetadata.keywords);
             setBackground(note.mMetadata.color);
             setTodoLists(note.mMetadata.todolists);
+            setUrls(note.mMetadata.urls);
+        }
+
+        private void setUrls(List<String> urls){
+            mUrlContainer.removeAllViews();
+            for(final String url : urls){
+                View cont = LayoutInflater.from(mContext).inflate(R.layout.url_layout, mUrlContainer, false);
+                TextView tv = cont.findViewById(R.id.textview);
+                tv.setText(url);
+                tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mOnNoteClick.onUrlClick(url);
+                    }
+                });
+                mUrlContainer.addView(cont);
+            }
         }
 
         private void setTodoLists(List<Note.TodoList> todolists) {
@@ -351,6 +373,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         public void setText(String s) {
             if(s==null)
                 s = "";
+            s = Pattern.compile("(?:(?:https?|ftp|file):\\/\\/|www\\.|ftp\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])", Pattern.CASE_INSENSITIVE).matcher(s).replaceAll("");
+            s = s.trim();
             if(s.isEmpty()){
                 mTextView.setVisibility(View.GONE);
             }
@@ -466,6 +490,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         void onInfoClick(Note note, View v);
 
         void onLongClick(Note note, View v);
+
+        void onUrlClick(String url);
     }
 
     @Override

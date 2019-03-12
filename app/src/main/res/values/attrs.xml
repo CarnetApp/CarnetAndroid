@@ -35,4 +35,6 @@
     <attr name="SyncIcon" format="reference"/>
     <attr name="SyncDisabled" format="reference"/>
 
+    <attr name="UrlColor" format="reference|color"/>
+
 </resources>

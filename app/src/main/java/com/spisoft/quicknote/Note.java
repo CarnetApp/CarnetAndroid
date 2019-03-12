@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -139,6 +140,7 @@ public class Note implements Serializable{
         public long last_modification_date = -1;
         public List<String> keywords = new ArrayList();
         public List<TodoList> todolists = new ArrayList();
+        public List<String> urls = new ArrayList<>();
         public int rating = -1;
         public String color = "none";
 
@@ -190,6 +192,7 @@ public class Note implements Serializable{
                     metadata.rating = jsonObject.getInt("rating");
                 if(jsonObject.has("color"))
                     metadata.color = jsonObject.getString("color");
+
                 JSONArray array =  jsonObject.getJSONArray("keywords");
                 for (int i = 0; i < array.length(); i++) {
                     metadata.keywords.add(array.getString(i));
@@ -198,6 +201,14 @@ public class Note implements Serializable{
                     array = jsonObject.getJSONArray("todolists");
                     for (int i = 0; i < array.length(); i++) {
                         metadata.todolists.add(TodoList.fromJSONObject(array.getJSONObject(i)));
+                    }
+                }
+
+                if(jsonObject.has("urls")){
+                    JSONObject obj = jsonObject.getJSONObject("urls");
+                    Iterator<String> iterator = obj.keys();
+                    while(iterator.hasNext()){
+                        metadata.urls.add(iterator.next());
                     }
                 }
             } catch (JSONException e) {
@@ -223,6 +234,12 @@ public class Note implements Serializable{
                     todolists.put(todoList.toJsonObject());
                 }
                 object.put("todolists",todolists);
+                JSONObject urlsObj = new JSONObject();
+
+                for(String url : urls){
+                    urlsObj.put("url", new JSONObject());
+                }
+                object.put("urls", urlsObj);
 
             } catch (JSONException e) {
                 e.printStackTrace();
