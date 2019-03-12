@@ -486,45 +486,45 @@ function list(pathToList, discret) {
 
       if (files.length == 0 && pathToList === "recentdb://") {
         $("#emty-view").fadeOut("fast");
-        var noteTestTxt = new Note("untitleddonotedit.sqd", "These fake notes will disappear as soon as you create a new note by selecting the bottom right button", "untitleddonotedit.sqd", {
+        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_1"), "untitleddonotedit.sqd", {
           creation_date: new Date().getTime(),
           last_modification_date: new Date().getTime(),
           keywords: [],
           rating: 5,
           color: "none"
-        }, oldNote != undefined ? oldNote.previews : undefined);
+        }, undefined);
         notes.push(noteTestTxt);
-        var noteTestTxt = new Note("untitleddonotedit.sqd", "Choose note/text colors, add keywords           ", "untitleddonotedit.sqd", {
+        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_2"), "untitleddonotedit.sqd", {
           creation_date: new Date().getTime(),
           last_modification_date: new Date().getTime(),
           keywords: ["keyword"],
           rating: -1,
           color: "orange"
-        }, oldNote != undefined ? oldNote.previews : undefined);
+        }, undefined);
         notes.push(noteTestTxt);
-        var noteTestTxt = new Note("untitleddonotedit.sqd", "Rate your notes or texts", "untitleddonotedit.sqd", {
+        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_3"), "untitleddonotedit.sqd", {
           creation_date: new Date().getTime(),
           last_modification_date: new Date().getTime(),
           keywords: [],
           rating: 3,
           color: "none"
-        }, oldNote != undefined ? oldNote.previews : undefined);
+        }, undefined);
         notes.push(noteTestTxt);
-        var noteTestTxt = new Note("untitleddonotedit.sqd", "Sync with your devices", "untitleddonotedit.sqd", {
+        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_4"), "untitleddonotedit.sqd", {
           creation_date: new Date().getTime(),
           last_modification_date: new Date().getTime(),
           keywords: [],
           rating: -1,
           color: "green"
-        }, oldNote != undefined ? oldNote.previews : undefined);
+        }, undefined);
         notes.push(noteTestTxt);
-        var noteTestTxt = new Note("untitleddonotedit.sqd", "Format your notes and documents, add pictures and audio records", "untitleddonotedit.sqd", {
+        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_5"), "untitleddonotedit.sqd", {
           creation_date: new Date().getTime(),
           last_modification_date: new Date().getTime(),
           keywords: [],
           rating: -1,
           color: "red"
-        }, oldNote != undefined ? oldNote.previews : undefined);
+        }, undefined);
         notes.push(noteTestTxt);
       }
 
@@ -552,7 +552,6 @@ function list(pathToList, discret) {
   });
 }
 
-list(initPath);
 refreshKeywords();
 
 function minimize() {
@@ -874,3 +873,12 @@ console.oldlog = console.log;
 console.log = function (m) {
   if (isDebug) console.oldlog(m);
 };
+
+$.i18n().load({
+  en: api_url + 'settings/lang/json?lang=en',
+  fr: api_url + 'settings/lang/json?lang=fr'
+}).done(function () {
+  $('body').i18n();
+  list(initPath);
+});
+$.i18n().locale = navigator.language;

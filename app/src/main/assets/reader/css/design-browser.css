@@ -86,6 +86,10 @@ body{
     
     cursor: pointer;
 }
+
+.mdl-card {  
+    cursor: pointer;
+}
 .card-text{
     color:inherit;
 }
@@ -215,4 +219,14 @@ body{
     background-color: rgba(0, 0, 0, 0);
     text-align: left;
     color: inherit;
+}
+
+.note-url{
+    padding-top:15px;
+    padding-bottom: 15px;
+    max-width: calc(100% - 15px);
+    border-top: #9e9d9d6e solid 1px;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }

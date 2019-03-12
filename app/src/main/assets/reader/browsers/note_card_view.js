@@ -60,6 +60,8 @@ NoteCardView.prototype.refreshTodoList = function () {
 };
 
 NoteCardView.prototype.setNote = function (note) {
+  var _this = this;
+
   if (this.oldColor != undefined) {
     this.elem.classList.remove(this.oldColor);
   }
@@ -148,6 +150,42 @@ NoteCardView.prototype.setNote = function (note) {
       }
     }
   }
+
+  this.cardUrls.innerHTML = "";
+
+  if (note.metadata.urls != undefined) {
+    var _arr = Object.keys(note.metadata.urls);
+
+    var _loop = function _loop() {
+      var url = _arr[_i];
+      div = document.createElement('div');
+      div.classList.add("note-url");
+      a = document.createElement('a');
+      a.href = url;
+
+      a.onclick = function () {
+        return false;
+      };
+
+      div.onclick = function (event) {
+        event.stopPropagation();
+        compatibility.openUrl(url);
+        return false;
+      };
+
+      a.innerHTML = url;
+      div.appendChild(a);
+
+      _this.cardUrls.appendChild(div);
+    };
+
+    for (var _i = 0; _i < _arr.length; _i++) {
+      var div;
+      var a;
+
+      _loop();
+    }
+  }
 };
 
 NoteCardView.prototype.init = function () {
@@ -183,6 +221,9 @@ NoteCardView.prototype.init = function () {
   this.cardKeywords = document.createElement('div');
   this.cardKeywords.classList.add("keywords");
   this.cardContent.appendChild(this.cardKeywords);
+  this.cardUrls = document.createElement('div');
+  this.cardUrls.classList.add("card-urls");
+  this.cardContent.appendChild(this.cardUrls);
   this.cardMedias = document.createElement('div');
   this.cardMedias.classList.add("card-medias");
   this.cardContent.appendChild(this.cardMedias);
