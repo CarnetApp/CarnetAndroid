@@ -12,6 +12,8 @@ Utils.caseInsensitiveSrt = function (a, b) {
   return a.toLowerCase().localeCompare(b.toLowerCase());
 };
 
+Utils.httpReg = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;
+
 Utils.srt = function (desc) {
   return function (a, b) {
     return desc ? ~~(a < b) : ~~(a > b);
