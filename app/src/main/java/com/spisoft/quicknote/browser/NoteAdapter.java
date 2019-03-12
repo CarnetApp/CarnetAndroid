@@ -250,7 +250,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             setName(note.title);
             setText(note.shortText);
             setRating(note.mMetadata.rating);
-            setDate(note.mMetadata.last_modification_date);
+            setDate(note.mMetadata.custom_date!=-1?note.mMetadata.custom_date:note.mMetadata.last_modification_date);
             setKeywords(note.mMetadata.keywords);
             setBackground(note.mMetadata.color);
             setTodoLists(note.mMetadata.todolists);
@@ -373,7 +373,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         public void setText(String s) {
             if(s==null)
                 s = "";
-            s = Pattern.compile("(?:(?:https?|ftp|file):\\/\\/|www\\.|ftp\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])", Pattern.CASE_INSENSITIVE).matcher(s).replaceAll("");
+            if(mNote.mMetadata.urls.size()>0)//otherwise old notes will appear empty
+                s = Pattern.compile("(?:(?:https?|ftp|file):\\/\\/|www\\.|ftp\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])", Pattern.CASE_INSENSITIVE).matcher(s).replaceAll("");
             s = s.trim();
             if(s.isEmpty()){
                 mTextView.setVisibility(View.GONE);

@@ -500,3 +500,18 @@ div#container-button::-webkit-scrollbar {
 	width: unset;
 
 }
+
+.c-datepicker{
+	z-index:4;
+	min-height: 474px !important;
+}
+.c-datepicker__toggle{
+	top:5px !important;
+}
+.c-datepicker__header-date__month, .c-datepicker__header-date__day{
+	display: none !important;
+}
+
+.c-datepicker__header-date {
+	height: 30px !important;
+}

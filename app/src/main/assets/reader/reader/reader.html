@@ -25,7 +25,7 @@
 	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/simplecolorpicker/simple-color-picker.css">
 	<link rel="stylesheet" href="<!ROOTPATH>css/design-common.css">
 	<link rel="stylesheet" href="<!ROOTPATH>css/design-editor.css">
-
+	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/material-datetime-picker.css">
 </head>
 
 <body>
@@ -71,7 +71,10 @@
 	<script src="<!ROOTPATH>libs/jquery_i18n/jquery.i18n.parser.js"></script>
 	<script src="<!ROOTPATH>libs/jquery_i18n/jquery.i18n.emitter.js"></script>
 	<script src="<!ROOTPATH>libs/jquery_i18n/jquery.i18n.emitter.bidi.js"></script>
+	<script src="<!ROOTPATH>libs/moment.js"></script>
 
+	<script src="<!ROOTPATH>reader/libs/rome.standalone.js"></script>
+	<script src="<!ROOTPATH>reader/libs/material-datetime-picker.js"></script>
 
 	<!-- dialogs declaration -->
 
@@ -193,7 +196,7 @@ mdl-layout--fixed-header">
 					<input class="mdl-textfield__input" type="text" name="name" id="name-input" value="Untitled">
 					<label class="mdl-textfield__label" for="name" data-i18n="note_name">Note name</label>
 				</div>
-				<a class="mdl-navigation__link" href="" id="export-button" data-i18n="export">Export note</a>
+				<a class="mdl-navigation__link" href="" id="date-button" data-i18n="date_time">Date and time</a>
 				<a class="mdl-navigation__link" id="exit" data-i18n="exit">Exit</a>
 				<div class="stars">
 					<form action="">
@@ -424,6 +427,7 @@ mdl-layout--fixed-header">
 			style="width:200px; height:200px; top:50%; left:50%; margin-top:-150px; margin-left:-100px;"></div>
 
 	</div>
+
 
 	<input type="file" id="input_file" />
 

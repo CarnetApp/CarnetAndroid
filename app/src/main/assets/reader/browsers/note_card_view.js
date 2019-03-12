@@ -74,9 +74,14 @@ NoteCardView.prototype.setNote = function (note) {
   }
 
   if (note.title.indexOf("untitled") == 0) this.cardTitleText.innerHTML = "";else this.cardTitleText.innerHTML = note.title;
-  var date = new Date(note.metadata.last_modification_date).toLocaleDateString();
+  var dateStamp = note.metadata.custom_date;
+  if (dateStamp == undefined) dateStamp = note.metadata.last_modification_date;
+  var date = new Date(dateStamp).toLocaleDateString();
   var text = "";
-  if (note.text != undefined) text = note.text.replace(Utils.httpReg, "");
+  if (note.text != undefined) if (note.metadata.urls != undefined && note.metadata.urls.length > 0) {
+    text = note.text.replace(Utils.httpReg, "");
+  } else text = note.text; //avoid empty note for old notes
+
   this.cardText.innerHTML = text;
   this.cardText.classList.remove("big-text");
   this.cardText.classList.remove("medium-text");

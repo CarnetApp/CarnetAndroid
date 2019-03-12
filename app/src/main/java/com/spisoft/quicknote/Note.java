@@ -137,6 +137,7 @@ public class Note implements Serializable{
     }
     public static class Metadata implements Serializable{
         public long creation_date = -1;
+        public long custom_date = -1;
         public long last_modification_date = -1;
         public List<String> keywords = new ArrayList();
         public List<TodoList> todolists = new ArrayList();
@@ -188,6 +189,9 @@ public class Note implements Serializable{
                     e.printStackTrace();
                 }
                 metadata.last_modification_date = jsonObject.getLong("last_modification_date");
+                if(jsonObject.has("custom_date"))
+                    metadata.custom_date = jsonObject.getLong("custom_date");
+
                 if(jsonObject.has("rating"))
                     metadata.rating = jsonObject.getInt("rating");
                 if(jsonObject.has("color"))
@@ -222,6 +226,9 @@ public class Note implements Serializable{
             try {
                 object.put("creation_date",creation_date);
                 object.put("last_modification_date",last_modification_date);
+                if(custom_date != -1)
+                    object.put("custom_date",custom_date);
+
                 object.put("rating",rating);
                 object.put("color",color);
                 JSONArray keywordsJson = new JSONArray();

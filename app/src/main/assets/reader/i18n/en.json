@@ -52,5 +52,6 @@
     "print_creation_date": "Print creation date",
     "error_save": "An error occured, please save your text and check it is not open in another tab",
     "not_yet_implemented": "Not yet implemented",
-    "open": "open"
+    "open": "open",
+    "date_time": "Date and time"
 }
