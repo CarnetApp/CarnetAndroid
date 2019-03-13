@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
 
@@ -24,7 +25,7 @@
     <string name="add_folder">Créer un dossier</string>
     <string name="name">Nom</string>
     <string name="new_folder_name">Nouveau dossier</string>
-    <string name="storage_preference_details" />
+    <string name="storage_preference_details"/>
     <string name="title_activity_settings">Paramètres</string>
     <string name="general_header">Général</string>
     <string name="paiement_header">Paiement</string>
@@ -45,13 +46,13 @@
     <string name="empty_message">Aucun document trouvé\nCréez un nouveau document avec le bouton +</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="default_password"></string>
+    <string name="default_password"/>
     <string name="title_activity_help_authorize_floating_window">
         HelpAuthorizeFloatingWindowActivity
     </string>
     <string name="authorize">Autoriser</string>
     <string name="authorize_description">Carnet requiert une permission spéciale pour s\'afficher en fenêtre. Veuiller activer l\'option "se superposer à d\'autres applications"</string>
-    <string name="authorisation_issue" >Problème d\'autorisation</string>
+    <string name="authorisation_issue">Problème d\'autorisation</string>
     <string name="error">Erreur</string>
     <string name="error_permission_storage">La permission Stockage est requise afin d\'enregistrer les notes sur votre appareil. Merci d\'autoriser Carnet à enregistrer ses documents sur votre carte SD / stockage interne.</string>
     <string name="allow">Autoriser</string>
@@ -67,7 +68,7 @@
     <string name="add_account">Synchroniser</string>
     <string name="later">Plus tard</string>
     <string name="remove_ad_free_confirm">Ads help me funding the app. You can disable them, but please, consider donation if you can.</string>
-    <string name="add_screenshot"></string>
+    <string name="add_screenshot"/>
     <string name="say_hi">Me prévenir</string>
     <string name="donation_ask">Carnet a été créée gratuitement, n\'hésitez pas à faire un don :)</string>
     <string name="donate">Faire un don</string>
@@ -113,4 +114,5 @@
     <string name="nextcloud_connect">Se connecter avec Nexctloud</string>
     <string name="other_sync_options">Autres options</string>
 
-</resources>
+<string name="hello_blank_fragment">Hello blank fragment</string>
+    </resources>
