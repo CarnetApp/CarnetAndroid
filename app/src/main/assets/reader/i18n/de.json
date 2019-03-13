@@ -51,5 +51,8 @@
     "print_modification_date": "Änderungsdatum drucken",
     "print_creation_date": "Erstellungsdatum drucken",
     "error_save": "Es ist ein Fehler aufgetreten. Bitte speichern Sie Ihren Text und überprüfen Sie, ob er nicht in einem anderen Tab geöffnet ist",
-    "not_yet_implemented": "Noch nicht implementiert"
+    "not_yet_implemented": "Noch nicht implementiert",
+    "open": "Öffnen",
+    "date_time": "Datum und Uhrzeit",
+    "media_empty_text": "Wählen Sie die + Taste, um Bilder / Sounds hinzuzufügen"
 }

@@ -156,7 +156,7 @@ Writer.prototype.setMediaList = function (list) {
     }
   } else {
     //this.addMediaMenu.parentNode.style.left = "0px"
-    writer.mediaList.innerHTML = "<span id='media-empty-view'>Select the + button to add images / sounds</span>";
+    writer.mediaList.innerHTML = "<span id='media-empty-view'>" + $.i18n("media_empty_text") + "</span>";
     document.getElementById("fullscreen-media-button").style.display = "none";
   }
 
@@ -1489,10 +1489,7 @@ $(document).ready(function () {
    };*/
 
 
-  $.i18n().load({
-    en: RequestBuilder.sRequestBuilder.api_url + 'settings/lang/json?lang=en',
-    fr: RequestBuilder.sRequestBuilder.api_url + 'settings/lang/json?lang=fr'
-  }).done(function () {
+  compatibility.loadLang(function () {
     $('body').i18n();
   });
   $.i18n().locale = navigator.language;

@@ -3,7 +3,6 @@
 var RequestBuilder = function RequestBuilder() {
   var api_url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "./";
   if (!api_url.endsWith("/")) api_url += "/";
-  console.log("api " + api_url);
   this.api_url = api_url;
   RequestBuilder.sRequestBuilder = this;
 };

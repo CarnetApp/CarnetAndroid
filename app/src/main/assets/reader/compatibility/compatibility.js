@@ -40,6 +40,43 @@ function () {
         win.focus();
       }
     }
+  }, {
+    key: "loadLang",
+    value: function loadLang(callback) {
+      var langs = ["en", "fr", "de"];
+      var toLoad = {};
+
+      for (var _i = 0; _i < langs.length; _i++) {
+        var lang = langs[_i];
+        toLoad[lang] = (!this.isElectron ? RequestBuilder.sRequestBuilder.api_url : "/") + 'settings/lang/json?lang=' + lang;
+      }
+
+      if (!this.isElectron) {
+        $.i18n().load(toLoad).done(callback);
+      } else {
+        var size = Object.keys(toLoad).length;
+        var i = 0;
+        var total = {};
+
+        var _arr = Object.keys(toLoad);
+
+        var _loop = function _loop() {
+          var key = _arr[_i2];
+          RequestBuilder.sRequestBuilder.get(toLoad[key], function (error, data) {
+            i++;
+            total[key] = data;
+
+            if (i == size) {
+              $.i18n().load(total).done(callback);
+            }
+          });
+        };
+
+        for (var _i2 = 0; _i2 < _arr.length; _i2++) {
+          _loop();
+        }
+      }
+    }
   }]);
 
   return Compatibility;

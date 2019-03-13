@@ -49,5 +49,10 @@
     "print": "Imprimer",
     "print_title": "Imprimer le titre",
     "print_modification_date": "Imprimer la date de modification",
-    "print_creation_date": "Imprimer la date de création"
+    "print_creation_date": "Imprimer la date de création",
+    "error_save": "Une erreur est survenue, sauvegardez votre texte manuellement et vérifiez s'il n'est pas ouvert ailleurs",
+    "not_yet_implemented": "Pas encore implémenté",
+    "open": "Ouvrir",
+    "date_time": "Date et heure",
+    "media_empty_text": "Appuyez sur + pour ajouter images et sons"
 }

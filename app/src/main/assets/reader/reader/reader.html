@@ -132,8 +132,7 @@
 
 
 	<dialog class="mdl-dialog" id="color-picker-dialog" style="padding: 0;">
-		<div
-			class="mdl-dialog__content jscolor {valueElement:'chosen-value', onFineChange:'writer.setPickerColor(this)' , shadow:false}"
+		<div class="mdl-dialog__content jscolor {valueElement:'chosen-value', onFineChange:'writer.setPickerColor(this)' , shadow:false}"
 			id="color-picker-div">
 		</div>
 		<div class="mdl-dialog__actions">
@@ -162,17 +161,18 @@
 mdl-layout--fixed-header">
 		<header id="header-carnet" class="mdl-layout__header">
 			<div class="mdl-layout__header-row" id="container-button" style="overflow-x: auto;overflow-y: hidden">
-				<button id="format-button" class="mdl-button mdl-js-button headerbar-button toolbar-button" for="format-toolbar"
-					data-i18n="format">
+				<button id="format-button" class="mdl-button mdl-js-button headerbar-button toolbar-button"
+					for="format-toolbar" data-i18n="format">
 					Format
 				</button>
 
-				<button id="edit-button" class="mdl-button mdl-js-button headerbar-button toolbar-button" for="edit-toolbar"
-					data-i18n="edit">
+				<button id="edit-button" class="mdl-button mdl-js-button headerbar-button toolbar-button"
+					for="edit-toolbar" data-i18n="edit">
 					Edit
 				</button>
 
-				<button id="tools-button" class="mdl-button mdl-js-button headerbar-button toolbar-button" for="tools-toolbar">
+				<button id="tools-button" class="mdl-button mdl-js-button headerbar-button toolbar-button"
+					for="tools-toolbar" data-i18n="tools">
 					Tools
 				</button>
 
@@ -202,14 +202,14 @@ mdl-layout--fixed-header">
 					<form action="">
 						<input class="star star-5" id="star-5" type="radio" name="star" value="5" />
 						<label class="star star-5" for="star-5"></label>
-						<input class="star star-4" id="star-4" type="radio" name="star" value="4" //> <label class="star star-4"
-							for="star-4"></label>
-						<input class="star star-3" id="star-3" type="radio" name="star" value="3" //> <label class="star star-3"
-							for="star-3"></label>
-						<input class="star star-2" id="star-2" type="radio" name="star" value="2" //> <label class="star star-2"
-							for="star-2"></label>
-						<input class="star star-1" id="star-1" type="radio" name="star" value="1" //> <label class="star star-1"
-							for="star-1"></label>
+						<input class="star star-4" id="star-4" type="radio" name="star" value="4" //> <label
+							class="star star-4" for="star-4"></label>
+						<input class="star star-3" id="star-3" type="radio" name="star" value="3" //> <label
+							class="star star-3" for="star-3"></label>
+						<input class="star star-2" id="star-2" type="radio" name="star" value="2" //> <label
+							class="star star-2" for="star-2"></label>
+						<input class="star star-1" id="star-1" type="radio" name="star" value="1" //> <label
+							class="star star-1" for="star-1"></label>
 					</form>
 				</div>
 				<div id="note-color">
@@ -246,7 +246,8 @@ mdl-layout--fixed-header">
 				</div>
 				<span style="text-align:center; margin:10px;" data-i18n="keywords"> Keywords</span>
 
-				<a class="mdl-navigation__link" href="" id="button-add-keyword" data-i18n="add_a_keyword">Add a keyword</a>
+				<a class="mdl-navigation__link" href="" id="button-add-keyword" data-i18n="add_a_keyword">Add a
+					keyword</a>
 				<span id="keywords-list">
 				</span>
 
@@ -302,7 +303,8 @@ mdl-layout--fixed-header">
 				-->
 				</div>
 				<div id="edit-toolbar" class="toolbar">
-					<button id="copy-button" class="mdl-button mdl-js-button headerbar-button in-toolbar-button" data-i18n="copy">
+					<button id="copy-button" class="mdl-button mdl-js-button headerbar-button in-toolbar-button"
+						data-i18n="copy">
 						copy
 					</button>
 					<button id="paste-button" class="mdl-button mdl-js-button headerbar-button in-toolbar-button"
@@ -334,7 +336,8 @@ mdl-layout--fixed-header">
 				<div id="center" style="height:100%;padding:0px;overflow-y: auto;">
 					<div id="media-toolbar">
 						<div id="media-header">
-							<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button" id="back-to-text-button">
+							<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button"
+								id="back-to-text-button" data-i18n="back_to_text">
 								Back to text
 							</button>
 						</div>
@@ -347,15 +350,18 @@ mdl-layout--fixed-header">
 								class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button in-toolbar-button"
 								data-upgraded=",MaterialButton">
 								<i class="material-icons">aspect_ratio</i>
-								<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button><button
-								id="add-media-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button"
+								<span class="mdl-button__ripple-container"><span
+										class="mdl-ripple"></span></span></button><button id="add-media-button"
+								class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button"
 								data-upgraded=",MaterialButton">
 								<i class="material-icons">add</i>
-								<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
-							<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" id="add-media-menu"
-								for="add-media-button">
-								<li class="mdl-menu__item" id="add-file-button">File/Photo</li>
-								<li class="mdl-menu__item" id="add-recording-button">Recording</li>
+								<span class="mdl-button__ripple-container"><span
+										class="mdl-ripple"></span></span></button>
+							<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+								id="add-media-menu" for="add-media-button">
+								<li class="mdl-menu__item" id="add-file-button" data-i18n="file_photo">File/Photo</li>
+								<li class="mdl-menu__item" id="add-recording-button" data-i18n="recording">Recording
+								</li>
 							</ul>
 						</div>
 						<div style="clear:both"></div>
@@ -427,7 +433,6 @@ mdl-layout--fixed-header">
 			style="width:200px; height:200px; top:50%; left:50%; margin-top:-150px; margin-left:-100px;"></div>
 
 	</div>
-
 
 	<input type="file" id="input_file" />
 

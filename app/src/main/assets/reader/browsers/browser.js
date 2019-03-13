@@ -874,10 +874,7 @@ console.log = function (m) {
   if (isDebug) console.oldlog(m);
 };
 
-$.i18n().load({
-  en: RequestBuilder.sRequestBuilder.api_url + 'settings/lang/json?lang=en',
-  fr: RequestBuilder.sRequestBuilder.api_url + 'settings/lang/json?lang=fr'
-}).done(function () {
+compatibility.loadLang(function () {
   $('body').i18n();
   list(initPath);
 });
