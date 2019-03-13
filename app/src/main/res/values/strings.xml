@@ -132,4 +132,5 @@
     <string name="fake_note_6">Add ToDo-Lists and URLs</string>
     <string name="fake_note_todo_item_1">Try Carnet</string>
     <string name="fake_note_todo_item_2">Share Carnet</string>
+    <string name="changelog">Changelog</string>
 </resources>

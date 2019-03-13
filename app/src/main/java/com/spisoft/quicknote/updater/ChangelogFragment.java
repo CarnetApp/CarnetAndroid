@@ -65,6 +65,7 @@ public class ChangelogFragment extends Fragment {
     }
 
 
-
-
+    public void setOnTouchListener(final View.OnTouchListener onTouchListener) {
+        mChangelogView.setOnTouchListener(onTouchListener);
+    }
 }

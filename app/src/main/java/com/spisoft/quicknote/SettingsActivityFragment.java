@@ -44,6 +44,7 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
         findPreference("pref_remove_ad_pay").setOnPreferenceClickListener(this);
         findPreference("pref_paypal").setOnPreferenceClickListener(this);
         findPreference("pref_desktop_version").setOnPreferenceClickListener(this);
+        findPreference("pref_changelog").setOnPreferenceClickListener(this);
 
     }
     @Override
@@ -119,6 +120,10 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
             intent.putExtra(Intent.EXTRA_SUBJECT, "About Quicknote");
 
             startActivity(Intent.createChooser(intent, "Send Email"));
+            return true;
+        }
+        else if(preference==findPreference("pref_changelog")){
+            startActivity(new Intent(getActivity(),ChangelogActivity.class));
             return true;
         }
         else

@@ -35,6 +35,10 @@
         android:key="pref_desktop_version"
         android:title="@string/desktop_version"
         />
+    <Preference
+        android:key="pref_changelog"
+        android:title="@string/changelog"
+        />
     <PreferenceCategory
         android:key="paiement_header"
         android:title="@string/paiement_header">

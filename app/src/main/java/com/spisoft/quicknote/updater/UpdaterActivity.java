@@ -5,29 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.os.AsyncTask;
-import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
-import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
-import com.spisoft.quicknote.utils.FileUtils;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import static android.view.View.GONE;
 
@@ -50,10 +40,29 @@ public class UpdaterActivity extends AppCompatActivity {
         }
 
     };
+    private ChangelogFragment mChangelogFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_updater);
+        mChangelogFragment = (ChangelogFragment)getSupportFragmentManager().getFragments().get(0);
+        mChangelogFragment.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                mHandler.removeMessages(0);
+                ((Button)findViewById(R.id.update_button)).setText(R.string.skip);
+                return false;
+            }
+        });
+        findViewById(R.id.root).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mHandler.removeMessages(0);
+                ((Button)findViewById(R.id.update_button)).setText(R.string.skip);
+            }
+        });
+
         if(getOldVersion(this) == -1    ){
             findViewById(R.id.changelog_fragment).setVisibility(View.GONE);
             findViewById(R.id.first_start).setVisibility(View.VISIBLE);
@@ -110,7 +119,8 @@ public class UpdaterActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        return;
+        if(findViewById(R.id.update_button).isEnabled())
+            end();
     }
 
     public static boolean startUpdateIfNeeded(Activity activity, int requestCode) {

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 static def getDate() {
     // we increment version number every 1000 seconds,
@@ -83,4 +85,5 @@ dependencies {
     googleImplementation project(':GoogleSync')
     implementation 'com.github.google:cameraview:3eaeac09a7f'
 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
