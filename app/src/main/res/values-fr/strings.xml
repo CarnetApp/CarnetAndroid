@@ -115,4 +115,13 @@
     <string name="other_sync_options">Autres options</string>
 
 <string name="hello_blank_fragment">Hello blank fragment</string>
-    </resources>
+    <string name="fake_note_1">Ces fausses notes disparaîtrons sitôt que vous créerez une nouvelle note en sélectionnant le bouton en bas à droite</string>
+    <string name="fake_note_2">"Choisissez la couleurs de vos notes, ajoutez des mots clefs           "</string>
+    <string name="fake_note_3">Attribuez une note à vos notes et textes</string>
+    <string name="fake_note_4">Synchronisez vos appareils</string>
+    <string name="fake_note_5">Mettez en forme vos notes et documents, ajoutez des images et enregistrements audio</string>
+    <string name="fake_notes_warning">Les fausses notes ne peuvent être modifiées</string>
+    <string name="fake_note_6">Ajoutez des ToDo-Listes et des liens</string>
+    <string name="fake_note_todo_item_1">Essayer Carnet</string>
+    <string name="fake_note_todo_item_2">Partager Carnet</string>
+</resources>
