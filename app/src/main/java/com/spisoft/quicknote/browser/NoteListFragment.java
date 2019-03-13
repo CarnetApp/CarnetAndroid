@@ -135,18 +135,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             public void run() {
                 if(getActivity()==null || mNotes != null)
                     return;
-                mNotes = getNotes();
-                if(mNotes!=null) {
-                    mNoteAdapter.setNotes(mNotes);
-                    if(mNotes.isEmpty())
-                        showEmptyMessage(null);
-                    else
-                        hideEmptyView();
-                    if (mLastSelected != null && mNotes.indexOf(mLastSelected) > 0)
-                        mGridLayout.scrollToPosition(mNotes.indexOf(mLastSelected));
-                    else
-                        mGridLayout.scrollToPosition(0);
-                }
+                reload(null, false);
                 onReady();
             }
         }, 0);
@@ -201,17 +190,62 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         }
     }
 
+    private Note createFakeNote(String text, List<String> keywords, String color, int rating, List<String> urls, List<String> todo, List<String> previews){
+        Note note = new Note("untitled.sqd");
+        note.isFake = true;
+        note.mMetadata = new Note.Metadata();
+        note.mMetadata.keywords = keywords;
+        note.mMetadata.last_modification_date = System.currentTimeMillis();
+        note.mMetadata.creation_date = System.currentTimeMillis();
+        note.mMetadata.color = color;
+        note.mMetadata.rating = rating;
+        Note.TodoList todoList = new Note.TodoList();
+        todoList.todo = todo;
+        note.mMetadata.todolists.add(todoList);
+        note.mMetadata.urls.addAll(urls);
+        note.shortText = text;
+        if(previews != null)
+            note.previews.addAll(previews);
+        return note;
+
+    }
+
     protected void reload(Note scrollTo, boolean keepCurrentScroll) {
         mNotes = getNotes();
+        if(mNotes == null)
+            mNotes = new ArrayList();
         if(mNotes!=null) {
+            hideEmptyView();
+                if(mNotes.isEmpty()) {
+                    mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_1), new ArrayList<String>(){{
+
+                    }}, "none",5, new ArrayList<String>(), new ArrayList<String>(), null));
+                    mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_6), new ArrayList<String>(){{
+                    }}, "none",-1, new ArrayList<String>(){{
+                        add("https://carnet.live");
+                    }}, new ArrayList<String>(){{
+                        add(getResources().getString(R.string.fake_note_todo_item_1));
+                        add(getResources().getString(R.string.fake_note_todo_item_2));
+                    }}, null));
+
+                    mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_5), new ArrayList<String>(){{
+                    }}, "red",-1, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(){{add("reader/img/bike.png");}}));
+
+                    mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_2), new ArrayList<String>(){{
+                        add("Keyword");
+                    }}, "orange",-1, new ArrayList<String>(), new ArrayList<String>(), null));
+                    mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_3), new ArrayList<String>(){{
+                    }}, "none",3, new ArrayList<String>(), new ArrayList<String>(), null));
+                    mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_4), new ArrayList<String>(){{
+                    }}, "green",-1, new ArrayList<String>(), new ArrayList<String>(), null));
+
+                }
+                else{
+                    mNoteAdapter.invalidateNotesMetadata();
+                }
+
             mNoteAdapter.setNotes(mNotes);
-            mNoteAdapter.invalidateNotesMetadata();
-            if (mNotes != null) {
-                if(mNotes.isEmpty())
-                    showEmptyMessage(null);
-                else
-                    hideEmptyView();
-            }
+
             if(keepCurrentScroll) {
             } else if (scrollTo != null && mNotes.indexOf(scrollTo) > 0)
                 mGridLayout.scrollToPosition(mNotes.indexOf(scrollTo));
@@ -304,11 +338,14 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
             return;
         }else {*/
-        if(NoteManager.needToUpdate(note.path))
-            Toast.makeText(getContext(), R.string.please_wait_update, Toast.LENGTH_LONG).show();
-        else
-            ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(note, null));
-
+        if(!note.isFake) {
+            if (NoteManager.needToUpdate(note.path))
+                Toast.makeText(getContext(), R.string.please_wait_update, Toast.LENGTH_LONG).show();
+            else
+                ((MainActivity) getActivity()).setFragment(BlankFragment.newInstance(note, null));
+        } else {
+            Toast.makeText(getContext(), R.string.fake_notes_warning, Toast.LENGTH_LONG).show();
+        }
           /*  Intent intent = new Intent(getActivity(), FloatingService.class);
             intent.putExtra(FloatingService.NOTE, note);
             getActivity().startService(intent);*/
@@ -325,48 +362,51 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
     @Override
     public void onInfoClick(final Note note, View view){
-        PopupMenu menu = new PopupMenu(getActivity(), view);
-        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
+        if(!note.isFake) {
+            PopupMenu menu = new PopupMenu(getActivity(), view);
+            menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
 
-                if(menuItem.getItemId()== R.string.delete){
-                    if(FloatingService.sService!=null&&FloatingService.sService.getNote()!=null&&FloatingService.sService.getNote().path.equalsIgnoreCase(note.path)){
+                    if (menuItem.getItemId() == R.string.delete) {
+                        if (FloatingService.sService != null && FloatingService.sService.getNote() != null && FloatingService.sService.getNote().path.equalsIgnoreCase(note.path)) {
 
-                        Toast.makeText(getActivity(), R.string.unable_to_delete_use, Toast.LENGTH_LONG).show();
-                        return true;
-                    }
-                    NoteManager.deleteNote(getContext(), note);
-                    mNotes = getNotes();
-                    mNoteAdapter.setNotes((List<Object>) mNotes);
-
-
-                }else if(menuItem.getItemId() == R.string.rename){
-                    if(FloatingService.sService!=null&&FloatingService.sService.getNote()!=null&&FloatingService.sService.getNote().path.equalsIgnoreCase(note.path)){
-
-                        Toast.makeText(getActivity(), R.string.unable_to_rename_use, Toast.LENGTH_LONG).show();
-                        return true;
-                    }
-                    RenameDialog dialog = new RenameDialog();
-                    dialog.setName(note.title);
-                    dialog.setRenameListener(new RenameDialog.OnRenameListener() {
-                        @Override
-                        public boolean renameTo(String name) {
-                            boolean success = NoteManager.renameNote(getContext(), note, name+".sqd") != null;
-                            reload(mLastSelected, false);
-                            return success;
-
+                            Toast.makeText(getActivity(), R.string.unable_to_delete_use, Toast.LENGTH_LONG).show();
+                            return true;
                         }
-                    });
-                    dialog.show(getFragmentManager(), "rename");
+                        NoteManager.deleteNote(getContext(), note);
+                        reload(null, false);
+
+
+                    } else if (menuItem.getItemId() == R.string.rename) {
+                        if (FloatingService.sService != null && FloatingService.sService.getNote() != null && FloatingService.sService.getNote().path.equalsIgnoreCase(note.path)) {
+
+                            Toast.makeText(getActivity(), R.string.unable_to_rename_use, Toast.LENGTH_LONG).show();
+                            return true;
+                        }
+                        RenameDialog dialog = new RenameDialog();
+                        dialog.setName(note.title);
+                        dialog.setRenameListener(new RenameDialog.OnRenameListener() {
+                            @Override
+                            public boolean renameTo(String name) {
+                                boolean success = NoteManager.renameNote(getContext(), note, name + ".sqd") != null;
+                                reload(mLastSelected, false);
+                                return success;
+
+                            }
+                        });
+                        dialog.show(getFragmentManager(), "rename");
+                    }
+                    return internalOnMenuClick(menuItem, note);
                 }
-                return internalOnMenuClick(menuItem, note);
-            }
-        });
-        menu.getMenu().add(0, R.string.rename, 0, R.string.rename);
-        menu.getMenu().add(0, R.string.delete, 0, R.string.delete);
-        internalCreateOptionMenu(menu.getMenu(), note);
-        menu.show();
+            });
+            menu.getMenu().add(0, R.string.rename, 0, R.string.rename);
+            menu.getMenu().add(0, R.string.delete, 0, R.string.delete);
+            internalCreateOptionMenu(menu.getMenu(), note);
+            menu.show();
+        } else {
+            Toast.makeText(getContext(), R.string.fake_notes_warning, Toast.LENGTH_LONG).show();
+        }
     }
 
     protected abstract boolean internalOnMenuClick(MenuItem menuItem, Note note);

@@ -123,4 +123,13 @@
     <string name="carnet_note_taking_app">Carnet is a versatile note application</string>
     <string name="nextcloud_connect">Connect with Nexctloud</string>
     <string name="other_sync_options">Other sync options</string>
+    <string name="fake_note_1">These fake notes will disappear as soon as you create a new note by selecting the bottom right button</string>
+    <string name="fake_note_2">Choose note/text colors, add keywords</string>
+    <string name="fake_note_3">Rate your notes or texts</string>
+    <string name="fake_note_4">Sync with your devices</string>
+    <string name="fake_note_5">Format your notes and documents, add pictures and audio records</string>
+    <string name="fake_notes_warning">Fake notes are not editable</string>
+    <string name="fake_note_6">Add ToDo-Lists and URLs</string>
+    <string name="fake_note_todo_item_1">Try Carnet</string>
+    <string name="fake_note_todo_item_2">Share Carnet</string>
 </resources>

@@ -29,6 +29,7 @@ public class Note implements Serializable{
     public ArrayList<String> medias;
     public boolean needsUpdateInfo = true;
     public boolean hasFound;
+    public boolean isFake;
 
     @Override
     public boolean equals(Object o) {

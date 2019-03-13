@@ -3,6 +3,7 @@ package com.spisoft.quicknote.browser;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -27,6 +28,7 @@ import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.NoteManager;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -451,22 +453,32 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
 
             viewHolder.setSelected(mSelelectedNotes != null && mSelelectedNotes.contains(note));
             Log.d(" ", note.title);
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if(note.equals(viewHolder.getNote()) && note.needsUpdateInfo)
-                        mNoteInfoRetriever.addNote(note.path);
-                }
-            },500);
-
-            if(note.previews.size()>0){
-                mHandler.post(new Runnable() {
+            if(!note.isFake) {
+                mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if(note.equals(viewHolder.getNote()))
-                            mNoteThumbnailEngine.addNote(note, viewHolder);
+                        if (note.equals(viewHolder.getNote()) && note.needsUpdateInfo)
+                            mNoteInfoRetriever.addNote(note.path);
                     }
-                });
+                }, 500);
+                if (note.previews.size() > 0) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (note.equals(viewHolder.getNote()))
+                                mNoteThumbnailEngine.addNote(note, viewHolder);
+                        }
+                    });
+                }
+            } else if (note.previews.size() > 0){
+
+                try {
+                    Bitmap b2 = BitmapFactory.decodeStream(mContext.getAssets().open(note.previews.get(0)));
+                    b2.setDensity(Bitmap.DENSITY_NONE);
+                    viewHolder.setPreview1(b2);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
