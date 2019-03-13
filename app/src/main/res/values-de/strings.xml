@@ -79,7 +79,7 @@
     <string name="keywords">Schlüsselwörter</string>
     <string name="sync_intro_title">Carnet synchronisieren</string>
     <string name="google_drive">Google Drive</string>
-    <string name="default_password">Pass­wort</string>
+    <string name="default_password"></string>
     <string name="title_activity_help_authorize_floating_window">HelpAuthorizeFloatingWindowActivity</string>
     <string name="title_activity_noise_selector">Geräuschauswahl</string>
     <string name="title_activity_noise_player">Geräusch Player</string>
