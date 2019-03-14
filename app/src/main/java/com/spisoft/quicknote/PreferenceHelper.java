@@ -28,6 +28,7 @@ public class PreferenceHelper {
     public static final String APP_VERSION_PREF = "pref_app_version";
     public static final String PREF_UID = "pref_uid";
     public static final String HAS_DONATE = "has_donate";
+    public static final String HAS_RATED = "has_rated";
     private static final String CURRENT_READER_VERSION = "current_reader_version";
     private static PreferenceHelper sPreferenceHelper;
     private final Context mContext;

@@ -161,6 +161,22 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
                             openDonation(null);
                         }
                     })
+                    .setDuration(6000)
+                    .show();
+        }
+
+        if(count%20 == 0 && !PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(PreferenceHelper.HAS_RATED, false)){
+            Snackbar.make(findViewById(R.id.root), R.string.rate_ask,
+                    Snackbar.LENGTH_LONG)
+                    .setAction(R.string.rate, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean(PreferenceHelper.HAS_RATED, true).commit();
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.spisoft.quicknote"));
+                            startActivity(browserIntent);
+                        }
+                    })
+                    .setDuration(5000)
                     .show();
         }
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(PreferenceHelper.LAUNCH_COUNT, count+1).commit();

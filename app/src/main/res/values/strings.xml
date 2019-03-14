@@ -115,6 +115,8 @@
     <string name="blue">Blue</string>
     <string name="dark">Dark</string>
     <string name="donation_ask">This application was created for free, please, consider making a donation</string>
+    <string name="rate_ask">Please, if you like this app, give us 5 stars :)</string>
+    <string name="rate">Rate it</string>
     <string name="first_start">First start, please wait</string>
     <string name="sync">Sync</string>
     <string name="change_credentials">Change Credentials</string>
