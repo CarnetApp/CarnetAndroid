@@ -239,8 +239,10 @@ public class RecentHelper {
         ArrayList<Object> toReturn = new ArrayList<>(pin);
         for(int i = 0; i < toReturn.size(); i++){
             Note note = CacheManager.getInstance(mContext).get(((Note)toReturn.get(i)).path);
-            if(note != null)
+            if(note != null) {
+                note.isPinned = true;
                 toReturn.set(i, note);
+            }
         }
         for(Note note : notes){
             Note cached = CacheManager.getInstance(mContext).get(note.path);
