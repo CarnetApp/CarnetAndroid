@@ -1,5 +1,3 @@
-"use strict";
-
 /*!
  * BIDI embedding support for jQuery.i18n
  *

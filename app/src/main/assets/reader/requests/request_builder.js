@@ -1,5 +1,3 @@
-"use strict";
-
 var RequestBuilder = function RequestBuilder() {
   var api_url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "./";
   if (!api_url.endsWith("/")) api_url += "/";

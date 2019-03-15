@@ -106,9 +106,11 @@
         </activity>
         <activity
             android:name=".editor.ImageActivity"
-            android:exported="true"
             android:screenOrientation="portrait" />
-        <activity android:name=".ChangelogActivity"
+        <activity
+            android:name=".ChangelogActivity"
+            android:exported="true" />
+        <activity android:name=".WebBasedActivity"
             android:exported="true"></activity>
     </application>
 

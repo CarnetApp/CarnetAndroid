@@ -255,7 +255,7 @@ public class RecentHelper {
         return toReturn;
     }
 
-    private JSONObject getJson() throws JSONException {
+    public JSONObject getJson() throws JSONException {
         Log.d("jsondebug", "getJson");
 
         String jsonString = read();

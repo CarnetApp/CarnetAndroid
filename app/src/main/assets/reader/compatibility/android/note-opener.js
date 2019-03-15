@@ -1,5 +1,3 @@
-"use strict";
-
 var NoteOpenerResultReceiver = function NoteOpenerResultReceiver() {};
 
 NoteOpenerResultReceiver.callbacks = [];

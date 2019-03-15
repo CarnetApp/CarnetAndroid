@@ -1,5 +1,3 @@
-"use strict";
-
 var ArchiverCompatibility = function ArchiverCompatibility() {};
 
 ArchiverCompatibility.create = function (type, ktkl) {

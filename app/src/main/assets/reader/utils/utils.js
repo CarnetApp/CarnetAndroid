@@ -1,5 +1,3 @@
-"use strict";
-
 var Utils = function Utils() {};
 
 Utils.keysrt = function (key, desc) {

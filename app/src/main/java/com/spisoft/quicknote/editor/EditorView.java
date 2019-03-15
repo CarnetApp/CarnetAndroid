@@ -307,6 +307,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         mLinearLayout.setLayoutTransition(new LayoutTransition());
         addView(mLinearLayout);
         mProgressLayout = LayoutInflater.from(getContext()).inflate(R.layout.progress_layout, null, true);
+        mProgressLayout.setVisibility(GONE);
         addView(mProgressLayout);
 
         mWebView = new MyWebView(getContext());
@@ -319,6 +320,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         mWebView.setVerticalScrollBarEnabled(false);
         mWebView.setHorizontalScrollBarEnabled(false);
         mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setDomStorageEnabled(true);
         //mWebView.getSettings().setSupportZoom(false);
         mWebView.setWebViewClient(mClient);
         mWebView.setWebChromeClient(new WebChromeClient() {
@@ -388,7 +390,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         mHasLoaded = false;
         mRootPath = getContext().getFilesDir().getAbsolutePath();
         mServer2 = new HttpServer(getContext());
-        mWebView.loadUrl(mServer2.getUrl("/tmp/reader.html"));
+        mWebView.loadUrl(mServer2.getUrl(getUrl()));
         //prepare Reader
         //extract
 
@@ -398,7 +400,9 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
 
 
     }
-
+    public String getUrl(){
+        return "/tmp/reader.html";
+    }
     public void askForPermission(String origin, String permission, int requestCode) {
         Log.d("WebView", "inside askForPermission for" + origin + "with" + permission);
 

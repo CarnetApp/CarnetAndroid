@@ -1,5 +1,3 @@
-"use strict";
-
 var FileBrowser = function FileBrowser(path) {
   this.path = path;
 };

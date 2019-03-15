@@ -1,5 +1,3 @@
-"use strict";
-
 var CarnetRecorder = function CarnetRecorder() {
   this.init();
 };

@@ -1,5 +1,3 @@
-"use strict";
-
 var KeywordsDBManager = function KeywordsDBManager(path) {};
 
 KeywordsDBManager.prototype.getFullDB = function (callback) {

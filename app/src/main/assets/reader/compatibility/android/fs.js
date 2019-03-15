@@ -1,5 +1,3 @@
-"use strict";
-
 var FSCompatibility = function FSCompatibility() {};
 
 function generateUID() {

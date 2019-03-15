@@ -1,5 +1,3 @@
-"use strict";
-
 var NoteCardView = function NoteCardView(elem, onTodoListChange) {
   this.elem = elem;
   this.init();

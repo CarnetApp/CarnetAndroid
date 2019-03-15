@@ -1,5 +1,3 @@
-"use strict";
-
 /* 
 * Webkitresize (http://editorboost.net/webkitresize)
 * Copyright 2012 Editorboost. All rights reserved. 

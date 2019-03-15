@@ -11,6 +11,7 @@ import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
+import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.PictureUtils;
@@ -25,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -111,6 +113,14 @@ public class HttpServer extends NanoHTTPD {
                             return openNote(parms.get("path").get(0));
                         case "keywordsdb":
                             return getKeywordDB();
+                        case "recentdb":
+                            try {
+                                RecentHelper.getInstance(mContext).getJson().toString();
+                                return NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/json",new ByteArrayInputStream(RecentHelper.getInstance(mContext).getJson().toString().getBytes()));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         case "settings/editor_css":
                             String theme = PreferenceManager.getDefaultSharedPreferences(mContext).getString("theme","carnet");
                             String metadata = FileUtils.readFile(mContext.getFilesDir().getAbsolutePath() +"/reader/css/"+theme+"/metadata.json");
@@ -173,9 +183,20 @@ public class HttpServer extends NanoHTTPD {
 
             }
             else {
+                if(path.contains("../"))
+                    return null;
                 fileMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(path));
                 try {
-                    rinput = new FileInputStream(mContext.getFilesDir().getAbsolutePath() + path);
+                    if(path.equals("/reader/reader/reader.html")){
+
+                    } else if (path.equals("/reader/index.html")){
+                        String index = FileUtils.readFile(mContext.getFilesDir().getAbsolutePath() + path);
+                        index = index.replace("!API_URL","/api/");
+                        rinput = new ByteArrayInputStream(index.getBytes());
+                    }
+                    else
+                        rinput = new FileInputStream(mContext.getFilesDir().getAbsolutePath() + path);
+
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     status = Response.Status.NOT_FOUND;

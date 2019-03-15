@@ -1,5 +1,3 @@
-"use strict";
-
 var ElectronStore = function ElectronStore() {
   var Store = require('electron-store');
 

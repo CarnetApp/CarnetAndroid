@@ -1,5 +1,3 @@
-"use strict";
-
 var KeywordDBManagerCompatibility = function KeywordDBManagerCompatibility() {};
 
 function generateUID() {

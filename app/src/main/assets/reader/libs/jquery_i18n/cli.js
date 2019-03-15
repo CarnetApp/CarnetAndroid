@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-"use strict";
 
 var parser = require(__dirname + '/CLDRPluralRuleParser.js');
 

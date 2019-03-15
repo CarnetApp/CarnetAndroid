@@ -1,5 +1,3 @@
-"use strict";
-
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
@@ -208,7 +206,7 @@ function resetGrid(discret) {
   noteCardViewGrid.onNoteClick(function (note) {
     if (!dontOpen) {
       if (note.path != "untitleddonotedit.sqd") openNote(note.path);else displaySnack({
-        message: "Fake notes are not editable",
+        message: $.i18n("fake_notes_warning"),
         timeout: 2000
       });
     }
@@ -494,6 +492,16 @@ function list(pathToList, discret) {
           color: "none"
         }, undefined);
         notes.push(noteTestTxt);
+        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_5"), "untitleddonotedit.sqd", {
+          creation_date: new Date().getTime(),
+          last_modification_date: new Date().getTime(),
+          keywords: [],
+          rating: -1,
+          color: "red"
+        }, undefined);
+        noteTestTxt.previews = [];
+        noteTestTxt.previews.push(root_url + "img/bike.png");
+        notes.push(noteTestTxt);
         var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_2"), "untitleddonotedit.sqd", {
           creation_date: new Date().getTime(),
           last_modification_date: new Date().getTime(),
@@ -518,12 +526,18 @@ function list(pathToList, discret) {
           color: "green"
         }, undefined);
         notes.push(noteTestTxt);
-        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_5"), "untitleddonotedit.sqd", {
+        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_6"), "untitleddonotedit.sqd", {
           creation_date: new Date().getTime(),
           last_modification_date: new Date().getTime(),
           keywords: [],
           rating: -1,
-          color: "red"
+          urls: {
+            "https://carnet.live": {}
+          },
+          todolists: [{
+            todo: [$.i18n("fake_note_todo_item_1"), $.i18n("fake_note_todo_item_2")]
+          }],
+          color: "none"
         }, undefined);
         notes.push(noteTestTxt);
       }
@@ -616,7 +630,7 @@ function loadNextNotes() {
   currentTask.getNext();
 }
 
-var browser = void 0;
+var browser = this;
 
 document.getElementById("grid-container").onscroll = function () {
   if (this.offsetHeight + this.scrollTop >= this.scrollHeight - 80) {
@@ -671,7 +685,7 @@ var right = document.getElementById("right-bar"); //writer frame
 
 var isElectron = typeof require === "function";
 var writerFrame = undefined;
-events = [];
+var events = [];
 
 if (isElectron) {
   writerFrame = document.getElementById("writer-webview");

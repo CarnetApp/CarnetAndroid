@@ -1,5 +1,3 @@
-"use strict";
-
 function initDragAreas() {
   var selected = null,
       // Object of the element to be moved

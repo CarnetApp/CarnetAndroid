@@ -54,5 +54,9 @@
     "not_yet_implemented": "Pas encore implémenté",
     "open": "Ouvrir",
     "date_time": "Date et heure",
-    "media_empty_text": "Appuyez sur + pour ajouter images et sons"
+    "media_empty_text": "Appuyez sur + pour ajouter images et sons",
+    "fake_note_6": "Ajoutez des ToDo-Listes et des liens",
+    "fake_note_todo_item_1": "Essayer Carnet",
+    "fake_note_todo_item_2": "Partager Carnet",
+    "fake_notes_warning": "Les fausses notes ne peuvent être modifiées"
 }

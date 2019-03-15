@@ -1,5 +1,3 @@
-"use strict";
-
 /*!
  * jQuery Internationalization library - Message Store
  *

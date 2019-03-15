@@ -1,5 +1,3 @@
-"use strict";
-
 /* global pluralRuleParser */
 (function ($) {
   'use strict'; // jscs:disable

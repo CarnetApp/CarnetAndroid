@@ -1,5 +1,3 @@
-"use strict";
-
 var Note = function Note(title, text, path, metadata, previews) {
   this.title = title;
   this.text = text;
