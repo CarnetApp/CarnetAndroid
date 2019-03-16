@@ -8,9 +8,9 @@
     <string name="floating">Floating note</string>
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
-    <string name="remove_recent">Remove from recent</string>
+    <string name="remove_recent">Remove from latest</string>
     <string name="storage_preference">Main storage</string>
-    <string name="recent">Recent</string>
+    <string name="recent">Latest</string>
     <string name="browser">Browser</string>
     <string name="parent_folder">Parent folder</string>
     <string name="title_activity_img_picker">ImgPickerActivity</string>
@@ -135,5 +135,5 @@
     <string name="fake_note_todo_item_1">Try Carnet</string>
     <string name="fake_note_todo_item_2">Share Carnet</string>
     <string name="changelog">Changelog</string>
-    <string name="restore_recent">Restore to recent</string>
+    <string name="restore_recent">Restore to latest</string>
 </resources>
