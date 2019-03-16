@@ -19,6 +19,7 @@ import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.CacheManager;
+import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.sync.Configuration;
 
@@ -179,12 +180,18 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
     }
     @Override
     protected boolean internalOnMenuClick(MenuItem menuItem, Note note) {
+        if(menuItem.getItemId() == R.string.restore_recent){
+            RecentHelper.getInstance(getContext()).addNote(note);
+            return true;
+        }
         return false;
     }
 
     @Override
     protected void internalCreateOptionMenu(Menu menu, Note note) {
-
+        if(!RecentHelper.getInstance(getContext()).getCachedLatestNotes().contains(note)){
+            menu.add(0, R.string.restore_recent, 0, R.string.restore_recent);
+        }
     }
 
     @Override
@@ -233,7 +240,6 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
         });
         menu.getMenu().add(0, R.string.rename, 0, R.string.rename);
         menu.getMenu().add(0, R.string.delete, 0, R.string.delete);
-        internalCreateOptionMenu(menu.getMenu(), null);
         menu.show();
     }
 
