@@ -135,4 +135,5 @@
     <string name="fake_note_todo_item_1">Try Carnet</string>
     <string name="fake_note_todo_item_2">Share Carnet</string>
     <string name="changelog">Changelog</string>
+    <string name="restore_recent">Restore to recent</string>
 </resources>

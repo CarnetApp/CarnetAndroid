@@ -31,6 +31,9 @@ public class RecentHelper {
     public static final String RECENT_FOLDER_NAME = "recentdb";
     private static final int CURRENT_VERSION=1;
     private final String mPath;
+    private ArrayList<Note> mCachedLatestNotes;
+    private String mCurrentJsonStr;
+    private List<Note> mPinnedNotes;
 
     private RecentHelper(Context context, String path){
         mContext = context;
@@ -127,7 +130,8 @@ public class RecentHelper {
 
     }
 
-    private void write(String s) {
+    private synchronized void write(String s) {
+        mCurrentJsonStr = s;
         File file= new File (getRecentPath());
         FileWriter fw = null;
         if (!file.exists()) {
@@ -147,9 +151,12 @@ public class RecentHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        reloadCache();
     }
 
-    private String read(){
+    private synchronized String read(){
+        if(mCurrentJsonStr != null)
+            return mCurrentJsonStr;
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
         try {
@@ -172,7 +179,8 @@ public class RecentHelper {
                     e.printStackTrace();
                 }
         }
-        return sb.toString();
+        mCurrentJsonStr = sb.toString();
+        return mCurrentJsonStr;
     }
     private String getRecentPath() {
         return mPath;
@@ -185,21 +193,23 @@ public class RecentHelper {
             return absolute;
 
     }
-    private JSONObject noteToJsonObject(Note note) {
-        JSONObject jsonObject = new JSONObject();
 
-            try {
-                jsonObject.put("relative_path",getRelativePath(note.path, mContext));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        return jsonObject;
+    public List<Note> getCachedLatestNotes(){
+        if(mCachedLatestNotes == null)
+            reloadCache();
+        return mCachedLatestNotes;
     }
 
-    public List<Object> getLatestNotes(int limit){
+    public List<Note> getPinnedNotes(){
+        if(mPinnedNotes == null)
+            reloadCache();
+        return mPinnedNotes;
+    }
+
+    public void reloadCache(){
         CacheManager.getInstance(mContext).loadCache();
         List<Note> notes = new ArrayList<>();
-        List<Object> pin = new ArrayList<>();
+        List<Note> pin = new ArrayList<>();
 
         String rootPath = PreferenceHelper.getRootPath(mContext)+"/";
         try {
@@ -236,26 +246,16 @@ public class RecentHelper {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ArrayList<Object> toReturn = new ArrayList<>(pin);
-        for(int i = 0; i < toReturn.size(); i++){
-            Note note = CacheManager.getInstance(mContext).get(((Note)toReturn.get(i)).path);
-            if(note != null) {
-                note.isPinned = true;
-                toReturn.set(i, note);
+        ArrayList<Note> toReturn = new ArrayList<>(pin);
+        for(Note note : notes){
+            if(!toReturn.contains(note)) {
+                toReturn.add(note);
             }
         }
-        for(Note note : notes){
-            Note cached = CacheManager.getInstance(mContext).get(note.path);
-            if(cached != null)
-                note = cached;
-            if(!toReturn.contains(note))
-                toReturn.add(note);
-        }
-
-
-
-        return toReturn;
+        mPinnedNotes = pin;
+        mCachedLatestNotes = toReturn;
     }
+
 
     public JSONObject getJson() throws JSONException {
         Log.d("jsondebug", "getJson");

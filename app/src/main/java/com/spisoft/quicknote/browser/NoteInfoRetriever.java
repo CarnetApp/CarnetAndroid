@@ -9,6 +9,7 @@ import android.util.Pair;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.NoteManager;
+import com.spisoft.quicknote.databases.RecentHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -128,6 +129,7 @@ public class NoteInfoRetriever {
 
                     Note note= getNoteInfo(path, null, 100);
                     Log.d(TAG, "getNoteInfo");
+                    note.isPinned = RecentHelper.getInstance(mContext).getPinnedNotes().contains(note);
 
                     note.lastModified = file.lastModified();
                     note.file_lastmodification = file.lastModified();

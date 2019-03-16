@@ -11,12 +11,14 @@ import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
+import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.utils.SpiDebugUtils;
 import com.spisoft.sync.Configuration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,15 +67,23 @@ public class RecentNoteListFragment extends NoteListFragment implements Configur
     }
     @Override
     protected List<Object> getNotes() {
-        return  RecentHelper.getInstance(getActivity()).getLatestNotes(-1);
+        List<Note> latest = RecentHelper.getInstance(getActivity()).getCachedLatestNotes();
+        for(int i = 0; i < latest.size(); i++){
+            Note curNote = latest.get(i);
+            Note note = CacheManager.getInstance(getContext()).get(curNote.path);
+            if(note != null) {
+                note.isPinned = curNote.isPinned;
+                latest.set(i, note);
+            }
+        }
+        return  new ArrayList<Object>(latest);
     }
 
     @Override
     protected boolean internalOnMenuClick(MenuItem menuItem, Note note) {
         if(menuItem.getItemId()==R.string.remove_recent){
             RecentHelper.getInstance(getContext()).removeRecent(note);
-            mNotes = getNotes();
-            mNoteAdapter.setNotes((List<Object>) mNotes);
+            reload(null, false);
         }
         else if(menuItem.getItemId()==R.string.pin){
             RecentHelper.getInstance(getContext()).pin(note);
