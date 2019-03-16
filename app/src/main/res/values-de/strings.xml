@@ -131,4 +131,7 @@
     <string name="fake_note_6">Aufgabenlisten und URLs hinzufügen</string>
     <string name="fake_note_todo_item_1">Carnet ausprobieren</string>
     <string name="fake_note_todo_item_2">Carnet teilen</string>
+<string name="rate_ask">Bewerten Sie die App doch bitte mit 5 Sternen, wenn sie Ihnen gefällt :)</string>
+    <string name="rate">App bewerten</string>
+    <string name="changelog">Änderungsprotokoll</string>
 </resources>
