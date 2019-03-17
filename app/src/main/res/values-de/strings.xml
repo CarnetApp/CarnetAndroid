@@ -6,9 +6,9 @@
     <string name="floating">Schwebende Notiz</string>
     <string name="rename">Umbenennen</string>
     <string name="delete">Löschen</string>
-    <string name="remove_recent">Archivieren</string>
+    <string name="remove_recent">Aus \"Neuste\" entfernen</string>
     <string name="storage_preference">Hauptspeicherort</string>
-    <string name="recent">Kürzlich verwendet</string>
+    <string name="recent">Neueste</string>
     <string name="browser">Explorer</string>
     <string name="parent_folder">Übergeordneter Ordner</string>
     <string name="toast_on_minimize">Zum Maximieren anklicken</string>
