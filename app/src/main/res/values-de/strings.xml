@@ -8,7 +8,7 @@
     <string name="delete">Löschen</string>
     <string name="remove_recent">Aus \"Neuste\" entfernen</string>
     <string name="storage_preference">Hauptspeicherort</string>
-    <string name="recent">Neueste</string>
+    <string name="recent">Neuste</string>
     <string name="browser">Explorer</string>
     <string name="parent_folder">Übergeordneter Ordner</string>
     <string name="toast_on_minimize">Zum Maximieren anklicken</string>
@@ -134,4 +134,5 @@
 <string name="rate_ask">Bewerten Sie die App doch bitte mit 5 Sternen, wenn sie Ihnen gefällt :)</string>
     <string name="rate">App bewerten</string>
     <string name="changelog">Änderungsprotokoll</string>
+<string name="restore_recent">Unter \"Neuste\" wiederherstellen</string>
 </resources>
