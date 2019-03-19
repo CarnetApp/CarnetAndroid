@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -90,13 +91,19 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        MenuItem item = menu.findItem(R.string.sync);
+        final MenuItem item = menu.findItem(R.string.sync);
         item.setEnabled(!SynchroService.isSyncing);
         if(SynchroService.isSyncing){
             TypedArray a = getTheme().obtainStyledAttributes(new int[] {R.attr.SyncDisabled});
             int attributeResourceId = a.getResourceId(0, 0);
             Drawable drawable = getResources().getDrawable(attributeResourceId);
-            item.setIcon(drawable);
+            item.setIcon(attributeResourceId);
+            mLockLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    ((Animatable) item.getIcon()).start();
+                }
+            });
         } else {
             TypedArray a = getTheme().obtainStyledAttributes(new int[] {R.attr.SyncIcon});
             int attributeResourceId = a.getResourceId(0, 0);

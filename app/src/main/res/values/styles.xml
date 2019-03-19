@@ -44,7 +44,7 @@
         <item name="NoteBGPurple">#b289c0</item>
         <item name="NoteBGPink">#cf9db9</item>
         <item name="SyncIcon">@drawable/sync_black</item>
-        <item name="SyncDisabled">@drawable/sync_black_disabled</item>
+        <item name="SyncDisabled">@drawable/rotating_sync_black</item>
 
         <item name="UrlColor">#e33d78</item>
 
@@ -78,7 +78,7 @@
         <item name="AddPhotoIcon">@drawable/camera_white</item>
         <item name="DotsIcon">@drawable/threedots_white</item>
         <item name="SyncIcon">@drawable/sync_white</item>
-        <item name="SyncDisabled">@drawable/sync_white_disabled</item>
+        <item name="SyncDisabled">@drawable/rotating_sync_white</item>
 
 
         <item name="NoteBGNone">#2f3341</item>

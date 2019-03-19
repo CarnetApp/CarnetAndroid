@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="360"
+            android:toDegrees="360"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="350"
+            android:toDegrees="350"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="340"
+            android:toDegrees="340"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="330"
+            android:toDegrees="330"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="320"
+            android:toDegrees="320"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="310"
+            android:toDegrees="310"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="300"
+            android:toDegrees="300"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="290"
+            android:toDegrees="290"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="280"
+            android:toDegrees="280"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="270"
+            android:toDegrees="270"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="260"
+            android:toDegrees="260"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="250"
+            android:toDegrees="250"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="240"
+            android:toDegrees="240"
+            android:visible="true" />
+    </item>
+
+
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="230"
+            android:toDegrees="230"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="220"
+            android:toDegrees="220"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="210"
+            android:toDegrees="210"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="200"
+            android:toDegrees="200"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="190"
+            android:toDegrees="190"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="180"
+            android:toDegrees="180"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="170"
+            android:toDegrees="170"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="160"
+            android:toDegrees="160"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="150"
+            android:toDegrees="150"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="140"
+            android:toDegrees="140"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="130"
+            android:toDegrees="130"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="120"
+            android:toDegrees="120"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="110"
+            android:toDegrees="110"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="100"
+            android:toDegrees="100"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="90"
+            android:toDegrees="90"
+            android:visible="true" />
+    </item>
+
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="80"
+            android:toDegrees="80"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="70"
+            android:toDegrees="70"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="60"
+            android:toDegrees="60"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="50"
+            android:toDegrees="50"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="40"
+            android:toDegrees="40"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="30"
+            android:toDegrees="30"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="20"
+            android:toDegrees="20"
+            android:visible="true" />
+    </item>
+    <item android:duration="50">
+        <rotate xmlns:android="http://schemas.android.com/apk/res/android"
+            android:drawable="@drawable/sync_white_disabled"
+            android:fromDegrees="10"
+            android:toDegrees="10"
+            android:visible="true" />
+    </item>
+
+
+
+
+
+</animation-list>

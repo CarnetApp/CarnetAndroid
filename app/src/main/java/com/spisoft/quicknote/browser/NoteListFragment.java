@@ -279,7 +279,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     }
 
     private void refreshSyncedStatus() {
-        mProgress.setVisibility(SynchroService.isSyncing?View.VISIBLE:View.GONE);
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -288,6 +287,14 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             }
         },500);
         mSwipeLayout.setRefreshing(SynchroService.isSyncing);
+    }
+
+    public void showProgress(){
+        mProgress.setVisibility(View.VISIBLE);
+    }
+
+    public void hideProgress(){
+        mProgress.setVisibility(View.GONE);
     }
 
     public void myOnPause() {
