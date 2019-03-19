@@ -15,6 +15,7 @@ import com.spisoft.quicknote.databases.NoteManager;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -46,7 +47,14 @@ public class SearchFragment extends NoteListFragment implements BrowserAdapter.O
     }
     public void doSearch(String search){
         mNoteAdapter.setNotes(new ArrayList<Object>()); //reset
-        searchTask = new SearchAsyncTask(mNoteAdapter, mPath, getContext(), mEmptyView);
+        showProgress();
+        searchTask = new SearchAsyncTask(mNoteAdapter, mPath, getContext(), mEmptyView){
+            @Override
+            protected void onPostExecute(HashMap result) {
+                hideProgress();
+            }
+
+        };
         searchTask.execute(search);
     }
 
