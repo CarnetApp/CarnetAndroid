@@ -238,7 +238,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
                 return true;
             }
         });
-        menu.getMenu().add(0, R.string.rename, 0, R.string.rename);
+       // menu.getMenu().add(0, R.string.rename, 0, R.string.rename);
         menu.getMenu().add(0, R.string.delete, 0, R.string.delete);
         menu.show();
     }
