@@ -65,6 +65,13 @@ public class SearchFragment extends NoteListFragment implements BrowserAdapter.O
         doSearch(getArguments().getString(SEARCH));
         //mRoot.
     }
+
+    @Override
+    protected boolean canDisplayFakeNotes() {
+        return false;
+    }
+
+
     @Override
     public void onClick(View view) {
         if(view == mRoot.findViewById(R.id.add_note_button)){

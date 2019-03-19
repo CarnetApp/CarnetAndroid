@@ -216,7 +216,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             mNotes = new ArrayList();
         if(mNotes!=null) {
             hideEmptyView();
-                if(mNotes.isEmpty()) {
+                if(mNotes.isEmpty() && canDisplayFakeNotes()) {
                     mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_1), new ArrayList<String>(){{
 
                     }}, "none",5, new ArrayList<String>(), new ArrayList<String>(), null));
@@ -254,6 +254,10 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         }
         onReady();
 
+    }
+
+    protected boolean canDisplayFakeNotes() {
+        return true;
     }
 
     public void  onDestroyView(){
