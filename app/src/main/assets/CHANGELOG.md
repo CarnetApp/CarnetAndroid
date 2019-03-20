@@ -6,6 +6,8 @@ Website links available in overview
 
 Multiple languages available in editor
 
+New Media bar
+
 Custom dates
 
 Fake notes when no notes to display
