@@ -1,3 +1,30 @@
+# Version 0.14
+
+Make website links clickable in editor
+
+Website links available in overview
+
+Multiple languages available in editor
+
+Custom dates
+
+Fake notes when no notes to display
+
+Unarchive / restore to latest
+
+Rotation of sync button
+
+Loading bar when searching
+
+Langs + : German
+
+Better browser to select remote sync folder
+
+Changelog in settings
+
+Fix : unpin
+
+
 # Version 0.13
 
 Better note caching
