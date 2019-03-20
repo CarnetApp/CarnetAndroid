@@ -12,7 +12,7 @@
     <string name="browser">Explorer</string>
     <string name="parent_folder">Übergeordneter Ordner</string>
     <string name="toast_on_minimize">Zum Maximieren anklicken</string>
-    <string name="loading">Lade</string>
+    <string name="loading">Lade...</string>
     <string name="add_note">Notiz hinzufügen</string>
     <string name="format">Format</string>
     <string name="edit">Bearbeiten</string>
@@ -50,7 +50,7 @@
     <string name="error">Fehler</string>
     <string name="error_permission_storage">Aufgrund des neuen Android-Berechtigungssystems benötigen wir die Erlaubnis auf den Speicher zuzugreifen, um Notizen auf Ihrem Gerät zu speichern (diese wird zum Speichern von Texten auf Ihrem internen Speicher und auf der SD-Karte benötigt).</string>
     <string name="allow">Erlauben</string>
-    <string name="exit">Fertig</string>
+    <string name="exit">Verlassen</string>
     <string name="stop">Stopp</string>
     <string name="unable_to_rename_use">Dokument kann während der Verwendung nicht umbenannt werden</string>
     <string name="unable_to_delete_use">Ein geöffnetes Dokument kann nicht gelöscht werden</string>
@@ -87,7 +87,7 @@
     <string name="switch_to_minimize_to_dim">Wechseln Sie in den Floating-Modus (-) um die Transparenz zu aktivieren</string>
     <string name="file_operation_in_progress">Dateivorgang</string>
     <string name="remote_folder">Hauptverzeichnis</string>
-    <string name="sync_intro_text">Carnet unterstützt die Synchronisierung mit Nextcloud, vergessen Sie nicht, die Desktop-Version herunterzuladen, um Ihre Notizen auch auf dem Computer zu haben. Carnet ist auch online im Nextcloud App-Store verfügbar.</string>
+    <string name="sync_intro_text">Carnet unterstützt die Synchronisierung mit Nextcloud, vergessen Sie nicht, die Desktop-Version herunterzuladen, um Ihre Notizen auch auf dem Computer zu haben. Carnet ist auch online im Nextcloud-App-Store verfügbar.</string>
     <string name="sync_intro_nextcloud_text">Open Source, mit mehreren Anbietern</string>
     <string name="sync_intro_gdrive_text">Einfach, da die meisten bereits eine Gmail-Adresse haben, allerdings nicht Open Source</string>
     <string name="sync_select_nextcloud_text">Carnet ist mit allen Nextcloud-Anbietern kompatibel. Finden und registrieren Sie sich bei einem Anbieter (einige sind kostenlos verfügbar)</string>
