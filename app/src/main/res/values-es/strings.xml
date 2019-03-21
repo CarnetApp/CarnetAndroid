@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
     <string name="hello_world">Hola mundo!</string>
@@ -24,7 +25,7 @@
     <string name="add_folder">Añadir directorio</string>
     <string name="name">Nombre</string>
     <string name="new_folder_name">Nuevo directorio</string>
-    <string name="storage_preference_details" />
+    <string name="storage_preference_details"/>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="general_header">General</string>
     <string name="paiement_header">Financiar</string>
@@ -116,4 +117,18 @@
     <string name="dark">Oscuro</string>
     <string name="donation_ask">Esta aplicación fue creada gratis, por favor, considere hacer una donación</string>
     <string name="first_start">Primer uso, por favor espere</string>
+<string name="rate_ask">Si te gusta esta App, danos 5 estrellas :)</string>
+    <string name="rate">Califícalo</string>
+    <string name="sync">Sincronizar</string>
+    <string name="change_credentials">Cambiar contraseña</string>
+    <string name="carnet_doesnt_spy">Carnet no te espía y no contiene publicidad</string>
+    <string name="carnet_open">Carnet es libre y de código abierto</string>
+    <string name="carnet_note_taking_app">Carnet es un aplicación versátil de notas</string>
+    <string name="nextcloud_connect">Conectar con Nextcloud</string>
+    <string name="other_sync_options">Otras opciones de Sincronizar</string>
+    <string name="fake_note_4">Sincroniza con tus dispositivos</string>
+    <string name="fake_note_todo_item_1">Prueba Carnet</string>
+    <string name="fake_note_todo_item_2">Comparte Carnet</string>
+    <string name="changelog">Historial de cambios</string>
+    <string name="restore_recent">Restaurar a la última</string>
 </resources>
