@@ -124,4 +124,5 @@
     <string name="fake_note_6">Ajoutez des ToDo-Listes et des liens</string>
     <string name="fake_note_todo_item_1">Essayer Carnet</string>
     <string name="fake_note_todo_item_2">Partager Carnet</string>
-</resources>
+<string name="title_activity_account_config">Configuration du compte</string>
+    </resources>
