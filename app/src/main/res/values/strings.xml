@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
     <string name="hello_world">Hello world!</string>
@@ -24,7 +25,7 @@
     <string name="add_folder">Add folder</string>
     <string name="name">Name</string>
     <string name="new_folder_name">New folder</string>
-    <string name="storage_preference_details" />
+    <string name="storage_preference_details"/>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="general_header">General</string>
     <string name="paiement_header">Paiement</string>
@@ -46,7 +47,7 @@
     <string name="empty_message">No note found\nPlease, create a new note with + button</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="default_password"></string>
+    <string name="default_password"/>
     <string name="title_activity_help_authorize_floating_window">
         HelpAuthorizeFloatingWindowActivity
     </string>
@@ -85,7 +86,7 @@
     <string name="please_wait">Please wait</string>
     <string name="pages">Pages</string>
     <string name="new_keyword">New Keyword</string>
-    <string name="title_activity_account_config">AccountConfigActivity</string>
+    <string name="title_activity_account_config">Account Configuration</string>
     <string name="remote_folder">Remote folder</string>
     <string name="keywords">Keywords</string>
     <string name="sync_intro_title">Sync Carnet</string>
