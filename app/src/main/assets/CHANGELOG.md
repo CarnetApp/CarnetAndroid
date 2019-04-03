@@ -1,3 +1,9 @@
+# Version 0.14.1
+
+Fix data connsumption
+
+Donation to donation.carnet.live
+
 # Version 0.14
 
 Make website links clickable in editor

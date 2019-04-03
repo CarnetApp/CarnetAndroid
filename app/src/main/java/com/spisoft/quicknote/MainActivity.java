@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
     public void openDonation(View view) {
         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean(PreferenceHelper.HAS_DONATE, true).commit();
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YMHT55NSCLER6"));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://donation.carnet.live"));
         startActivity(browserIntent);
     }
 
