@@ -1,5 +1,7 @@
 package com.spisoft.quicknote.databases;
 
+import android.annotation.TargetApi;
+import android.app.IntentService;
 import android.app.job.JobInfo;
 import android.app.job.JobParameters;
 import android.app.job.JobScheduler;
@@ -9,8 +11,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.PersistableBundle;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.spisoft.quicknote.MainActivity;
@@ -22,8 +24,7 @@ import com.spisoft.sync.utils.Utils;
 import java.io.File;
 import java.util.List;
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class DBMergerService extends JobService {
+public class DBMergerService {
     static final String TAG = "DBMergerService";
     private static final int JOB_ID = 1000;
     private static final java.lang.String EXTRA_DATABASE = "extra_database";
@@ -35,8 +36,8 @@ public class DBMergerService extends JobService {
     private static Configuration.PathObserver sRecentPathObserver = new Configuration.PathObserver() {
         @Override
         public void onPathChanged(String path, List<String> modifiedPaths) {
-            Log.d(TAG, "on recent changed "+path);
-            if(path.contains("/recentdb"))
+            Log.d(TAG, "on recent changed " + path);
+            if (path.contains("/recentdb"))
                 scheduleJob(Utils.context, true, RECENT_DATABASE);
             else
                 scheduleJob(Utils.context, true, KEYWORDS_DATABASE);
@@ -46,113 +47,184 @@ public class DBMergerService extends JobService {
     private static PreferenceHelper.RootPathChangeListener sRootPathListener = new PreferenceHelper.RootPathChangeListener() {
         @Override
         public void onRootPathChangeListener(String oldPath, String newPath) {
-            Configuration.addPathObserver(NoteManager.getDontTouchFolder(Utils.context)+"/"+ RecentHelper.RECENT_FOLDER_NAME, sRecentPathObserver);
-            Configuration.addPathObserver(NoteManager.getDontTouchFolder(Utils.context)+"/"+ KeywordsHelper.KEYWORDS_FOLDER_NAME, sRecentPathObserver);
+            Configuration.addPathObserver(NoteManager.getDontTouchFolder(Utils.context) + "/" + RecentHelper.RECENT_FOLDER_NAME, sRecentPathObserver);
+            Configuration.addPathObserver(NoteManager.getDontTouchFolder(Utils.context) + "/" + KeywordsHelper.KEYWORDS_FOLDER_NAME, sRecentPathObserver);
         }
     };
-    private final Handler mHandler;
 
 
-
-    public DBMergerService() {
-        mHandler = new Handler();
-    }
-
-    @Override
-    public boolean onStartJob(JobParameters jobParameters) {
-        sIsRunning = true;
-                Log.d(TAG, "starting merging task");
-        int database = jobParameters.getExtras().getInt(EXTRA_DATABASE,ALL_DATABASES);
-        if(database == ALL_DATABASES || database == RECENT_DATABASE) {
-            File recentDBFolder = new File(NoteManager.getDontTouchFolder(DBMergerService.this) + "/" + RecentHelper.RECENT_FOLDER_NAME);
-            boolean hasChanged = false;
-            if (recentDBFolder.exists()) {
-                RecentHelper myRecentHelper = RecentHelper.getInstance(DBMergerService.this);
-                File[] dbs = recentDBFolder.listFiles();
-                if (dbs != null) {
-                    for (File db : dbs) {
-                        if (!PreferenceHelper.getUid(DBMergerService.this).equals(db.getName())) {
-                            Log.d(TAG, "merging with " + db.getName());
-
-                            if(myRecentHelper.mergeDB(db.getAbsolutePath()))
-                                hasChanged = true;
-                        }
-                    }
-                }
-            }
-            if(hasChanged)
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Utils.context.sendBroadcast(new Intent(NoteListFragment.ACTION_RELOAD));
-                }
-            });
+    public static void scheduleJob(Context context, boolean now, int database) {
+        if (!isListenerSet) {
+            Configuration.addPathObserver(NoteManager.getDontTouchFolder(context) + "/" + RecentHelper.RECENT_FOLDER_NAME, sRecentPathObserver);
+            Configuration.addPathObserver(NoteManager.getDontTouchFolder(Utils.context) + "/" + KeywordsHelper.KEYWORDS_FOLDER_NAME, sRecentPathObserver);
+            PreferenceHelper.getInstance(context).addOnRootPathChangedListener(sRootPathListener);
+            isListenerSet = true;
         }
-        if(database == ALL_DATABASES || database == KEYWORDS_DATABASE) {
-            Log.d(TAG, "merging keywords");
-            boolean hasChanged = false;
-            File recentDBFolder = new File(NoteManager.getDontTouchFolder(DBMergerService.this) + "/" + KeywordsHelper.KEYWORDS_FOLDER_NAME);
-            if (recentDBFolder.exists()) {
-                KeywordsHelper myRecentHelper = KeywordsHelper.getInstance(DBMergerService.this);
-                File[] dbs = recentDBFolder.listFiles();
-                if (dbs != null) {
-                    for (File db : dbs) {
-                        if (!PreferenceHelper.getUid(DBMergerService.this).equals(db.getName())) {
-                            Log.d(TAG, "merging with " + db.getName());
-
-                            if(myRecentHelper.mergeDB(db.getAbsolutePath()))
-                                hasChanged = true;
-                        }
-                    }
-                }
-            }
-            if(hasChanged)
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Utils.context.sendBroadcast(new Intent(MainActivity.ACTION_RELOAD_KEYWORDS));
-                }
-            });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            DBMergerJobService.scheduleJob(context, now, database);
         }
-        scheduleJob(DBMergerService.this, false, ALL_DATABASES);
-
-        return true;
+        else
+            DBMergerIntentService.scheduleJob(context, now, database);
     }
-
-    @Override
-    public boolean onStopJob(JobParameters jobParameters) {
-        sIsRunning = false;
-        return true;
-    }
-
-    public static boolean isJobScheduledOrRunning(Context context){
-        if(sIsRunning)return true;
-        JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        for(JobInfo jobInfo : jobScheduler.getAllPendingJobs()){
-            if (jobInfo.getId() == JOB_ID)
-                return true;
+    public static boolean isJobScheduledOrRunning(Context context) {
+        if (sIsRunning) return true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return DBMergerJobService.isJobScheduledOrRunning(context);
         }
         return false;
     }
-    public static void scheduleJob(Context context, boolean now, int database) {
-        if(!isListenerSet){
-            Configuration.addPathObserver(NoteManager.getDontTouchFolder(context)+"/"+ RecentHelper.RECENT_FOLDER_NAME, sRecentPathObserver);
-            Configuration.addPathObserver(NoteManager.getDontTouchFolder(Utils.context)+"/"+ KeywordsHelper.KEYWORDS_FOLDER_NAME, sRecentPathObserver);
-            PreferenceHelper.getInstance(context).addOnRootPathChangedListener(sRootPathListener);
-        }
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
-            Log.d(TAG, "scheduleJob");
-            ComponentName serviceComponent = new ComponentName(context, DBMergerService.class);
-            JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, serviceComponent);
-            builder.setMinimumLatency(now?100:5*60 * 1000); // wait at least
-            builder.setOverrideDeadline(now?1000:10*60 * 1000); // maximum delay
-            PersistableBundle bundle  =new PersistableBundle();
-            bundle.putInt(EXTRA_DATABASE, database);
-            builder.setExtras(bundle);
-            JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-            jobScheduler.cancel(JOB_ID);
-            jobScheduler.schedule(builder.build());
 
+    public static class CommonDBMerger{
+        private final Handler mHandler;
+        private final Context mContext;
+
+        public CommonDBMerger(Context context){
+            mHandler = new Handler();
+            mContext = context;
+        }
+
+        public void startMerging(int database){
+            if (database == ALL_DATABASES || database == RECENT_DATABASE) {
+                File recentDBFolder = new File(NoteManager.getDontTouchFolder(mContext) + "/" + RecentHelper.RECENT_FOLDER_NAME);
+                boolean hasChanged = false;
+                if (recentDBFolder.exists()) {
+                    RecentHelper myRecentHelper = RecentHelper.getInstance(mContext);
+                    File[] dbs = recentDBFolder.listFiles();
+                    if (dbs != null) {
+                        for (File db : dbs) {
+                            if (!PreferenceHelper.getUid(mContext).equals(db.getName())) {
+                                Log.d(TAG, "merging with " + db.getName());
+
+                                if (myRecentHelper.mergeDB(db.getAbsolutePath()))
+                                    hasChanged = true;
+                            }
+                        }
+                    }
+                }
+                if (hasChanged)
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utils.context.sendBroadcast(new Intent(NoteListFragment.ACTION_RELOAD));
+                        }
+                    });
+            }
+            if (database == ALL_DATABASES || database == KEYWORDS_DATABASE) {
+                Log.d(TAG, "merging keywords");
+                boolean hasChanged = false;
+                File recentDBFolder = new File(NoteManager.getDontTouchFolder(mContext) + "/" + KeywordsHelper.KEYWORDS_FOLDER_NAME);
+                if (recentDBFolder.exists()) {
+                    KeywordsHelper myRecentHelper = KeywordsHelper.getInstance(mContext);
+                    File[] dbs = recentDBFolder.listFiles();
+                    if (dbs != null) {
+                        for (File db : dbs) {
+                            if (!PreferenceHelper.getUid(mContext).equals(db.getName())) {
+                                Log.d(TAG, "merging with " + db.getName());
+
+                                if (myRecentHelper.mergeDB(db.getAbsolutePath()))
+                                    hasChanged = true;
+                            }
+                        }
+                    }
+                }
+                if (hasChanged)
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utils.context.sendBroadcast(new Intent(MainActivity.ACTION_RELOAD_KEYWORDS));
+                        }
+                    });
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public static class DBMergerJobService extends JobService {
+        private final CommonDBMerger mCommonDBMerger;
+
+        public DBMergerJobService() {
+            mCommonDBMerger = new CommonDBMerger(this);
+        }
+
+        @Override
+        public boolean onStartJob(JobParameters jobParameters) {
+            sIsRunning = true;
+            Log.d(TAG, "starting merging task");
+            int database = jobParameters.getExtras().getInt(EXTRA_DATABASE, ALL_DATABASES);
+            mCommonDBMerger.startMerging(database);
+            return true;
+        }
+
+        @Override
+        public boolean onStopJob(JobParameters jobParameters) {
+            sIsRunning = false;
+            return true;
+        }
+        public static boolean isJobScheduledOrRunning(Context context) {
+            if (sIsRunning) return true;
+            JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            for (JobInfo jobInfo : jobScheduler.getAllPendingJobs()) {
+                if (jobInfo.getId() == JOB_ID)
+                    return true;
+            }
+            return false;
+        }
+
+        public static void scheduleJob(Context context, boolean now, int database) {
+            if (!isListenerSet) {
+                Configuration.addPathObserver(NoteManager.getDontTouchFolder(context) + "/" + RecentHelper.RECENT_FOLDER_NAME, sRecentPathObserver);
+                Configuration.addPathObserver(NoteManager.getDontTouchFolder(Utils.context) + "/" + KeywordsHelper.KEYWORDS_FOLDER_NAME, sRecentPathObserver);
+                PreferenceHelper.getInstance(context).addOnRootPathChangedListener(sRootPathListener);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Log.d(TAG, "scheduleJob");
+                ComponentName serviceComponent = new ComponentName(context, DBMergerService.class);
+                JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, serviceComponent);
+                builder.setMinimumLatency(now ? 100 : 20 * 60 * 1000); // wait at least
+                builder.setOverrideDeadline(now ? 1000 : 50 * 60 * 1000); // maximum delay
+                PersistableBundle bundle = new PersistableBundle();
+                bundle.putInt(EXTRA_DATABASE, database);
+                builder.setExtras(bundle);
+                JobScheduler jobScheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                jobScheduler.cancel(JOB_ID);
+                jobScheduler.schedule(builder.build());
+
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public static class DBMergerIntentService extends IntentService {
+        private CommonDBMerger mCommonDBMerger;
+
+        public DBMergerIntentService(String name) {
+            super(name);
+            mCommonDBMerger = new CommonDBMerger(this);
+
+        }
+
+        @Override
+        public IBinder onBind(Intent intent) {
+            return null;
+        }
+
+        @Override
+        protected void onHandleIntent(Intent intent) {
+            sIsRunning = true;
+            Log.d(TAG, "starting merging task");
+            int database = intent.getExtras().getInt(EXTRA_DATABASE, ALL_DATABASES);
+            mCommonDBMerger.startMerging(database);
+            sIsRunning = false;
+        }
+
+
+
+        public static void scheduleJob(Context context, boolean now, int database) {
+            if(now){
+                Intent intent = new Intent(context, DBMergerIntentService.class);
+                intent.putExtra(EXTRA_DATABASE, database);
+                context.startService(intent);
+            }
         }
     }
 }

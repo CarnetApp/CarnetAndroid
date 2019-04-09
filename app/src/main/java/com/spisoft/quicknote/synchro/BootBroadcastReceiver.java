@@ -12,7 +12,6 @@ import com.spisoft.quicknote.databases.DBMergerService;
 public class BootBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        //context.startService(new Intent(context, SynchroService.class));
         DBMergerService.scheduleJob(context, true, DBMergerService.ALL_DATABASES);
     }
 }
