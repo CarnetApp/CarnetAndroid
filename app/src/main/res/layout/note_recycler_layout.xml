@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -54,14 +53,14 @@
             android:layout_height="35dip"
 
             android:background="@drawable/transparent_ripple"
-            android:src="?attr/AddFolderIcon" />
+            app:srcCompat="?attr/AddFolderIcon" />
         <ImageButton
             android:id="@+id/add_photos_button"
             android:padding="10dp"
             android:layout_width="70dip"
             android:layout_height="35dip"
             android:background="@drawable/transparent_ripple"
-            android:src="?attr/AddPhotoIcon" />
+            app:srcCompat="?attr/AddPhotoIcon" />
         <ImageButton
             android:id="@+id/add_note_button"
             android:padding="10dp"
@@ -69,7 +68,7 @@
             android:layout_height="35dip"
 
             android:background="@drawable/transparent_ripple"
-            android:src="?attr/AddNoteIcon" />
+            app:srcCompat="?attr/AddNoteIcon" />
     </LinearLayout>
     <FrameLayout
         android:id="@+id/empty_view"

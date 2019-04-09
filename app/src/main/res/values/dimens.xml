@@ -11,4 +11,5 @@
     <dimen name="big_text">22sp</dimen>
     <dimen name="medium_text">20sp</dimen>
     <dimen name="small_text">18sp</dimen>
+    <dimen name="column_size">300dp</dimen>
 </resources>
