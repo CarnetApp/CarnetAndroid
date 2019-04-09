@@ -178,7 +178,7 @@ public class DBMergerService {
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Log.d(TAG, "scheduleJob");
-                ComponentName serviceComponent = new ComponentName(context, DBMergerService.class);
+                ComponentName serviceComponent = new ComponentName(context, DBMergerJobService.class);
                 JobInfo.Builder builder = new JobInfo.Builder(JOB_ID, serviceComponent);
                 builder.setMinimumLatency(now ? 100 : 20 * 60 * 1000); // wait at least
                 builder.setOverrideDeadline(now ? 1000 : 50 * 60 * 1000); // maximum delay

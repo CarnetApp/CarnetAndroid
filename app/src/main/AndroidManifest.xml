@@ -76,7 +76,7 @@
             android:theme="@style/CarnetTheme.White" />
 
         <service
-            android:name=".databases.DBMergerService"
+            android:name=".databases.DBMergerService$DBMergerJobService"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
