@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,40 +79,48 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                              Bundle savedInstanceState){
+                             Bundle savedInstanceState){
         super.onCreateView(inflater, container, savedInstanceState);
-            if(mRoot!=null)
-                return mRoot;
-            mRoot = inflater.inflate(R.layout.note_recycler_layout, null);
-            mSwipeLayout = (SwipeRefreshLayout) mRoot.findViewById(R.id.swipe_container);
-            Field field = null;
-            try {
-                field = mSwipeLayout.getClass().getDeclaredField("mCircleView");
-                field.setAccessible(true);
-                mCircleView = (View)field.get(mSwipeLayout);
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+        if(mRoot!=null)
+            return mRoot;
+        mRoot = inflater.inflate(R.layout.note_recycler_layout, null);
+        mSwipeLayout = (SwipeRefreshLayout) mRoot.findViewById(R.id.swipe_container);
+        Field field = null;
+        try {
+            field = mSwipeLayout.getClass().getDeclaredField("mCircleView");
+            field.setAccessible(true);
+            mCircleView = (View)field.get(mSwipeLayout);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+
+        mProgress = mRoot.findViewById(R.id.list_progress);
+        mSwipeLayout.setOnRefreshListener(this);
+        mSwipeLayout.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        mRecyclerView = (RecyclerView) mRoot.findViewById(R.id.recyclerView);
+        mEmptyView = mRoot.findViewById(R.id.empty_view);
+        mEmptyViewMessage = (TextView) mRoot.findViewById(R.id.empty_message);
+        mRoot.findViewById(R.id.add_note_button).setOnClickListener(this);
+        mRoot.findViewById(R.id.add_photos_button).setOnClickListener(this);
+        mNoteAdapter = getAdapter();
+        mNoteAdapter.setOnNoteClickListener(this);
+        mGridLayout = new StaggeredGridLayoutManager( 2, StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mGridLayout);
+        mRoot.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int columnWidth = getResources().getDimensionPixelSize(R.dimen.column_size);
+                int spanCount = Math.max(1, mRoot.getWidth() / columnWidth);
+                mGridLayout.setSpanCount(spanCount);
             }
-
-
-            mProgress = mRoot.findViewById(R.id.list_progress);
-            mSwipeLayout.setOnRefreshListener(this);
-            mSwipeLayout.setColorScheme(android.R.color.holo_blue_bright,
-                    android.R.color.holo_green_light,
-                    android.R.color.holo_orange_light,
-                    android.R.color.holo_red_light);
-            mRecyclerView = (RecyclerView) mRoot.findViewById(R.id.recyclerView);
-            mEmptyView = mRoot.findViewById(R.id.empty_view);
-            mEmptyViewMessage = (TextView) mRoot.findViewById(R.id.empty_message);
-            mRoot.findViewById(R.id.add_note_button).setOnClickListener(this);
-            mRoot.findViewById(R.id.add_photos_button).setOnClickListener(this);
-            mNoteAdapter = getAdapter();
-            mNoteAdapter.setOnNoteClickListener(this);
-            mGridLayout = new StaggeredGridLayoutManager( 2, StaggeredGridLayoutManager.VERTICAL);
-            mRecyclerView.setLayoutManager(mGridLayout);
-            mRecyclerView.setAdapter(mNoteAdapter);
+        });
+        mRecyclerView.setAdapter(mNoteAdapter);
 
 
 
