@@ -3,6 +3,7 @@ package com.spisoft.quicknote;
 import android.content.Context;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.utils.Utils;
@@ -30,9 +31,25 @@ public class PreferenceHelper {
     public static final String HAS_DONATE = "has_donate";
     public static final String HAS_RATED = "has_rated";
     private static final String CURRENT_READER_VERSION = "current_reader_version";
+    private static final String SORT_REVERSED = "sort_reversed";
+    private static final String SORT_BY = "sort_by";
     private static PreferenceHelper sPreferenceHelper;
     private final Context mContext;
     private List<RootPathChangeListener> mRootPathChangeListener = new ArrayList<>();
+
+    public static boolean isSortReverse(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SORT_REVERSED, false);
+    }
+
+    public static String getSortBy(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(SORT_BY, "default");
+    }
+    public static void setSortBy(Context context, String sort) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SORT_BY, sort).apply();
+    }
+    public static void setSortReverse(Context context, boolean reversed) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(SORT_REVERSED, reversed).apply();
+    }
 
     public void addOnRootPathChangedListener(RootPathChangeListener sRootPathListener) {
         mRootPathChangeListener.add(sRootPathListener);

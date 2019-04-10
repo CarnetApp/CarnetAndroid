@@ -15,14 +15,18 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.CheckBox;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.spisoft.quicknote.FileManagerService;
 import com.spisoft.quicknote.FloatingService;
 import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.Note;
@@ -38,6 +42,7 @@ import com.spisoft.sync.synchro.SynchroService;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -61,21 +66,86 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     private SwipeRefreshLayout mSwipeLayout;
     private View mProgress;
     private View mCircleView;
+    private ViewTreeObserver.OnGlobalLayoutListener mWidthListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+            if(isDetached())
+                return;
+            int columnWidth = getResources().getDimensionPixelSize(R.dimen.column_size);
+            int spanCount = Math.max(1, mRoot.getWidth() / columnWidth);
+            if(spanCount != mGridLayout.getSpanCount())
+                mGridLayout.setSpanCount(spanCount);
+        }
+    };
 
     public void onPause(){
         super.onPause();
         myOnPause();
+        mRoot.getViewTreeObserver().removeOnGlobalLayoutListener(mWidthListener);
     }
 
     public void onResume(){
         super.onResume();
         myOnResume();
+        mRoot.getViewTreeObserver().addOnGlobalLayoutListener(mWidthListener);
+
     }
 
     @Override
     public void onCreate(Bundle saved){
         super.onCreate(saved);
+        setHasOptionsMenu(true);
+    }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        boolean reversed = PreferenceHelper.isSortReverse(getActivity());
+        String sortBy = PreferenceHelper.getSortBy(getActivity());
+
+        SubMenu sort = menu.addSubMenu("Sort");
+        sort.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        sort.add(0, R.string.sort_reversed, 0, R.string.sort_reversed).setChecked(reversed);
+        sort.add(1, R.string.sort_default, 0, R.string.sort_default).setChecked(sortBy.equals("default"));
+        sort.add(1, R.string.sort_creation_date, 0, R.string.sort_creation_date).setChecked(sortBy.equals("creation"));
+        sort.add(1, R.string.sort_modification_date, 0, R.string.sort_modification_date).setChecked(sortBy.equals("modification"));
+        sort.add(1, R.string.sort_custom_date, 0, R.string.sort_custom_date).setChecked(sortBy.equals("custom"));
+        sort.setGroupCheckable(0, true, false);
+        sort.setGroupCheckable(1, true, true);
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.string.sort_reversed:
+                PreferenceHelper.setSortReverse(getActivity(),!PreferenceHelper.isSortReverse(getActivity()));
+                getActivity().invalidateOptionsMenu();
+                reorderItems(true);
+                return true;
+            case R.string.sort_default:
+                PreferenceHelper.setSortBy(getActivity(), "default");
+                getActivity().invalidateOptionsMenu();
+                reorderItems(true);
+                return true;
+            case R.string.sort_creation_date:
+                PreferenceHelper.setSortBy(getActivity(), "creation");
+                getActivity().invalidateOptionsMenu();
+                reorderItems(true);
+                return true;
+            case R.string.sort_modification_date:
+                PreferenceHelper.setSortBy(getActivity(), "modification");
+                getActivity().invalidateOptionsMenu();
+                reorderItems(true);
+                return true;
+            case R.string.sort_custom_date:
+                PreferenceHelper.setSortBy(getActivity(), "custom");
+                getActivity().invalidateOptionsMenu();
+                reorderItems(true);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -112,14 +182,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         mNoteAdapter.setOnNoteClickListener(this);
         mGridLayout = new StaggeredGridLayoutManager( 2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mGridLayout);
-        mRoot.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                int columnWidth = getResources().getDimensionPixelSize(R.dimen.column_size);
-                int spanCount = Math.max(1, mRoot.getWidth() / columnWidth);
-                mGridLayout.setSpanCount(spanCount);
-            }
-        });
         mRecyclerView.setAdapter(mNoteAdapter);
 
 
@@ -252,8 +314,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                 else{
                     mNoteAdapter.invalidateNotesMetadata();
                 }
-
-            mNoteAdapter.setNotes(mNotes);
+            reorderItems(false);
 
             if(keepCurrentScroll) {
             } else if (scrollTo != null && mNotes.indexOf(scrollTo) > 0)
@@ -262,6 +323,23 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                 mGridLayout.scrollToPosition(0);
         }
         onReady();
+
+    }
+
+    private void reorderItems(boolean scrollTop) {
+        String sortBy = PreferenceHelper.getSortBy(getContext());
+        boolean reversed = PreferenceHelper.isSortReverse(getContext());
+        List<Object> orderedNotes = new ArrayList(mNotes);
+        if(!sortBy.equals("default"))
+            Collections.sort(orderedNotes, sortBy.equals("creation")?
+                    new SortByCreation():sortBy.equals("modification")?
+                    new SortByModification():new SortByCustom());
+        if(reversed){
+            Collections.reverse(orderedNotes);
+        }
+        mNoteAdapter.setNotes(orderedNotes);
+        if(scrollTop)
+            mGridLayout.scrollToPosition(0);
 
     }
 
@@ -466,5 +544,53 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     }
 
 
-
+    private class SortByCreation implements java.util.Comparator<Object> {
+        @Override
+        public int compare(Object o1, Object o2) {
+            if(o1 instanceof Note && o2 instanceof Note){
+                long date1 = ((Note) o1).mMetadata.creation_date;
+                if(date1 == -1)
+                    date1 = ((Note) o1).mMetadata.last_modification_date;
+                long date2 = ((Note) o2).mMetadata.creation_date;
+                if(date2 == -1)
+                    date2 = ((Note) o2).mMetadata.last_modification_date;
+                return new Long(date1).compareTo(date2);
+            }
+            return 0;
+        }
+    }
+    private class SortByModification implements java.util.Comparator<Object> {
+        @Override
+        public int compare(Object o1, Object o2) {
+            if(o1 instanceof Note && o2 instanceof Note){
+                long date1 = ((Note) o1).mMetadata.last_modification_date;
+                if(date1 == -1)
+                    date1 = ((Note) o1).mMetadata.creation_date;
+                long date2 = ((Note) o2).mMetadata.last_modification_date;
+                if(date2 == -1)
+                    date2 = ((Note) o2).mMetadata.creation_date;
+                return new Long(date1).compareTo(date2);
+            }
+            return 0;
+        }
+    }
+    private class SortByCustom implements java.util.Comparator<Object> {
+        @Override
+        public int compare(Object o1, Object o2) {
+            if(o1 instanceof Note && o2 instanceof Note) {
+                long date1 = ((Note) o1).mMetadata.custom_date;
+                if (date1 == -1)
+                    date1 = ((Note) o1).mMetadata.creation_date;
+                if (date1 == -1)
+                    date1 = ((Note) o1).mMetadata.last_modification_date;
+                long date2 = ((Note) o2).mMetadata.custom_date;
+                if (date2 == -1)
+                    date2 = ((Note) o2).mMetadata.creation_date;
+                if (date2 == -1)
+                    date2 = ((Note) o2).mMetadata.last_modification_date;
+                return new Long(date1).compareTo(date2);
+            }
+            return 0;
+        }
+    }
 }
