@@ -1,2 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="hello_world">Ahoj světe!</string>
+    <string name="action_settings">Nastavení</string>
+
+    <string name="rename">Přejmenovat</string>
+    <string name="delete">Smazat</string>
+    <string name="remove_recent">Odstranit z posledních</string>
+    <string name="storage_preference">Hlavní úložiště</string>
+    <string name="recent">Poslední</string>
+    <string name="browser">Prohlížeč</string>
+    <string name="parent_folder">Nadřazená složka</string>
+    <string name="loading">Načítání</string>
+    <string name="add_note">Přidat poznámku</string>
+    <string name="format">Formátování</string>
+    <string name="edit">Upravit</string>
+    <string name="name">Název</string>
+    <string name="new_folder_name">Nová složka</string>
+    <string name="general_header">Obecné nastavení</string>
+    <string name="new_password">Nové heslo</string>
+    <string name="old_password">Aktuální heslo</string>
+    <string name="statistics">Statistiky</string>
+    <string name="error_reading">Při čtení souboru poznámky došlo k chybě</string>
+    <string name="write_error">Při ukládání textu došlo k chybě</string>
+    <string name="paste">Vložit</string>
+    <string name="new_keyword">Nové klíčové slovo</string>
+    <string name="title_activity_account_config">Nastavení účtu</string>
+    <string name="keywords">Klíčová slova</string>
+    <string name="google_drive">Google Drive</string>
+    <string name="desktop_version">Verze pro počítač</string>
+    <string name="theme">Vzhled</string>
+    <string name="blue">Modrý</string>
+    <string name="dark">Tmavý</string>
+    <string name="carnet_doesnt_spy">Carnet vás nešpehuje a nejsou v něm žádné reklamy</string>
+    <string name="other_sync_options">Další možnosti synchronizace</string>
+    <string name="fake_note_todo_item_1">Vyzkoušet Carnet</string>
+    <string name="changelog">Seznam změn</string>
+    </resources>
