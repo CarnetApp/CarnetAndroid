@@ -125,4 +125,8 @@
     <string name="fake_note_todo_item_1">Essayer Carnet</string>
     <string name="fake_note_todo_item_2">Partager Carnet</string>
 <string name="title_activity_account_config">Configuration du compte</string>
-    </resources>
+    <string name="rate_ask">SI vous aimez cette application, notez-nous 5 étoiles :)</string>
+    <string name="rate">Noter</string>
+    <string name="changelog">Changelog</string>
+    <string name="restore_recent">Restaurer dans récent</string>
+</resources>
