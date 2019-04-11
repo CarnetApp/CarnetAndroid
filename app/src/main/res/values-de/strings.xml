@@ -2,7 +2,7 @@
 <resources><string name="hello_world">Hallo Welt!</string>
     <string name="action_settings">Einstellungen</string>
 
-    <string name="hello_blank_fragment">Hallo leeres Fragment</string>
+    <string name="hello_blank_fragment">Dies ist nur ein Beispielsatz!</string>
     <string name="floating">Schwebende Notiz</string>
     <string name="rename">Umbenennen</string>
     <string name="delete">Löschen</string>
@@ -42,7 +42,7 @@
     <string name="drawer_open">Öffne Navigationsleiste</string>
     <string name="drawer_close">Schließe Navigationsleiste</string>
     <string name="authorize">Genehmigen</string>
-    <string name="authorize_description">Carnet benötigt spezielle Berechtigung, um als Fenster angezeigt zu werden. Diese bitte durch Aktivierung von \"Über anderen Apps einblenden\" erteilen</string>
+    <string name="authorize_description">Carnet benötigt spezielle Berechtigung, um als Fenster angezeigt zu werden. Diese bitte durch Aktivierung von \"Über anderen Apps einblenden\" erteilen.</string>
     <string name="title_activity_img_picker">Bild auswählen</string>
     <string name="title_activity_settings">Einstellungen</string>
     <string name="crop">Ausschneiden</string>
