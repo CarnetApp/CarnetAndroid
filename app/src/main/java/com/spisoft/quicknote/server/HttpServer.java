@@ -311,7 +311,8 @@ public class HttpServer extends NanoHTTPD {
         FileUtils.writeToFile(extractedNotePath+"/index.html", html);
         FileUtils.writeToFile(extractedNotePath+"/metadata.json", metadata);
         //we update metadata cache
-        Note note = new Note(path);
+        File noteFile = new File(PreferenceHelper.getRootPath(mContext),path);
+        Note note = new Note(noteFile.getAbsolutePath());
         note.mMetadata = Note.Metadata.fromString(metadata);
         File f = new File(extractedNotePath, "data");
         if(f.exists()) {
@@ -326,7 +327,7 @@ public class HttpServer extends NanoHTTPD {
             txt = txt.substring(0, 100);
         note.shortText = txt;
         Response res = saveNote(path);
-        note.file_lastmodification = new File(PreferenceHelper.getRootPath(mContext),path).lastModified();
+        note.file_lastmodification = noteFile.lastModified();
         CacheManager.getInstance(mContext).addToCache(note);
         CacheManager.getInstance(mContext).writeCache();
 

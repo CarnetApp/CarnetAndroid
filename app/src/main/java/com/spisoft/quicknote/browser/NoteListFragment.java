@@ -32,6 +32,7 @@ import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
+import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.editor.BlankFragment;
@@ -248,8 +249,9 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         for(Note note : notes){
             int index;
             if((index = mNotes.indexOf(note))>=0){
-                ((Note)mNotes.get(index)).needsUpdateInfo = true;
-                mNoteAdapter.notifyItemChanged(index);
+                Note noteCache = CacheManager.getInstance(getContext()).get(note.path);
+                mNotes.set(index, noteCache);
+                mNoteAdapter.onNoteInfo(noteCache);
             }else{
                 reloadAll = true;
                 break;
@@ -310,9 +312,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                     mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_4), new ArrayList<String>(){{
                     }}, "green",-1, new ArrayList<String>(), new ArrayList<String>(), null));
 
-                }
-                else{
-                    mNoteAdapter.invalidateNotesMetadata();
                 }
             reorderItems(false);
 
@@ -401,9 +400,9 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         if(mLastSelected != null && mNotes != null){
             int index;
             if((index = mNotes.indexOf(mLastSelected))>=0){
-                ((Note)mNotes.get(index)).needsUpdateInfo = true;
-                mNoteAdapter.notifyItemChanged(index);
-                Log.d(TAG, "notifyItemChanged");
+                Note note = CacheManager.getInstance(getContext()).get(((Note)mNotes.get(index)).path);
+                mNotes.set(index, note);
+                mNoteAdapter.onNoteInfo(note);
 
             }
             else

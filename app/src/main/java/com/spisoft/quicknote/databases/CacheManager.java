@@ -52,6 +52,7 @@ public class CacheManager {
                 Note.Metadata metadata = Note.Metadata.fromJSONObject(noteJson.getJSONObject("metadata"));
                 Note note = new Note(path);
                 note.setMetaData(metadata);
+                note.needsUpdateInfo = false;
                 note.shortText = noteJson.getString("shorttext");
                 if(noteJson.has("previews")){
                     JSONArray previews = noteJson.getJSONArray("previews");

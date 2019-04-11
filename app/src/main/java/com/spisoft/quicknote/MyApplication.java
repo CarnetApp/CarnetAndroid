@@ -7,12 +7,14 @@ import android.os.AsyncTask;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.spisoft.quicknote.browser.NoteListFragment;
 import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.synchro.AccountConfigActivity;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.utils.Utils;
 import com.spisoft.sync.wrappers.WrapperFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,22 +64,35 @@ public class MyApplication extends Application implements Configuration.PathObse
     @Override
     public void onPathChanged(String path, final List<String> modifiedPaths) {
         Log.d(TAG, "onPathChanged "+path);
-        new AsyncTask<Void, Void, Void>(){
+        new AsyncTask<Void, Void, ArrayList<Note>>(){
 
             @Override
-            protected Void doInBackground(Void... voids) {
+            protected ArrayList<Note> doInBackground(Void... voids) {
                 boolean hasAddedSmt = false;
+                ArrayList<Note> notes = new ArrayList<>();
                 for (String filepath : modifiedPaths){
                     if(filepath.endsWith(".sqd")){
+                        Log.d(TAG, "onPathChanged "+filepath);
+
                         CacheManager.getInstance(MyApplication.this).loadCache();//won't load twice
                         CacheManager.getInstance(MyApplication.this).addToCache(filepath);
                         hasAddedSmt = true;
+                        notes.add(new Note(filepath));
                     }
                 }
                 if(hasAddedSmt)
                     CacheManager.getInstance(MyApplication.this).writeCache();
-                return null;
+
+                return notes;
+            }
+            @Override
+            protected void onPostExecute(ArrayList<Note> result) {
+                Intent intent = new Intent(NoteListFragment.ACTION_RELOAD);
+                intent.putExtra("notes", result);
+                sendBroadcast(intent);
+
             }
         }.execute();
+
     }
 }
