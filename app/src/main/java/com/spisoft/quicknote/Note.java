@@ -245,7 +245,7 @@ public class Note implements Serializable{
                 JSONObject urlsObj = new JSONObject();
 
                 for(String url : urls){
-                    urlsObj.put("url", new JSONObject());
+                    urlsObj.put(url, new JSONObject());
                 }
                 object.put("urls", urlsObj);
 
