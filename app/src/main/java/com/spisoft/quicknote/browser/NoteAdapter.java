@@ -457,8 +457,9 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (note.equals(viewHolder.getNote()) && note.needsUpdateInfo)
+                        if (note.equals(viewHolder.getNote()) && note.needsUpdateInfo) {
                             mNoteInfoRetriever.addNote(note.path);
+                        }
                     }
                 }, 500);
                 if (note.previews.size() > 0) {

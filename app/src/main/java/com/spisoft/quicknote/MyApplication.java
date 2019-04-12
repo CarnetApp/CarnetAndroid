@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.spisoft.quicknote.browser.NoteListFragment;
 import com.spisoft.quicknote.databases.CacheManager;
+import com.spisoft.quicknote.databases.DBMergerService;
 import com.spisoft.quicknote.synchro.AccountConfigActivity;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.utils.Utils;
@@ -52,6 +53,7 @@ public class MyApplication extends Application implements Configuration.PathObse
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        DBMergerService.setListeners(this);
     }
     private void startAccountConfigActivity(int accountId, int accountType){
         Intent intent = new Intent(MyApplication.this, AccountConfigActivity.class);

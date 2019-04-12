@@ -52,14 +52,15 @@ public class DBMergerService {
         }
     };
 
-
-    public static void scheduleJob(Context context, boolean now, int database) {
+    public static void setListeners(Context context){
         if (!isListenerSet) {
             Configuration.addPathObserver(NoteManager.getDontTouchFolder(context) + "/" + RecentHelper.RECENT_FOLDER_NAME, sRecentPathObserver);
             Configuration.addPathObserver(NoteManager.getDontTouchFolder(Utils.context) + "/" + KeywordsHelper.KEYWORDS_FOLDER_NAME, sRecentPathObserver);
             PreferenceHelper.getInstance(context).addOnRootPathChangedListener(sRootPathListener);
             isListenerSet = true;
         }
+    }
+    public static void scheduleJob(Context context, boolean now, int database) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             DBMergerJobService.scheduleJob(context, now, database);
         }
@@ -147,17 +148,23 @@ public class DBMergerService {
         }
 
         @Override
-        public boolean onStartJob(JobParameters jobParameters) {
+        public boolean onStartJob(final JobParameters jobParameters) {
             sIsRunning = true;
-            Log.d(TAG, "starting merging task");
-            int database = jobParameters.getExtras().getInt(EXTRA_DATABASE, ALL_DATABASES);
-            mCommonDBMerger.startMerging(database);
+            new Thread(){
+                public void run(){
+                    Log.d(TAG, "starting merging task");
+                    int database = jobParameters.getExtras().getInt(EXTRA_DATABASE, ALL_DATABASES);
+                    mCommonDBMerger.startMerging(database);
+                    sIsRunning = false;
+
+                }
+            }.start();
+
             return true;
         }
 
         @Override
         public boolean onStopJob(JobParameters jobParameters) {
-            sIsRunning = false;
             return true;
         }
         public static boolean isJobScheduledOrRunning(Context context) {
@@ -171,11 +178,7 @@ public class DBMergerService {
         }
 
         public static void scheduleJob(Context context, boolean now, int database) {
-            if (!isListenerSet) {
-                Configuration.addPathObserver(NoteManager.getDontTouchFolder(context) + "/" + RecentHelper.RECENT_FOLDER_NAME, sRecentPathObserver);
-                Configuration.addPathObserver(NoteManager.getDontTouchFolder(Utils.context) + "/" + KeywordsHelper.KEYWORDS_FOLDER_NAME, sRecentPathObserver);
-                PreferenceHelper.getInstance(context).addOnRootPathChangedListener(sRootPathListener);
-            }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Log.d(TAG, "scheduleJob");
                 ComponentName serviceComponent = new ComponentName(context, DBMergerJobService.class);
