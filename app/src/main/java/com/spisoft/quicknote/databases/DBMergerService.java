@@ -206,6 +206,10 @@ public class DBMergerService {
 
         }
 
+        public DBMergerIntentService(){
+            this("DBMergerIntentService");
+        }
+
         @Override
         public IBinder onBind(Intent intent) {
             return null;
