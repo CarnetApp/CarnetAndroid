@@ -28,6 +28,7 @@ import android.widget.FrameLayout;
 
 import com.spisoft.quicknote.browser.PasteDialog;
 import com.spisoft.quicknote.browser.PermissionChecker;
+import com.spisoft.quicknote.databases.CacheBuilderIntentService;
 import com.spisoft.quicknote.databases.DBMergerService;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.editor.BlankFragment;
@@ -190,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         mPermissionChecker.checkAndRequestPermission(this);
 
         // startService(new Intent(this, FloatingService.class));
+        startService(new Intent(this, CacheBuilderIntentService.class));
         lockOnStart= true;
         if(mSavedInstanceState==null) {
             Fragment fragment = MainFragment.newInstance();

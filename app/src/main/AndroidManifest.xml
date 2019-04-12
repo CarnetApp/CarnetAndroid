@@ -75,7 +75,8 @@
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service android:name="com.spisoft.sync.synchro.SynchroService" />
-
+        <service android:enabled="true" android:name=".databases.CacheBuilderIntentService" />
+        <service android:enabled="true" android:name=".databases.DBMergerService$DBMergerIntentService" />
         <activity android:name="com.spisoft.sync.account.AccountListActivity" />
         <activity android:name="com.spisoft.sync.account.AccountTypeActivity" />
         <activity

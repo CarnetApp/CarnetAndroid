@@ -54,6 +54,8 @@ public class CacheManager {
                 note.setMetaData(metadata);
                 note.needsUpdateInfo = false;
                 note.shortText = noteJson.getString("shorttext");
+                if(noteJson.has("lastmodification"))
+                    note.file_lastmodification = noteJson.getLong("lastmodification");
                 if(noteJson.has("previews")){
                     JSONArray previews = noteJson.getJSONArray("previews");
                     for (int j = 0; j<previews.length(); j++){
