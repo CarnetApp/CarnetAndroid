@@ -15,7 +15,7 @@
     <string name="edit">Upravit</string>
     <string name="name">Název</string>
     <string name="new_folder_name">Nová složka</string>
-    <string name="general_header">Obecné nastavení</string>
+    <string name="general_header">Obecná nastavení</string>
     <string name="new_password">Nové heslo</string>
     <string name="old_password">Aktuální heslo</string>
     <string name="statistics">Statistiky</string>
@@ -34,4 +34,43 @@
     <string name="other_sync_options">Další možnosti synchronizace</string>
     <string name="fake_note_todo_item_1">Vyzkoušet Carnet</string>
     <string name="changelog">Seznam změn</string>
+    <string name="report_bug_or_propose">Chyby / Funkce</string>
+    <string name="report_bug_or_propose_description">Nahlaste chybu, nebo požádejte o novou funkci</string>
+    <string name="wrong_password">Špatný PIN kód: výchozí je 0000</string>
+    <string name="checking_password">Ověřování...</string>
+    <string name="password_on_minimize">PIN kód pro otevření aplikace</string>
+    <string name="pref_set_password">Nastavit heslo</string>
+    <string name="empty_message">Nebyla nalezena žádná poznámka
+\nVytvořte prosím novou poznámku pomocí tlačítka +</string>
+    <string name="error">Chyba</string>
+    <string name="error_permission_storage">Z důvodu nového systému oprávnění v androidu vás musíme požádat o povolení oprávnění k ukládání poznámek v úložišti na vašem zařízení (toto bude použito k ukládání textů ve vnitřním úložišti i na SD kartě).</string>
+    <string name="allow">Povolit</string>
+    <string name="exit">Ukončit</string>
+    <string name="unable_to_delete_use">Otevřený dokument nelze smazat</string>
+    <string name="please_wait_update">Počkejte prosím, dokud nebudou vaše poznámky aktualizovány</string>
+    <string name="sync_cloud_preference">Synchronizovat s cloudovým úložištěm</string>
+
+    <string name="sync_intro_title">Synchronizujte Carnet</string>
+    <string name="sync_intro_text">Carnet podporuje synchronizaci s NextCloudem, nezapomeňte si stáhnout verzi pro počítač, abyste měli vaše poznámky i na vašem PC. Carnet má také online verzi, kterou naleznete v NextCloud obchodě s aplikacemi.</string>
+    <string name="skip">Přeskočit</string>
+    <string name="welcome">Vítejte!</string>
+    <string name="welcome_subtitle">Objevte Carnet</string>
+    <string name="next">Další</string>
+    <string name="say_hi">Pozdravte mě!</string>
+    <string name="say_hi_subtitle">Klepnutím na tlačítko „Pozdravte mě“ mi můžete pomoci zjistit, kolik lidí používá tuto aplikaci
+\n:)</string>
+    <string name="say_hi_subtitle2">Dozvím se tak, že aplikace byla opět stažena (nemusíte to dělat, ale pomůže mi to).</string>
+    <string name="open_for_registrations">Otevřeno pro registrace</string>
+    <string name="reliability">Spolehlivost</string>
+    <string name="updating">Aktualizace...</string>
+    <string name="first_start">První spuštění, počkejte prosím</string>
+    <string name="nextcloud_connect">Připojit se k Nextcloudu</string>
+    <string name="fake_note_1">Tyto falešné poznámky zmizí, jakmile vytvoříte novou poznámku pomocí tlačítka vpravo dole</string>
+    <string name="fake_note_2">Zvolte barvu poznámek a textu, přidejte klíčová slova</string>
+    <string name="fake_note_3">Ohodnoťte vaše poznámky nebo texty</string>
+    <string name="fake_note_4">Synchronizujte s vašimi zařízeními</string>
+    <string name="fake_note_5">Formátujte vaše poznámky a dokumenty, přidejte obrázky a nahrávejte audio</string>
+    <string name="fake_notes_warning">Falešné poznámky nelze upravovat</string>
+    <string name="fake_note_6">Přidejte seznamy úkolů a URL adresy</string>
+    <string name="fake_note_todo_item_2">Sdílet Carnet</string>
     </resources>
