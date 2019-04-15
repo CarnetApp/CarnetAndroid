@@ -79,6 +79,7 @@ public class CacheManager {
 
     public synchronized void addToCache(Note note){
         if(cache == null ) return;
+        note.needsUpdateInfo = false;
         cache.put(note.path, note);
     }
 

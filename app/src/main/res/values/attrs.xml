@@ -34,6 +34,7 @@
     <attr name="DotsIcon" format="reference" />
     <attr name="SyncIcon" format="reference"/>
     <attr name="SyncDisabled" format="reference"/>
+    <attr name="SortIcon" format="reference"/>
 
     <attr name="UrlColor" format="reference|color"/>
 

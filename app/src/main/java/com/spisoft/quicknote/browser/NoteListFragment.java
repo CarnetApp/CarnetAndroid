@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -113,6 +115,10 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         sort.add(1, R.string.sort_custom_date, 0, R.string.sort_custom_date).setChecked(sortBy.equals("custom"));
         sort.setGroupCheckable(0, true, false);
         sort.setGroupCheckable(1, true, true);
+        TypedArray a = getContext().getTheme().obtainStyledAttributes(new int[] {R.attr.SortIcon});
+        int attributeResourceId = a.getResourceId(0, 0);
+        Drawable drawable = getResources().getDrawable(attributeResourceId);
+        sort.setIcon(drawable);
 
 
     }
