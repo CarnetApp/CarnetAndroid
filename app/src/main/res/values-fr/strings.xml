@@ -68,7 +68,7 @@
     <string name="add_account">Synchroniser</string>
     <string name="later">Plus tard</string>
     <string name="remove_ad_free_confirm">Ads help me funding the app. You can disable them, but please, consider donation if you can.</string>
-    <string name="add_screenshot"/>
+    <string name="add_screenshot">Ajouter la capture d\'écran à la note \?</string>
     <string name="say_hi">Me prévenir</string>
     <string name="donation_ask">Carnet a été créée gratuitement, n\'hésitez pas à faire un don :)</string>
     <string name="donate">Faire un don</string>
@@ -129,4 +129,14 @@
     <string name="rate">Noter</string>
     <string name="changelog">Changelog</string>
     <string name="restore_recent">Restaurer dans récent</string>
+<string name="error_reading">Error pendant la lecture du fichier</string>
+    <string name="please_wait_update">Attendez SVP pendant la mise-à-jour de vos notes</string>
+    <string name="write_error">Erreur lors de la sauvegarde du texte</string>
+    <string name="title_activity_authorize">Activité d\'autorisation</string>
+    <string name="pages">Pages</string>
+    <string name="sort_reversed">Ordre inversé</string>
+    <string name="sort_default">Défaut</string>
+    <string name="sort_creation_date">Date de création</string>
+    <string name="sort_modification_date">Date de modification</string>
+    <string name="sort_custom_date">Date personnalisée</string>
 </resources>
