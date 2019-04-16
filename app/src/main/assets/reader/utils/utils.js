@@ -1,3 +1,5 @@
+"use strict";
+
 var Utils = function Utils() {};
 
 Utils.keysrt = function (key, desc) {
@@ -8,6 +10,66 @@ Utils.keysrt = function (key, desc) {
 
 Utils.caseInsensitiveSrt = function (a, b) {
   return a.toLowerCase().localeCompare(b.toLowerCase());
+};
+
+Utils.sortByDefault = function (a, b) {
+  return a.originalIndex < b.originalIndex ? -1 : 1;
+};
+
+Utils.sortByCreationDate = function (a, b) {
+  var dateA = a.metadata.last_modification_date;
+
+  if (a.metadata.creation_date != undefined && a.metadata.creation_date !== "") {
+    dateA = a.metadata.creation_date;
+  }
+
+  var dateB = b.metadata.last_modification_date;
+
+  if (b.metadata.creation_date != undefined && b.metadata.creation_date !== "") {
+    dateB = b.metadata.creation_date;
+  }
+
+  return dateA < dateB ? -1 : 1;
+};
+
+Utils.sortByCustomDate = function (a, b) {
+  var dateA = a.metadata.custom_date;
+
+  if (dateA == undefined || dateA == "") {
+    dateA = a.metadata.creation_date;
+  }
+
+  if (dateA == undefined || dateA == "") {
+    dateA = a.metadata.last_modification_date;
+  }
+
+  var dateB = b.metadata.custom_date;
+
+  if (dateB == undefined) {
+    dateB = b.metadata.creation_date;
+  }
+
+  if (dateB == undefined) {
+    dateB = b.metadata.last_modification_date;
+  }
+
+  return dateA < dateB ? -1 : 1;
+};
+
+Utils.sortByModificationDate = function (a, b) {
+  var dateA = a.metadata.creation_date;
+
+  if (a.metadata.last_modification_date != undefined) {
+    dateA = a.metadata.last_modification_date;
+  }
+
+  var dateB = b.metadata.creation_date;
+
+  if (b.metadata.last_modification_date != undefined) {
+    dateB = b.metadata.last_modification_date;
+  }
+
+  return dateA < dateB ? -1 : 1;
 };
 
 Utils.httpReg = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm;

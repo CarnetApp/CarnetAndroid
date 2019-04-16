@@ -1,3 +1,5 @@
+"use strict";
+
 var FileUtils = function FileUtils() {};
 
 FileUtils.base64MimeType = function (encoded) {

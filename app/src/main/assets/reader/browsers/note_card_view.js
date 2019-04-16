@@ -1,3 +1,5 @@
+"use strict";
+
 var NoteCardView = function NoteCardView(elem, onTodoListChange) {
   this.elem = elem;
   this.init();
@@ -21,7 +23,7 @@ NoteCardView.prototype.refreshTodoList = function () {
       label.classList.add("mdl-checkbox");
       label.classList.add("mdl-js-checkbox");
       label.classList.add("mdl-js-ripple-effect");
-      label.for = id;
+      label["for"] = id;
       var input = document.createElement("input");
       input.type = "checkbox";
       input.id = id;
@@ -115,8 +117,8 @@ NoteCardView.prototype.setNote = function (note) {
       _iteratorError = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion && _iterator.return != null) {
-          _iterator.return();
+        if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+          _iterator["return"]();
         }
       } finally {
         if (_didIteratorError) {
@@ -145,8 +147,8 @@ NoteCardView.prototype.setNote = function (note) {
       _iteratorError2 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-          _iterator2.return();
+        if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+          _iterator2["return"]();
         }
       } finally {
         if (_didIteratorError2) {
@@ -159,10 +161,8 @@ NoteCardView.prototype.setNote = function (note) {
   this.cardUrls.innerHTML = "";
 
   if (note.metadata.urls != undefined) {
-    var _arr = Object.keys(note.metadata.urls);
-
     var _loop = function _loop() {
-      var url = _arr[_i];
+      var url = _Object$keys[_i];
       div = document.createElement('div');
       div.classList.add("note-url");
       a = document.createElement('a');
@@ -184,7 +184,7 @@ NoteCardView.prototype.setNote = function (note) {
       _this.cardUrls.appendChild(div);
     };
 
-    for (var _i = 0; _i < _arr.length; _i++) {
+    for (var _i = 0, _Object$keys = Object.keys(note.metadata.urls); _i < _Object$keys.length; _i++) {
       var div;
       var a;
 

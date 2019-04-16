@@ -1,3 +1,5 @@
+"use strict";
+
 function generateUID() {
   // I generate the UID from two parts here
   // to ensure the random number provide enough bits.
@@ -208,7 +210,7 @@ TodoList.prototype.createItem = function (text, ischecked, after) {
   label.classList.add("mdl-checkbox");
   label.classList.add("mdl-js-checkbox");
   label.classList.add("mdl-js-ripple-effect");
-  label.for = id;
+  label["for"] = id;
   var input = document.createElement("input");
   input.type = "checkbox";
   input.id = id;

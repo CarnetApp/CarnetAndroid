@@ -1,3 +1,5 @@
+"use strict";
+
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var rootpath = undefined;
@@ -220,7 +222,7 @@ Writer.prototype.refreshMedia = function () {
 Writer.prototype.deleteMedia = function (name) {
   console.log("name " + name);
   var writer = this;
-  RequestBuilder.sRequestBuilder.delete("/note/open/" + this.saveID + "/media?path=" + encodeURIComponent(this.note.path) + "&media=" + encodeURIComponent(name), function (error, data) {
+  RequestBuilder.sRequestBuilder["delete"]("/note/open/" + this.saveID + "/media?path=" + encodeURIComponent(this.note.path) + "&media=" + encodeURIComponent(name), function (error, data) {
     if (!error) writer.setMediaList(data);
   });
 };
@@ -259,8 +261,8 @@ Writer.prototype.setDoNotEdit = function (b) {
     _iteratorError = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion && _iterator.return != null) {
-        _iterator.return();
+      if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+        _iterator["return"]();
       }
     } finally {
       if (_didIteratorError) {
@@ -402,8 +404,8 @@ Writer.prototype.fillWriter = function (extractedHTML) {
     _iteratorError2 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-        _iterator2.return();
+      if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+        _iterator2["return"]();
       }
     } finally {
       if (_didIteratorError2) {
@@ -784,7 +786,7 @@ Writer.prototype.init = function () {
   };
 
   document.getElementById("add-recording-button").onclick = function () {
-    writer.recorder.new();
+    writer.recorder["new"]();
     writer.recorderDialog.showModal();
   };
 
@@ -795,7 +797,7 @@ Writer.prototype.init = function () {
     if (date == undefined) date = writer.note.metadata.creation_date;
     if (date == undefined) date = new Date().now();
     var picker = new MaterialDatetimePicker({
-      default: moment(date)
+      "default": moment(date)
     }).on('submit', function (val) {
       writer.note.metadata.custom_date = val.unix() * 1000;
       writer.hasTextChanged = true;
@@ -1218,8 +1220,8 @@ RenameNoteTask.prototype.run = function (callback) {
     _iteratorError3 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-        _iterator3.return();
+      if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+        _iterator3["return"]();
       }
     } finally {
       if (_didIteratorError3) {
@@ -1323,8 +1325,8 @@ SaveNoteTask.prototype.trySave = function (onEnd, trial) {
     _iteratorError4 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
-        _iterator4.return();
+      if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
+        _iterator4["return"]();
       }
     } finally {
       if (_didIteratorError4) {
@@ -1333,8 +1335,8 @@ SaveNoteTask.prototype.trySave = function (onEnd, trial) {
     }
   }
 
-  for (var _i = 0; _i < currentUrls.length; _i++) {
-    var url = currentUrls[_i];
+  for (var _i = 0, _currentUrls = currentUrls; _i < _currentUrls.length; _i++) {
+    var url = _currentUrls[_i];
     if (urls.indexOf(url) < 0) delete this.writer.note.metadata.urls[url];
   }
 
@@ -1434,8 +1436,8 @@ $(document).ready(function () {
         _iteratorError5 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
-            _iterator5.return();
+          if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+            _iterator5["return"]();
           }
         } finally {
           if (_didIteratorError5) {

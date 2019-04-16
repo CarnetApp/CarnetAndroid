@@ -1,3 +1,5 @@
+"use strict";
+
 var NextcloudStore = function NextcloudStore() {};
 
 NextcloudStore.prototype.get = function (key) {

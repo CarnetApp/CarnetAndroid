@@ -1,3 +1,5 @@
+"use strict";
+
 var FileBrowser = function FileBrowser(path) {
   this.path = path;
 };
@@ -11,8 +13,8 @@ FileBrowser.prototype.createFolder = function (name, callback) {
 FileBrowser.prototype.list = function (callback) {
   if (this.path == "recentdb://") {
     console.log("getting recent");
-    var db = new RecentDBManager();
-    db.getFlatenDB(function (err, flaten, pin) {
+    var db = RecentDBManager.getInstance();
+    db.getFlatenDB(function (err, flaten, pin, metadata) {
       console.log(JSON.stringify(flaten));
       var files = [];
       var _iteratorNormalCompletion = true;
@@ -33,8 +35,8 @@ FileBrowser.prototype.list = function (callback) {
         _iteratorError = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion && _iterator.return != null) {
-            _iterator.return();
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
           }
         } finally {
           if (_didIteratorError) {
@@ -61,8 +63,8 @@ FileBrowser.prototype.list = function (callback) {
         _iteratorError2 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-            _iterator2.return();
+          if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+            _iterator2["return"]();
           }
         } finally {
           if (_didIteratorError2) {
@@ -71,7 +73,7 @@ FileBrowser.prototype.list = function (callback) {
         }
       }
 
-      callback(files, true);
+      callback(files, true, metadata);
     });
   } else if (this.path.startsWith("keyword://")) {
     console.log("getting keyword");
@@ -98,8 +100,8 @@ FileBrowser.prototype.list = function (callback) {
         _iteratorError3 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-            _iterator3.return();
+          if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+            _iterator3["return"]();
           }
         } finally {
           if (_didIteratorError3) {
@@ -145,8 +147,8 @@ FileBrowser.prototype.list = function (callback) {
         _iteratorError4 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
-            _iterator4.return();
+          if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
+            _iterator4["return"]();
           }
         } finally {
           if (_didIteratorError4) {

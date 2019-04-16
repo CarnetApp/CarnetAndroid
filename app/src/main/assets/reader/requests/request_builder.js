@@ -1,3 +1,5 @@
+"use strict";
+
 var RequestBuilder = function RequestBuilder() {
   var api_url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "./";
   if (!api_url.endsWith("/")) api_url += "/";
@@ -23,7 +25,7 @@ RequestBuilder.prototype.get = function (path, callback) {
   });
 };
 
-RequestBuilder.prototype.delete = function (path, callback) {
+RequestBuilder.prototype["delete"] = function (path, callback) {
   path = this.cleanPath(path);
   $.ajax({
     url: this.api_url + path,

@@ -1,3 +1,5 @@
+"use strict";
+
 var KeywordsDBManager = function KeywordsDBManager(path) {};
 
 KeywordsDBManager.prototype.getFullDB = function (callback) {
@@ -42,7 +44,10 @@ KeywordsDBManager.prototype.getFlatenDB = function (callback) {
           if (keyword == undefined) {
             for (var key in flaten) {
               var indexBis = flaten[key].indexOf(item.path);
-              if (indexBis >= -1) flaten[key].splice(indexBis, 1);
+
+              if (indexBis >= 0) {
+                flaten[key].splice(indexBis, 1);
+              }
             }
           }
         } else if (item.action == "move") {
@@ -58,8 +63,8 @@ KeywordsDBManager.prototype.getFlatenDB = function (callback) {
       _iteratorError = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion && _iterator.return != null) {
-          _iterator.return();
+        if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+          _iterator["return"]();
         }
       } finally {
         if (_didIteratorError) {
@@ -152,8 +157,8 @@ KeywordsDBManager.prototype.mergeDB = function (path, callback) {
               _iteratorError3 = err;
             } finally {
               try {
-                if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-                  _iterator3.return();
+                if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+                  _iterator3["return"]();
                 }
               } finally {
                 if (_didIteratorError3) {
@@ -172,8 +177,8 @@ KeywordsDBManager.prototype.mergeDB = function (path, callback) {
           _iteratorError2 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-              _iterator2.return();
+            if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+              _iterator2["return"]();
             }
           } finally {
             if (_didIteratorError2) {

@@ -1,3 +1,5 @@
+"use strict";
+
 var FileOpener = function FileOpener() {};
 
 FileOpener.selectFile = function (callback) {

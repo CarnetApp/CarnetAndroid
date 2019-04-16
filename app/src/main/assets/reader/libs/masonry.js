@@ -1,3 +1,5 @@
+"use strict";
+
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /*!
@@ -59,7 +61,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   return n(e || t.jQuery), i;
 }), function (t, e) {
   "function" == typeof define && define.amd ? define("ev-emitter/ev-emitter", e) : "object" == (typeof module === "undefined" ? "undefined" : _typeof(module)) && module.exports ? module.exports = e() : t.EvEmitter = e();
-}("undefined" != typeof window ? window : this, function () {
+}("undefined" != typeof window ? window : void 0, function () {
   function t() {}
 
   var e = t.prototype;

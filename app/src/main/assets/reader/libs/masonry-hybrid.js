@@ -117,7 +117,7 @@ MasonryHybrid.prototype = {
       handles: "se",
       start: function start() {
         $(this).find(".screen-size").length <= 0 ? (this.screenSize = $("<span>", {
-          class: "screen-size"
+          "class": "screen-size"
         }), $(this).append(this.screenSize)) : this.screenSize = $(this).find(".screen-size");
       },
       resize: function resize(a, c) {

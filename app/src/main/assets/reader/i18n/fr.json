@@ -15,6 +15,7 @@
     "note_list_empty": "Aucune note à afficher, créez une nouvelle note !",
     "pin": "Attacher",
     "archive": "Archiver",
+    "unarchive": "Désarchiver",
     "delete": "Supprimer",
     "ok": "OK",
     "rename": "Renommer",

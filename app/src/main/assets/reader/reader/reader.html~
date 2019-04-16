@@ -9,9 +9,8 @@
 
 	<script src="<!ROOTPATH>libs/jquery.min.js"></script>
 	<script src="<!ROOTPATH>libs/polyfill.js"></script>
-	<script src="<!ROOTPATH>libs/dialog-polyfill.js"></script>
 	<link rel="stylesheet" href="<!ROOTPATH>libs/polyfill.css">
-	<link rel="stylesheet" href="<!ROOTPATH>libs/dialog-polyfill.css">
+
 	<script>
 		var rootpath = "<!ROOTPATH>";
 		var tmppath = "tmp/";

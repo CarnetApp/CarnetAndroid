@@ -1,3 +1,5 @@
+"use strict";
+
 var header = document.getElementById("header");
 header.parentNode.removeChild(header);
 document.getElementById("content-wrapper").style.paddingTop = "0px";

@@ -1,3 +1,5 @@
+"use strict";
+
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /*! jQuery Mobile 1.4.5 | Git HEADhash: 68e55e7 <> 2014-10-31T17:33:30Z | (c) 2010, 2014 jQuery Foundation, Inc. | jquery.org/license */
@@ -5,7 +7,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   "function" == typeof define && define.amd ? define(["jquery"], function (d) {
     return c(d, a, b), d.mobile;
   }) : c(a.jQuery, a, b);
-}(this, document, function (a, b, c) {
+}(void 0, document, function (a, b, c) {
   !function (a) {
     a.mobile = {};
   }(a), function (a, b) {

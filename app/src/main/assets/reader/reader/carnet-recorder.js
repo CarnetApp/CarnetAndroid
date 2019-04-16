@@ -1,3 +1,5 @@
+"use strict";
+
 var CarnetRecorder = function CarnetRecorder() {
   this.init();
 };
@@ -220,7 +222,7 @@ CarnetRecorder.prototype.setAudioUrl = function (url, name) {
   this.refreshButtons();
 };
 
-CarnetRecorder.prototype.new = function () {
+CarnetRecorder.prototype["new"] = function () {
   document.getElementById("waveform").style.display = "none";
   document.getElementById("analyser").style.display = "block";
   this.reset();

@@ -1,3 +1,5 @@
+"use strict";
+
 {
   console.log("hidden");
   var right2 = document.getElementById("right-bar");

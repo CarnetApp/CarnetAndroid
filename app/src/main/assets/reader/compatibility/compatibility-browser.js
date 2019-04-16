@@ -21,8 +21,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 var BrowserCompatibility =
 /*#__PURE__*/
 function (_Compatibility) {
-  "use strict";
-
   _inherits(BrowserCompatibility, _Compatibility);
 
   function BrowserCompatibility() {
@@ -113,7 +111,7 @@ function (_Compatibility) {
           }
         };
 
-        var SettingsHelper = require("./settings/settings_helper").SettingsHelper;
+        var SettingsHelper = require("./server/settings_helper").SettingsHelper;
 
         var settingsHelper = new SettingsHelper();
 

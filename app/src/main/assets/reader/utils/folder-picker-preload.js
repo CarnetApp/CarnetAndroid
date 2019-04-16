@@ -1,3 +1,5 @@
+"use strict";
+
 var _require = require('electron'),
     ipcRenderer = _require.ipcRenderer;
 

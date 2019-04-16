@@ -1,3 +1,5 @@
+"use strict";
+
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -9,8 +11,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Compatibility =
 /*#__PURE__*/
 function () {
-  "use strict";
-
   function Compatibility() {
     _classCallCheck(this, Compatibility);
 
@@ -46,8 +46,8 @@ function () {
       var langs = ["en", "fr", "de"];
       var toLoad = {};
 
-      for (var _i = 0; _i < langs.length; _i++) {
-        var lang = langs[_i];
+      for (var _i = 0, _langs = langs; _i < _langs.length; _i++) {
+        var lang = _langs[_i];
         toLoad[lang] = (!this.isElectron ? RequestBuilder.sRequestBuilder.api_url : "/") + 'settings/lang/json?lang=' + lang;
       }
 
@@ -58,10 +58,8 @@ function () {
         var i = 0;
         var total = {};
 
-        var _arr = Object.keys(toLoad);
-
         var _loop = function _loop() {
-          var key = _arr[_i2];
+          var key = _Object$keys[_i2];
           RequestBuilder.sRequestBuilder.get(toLoad[key], function (error, data) {
             i++;
             total[key] = data;
@@ -72,7 +70,7 @@ function () {
           });
         };
 
-        for (var _i2 = 0; _i2 < _arr.length; _i2++) {
+        for (var _i2 = 0, _Object$keys = Object.keys(toLoad); _i2 < _Object$keys.length; _i2++) {
           _loop();
         }
       }
