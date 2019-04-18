@@ -113,14 +113,14 @@ public class HttpServer extends NanoHTTPD {
                             return openNote(parms.get("path").get(0));
                         case "keywordsdb":
                             return getKeywordDB();
-                        case "recentdb":
+                      /*  case "recentdb":
                             try {
                                 RecentHelper.getInstance(mContext).getJson().toString();
                                 return NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/json",new ByteArrayInputStream(RecentHelper.getInstance(mContext).getJson().toString().getBytes()));
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                            }
+                            }*/
                         case "settings/editor_css":
                             String theme = PreferenceManager.getDefaultSharedPreferences(mContext).getString("theme","carnet");
                             String metadata = FileUtils.readFile(mContext.getFilesDir().getAbsolutePath() +"/reader/css/"+theme+"/metadata.json");
