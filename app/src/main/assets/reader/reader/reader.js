@@ -289,7 +289,12 @@ Writer.prototype.extractNote = function () {
     console.log(data);
     writer.saveID = data.id;
     writer.fillWriter(data.html);
-    if (data.metadata == null) writer.note.metadata = new NoteMetadata();else writer.note.metadata = data.metadata;
+
+    if (data.metadata == null) {
+      writer.note.is_not_created = true;
+      writer.note.metadata = new NoteMetadata();
+    } else writer.note.metadata = data.metadata;
+
     writer.manager = new TodoListManager(document.getElementById("text"));
     writer.oDoc.addEventListener('remove-todolist', function (e) {
       e.previous.innerHTML += "<br />" + e.next.innerHTML;
@@ -317,21 +322,28 @@ Writer.prototype.extractNote = function () {
   });
 };
 
-var saveTextIfChanged = function saveTextIfChanged() {
+var saveTextIfChanged = function saveTextIfChanged(onSaved) {
   console.log("has text changed ? " + writer.hasTextChanged);
-  if (writer.hasTextChanged) writer.seriesTaskExecutor.addTask(writer.saveNoteTask, function () {
-    console.log("exitOnSaved " + writer.exitOnSaved);
 
-    if (writer.exitOnSaved) {
-      writer.exitOnSaved = false;
-      writer.askToExit();
-    }
-  });else if (writer.exitOnSaved) {
+  if (writer.hasTextChanged) {
+    writer.seriesTaskExecutor.addTask(writer.saveNoteTask, function () {
+      console.log("exitOnSaved " + writer.exitOnSaved);
+      writer.note.is_not_created = false;
+
+      if (writer.exitOnSaved) {
+        writer.exitOnSaved = false;
+        writer.askToExit();
+      }
+
+      if (onSaved != undefined) onSaved();
+    });
+  } else if (writer.exitOnSaved) {
     /*    writer.exitOnSaved = false
         writer.askToExit()*/
   } else {
     writer.setNextSaveTask();
   }
+
   writer.hasTextChanged = false;
 };
 
@@ -561,7 +573,17 @@ Writer.prototype.init = function () {
   document.execCommand('styleWithCSS', false, true);
 
   document.getElementById("input_file").onchange = function () {
-    writer.sendFiles(this.files);
+    var input = this;
+
+    if (writer.note.is_not_created) {
+      writer.hasTextChanged = true; //first we need to create it
+
+      saveTextIfChanged(function () {
+        writer.sendFiles(input.files);
+      });
+    } else {
+      writer.sendFiles(this.files);
+    }
   };
 
   this.statsDialog = this.elem.querySelector('#statsdialog');
