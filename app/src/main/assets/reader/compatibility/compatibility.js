@@ -43,7 +43,7 @@ function () {
   }, {
     key: "loadLang",
     value: function loadLang(callback) {
-      var langs = ["en", "fr", "de"];
+      var langs = ["en", "fr", "de", "ru", "nl", "cs", "sk"];
       var toLoad = {};
 
       for (var _i = 0, _langs = langs; _i < _langs.length; _i++) {

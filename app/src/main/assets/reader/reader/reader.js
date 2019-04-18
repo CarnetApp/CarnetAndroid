@@ -319,11 +319,24 @@ Writer.prototype.extractNote = function () {
 
 var saveTextIfChanged = function saveTextIfChanged() {
   console.log("has text changed ? " + writer.hasTextChanged);
-  if (writer.hasTextChanged) writer.seriesTaskExecutor.addTask(writer.saveNoteTask);else if (writer.exitOnSaved) {
-    writer.exitOnSaved = false;
-    writer.askToExit();
+  if (writer.hasTextChanged) writer.seriesTaskExecutor.addTask(writer.saveNoteTask, function () {
+    console.log("exitOnSaved " + writer.exitOnSaved);
+
+    if (writer.exitOnSaved) {
+      writer.exitOnSaved = false;
+      writer.askToExit();
+    }
+  });else if (writer.exitOnSaved) {
+    /*    writer.exitOnSaved = false
+        writer.askToExit()*/
+  } else {
+    writer.setNextSaveTask();
   }
   writer.hasTextChanged = false;
+};
+
+Writer.prototype.setNextSaveTask = function () {
+  setTimeout(saveTextIfChanged, 4000);
 };
 
 Writer.prototype.createEditableZone = function () {
@@ -430,7 +443,7 @@ Writer.prototype.fillWriter = function (extractedHTML) {
   this.oDoc.addEventListener("input", function () {
     writer.hasTextChanged = true;
   }, false);
-  this.saveInterval = setInterval(saveTextIfChanged, 2000);
+  this.saveInterval = setTimeout(saveTextIfChanged, 4000);
   this.sDefTxt = this.oDoc.innerHTML;
   /*simple initialization*/
 
@@ -854,6 +867,11 @@ Writer.prototype.askToExit = function () {
 
   if (this.seriesTaskExecutor.isExecuting || this.hasTextChanged) {
     this.exitOnSaved = true;
+
+    if (this.hasTextChanged) {
+      saveTextIfChanged();
+    }
+
     return false;
   } else {
     this.closeFullscreenMediaToolbar();
@@ -1262,12 +1280,14 @@ RenameNoteTask.prototype.run = function (callback) {
 
 var SeriesTaskExecutor = function SeriesTaskExecutor() {
   this.task = [];
+  this.callbacks = {};
   this.isExecuting = false;
 };
 
-SeriesTaskExecutor.prototype.addTask = function (task) {
+SeriesTaskExecutor.prototype.addTask = function (task, onEnd) {
   this.task.push(task);
-  console.log("push " + this.isExecuting);
+  this.callbacks[task] = onEnd;
+  console.log("adding en end " + onEnd);
 
   if (!this.isExecuting) {
     this.execNext();
@@ -1278,15 +1298,18 @@ SeriesTaskExecutor.prototype.execNext = function () {
   this.isExecuting = true;
   console.log("exec next ");
   if (this.task == undefined) this.task = [];
-
-  if (this.task.length == 0) {
-    this.isExecuting = false;
-    return;
-  }
-
   var executor = this;
-  this.task.shift().run(function () {
-    executor.execNext();
+  var task = this.task.shift();
+  task.run(function () {
+    executor.isExecuting = executor.task.length > 0;
+
+    if (executor.callbacks[task] != undefined) {
+      executor.callbacks[task]();
+      delete executor.callbacks[task];
+      console.log("on end");
+    }
+
+    if (executor.task.length > 0) executor.execNext();
   });
   console.log("this.task length " + this.task.length);
 };
@@ -1371,7 +1394,10 @@ SaveNoteTask.prototype.trySave = function (onEnd, trial) {
         writer.setDoNotEdit(true);
         onEnd();
       }
-    } else onEnd();
+    } else {
+      onEnd();
+      task.writer.setNextSaveTask();
+    }
   });
 };
 

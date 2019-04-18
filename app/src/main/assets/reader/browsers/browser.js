@@ -591,7 +591,7 @@ function list(pathToList, discret) {
         notes.push(noteTestTxt);
       }
 
-      sortBy(lastSortBy, lastReversed);
+      sortBy(uiSettings['sort_by'], uiSettings['reversed']);
 
       if (discret) {
         document.getElementById("grid-container").scrollTop = scroll;
@@ -602,7 +602,7 @@ function list(pathToList, discret) {
     if (!endOfSearch) {
       refreshTimeout = setTimeout(function () {
         list(pathToList, files.length > 0);
-      }, 4000);
+      }, 1000);
     } else {
       refreshTimeout = setTimeout(function () {
         list(pathToList, true);
@@ -934,17 +934,43 @@ console.log = function (m) {
   if (isDebug) console.oldlog(m);
 };
 
-var lastSortBy = "default";
-var lastReversed = false;
+var uiSettings = {};
+
+function setDefaultSettings(key, value) {
+  if (uiSettings[key] == undefined) uiSettings[key] = value;
+}
+
 compatibility.loadLang(function () {
   $('body').i18n();
-  list(initPath);
+  RequestBuilder.sRequestBuilder.get("/settings/browser", function (error, data) {
+    if (data != undefined && data != "") {
+      data = JSON.parse(data);
+      uiSettings = data; //set default settings
+    }
+
+    setDefaultSettings('sort_by', 'default');
+    setDefaultSettings('reversed', false);
+    $("input[name='sort-by'][value='" + uiSettings['sort_by'] + "']").parent().addClass("is-checked");
+    $("input[name='sort-by'][value='" + uiSettings['sort_by'] + "']").attr('checked', 'checked');
+    document.getElementById("reversed-order").checked = uiSettings['reversed'];
+
+    if (uiSettings['reversed']) {
+      document.getElementById("reversed-order").parentNode.classList.add("is-checked");
+    }
+
+    list(initPath);
+  });
 });
 $.i18n().locale = navigator.language;
 $(".sort-item").click(function () {
   var radioValue = $("input[name='sort-by']:checked").val();
 
   if (radioValue) {
+    uiSettings['sort_by'] = radioValue;
+    uiSettings['reversed'] = document.getElementById("reversed-order").checked;
     sortBy(radioValue, document.getElementById("reversed-order").checked);
+    RequestBuilder.sRequestBuilder.post("/settings/browser", {
+      jsonSettings: JSON.stringify(uiSettings)
+    }, function (error, data) {});
   }
 });
