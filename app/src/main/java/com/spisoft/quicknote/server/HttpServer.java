@@ -314,32 +314,46 @@ public class HttpServer extends NanoHTTPD {
         File noteFile = new File(PreferenceHelper.getRootPath(mContext),path);
         Note note = new Note(noteFile.getAbsolutePath());
         note.mMetadata = Note.Metadata.fromString(metadata);
-        File f = new File(extractedNotePath, "data");
-        if(f.exists()) {
-            for (File c : f.listFiles()) {
-                if (c.getName().startsWith("preview_")) {
-                    note.previews.add(c.getName());
-                }
-            }
-        }
         String txt = Jsoup.parse(html).text();
         if(txt.length()>100)
             txt = txt.substring(0, 100);
         note.shortText = txt;
-        Response res = saveNote(path);
-        note.file_lastmodification = noteFile.lastModified();
-        CacheManager.getInstance(mContext).addToCache(note);
-        CacheManager.getInstance(mContext).writeCache();
+        Response res = saveNote(note);
+
 
         return res;
     }
 
+    private Response saveNote(String relativePath) {
+        File noteFile = new File(PreferenceHelper.getRootPath(mContext),relativePath);
+        Note note = CacheManager.getInstance(mContext).get(noteFile.getAbsolutePath());
+        if(note == null){
+            note = new Note(noteFile.getAbsolutePath());
+        }
+        return saveNote(note);
+    }
 
-    private Response saveNote(String path) {
-        path = new File(PreferenceHelper.getRootPath(mContext),path).getAbsolutePath();
+    private Response saveNote(Note note) {
         List <String> except = new ArrayList<>();
         except.add(extractedNotePath+"/reader.html");
-        ZipUtils.zipFolder(new File(extractedNotePath), path,except);
+        ZipUtils.zipFolder(new File(extractedNotePath), note.path,except);
+        File noteFile = new File(PreferenceHelper.getRootPath(mContext),note.path);
+        File f = new File(extractedNotePath, "data");
+        note.previews.clear();
+        if(f.exists()) {
+            if(!f.isDirectory())
+                f.delete();
+            else {
+                for (File c : f.listFiles()) {
+                    if (c.getName().startsWith("preview_")) {
+                        note.previews.add("data/"+c.getName());
+                    }
+                }
+            }
+        }
+        note.file_lastmodification = noteFile.lastModified();
+        CacheManager.getInstance(mContext).addToCache(note);
+        CacheManager.getInstance(mContext).writeCache();
         return NanoHTTPD.newFixedLengthResponse("Saved !");
     }
 
