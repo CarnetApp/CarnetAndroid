@@ -1,3 +1,19 @@
+# Version 0.15.0
+
+Sort options
+
+Faster launch
+
+Adapted to larger screen
+
+Better use of cache (faster)
+
+Faster launch
+
+Better save process
+
+Languages: Russian (Alex Sev), Czech (Leschek), Dutch (Heimen Stoffels), Slovak (Ivan Pleva), Korean (devfreedom)
+
 # Version 0.14.1
 
 Fix data connsumption
