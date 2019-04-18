@@ -114,7 +114,7 @@
     <string name="blue">Blau</string>
     <string name="dark">Dunkel</string>
     <string name="donation_ask">Diese Anwendung wurde kostenlos erstellt, bitte denken Sie über eine Spende nach</string>
-    <string name="first_start">Erster Verwendung, bitte warten</string>
+    <string name="first_start">Erster Start, bitte warten</string>
     <string name="sync">Synchronisieren</string>
     <string name="change_credentials">Anmeldeinformationen ändern</string>
     <string name="carnet_doesnt_spy">Carnet spioniere Sie nicht aus und enthält keine Werbung</string>
