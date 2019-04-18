@@ -428,7 +428,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         except.add(mRootPath + "/tmp/reader.html");
         FileUtils.deleteRecursive(dir, except);
         mServer2.setCurrentNotePath(RecentHelper.getRelativePath(mNote.path, getContext()));
-        mWebView.loadUrl("javascript:loadPath('" + Uri.encode(RecentHelper.getRelativePath(mNote.path, getContext())) + "')");
+        mWebView.loadUrl("javascript:loadPath('" + StringEscapeUtils.escapeEcmaScript(RecentHelper.getRelativePath(mNote.path, getContext())) + "')");
 
     }
 
