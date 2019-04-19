@@ -8,8 +8,8 @@
     <string name="delete">Удалить</string>
     <string name="remove_recent">Удалить из последнего</string>
     <string name="storage_preference">Главное хранилище</string>
-    <string name="recent">Последнее</string>
-    <string name="browser">Просмотр</string>
+    <string name="recent">Последние</string>
+    <string name="browser">СмотретьВсе</string>
     <string name="parent_folder">На уровень выше</string>
     <string name="title_activity_img_picker">ВыборИзображения</string>
     <string name="toast_on_minimize">Нажми чтобы увеличить</string>
@@ -35,7 +35,7 @@
     <string name="delete_confirm">Вы уверены, что хотите это удалить \?</string>
     <string name="crop">Обрезать</string>
     <string name="wrong_password">Не верный пин-код: по-умолчанию 0000</string>
-    <string name="checking_password">Проверка…</string>
+    <string name="checking_password">Проверка...</string>
     <string name="password_on_minimize">Пин-код при сворачивании</string>
     <string name="pref_set_password">Установить пароль</string>
     <string name="new_password">Новый пароль</string>
@@ -81,7 +81,7 @@
     <string name="please_wait">Пожалуйста подождите</string>
     <string name="pages">Страницы</string>
     <string name="new_keyword">Новое КлючевоеСлово</string>
-    <string name="title_activity_account_config">Настройки Пользователя</string>
+    <string name="title_activity_account_config">Настройки аккаунта</string>
     <string name="remote_folder">Облачная папка</string>
     <string name="keywords">КлючевыеСлова</string>
     <string name="sync_intro_title">Синхронизация Carnet</string>
@@ -102,7 +102,7 @@
 \n:)</string>
     <string name="say_hi_subtitle2">Я пойму, что приложение было загружено еще раз (совсем не обязательно, но полезно).</string>
     <string name="not_available_on_fdroid">Недоступно на fdroid</string>
-    <string name="desktop_version">Десктопная Версия</string>
+    <string name="desktop_version">Версия для Компьютера</string>
     <string name="sync_intro_text_carnet_instance">Carnet может автоматически создавать резервные копии ваших заметок в Интернете. 
 \nВыберите провайдера Carnet, чтобы иметь возможность редактировать их в своем браузере, как на своем мобильном телефоне, так и на компьютере</string>
     <string name="doesnt_accept_new_users">Не принимает новых пользователей</string>
@@ -110,8 +110,8 @@
     <string name="reliability">Надежность</string>
     <string name="updating">Обновление…</string>
     <string name="theme">Тема</string>
-    <string name="blue">Синий</string>
-    <string name="dark">Тёмный</string>
+    <string name="blue">Синяя</string>
+    <string name="dark">Тёмная</string>
     <string name="donation_ask">Это приложение было создано бесплатно, пожалуйста, рассмотрите возможность сделать пожертвование</string>
     <string name="rate_ask">Пожалуйста, если вам нравится это приложение, поставьте нам 5 звезд :)</string>
     <string name="rate">Оцените</string>
@@ -124,7 +124,7 @@
     <string name="nextcloud_connect">Подключение к Nexctloud</string>
     <string name="other_sync_options">Другие опции синхронизации</string>
     <string name="fake_note_1">Это пробные заметки, они исчезнут, как только вы создадите свою новую, выбрав кнопку справа внизу</string>
-    <string name="fake_note_2">Выберите цвет текста заметки, добавьте ключевые слова</string>
+    <string name="fake_note_2">Выберите цвет заметки/текста, добавьте ключевые слова</string>
     <string name="fake_note_3">"Оцените свои заметки, тексты "</string>
     <string name="fake_note_4">Синхронизация с вашими устройствами</string>
     <string name="fake_note_5">Отформатируйте свои заметки и документы, добавьте изображения и аудиозаписи</string>
@@ -136,7 +136,7 @@
     <string name="restore_recent">Вернуть в Последнее</string>
     <string name="sort_reversed">Обратный порядок</string>
     <string name="sort_default">По-умолчанию</string>
-    <string name="sort_creation_date">Дата создания</string>
-    <string name="sort_modification_date">Дата изменения</string>
-    <string name="sort_custom_date">Дата пользователя</string>
+    <string name="sort_creation_date">по Дате создания</string>
+    <string name="sort_modification_date">по Дате изменения</string>
+    <string name="sort_custom_date">по Дате пользователя</string>
 </resources>
