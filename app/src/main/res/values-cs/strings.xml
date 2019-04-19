@@ -73,12 +73,12 @@
     <string name="fake_notes_warning">Falešné poznámky nelze upravovat</string>
     <string name="fake_note_6">Přidejte seznamy úkolů a URL adresy</string>
     <string name="fake_note_todo_item_2">Sdílet Carnet</string>
-    <string name="hello_blank_fragment"></string>
+    <string name="hello_blank_fragment"/>
     <string name="add_folder">Přidat složku</string>
     <string name="donate_liberapay">Přispět (přes Liberapay)</string>
     <string name="donate_paypal">Přispět (přes PayPal)</string>
     <string name="donate">Přispět</string>
-    <string name="remove_ad_free">Odstranit reklamu zdarma</string>
+    <string name="remove_ad_free">Odstranit zdarma reklamu</string>
     <string name="delete_confirm">Opravdu tohle chcete smazat\?</string>
     <string name="unable_to_rename_use">Používaný dokument nelze smazat</string>
     <string name="google_drive_preference">Synchronizovat s Google drive</string>
@@ -103,4 +103,5 @@
     <string name="sort_creation_date">Datum vytvoření</string>
     <string name="sort_modification_date">Datum upravení</string>
     <string name="sort_custom_date">Vlastní datum</string>
-</resources>
+<string name="remove_ad_description">Přispějte na další vývoj aplikace</string>
+    </resources>
