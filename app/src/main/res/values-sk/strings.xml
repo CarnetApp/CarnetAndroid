@@ -51,7 +51,7 @@
     <string name="error">Chyba</string>
     <string name="error_permission_storage">Kvôli novému systému oprávnení Androidu potrebujeme povolenie úložiska na ukladanie poznámok vo vašom zariadení (bude sa používať na ukladanie textov na vašom internom úložisku, aj na SD karte).</string>
     <string name="allow">Povoliť</string>
-    <string name="exit">Skončiť</string>
+    <string name="exit">Zavrieť</string>
     <string name="title_activity_noise_selector">NoiseSelector</string>
     <string name="title_activity_noise_player">NoisePlayer</string>
     <string name="white_noise_player">Prehrávač bieleho šumu</string>
