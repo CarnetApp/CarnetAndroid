@@ -136,12 +136,70 @@ public class Note implements Serializable{
         }
 
     }
+
+    public static class Reminder implements Serializable{
+        public List<String> days = new ArrayList<>();
+        public long date = -1;
+        public long time = -1;
+        public String frequency = null;
+        public String id = "";
+        public static Reminder fromString(String string){
+            Reminder reminder = new Reminder();
+            try {
+                JSONObject jsonObject = new JSONObject(string);
+                return fromJSONObject(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return reminder;
+        }
+
+        public static Reminder fromJSONObject(JSONObject jsonObject){
+            Reminder reminder = new Reminder();
+            try {
+                reminder.id = jsonObject.getString("id");
+                JSONArray array =  jsonObject.getJSONArray("days");
+                for (int i = 0; i < array.length(); i++) {
+                    reminder.days.add(array.getString(i));
+                }
+                reminder.frequency = jsonObject.getString("reminder");
+                reminder.time = jsonObject.getLong("reminder");
+                if(jsonObject.has("date"))
+                    reminder.date = jsonObject.getLong("date");
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return reminder;
+        }
+
+        public JSONObject toJsonObject(){
+            JSONObject object = new JSONObject();
+            try {
+                object.put("id",id);
+                JSONArray days = new JSONArray();
+                for(String item : this.days){
+                    days.put(item);
+                }
+                object.put("days",days);
+                object.put("time",time);
+                object.put("date",date);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+    }
+
     public static class Metadata implements Serializable{
         public long creation_date = -1;
         public long custom_date = -1;
         public long last_modification_date = -1;
         public List<String> keywords = new ArrayList();
         public List<TodoList> todolists = new ArrayList();
+        public List<Reminder> reminders = new ArrayList();
         public List<String> urls = new ArrayList<>();
         public int rating = -1;
         public String color = "none";
@@ -214,6 +272,12 @@ public class Note implements Serializable{
                     Iterator<String> iterator = obj.keys();
                     while(iterator.hasNext()){
                         metadata.urls.add(iterator.next());
+                    }
+                }
+                if(jsonObject.has("reminders")){
+                    JSONArray array1 = jsonObject.getJSONArray("reminders");
+                    for(int i = 0; i < array1.length(); i++){
+                        metadata.reminders.add(Reminder.fromJSONObject(array1.getJSONObject(i)));
                     }
                 }
             } catch (JSONException e) {
