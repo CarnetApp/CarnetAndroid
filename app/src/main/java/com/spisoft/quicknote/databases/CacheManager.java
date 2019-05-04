@@ -40,7 +40,7 @@ public class CacheManager {
         cacheFile = new File(mContext.getCacheDir(), "noteinfo.json");
     }
 
-    public void loadCache(){
+    public synchronized void loadCache(){
         if(cache != null ) return;
         cache = new HashMap<>();
         try {
