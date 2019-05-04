@@ -31,7 +31,6 @@ import com.spisoft.quicknote.browser.PermissionChecker;
 import com.spisoft.quicknote.databases.CacheBuilderIntentService;
 import com.spisoft.quicknote.databases.DBMergerService;
 import com.spisoft.quicknote.databases.NoteManager;
-import com.spisoft.quicknote.databases.RemindersManager;
 import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.editor.EditorActivity;
@@ -80,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         if(!UpdaterActivity.startUpdateIfNeeded(this, UPDATE_REQUEST_CODE)){
             onUpdateDone();
         }
-        new RemindersManager(this);
     }
 
     @Override
