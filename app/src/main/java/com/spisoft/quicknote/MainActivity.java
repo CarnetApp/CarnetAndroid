@@ -279,7 +279,11 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     protected void onResume(){
         super.onResume();
         if(!isChangingConfigurations()) {
-            startService(new Intent(this, SynchroService.class));
+            try {
+                startService(new Intent(this, SynchroService.class));
+            } catch (java.lang.IllegalStateException e){ //should happen when foreground... but it does
+
+            }
             if (!PreferenceHelper.shouldLockOnMinimize(this)) {
                 if (isLocked)
                     onPasswordOk();
