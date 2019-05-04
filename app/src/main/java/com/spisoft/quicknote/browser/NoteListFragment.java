@@ -407,6 +407,10 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             int index;
             if((index = mNotes.indexOf(mLastSelected))>=0){
                 Note note = CacheManager.getInstance(getContext()).get(((Note)mNotes.get(index)).path);
+                if(note == null){
+                    note = (Note)mNotes.get(index);
+                    note.needsUpdateInfo = true;
+                }
                 mNotes.set(index, note);
                 mNoteAdapter.onNoteInfo(note);
 
