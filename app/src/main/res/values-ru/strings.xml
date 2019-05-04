@@ -7,7 +7,7 @@
     <string name="rename">Переименовать</string>
     <string name="delete">Удалить</string>
     <string name="remove_recent">Убрать из Последних</string>
-    <string name="storage_preference">Основное хранилище</string>
+    <string name="storage_preference">Главное хранилище</string>
     <string name="recent">Последние</string>
     <string name="browser">Обзор</string>
     <string name="parent_folder">На уровень выше</string>
@@ -24,13 +24,13 @@
     <string name="new_folder_name">Новая папка</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="general_header">Основные</string>
-    <string name="paiement_header">Вознаграждения</string>
+    <string name="paiement_header">Вознаграждение</string>
     <string name="donate_liberapay">Пожертвовать (Liberapay)</string>
     <string name="donate_paypal">Пожертвовать (PayPal)</string>
     <string name="donate">Пожертвовать</string>
     <string name="remove_ad_description">Поддержите меня материально</string>
     <string name="remove_ad_free">Убрать рекламу бесплатно</string>
-    <string name="report_bug_or_propose">Ошибка / Пожелание</string>
+    <string name="report_bug_or_propose">Ошибка / Предложение</string>
     <string name="report_bug_or_propose_description">Сообщить об ошибке или предложить функцию</string>
     <string name="delete_confirm">Вы уверены, что хотите удалить это\?</string>
     <string name="crop">Обрезать</string>
@@ -49,7 +49,7 @@
     <string name="authorize_description">Для работы в режиме окна Carnet требуется специальное разрешение. Для этого, пожалуйста, включите отображение поверх других окон</string>
     <string name="authorisation_issue">Проблема авторизации</string>
     <string name="error">Ошибка</string>
-    <string name="error_permission_storage">Ввиду обновления системы разрешений Android, нам нужно разрешение на доступ к хранилищу, чтобы хранить заметки на Вашем устройстве (будет использоваться для сохранения текстов как во внутренней памяти, так и на SD-карте).</string>
+    <string name="error_permission_storage">Ввиду обновления системы полномочий Android, требуется разрешение на доступ к хранилищу, чтобы держать заметки на Вашем устройстве (будет использоваться для сохранения текстов как во внутренней памяти, так и на SD-карте).</string>
     <string name="allow">Разрешить</string>
     <string name="exit">Выйти</string>
     <string name="title_activity_noise_selector">NoiseSelector</string>
@@ -85,7 +85,7 @@
     <string name="remote_folder">Облачная папка</string>
     <string name="keywords">Ключевые слова</string>
     <string name="sync_intro_title">Синхронизация Carnet</string>
-    <string name="sync_intro_text">Carnet поддерживает синхронизацию с NextCloud. Загрузите версию для своего компьютера, чтобы получить на нем доступ к Вашим заметкам. Приложение Carnet также доступно в магазине NextCloud.</string>
+    <string name="sync_intro_text">Carnet поддерживает синхронизацию с NextCloud. Загрузите версию для своего компьютера, чтобы получить на нем доступ к Вашим заметкам. Carnet также можно найти в магазине приложений NextCloud.</string>
     <string name="sync_intro_nextcloud_text">OpenSource, с несколькими провайдерами</string>
     <string name="google_drive">Google Drive</string>
     <string name="sync_intro_gdrive_text">Спокойно, у большинства из вас уже есть адрес Gmail, а он не OpenSource</string>
@@ -104,7 +104,7 @@
     <string name="not_available_on_fdroid">Недоступно в F-Droid</string>
     <string name="desktop_version">Приложение для компьютера</string>
     <string name="sync_intro_text_carnet_instance">Carnet может автоматически создавать резервные копии Ваших заметок онлайн. 
-\nВыберите провайдера Carnet, чтобы получить возможность редактировать их в веб-браузере на телефоне или компьютере</string>
+\nВыберите провайдера Carnet, чтобы получить возможность редактировать их в веб-браузере на Вашем телефоне или компьютере</string>
     <string name="doesnt_accept_new_users">Не принимает новых пользователей</string>
     <string name="open_for_registrations">Открыт для регистрации</string>
     <string name="reliability">Надежность</string>
@@ -124,7 +124,7 @@
     <string name="nextcloud_connect">Подключение к Nextсloud</string>
     <string name="other_sync_options">Другие способы синхронизации</string>
     <string name="fake_note_1">Эта демонстрация исчезнет, как только Вы создадите первую запись с помощью кнопки в нижнем правом углу</string>
-    <string name="fake_note_2">Выбирайте цвет заметок/текста, добавляйте ключевые слова</string>
+    <string name="fake_note_2">Выбирайте цвет заметок и текста, добавляйте ключевые слова</string>
     <string name="fake_note_3">"Оценивайте свои заметки и тексты "</string>
     <string name="fake_note_4">Синхронизируйте свои устройства</string>
     <string name="fake_note_5">Форматируйте заметки и документы, добавляйте изображения и аудиозаписи</string>
@@ -138,5 +138,5 @@
     <string name="sort_default">по-умолчанию</string>
     <string name="sort_creation_date">по дате создания</string>
     <string name="sort_modification_date">по дате изменения</string>
-    <string name="sort_custom_date">по дате в документе</string>
+    <string name="sort_custom_date">по внутренней дате</string>
 </resources>
