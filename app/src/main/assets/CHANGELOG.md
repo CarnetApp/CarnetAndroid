@@ -1,3 +1,9 @@
+# Version 0.15.1
+
+Bug fix
+
+Updated Translations: Russian (Max Guffin, Alex Sev), Czech (Leschek), Slovak (Ivan Pleva), German (Christian Scholz)
+
 # Version 0.15.0
 
 Sort options
