@@ -278,8 +278,8 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     }
     protected void onResume(){
         super.onResume();
-        startService(new Intent(this, SynchroService.class));
         if(!isChangingConfigurations()) {
+            startService(new Intent(this, SynchroService.class));
             if (!PreferenceHelper.shouldLockOnMinimize(this)) {
                 if (isLocked)
                     onPasswordOk();
