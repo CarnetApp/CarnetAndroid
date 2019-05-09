@@ -1,22 +1,18 @@
 package com.spisoft.quicknote.browser;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Handler;
-import android.util.Log;
 import android.util.Pair;
 
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
+import com.spisoft.sync.Log;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Stack;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;

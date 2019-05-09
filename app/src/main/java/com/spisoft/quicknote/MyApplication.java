@@ -4,14 +4,15 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
-import android.util.Log;
 
 import com.spisoft.quicknote.browser.NoteListFragment;
 import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.DBMergerService;
 import com.spisoft.quicknote.synchro.AccountConfigActivity;
 import com.spisoft.sync.Configuration;
+import com.spisoft.sync.Log;
 import com.spisoft.sync.utils.Utils;
 import com.spisoft.sync.wrappers.WrapperFactory;
 
@@ -29,6 +30,7 @@ public class MyApplication extends Application implements Configuration.PathObse
     protected void attachBaseContext(Context base) {
 
         super.attachBaseContext(base);
+        Log.isDebug = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_debug_log",false);
         MultiDex.install(this);
         Log.d("uiddebug",PreferenceHelper.getUid(this));
         Utils.context = this;

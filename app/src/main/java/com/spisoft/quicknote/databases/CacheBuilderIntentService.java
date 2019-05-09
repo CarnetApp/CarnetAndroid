@@ -2,10 +2,10 @@ package com.spisoft.quicknote.databases;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.util.Log;
 
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
+import com.spisoft.sync.Log;
 
 import java.io.File;
 

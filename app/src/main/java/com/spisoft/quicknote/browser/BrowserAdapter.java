@@ -2,7 +2,6 @@ package com.spisoft.quicknote.browser;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,10 +50,8 @@ public class BrowserAdapter extends NoteAdapter {
             if (mSelelectedFolders == null)
                 mSelelectedFolders = new ArrayList<>();
             if (mSelelectedFolders.contains(note)) {
-                Log.d("selectdebug", "remove");
                 mSelelectedFolders.remove(note);
             } else {
-                Log.d("selectdebug", "add");
                 mSelelectedFolders.add(note);
             }
             notifyItemChanged(mNotes.indexOf(note));

@@ -1,7 +1,6 @@
 package com.spisoft.quicknote.databases;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
@@ -222,7 +221,6 @@ public class RecentHelper {
                 if(action.equals("add")){
                     notes.remove(note);
                     notes.add(0,note);
-                    Log.d("addingdebug","adding "+note.path);
                 }else if(action.equals("pin")){
                     pin.remove(note);
                     note.isPinned = true;
@@ -258,7 +256,6 @@ public class RecentHelper {
 
 
     public JSONObject getJson() throws JSONException {
-        Log.d("jsondebug", "getJson");
 
         String jsonString = read();
         if(jsonString==null||jsonString.isEmpty())

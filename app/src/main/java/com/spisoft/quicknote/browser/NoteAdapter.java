@@ -8,12 +8,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.os.Handler;
 import android.support.annotation.ColorInt;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +25,7 @@ import android.widget.TextView;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.NoteManager;
+import com.spisoft.sync.Log;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -35,8 +34,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import android.os.Handler;
 
 /**
  * Created by alexandre on 03/02/16.
@@ -162,10 +159,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         if (mSelelectedNotes == null)
             mSelelectedNotes = new ArrayList<>();
         if (mSelelectedNotes.contains(note)) {
-            Log.d("selectdebug", "remove");
             mSelelectedNotes.remove(note);
         } else {
-            Log.d("selectdebug", "add");
             mSelelectedNotes.add(note);
         }
         notifyItemChanged(mNotes.indexOf(note));

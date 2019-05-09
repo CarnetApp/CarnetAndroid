@@ -3,12 +3,10 @@ package com.spisoft.quicknote.browser;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.os.Handler;
 
 import com.spisoft.quicknote.Note;
-import com.spisoft.quicknote.databases.NoteManager;
+import com.spisoft.sync.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +14,6 @@ import java.util.Enumeration;
 import java.util.Stack;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import android.os.Handler;
 
 /**
  * Created by phiedora on 27/07/18.

@@ -1,11 +1,10 @@
 package com.spisoft.quicknote.databases;
 
 import android.content.Context;
-import android.util.JsonWriter;
-import android.util.Log;
 
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
+import com.spisoft.sync.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
