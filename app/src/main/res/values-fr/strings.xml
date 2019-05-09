@@ -31,7 +31,6 @@
     <string name="paiement_header">Paiement</string>
     <string name="donate_liberapay">Faire un don (Liberapay)</string>
     <string name="donate_paypal">Faire un don (PayPal)</string>
-    <string name="remove_ad_description">Financer l\'application et supprimer la pub</string>
     <string name="remove_ad_free">Supprimer la pub gratuitement</string>
     <string name="report_bug_or_propose">Bogue / Idée</string>
     <string name="report_bug_or_propose_description">Report a bug or ask for a feature</string>
@@ -67,7 +66,6 @@
     <string name="sync_drive_activity">Pour plus de sécurité, synchronisez vos documents avec Google Drive !</string>
     <string name="add_account">Synchroniser</string>
     <string name="later">Plus tard</string>
-    <string name="remove_ad_free_confirm">Ads help me funding the app. You can disable them, but please, consider donation if you can.</string>
     <string name="add_screenshot">Ajouter la capture d\'écran à la note \?</string>
     <string name="say_hi">Me prévenir</string>
     <string name="donation_ask">Carnet a été créée gratuitement, n\'hésitez pas à faire un don :)</string>

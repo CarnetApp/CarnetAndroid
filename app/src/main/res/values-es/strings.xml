@@ -32,7 +32,6 @@
     <string name="donate_liberapay">Donar (Libeeapay)</string>
     <string name="donate_paypal">Donar (PayPal)</string>
     <string name="donate">Donar</string>
-    <string name="remove_ad_description">Ayuda a mejorar financiandome</string>
     <string name="remove_ad_free">Elimina los anuncios gratis</string>
     <string name="report_bug_or_propose">Bug / caracteristica</string>
     <string name="report_bug_or_propose_description">Reporta un bug o pregunta por una característica</string>
@@ -63,7 +62,6 @@
     <string name="switch_to_minimize_to_dim">Cambia al modo flotante (-) para activar las transparencias</string>
     <string name="unable_to_rename_use">No se puede renombrar un documento mientras se esta editando</string>
     <string name="unable_to_delete_use">No se puede eliminar un documento abierto</string>
-    <string name="remove_ad_free_confirm">Los anuncios me ayudan a financiar la app. Puedes desactivarlos, pero considere una donación si puede.</string>
     <string name="add_screenshot">¿Añadir captura de pantalla a la nota?</string>
     <string name="statistics">Estadísticas</string>
     <string name="error_reading">Error mientras se leía la nota</string>

@@ -28,7 +28,6 @@
     <string name="donate_liberapay">Prispieť (Liberapay)</string>
     <string name="donate_paypal">Prispieť (PayPal)</string>
     <string name="donate">Prispieť</string>
-    <string name="remove_ad_description">Podporte môj vývoj finančne</string>
     <string name="remove_ad_free">"Zadarmo odstrániť reklamy "</string>
     <string name="report_bug_or_propose">Chyba / funkcia</string>
     <string name="report_bug_or_propose_description">Nahlásiť chybu alebo požiadať o funkciu</string>
@@ -59,7 +58,6 @@
     <string name="switch_to_minimize_to_dim">Prepnúť na plávajúci mód (-) pre umožnenie priehľadnosti</string>
     <string name="unable_to_rename_use">Nemožno premenovať dokumenť počas toho, ako sa používa</string>
     <string name="unable_to_delete_use">Nemožno odstrániť otvorený dokument</string>
-    <string name="remove_ad_free_confirm">Reklamy mi pomáhajú financovať apku. Môžete ich vypnúť, ale zvážte, prosím, finančný príspevok, ak môžete.</string>
     <string name="add_screenshot">Pridať k poznámke snímku obrazovky\?</string>
     <string name="statistics">Štatistika</string>
     <string name="error_reading">Chyba pri čítaní súboru poznámky</string>

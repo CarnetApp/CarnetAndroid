@@ -31,7 +31,6 @@
     <string name="donate_liberapay">Doneren (Liberapay)</string>
     <string name="donate_paypal">Doneren (PayPal)</string>
     <string name="donate">Doneren</string>
-    <string name="remove_ad_description">Help de app te verbeteren door te doneren</string>
     <string name="remove_ad_free">Reclame gratis verwijderen</string>
     <string name="report_bug_or_propose">Bug / Functie</string>
     <string name="report_bug_or_propose_description">Meld een bug of vraag om een nieuwe functie</string>
@@ -64,7 +63,6 @@
     <string name="switch_to_minimize_to_dim">Schakel over naar de zwevende modus (-) om doorzichtigheid in te schakelen</string>
     <string name="unable_to_rename_use">Kan geen namen wijzigen van geopende documenten</string>
     <string name="unable_to_delete_use">Kan geopende documenten niet verwijderen</string>
-    <string name="remove_ad_free_confirm">Reclame helpt me budget te verkrijgen voor de ontwikkeling van de app. Je kunt de reclame uitschakelen, maar overweeg dan een donatie.</string>
     <string name="add_screenshot">Schermafdruk toevoegen aan notitie?</string>
     <string name="statistics">Statistieken</string>
     <string name="error_reading">Fout tijdens lezen van notitiebestand</string>

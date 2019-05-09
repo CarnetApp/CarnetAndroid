@@ -26,7 +26,6 @@
     <string name="donate_liberapay">Liberapay</string>
     <string name="donate_paypal">PayPal</string>
     <string name="donate">Spenden</string>
-    <string name="remove_ad_description">Helfen Sie mit, die App durch Spenden zu verbessern</string>
     <string name="remove_ad_free">Werbung kostenlos entfernen</string>
     <string name="report_bug_or_propose">Fehler/Funktion</string>
     <string name="report_bug_or_propose_description">Melden Sie einen Fehler oder fragen Sie nach einer neuen Funktion</string>
@@ -54,7 +53,6 @@
     <string name="stop">Stopp</string>
     <string name="unable_to_rename_use">Dokument kann während der Verwendung nicht umbenannt werden</string>
     <string name="unable_to_delete_use">Ein geöffnetes Dokument kann nicht gelöscht werden</string>
-    <string name="remove_ad_free_confirm">Anzeigen helfen mir bei der Finanzierung der App. Sie können diese deaktivieren, aber denken Sie dann, wenn möglich doch bitte an eine Spende.</string>
     <string name="add_screenshot">Screenshot zur Notiz hinzufügen\?</string>
     <string name="statistics">Statistiken</string>
     <string name="error_reading">Fehler beim Lesen der Notizdatei</string>

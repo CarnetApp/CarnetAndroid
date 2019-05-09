@@ -25,7 +25,6 @@
     <string name="donate_liberapay">기부하기 (Liberapay)</string>
     <string name="donate_paypal">기부하기 (PayPal)</string>
     <string name="donate">기부하기</string>
-    <string name="remove_ad_description">기부를 통해 기능 개선에 기여하기</string>
     <string name="remove_ad_free">무료로 광고 제거</string>
     <string name="report_bug_or_propose">버그 / 기능</string>
     <string name="report_bug_or_propose_description">버그를 보고하거나 기능을 요청하세요</string>
@@ -53,7 +52,6 @@
     <string name="switch_to_minimize_to_dim">투명도를 활성화하기 위해서 포스트잇 모드(-)로 전환하세요</string>
     <string name="unable_to_rename_use">사용 중인 문서의 이름을 바꿀 수 없습니다</string>
     <string name="unable_to_delete_use">사용 중인 문서를 삭제할 수 없습니다</string>
-    <string name="remove_ad_free_confirm">광고 수익은 앱 개발에 활용됩니다. 광고를 제거할 수 있지만, 가능하다면 기부를 고려해보세요.</string>
     <string name="add_screenshot">노트에 스크린샷을 추가할까요\?</string>
     <string name="statistics">통계</string>
     <string name="error_reading">노트 파일을 읽는 도중 오류 발생</string>

@@ -32,7 +32,6 @@
     <string name="donate_liberapay">Donate (Liberapay)</string>
     <string name="donate_paypal">Donate (PayPal)</string>
     <string name="donate">Donate</string>
-    <string name="remove_ad_description">Help improving by funding me</string>
     <string name="remove_ad_free">Remove ad for free</string>
     <string name="report_bug_or_propose">Bug / feature</string>
     <string name="report_bug_or_propose_description">Report a bug or ask for a feature</string>
@@ -65,7 +64,6 @@
     <string name="switch_to_minimize_to_dim">Switch to floating mode (-) to enable transparency</string>
     <string name="unable_to_rename_use">Unable to rename a document while being used</string>
     <string name="unable_to_delete_use">Unable to delete an opened document</string>
-    <string name="remove_ad_free_confirm">Ads help me funding the app. You can disable them, but please, consider donation if you can.</string>
     <string name="add_screenshot">Add screenshot to note ?</string>
     <string name="statistics">Statistics</string>
     <string name="error_reading">Error when reading note file</string>

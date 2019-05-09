@@ -28,7 +28,6 @@
     <string name="donate_liberapay">Пожертвовать (Liberapay)</string>
     <string name="donate_paypal">Пожертвовать (PayPal)</string>
     <string name="donate">Пожертвовать</string>
-    <string name="remove_ad_description">Поддержите меня материально</string>
     <string name="remove_ad_free">Убрать рекламу бесплатно</string>
     <string name="report_bug_or_propose">Ошибка / Предложение</string>
     <string name="report_bug_or_propose_description">Сообщить об ошибке или предложить функцию</string>
@@ -59,7 +58,6 @@
     <string name="switch_to_minimize_to_dim">Switch to floating mode (-) to enable transparency</string>
     <string name="unable_to_rename_use">Невозможно переименовать документ во время использования</string>
     <string name="unable_to_delete_use">Невозможно удалить открытый документ</string>
-    <string name="remove_ad_free_confirm">Реклама помогает мне финансировать приложение. Вы можете отключить её, но, всё же, подумайте о пожертвовании.</string>
     <string name="add_screenshot">Добавить скриншот к заметке\?</string>
     <string name="statistics">Статистика</string>
     <string name="error_reading">Ошибка при чтении файла заметки</string>
