@@ -117,4 +117,5 @@
 <string name="system_header">System</string>
     <string name="debug_log">Debug-Protokoll aktivieren</string>
     <string name="faster_editor_load">Schnelleres Laden des Editors (experimentell)</string>
-</resources>
+<string name="floating">Schwebende Notiz</string>
+    </resources>
