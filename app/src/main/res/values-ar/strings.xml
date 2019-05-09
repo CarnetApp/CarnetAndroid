@@ -9,8 +9,6 @@
     <string name="parent_folder">المجلد الرئيسي</string>
     <string name="loading">التحميل جارٍ…</string>
     <string name="add_note">إضافة ملاحظة</string>
-    <string name="edit">تعديل</string>
-    <string name="image">صورة</string>
     <string name="add_folder">إضافة مجلد</string>
     <string name="name">التسمية</string>
     <string name="new_folder_name">مجلد جديد</string>
@@ -21,7 +19,6 @@
     <string name="report_bug_or_propose">علة / ميزة</string>
     <string name="report_bug_or_propose_description">للإبلاغ عن علة أو لطلب ميزة</string>
     <string name="delete_confirm">هل أنت متأكد مِن أنك تريد حذف هذا؟</string>
-    <string name="crop">قص</string>
     <string name="checking_password">التحقق جارٍ…</string>
     <string name="pref_set_password">تعيين الكلمة السرية</string>
     <string name="new_password">كلمة السر الجديدة</string>
@@ -31,19 +28,13 @@
     <string name="error">خطأ</string>
     <string name="allow">السماح</string>
     <string name="exit">الخروج</string>
-    <string name="stop">إيقاف</string>
     <string name="add_screenshot">هل تريد إضافة لقطة شاشة إلى الملاحظة؟</string>
-    <string name="statistics">الإحصائيات</string>
-    <string name="error_reading">خطأ أثناء قراءة ملف الملاحظة</string>
     <string name="write_error">خطأ أثناء حفظ النص</string>
     <string name="sync_cloud_preference">المزامنة مع خدمة التخزين السحابي</string>
 
-    <string name="add_account">إضافة حساب</string>
-    <string name="later">لاحقًا</string>
     <string name="move">نقل</string>
     <string name="paste">لصق</string>
     <string name="please_wait">يرجى الإنتظار</string>
-    <string name="pages">الصفحات</string>
     <string name="new_keyword">كلمة مفتاحية جديدة</string>
     <string name="remote_folder">مجلد بُعدي</string>
     <string name="keywords">الكلمات المفتاحية</string>

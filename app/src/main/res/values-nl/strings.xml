@@ -13,14 +13,9 @@
     <string name="recent">Recent</string>
     <string name="browser">Verkenner</string>
     <string name="parent_folder">Bovenliggende mappen</string>
-    <string name="title_activity_img_picker">Afbeelding kiezen</string>
     <string name="toast_on_minimize">Druk op mij om te maximaliseren</string>
     <string name="loading">Bezig met laden...</string>
     <string name="add_note">Notitie toevoegen</string>
-    <string name="format">Formaat</string>
-    <string name="edit">Bewerken</string>
-    <string name="text_zone">Tekstgebied</string>
-    <string name="image">Afbeelding</string>
     <string name="add_folder">Map toevoegen</string>
     <string name="name">Naam</string>
     <string name="new_folder_name">Nieuwe map</string>
@@ -31,11 +26,9 @@
     <string name="donate_liberapay">Doneren (Liberapay)</string>
     <string name="donate_paypal">Doneren (PayPal)</string>
     <string name="donate">Doneren</string>
-    <string name="remove_ad_free">Reclame gratis verwijderen</string>
     <string name="report_bug_or_propose">Bug / Functie</string>
     <string name="report_bug_or_propose_description">Meld een bug of vraag om een nieuwe functie</string>
     <string name="delete_confirm">Weet je zeker dat je dit wilt verwijderen?</string>
-    <string name="crop">Bijsnijden</string>
     <string name="wrong_password">Onjuiste pincode: standaard 0000</string>
     <string name="checking_password">Bezig met controleren...</string>
     <string name="password_on_minimize">Pincode vereisen na minimaliseren</string>
@@ -45,7 +38,6 @@
     <string name="empty_message">Geen notities\nCreëer een notitie met de knop \'+\'</string>
     <string name="drawer_open">Navigatiemenu openen</string>
     <string name="drawer_close">Navigatiemenu sluiten</string>
-    <string name="default_password"></string>
     <string name="title_activity_help_authorize_floating_window">
         HelpAuthorizeFloatingWindowActivity
     </string>
@@ -56,39 +48,25 @@
     <string name="error_permission_storage">Vanwege het nieuwe Android-machtigingssysteem, moet je de machtiging \'opslag\' verlenen om notities op te kunnen slaan (op zowel je interne opslag als je SD-kaart).</string>
     <string name="allow">Toestaan</string>
     <string name="exit">Afsluiten</string>
-    <string name="title_activity_noise_selector">Ruiskiezer</string>
-    <string name="title_activity_noise_player">Ruisspeler</string>
-    <string name="white_noise_player">Witte ruis-speler</string>
-    <string name="stop">Stoppen</string>
-    <string name="switch_to_minimize_to_dim">Schakel over naar de zwevende modus (-) om doorzichtigheid in te schakelen</string>
     <string name="unable_to_rename_use">Kan geen namen wijzigen van geopende documenten</string>
     <string name="unable_to_delete_use">Kan geopende documenten niet verwijderen</string>
     <string name="add_screenshot">Schermafdruk toevoegen aan notitie?</string>
-    <string name="statistics">Statistieken</string>
-    <string name="error_reading">Fout tijdens lezen van notitiebestand</string>
     <string name="please_wait_update">Even geduld; je notities worden bijgewerkt...</string>
     <string name="write_error">Fout tijdens opslaan van tekst</string>
-    <string name="title_activity_authorize">Machtigen</string>
-    <string name="google_drive_preference">Synchroniseren met Google Drive</string>
     <string name="sync_cloud_preference">Synchroniseren met cloudopslag</string>
 
     <string name="title_activity_help">Hulp</string>
-    <string name="sync_drive_activity">Neem het zekere voor het onzekere: \nsynchroniseer je documenten met Google Drive!</string>
-    <string name="add_account">Account toevoegen</string>
-    <string name="later">Later</string>
     <string name="move">Verplaatsen</string>
     <string name="paste">Plakken</string>
     <string name="paste_how_to">Blader naar de gewenste map en druk dan op \'Plakken\'</string>
     <string name="file_operation_in_progress">Bestandsoperatie</string>
     <string name="please_wait">Even geduld...</string>
-    <string name="pages">Pagina\'s</string>
     <string name="new_keyword">Nieuw trefwoord</string>
     <string name="title_activity_account_config">Account instellen</string>
     <string name="remote_folder">Map op afstand</string>
     <string name="keywords">Trefwoorden</string>
     <string name="sync_intro_title">Carnet synchroniseren</string>
     <string name="sync_intro_text">Carnet ondersteunt synchronisatie met NextCloud. Vergeet niet de app te downloaden op je computer als je je notities ook daar wilt beheren. Carnet is tevens beschikbaar in de NextCloud App Store.</string>
-    <string name="sync_intro_nextcloud_text">Open source, met meerdere aanbieders</string>
     <string name="google_drive">Google Drive</string>
     <string name="sync_intro_gdrive_text">Eenvoudig, omdat de meeste mensen al een Gmail-adres hebben, maar niet open source</string>
     <string name="sync_select_nextcloud_text">Carnet is compatibel met elke NextCloud-aanbieder. Zoek een aanbieder en registreer je (sommige zijn gratis beschikbaar).</string>

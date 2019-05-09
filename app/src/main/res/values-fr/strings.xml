@@ -18,10 +18,6 @@
     <string name="toast_on_minimize">Cliquez ici pour agrandir</string>
     <string name="loading">Chargement</string>
     <string name="add_note">Créer un document</string>
-    <string name="format">Format</string>
-    <string name="edit">Edition</string>
-    <string name="text_zone">Zone de texte</string>
-    <string name="image">Image</string>
     <string name="add_folder">Créer un dossier</string>
     <string name="name">Nom</string>
     <string name="new_folder_name">Nouveau dossier</string>
@@ -31,11 +27,9 @@
     <string name="paiement_header">Paiement</string>
     <string name="donate_liberapay">Faire un don (Liberapay)</string>
     <string name="donate_paypal">Faire un don (PayPal)</string>
-    <string name="remove_ad_free">Supprimer la pub gratuitement</string>
     <string name="report_bug_or_propose">Bogue / Idée</string>
     <string name="report_bug_or_propose_description">Report a bug or ask for a feature</string>
     <string name="delete_confirm">Action non réversible: confirmez-vous la suppression ?</string>
-    <string name="crop">Couper</string>
     <string name="wrong_password">Wrong pin code: default 0000</string>
     <string name="checking_password">Vérification...</string>
     <string name="password_on_minimize">Protéger par code pin</string>
@@ -45,7 +39,6 @@
     <string name="empty_message">Aucun document trouvé\nCréez un nouveau document avec le bouton +</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="default_password"/>
     <string name="title_activity_help_authorize_floating_window">
         HelpAuthorizeFloatingWindowActivity
     </string>
@@ -56,23 +49,13 @@
     <string name="error_permission_storage">La permission Stockage est requise afin d\'enregistrer les notes sur votre appareil. Merci d\'autoriser Carnet à enregistrer ses documents sur votre carte SD / stockage interne.</string>
     <string name="allow">Autoriser</string>
     <string name="exit">Quitter</string>
-    <string name="title_activity_noise_selector">NoiseSelector</string>
-    <string name="title_activity_noise_player">NoisePlayer</string>
-    <string name="white_noise_player">White noise player</string>
-    <string name="stop">Stop</string>
-    <string name="switch_to_minimize_to_dim">Passez en mode fenêtré (-) pour activer la transparence</string>
     <string name="unable_to_rename_use">Impossible de renommer un document en cours d\'édition</string>
     <string name="unable_to_delete_use">Impossible de supprimer un document en cours d\'édition</string>
-    <string name="sync_drive_activity">Pour plus de sécurité, synchronisez vos documents avec Google Drive !</string>
-    <string name="add_account">Synchroniser</string>
-    <string name="later">Plus tard</string>
     <string name="add_screenshot">Ajouter la capture d\'écran à la note \?</string>
     <string name="say_hi">Me prévenir</string>
     <string name="donation_ask">Carnet a été créée gratuitement, n\'hésitez pas à faire un don :)</string>
     <string name="donate">Faire un don</string>
-    <string name="statistics">Statistiques</string>
     <string name="sync_cloud_preference">Synchronisation</string>
-    <string name="google_drive_preference">Synchroniser avec Google Drive</string>
     <string name="move">Déplacer</string>
     <string name="paste">Coller</string>
     <string name="paste_how_to">Naviguez jusqu\'au dossier de votre choix</string>
@@ -82,7 +65,6 @@
     <string name="keywords">Mots clefs</string>
     <string name="sync_intro_title">Synchroniser Carnet</string>
     <string name="sync_intro_text">Carnet peut se synchroniser avec NextCloud. N\'hésitez pas à télécharger le client pour ordinateur pour y retrouver toutes vos notes. Carnet est aussi disponible en ligne sur le magasin d\'applications de NextCloud</string>
-    <string name="sync_intro_nextcloud_text">Open Source, avec plusieurs fournisseurs</string>
     <string name="sync_intro_gdrive_text">Facile, la plupart d\'entre vous ont une adresse Gmail, pas OpenSource</string>
     <string name="skip">Passer</string>
     <string name="welcome">Bienvenue !</string>
@@ -127,11 +109,8 @@
     <string name="rate">Noter</string>
     <string name="changelog">Changelog</string>
     <string name="restore_recent">Restaurer dans récent</string>
-<string name="error_reading">Error pendant la lecture du fichier</string>
     <string name="please_wait_update">Attendez SVP pendant la mise-à-jour de vos notes</string>
     <string name="write_error">Erreur lors de la sauvegarde du texte</string>
-    <string name="title_activity_authorize">Activité d\'autorisation</string>
-    <string name="pages">Pages</string>
     <string name="sort_reversed">Ordre inversé</string>
     <string name="sort_default">Défaut</string>
     <string name="sort_creation_date">Date de création</string>
