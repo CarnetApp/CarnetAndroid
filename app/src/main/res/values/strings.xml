@@ -144,4 +144,5 @@
     <string name="sort_custom_date">Custom date</string>
     <string name="system_header">System</string>
     <string name="debug_log">Enable debug log</string>
+    <string name="faster_editor_load">Faster editor load (experimental)</string>
 </resources>

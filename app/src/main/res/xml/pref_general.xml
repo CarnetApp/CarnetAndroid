@@ -63,6 +63,11 @@
             android:defaultValue="false"
             android:title="@string/debug_log"
             />
+        <CheckBoxPreference
+            android:key="pref_faster_editor_load"
+            android:defaultValue="false"
+            android:title="@string/faster_editor_load"
+            />
     </PreferenceCategory>
 
 

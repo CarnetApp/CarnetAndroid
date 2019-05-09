@@ -235,6 +235,15 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         if(FileManagerService.sIsCopying)
             displayPasteDialog();
         mSavedInstanceState = null;
+        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_faster_editor_load", false)) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setPreloadBlankFragment();
+
+                }
+            }, 1000);
+        }
     }
 
     public void openDonation(View view) {
@@ -361,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
                 getSupportFragmentManager()
                         .beginTransaction()
                         .addToBackStack(mEditorFrag.getClass().getName())
-                        .replace(R.id.root,mEditorFrag)
+                        .replace(R.id.behind_root,mEditorFrag)
                         .commit();
             }
 
