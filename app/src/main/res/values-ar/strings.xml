@@ -1,2 +1,74 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="hello_world">أهلا بالعالم!</string>
+    <string name="action_settings">الإعدادات</string>
+
+    <string name="rename">إعادة التسمية</string>
+    <string name="delete">حذف</string>
+    <string name="storage_preference">التخزين الرئيسي</string>
+    <string name="browser">المتصفح</string>
+    <string name="parent_folder">المجلد الرئيسي</string>
+    <string name="loading">التحميل جارٍ…</string>
+    <string name="add_note">إضافة ملاحظة</string>
+    <string name="edit">تعديل</string>
+    <string name="image">صورة</string>
+    <string name="add_folder">إضافة مجلد</string>
+    <string name="name">التسمية</string>
+    <string name="new_folder_name">مجلد جديد</string>
+    <string name="general_header">الإعدادات العامة</string>
+    <string name="donate_liberapay">تبرع (ليبراباي)</string>
+    <string name="donate_paypal">تبرع (بايبال)</string>
+    <string name="donate">التبرع</string>
+    <string name="remove_ad_description">ساعدوني في تحسين التطبيق عن طريق التبرع</string>
+    <string name="report_bug_or_propose">علة / ميزة</string>
+    <string name="report_bug_or_propose_description">للإبلاغ عن علة أو لطلب ميزة</string>
+    <string name="delete_confirm">هل أنت متأكد مِن أنك تريد حذف هذا؟</string>
+    <string name="crop">قص</string>
+    <string name="checking_password">التحقق جارٍ…</string>
+    <string name="pref_set_password">تعيين الكلمة السرية</string>
+    <string name="new_password">كلمة السر الجديدة</string>
+    <string name="old_password">كلمة السر الحالية</string>
+    <string name="authorize">ترخيص</string>
+    <string name="authorisation_issue">مشكلة في الترخيص</string>
+    <string name="error">خطأ</string>
+    <string name="allow">السماح</string>
+    <string name="exit">الخروج</string>
+    <string name="stop">إيقاف</string>
+    <string name="add_screenshot">هل تريد إضافة لقطة شاشة إلى الملاحظة؟</string>
+    <string name="statistics">الإحصائيات</string>
+    <string name="error_reading">خطأ أثناء قراءة ملف الملاحظة</string>
+    <string name="write_error">خطأ أثناء حفظ النص</string>
+    <string name="sync_cloud_preference">المزامنة مع خدمة التخزين السحابي</string>
+
+    <string name="add_account">إضافة حساب</string>
+    <string name="later">لاحقًا</string>
+    <string name="move">نقل</string>
+    <string name="paste">لصق</string>
+    <string name="please_wait">يرجى الإنتظار</string>
+    <string name="pages">الصفحات</string>
+    <string name="new_keyword">كلمة مفتاحية جديدة</string>
+    <string name="remote_folder">مجلد بُعدي</string>
+    <string name="keywords">الكلمات المفتاحية</string>
+    <string name="sync_intro_title">مزامنة كارني</string>
+    <string name="google_drive">غوغل درايف</string>
+    <string name="skip">تخطي</string>
+    <string name="welcome">مرحبًا!</string>
+    <string name="welcome_subtitle">هيا لنكتشف كارني \"Carnet\"</string>
+    <string name="next">التالي</string>
+    <string name="app_restart">سوف يتم إعادة تشغيل التطبيق الآن</string>
+    <string name="pin">تدبيس</string>
+    <string name="unpin">إلغاء التدبيس</string>
+    <string name="say_hi">قل مرحبًا!</string>
+    <string name="not_available_on_fdroid">غير متوفر على أف-درويد</string>
+    <string name="desktop_version">الإصدار المكتبي</string>
+    <string name="doesnt_accept_new_users">لا يقبل مستخدمين جُدد</string>
+    <string name="open_for_registrations">التسجيلات مفتوحة</string>
+    <string name="updating">التحديث جارٍ…</string>
+    <string name="theme">السمة</string>
+    <string name="blue">زرقاء</string>
+    <string name="dark">ليلية</string>
+    <string name="first_start">أول تشغيل، يرجى الإنتظار</string>
+    <string name="sync">مزامنة</string>
+    <string name="carnet_open">كارني \"Carnet\" تطبيق حر ومفتوح المصدر</string>
+    <string name="nextcloud_connect">التوصيل بـ NextCloud</string>
+    <string name="other_sync_options">خيارات أخرى للمزامنة</string>
+    </resources>
