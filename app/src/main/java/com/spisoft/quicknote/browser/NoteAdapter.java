@@ -275,19 +275,25 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             container.removeAllViews();
             for(final Note.TodoList todoList:todolists){
                 for(final String item : todoList.todo){
+                    final LinearLayout cblayout = new LinearLayout(mContext);
+                    cblayout.setOrientation(LinearLayout.HORIZONTAL);
                     final CheckBox checkBox = new CheckBox(mContext);
-                    checkBox.setText(item);
-                    container.addView(checkBox);
+                    final TextView tv = new TextView(mContext);
+
+                    tv.setText(item);
+                    cblayout.addView(checkBox);
+                    cblayout.addView(tv);
+                    container.addView(cblayout);
                     checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             todoList.todo.remove(item);
                             todoList.done.add(item);
                             NoteManager.updateMetadata(mContext, mNote);
-                            checkBox.post(new Runnable() {
+                            cblayout.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ((LinearLayout)checkBox.getParent()).removeView(checkBox);
+                                    ((LinearLayout)cblayout.getParent()).removeView(cblayout);
                                 }
                             });
                         }
