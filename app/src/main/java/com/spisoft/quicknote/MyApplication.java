@@ -30,10 +30,10 @@ public class MyApplication extends Application implements Configuration.PathObse
     protected void attachBaseContext(Context base) {
 
         super.attachBaseContext(base);
+        Utils.context = this;
         Log.isDebug = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_debug_log",false);
         MultiDex.install(this);
         Log.d("uiddebug",PreferenceHelper.getUid(this));
-        Utils.context = this;
 
         Configuration.sOnAccountSelectedListener = new Configuration.OnAccountSelectedListener() {
             @Override
