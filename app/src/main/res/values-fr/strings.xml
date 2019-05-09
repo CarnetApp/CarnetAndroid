@@ -14,7 +14,6 @@
     <string name="recent">Récent</string>
     <string name="browser">Explorateur</string>
     <string name="parent_folder">Dossier parent</string>
-    <string name="title_activity_img_picker">ImgPickerActivity</string>
     <string name="toast_on_minimize">Cliquez ici pour agrandir</string>
     <string name="loading">Chargement</string>
     <string name="add_note">Créer un document</string>

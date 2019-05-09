@@ -11,14 +11,9 @@
     <string name="recent">Novaj</string>
     <string name="browser">Esplorilo</string>
     <string name="parent_folder">Patra dosierujo</string>
-    <string name="title_activity_img_picker">BildElektAktiveco</string>
     <string name="toast_on_minimize">Alklaku por pligrandigi</string>
     <string name="loading">Ŝarĝante</string>
     <string name="add_note">Aldonu noton</string>
-    <string name="format">Tekstaranĝo</string>
-    <string name="edit">Redakti</string>
-    <string name="text_zone">Skribzono</string>
-    <string name="image">Bildo</string>
     <string name="add_folder">Aldoni dosierujon</string>
     <string name="name">Nomo</string>
     <string name="new_folder_name">Nova dosierujo</string>
@@ -31,7 +26,6 @@
     <string name="report_bug_or_propose">Cimo / funkcio</string>
     <string name="report_bug_or_propose_description">Signali cimon aŭ peti funkcion</string>
     <string name="delete_confirm">Ĉu vi certas, ke vi volas forigi tion\?</string>
-    <string name="crop">Eltondi</string>
     <string name="wrong_password">Malĝusta PIN: defaŭlta 0000</string>
     <string name="checking_password">Kontrolado…</string>
     <string name="password_on_minimize">Protekti per PIN-kodo kaze de plejetigo</string>
