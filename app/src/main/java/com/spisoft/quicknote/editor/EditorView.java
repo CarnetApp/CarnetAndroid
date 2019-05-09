@@ -28,7 +28,6 @@ import android.print.PrintManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +52,7 @@ import com.spisoft.quicknote.server.HttpServer;
 import com.spisoft.quicknote.serviceactivities.CropWrapperActivity;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.ZipUtils;
+import com.spisoft.sync.Log;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -321,6 +321,10 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         mWebView.setHorizontalScrollBarEnabled(false);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setDomStorageEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(Log.isDebug);
+        }
+
         //mWebView.getSettings().setSupportZoom(false);
         mWebView.setWebViewClient(mClient);
         mWebView.setWebChromeClient(new WebChromeClient() {
