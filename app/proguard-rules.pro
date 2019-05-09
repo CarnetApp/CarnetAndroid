@@ -20,24 +20,78 @@
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
 -dontobfuscate
+-dontwarn
 
--renamesourcefileattribute SourceFile
--keepattributes SourceFile,LineNumberTable
--keepattributes Exceptions,InnerClasses
--keepclassmembers class org.apache.http.**
+-keep class com.spisoft.sync.wrappers.** { *; }
+# Nextcloud
+-keep,allowshrinking class com.owncloud.android.** { *; }
+-keep,allowshrinking class org.apache.jackrabbit.webdav.** { *; }
+-keep,allowshrinking class org.apache.commons.codec.** { *; }
+-keep,allowshrinking class org.apache.commons.logging.** { *; }
+-keep,allowshrinking class org.parceler.** { *; }
+-keep,allowshrinking class org.slf4j.** { *; }
+
+#ignore nextcloud related warnings
+-dontwarn com.owncloud.android.lib.**
+-dontwarn org.apache.jackrabbit.webdav.**
+-dontwarn org.apache.commons.codec.**
+-dontwarn org.apache.commons.logging.**
+-dontwarn org.slf4j.**
+
 -dontskipnonpubliclibraryclasses
--keep public class com.google.android.gms.* { public *; }
--dontwarn com.google.android.gms.**
--keep public class com.tooleap.sdk.* { public *; }
--dontwarn com.tooleap.sdk.**
--keep class android.support.v7.widget.SearchView { *; }
--keep class com.spisoft.quicknote.*{ *; }
--keep public class com.mypackage.MyClass$MyJavaScriptInterface
 
--keep public class com.spisoft.quicknote.editor.EditorView$WebViewJavaScriptInterface
--keep public class * implements com.spisoft.quicknote.editor.EditorView$WebViewJavaScriptInterface
--keepclassmembers class com.spisoft.quicknote.editor.EditorView$WebViewJavaScriptInterface {
-    <methods>;
+-keepclasseswithmembernames class * {
+    native <methods>;
 }
--keep  class com.fasterxml.jackson.annotation.** {*;}
--keepattributes JavascriptInterface
+
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
+
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keep class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator *;
+}
+
+-keepattributes InnerClasses
+#end nextcloud
+
+
+
+
+# Retrofit does reflection on generic parameters. InnerClasses is required to use Signature and
+# EnclosingMethod is required to use InnerClasses.
+-keepattributes Signature, InnerClasses, EnclosingMethod
+
+# Retrofit does reflection on method and parameter annotations.
+-keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
+
+# Retain service method parameters when optimizing.
+-keepclassmembers,allowshrinking,allowobfuscation interface * {
+    @retrofit2.http.* <methods>;
+}
+
+# Ignore annotation used for build tooling.
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
+# Ignore JSR 305 annotations for embedding nullability information.
+-dontwarn javax.annotation.**
+
+# Guarded by a NoClassDefFoundError try/catch and only used when on the classpath.
+-dontwarn kotlin.Unit
+
+# Top-level functions that can only be used by Kotlin.
+-dontwarn retrofit2.KotlinExtensions
+
+# With R8 full mode, it sees no subtypes of Retrofit interfaces since they are created with a Proxy
+# and replaces all potential values with null. Explicitly keeping the interfaces prevents this.
+-if interface * { @retrofit2.http.* <methods>; }
+-keep,allowobfuscation interface <1>
