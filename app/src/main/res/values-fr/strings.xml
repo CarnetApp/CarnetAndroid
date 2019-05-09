@@ -72,7 +72,7 @@
     <string name="next">Suivant</string>
     <string name="app_restart">L\'application va maintenant redémarrer</string>
     <string name="pin">Attacher</string>
-    <string name="unpin">Déttacher</string>
+    <string name="unpin">Détacher</string>
     <string name="not_available_on_fdroid">Indisponible sur Fdroid</string>
     <string name="desktop_version">Version ordinateur</string>
     <string name="sync_intro_text_carnet_instance">Carnet peut synchroniser vos notes automatiquement. Choisissez un fournisseur pour accéder à vos notes dans votre navigateur web</string>
