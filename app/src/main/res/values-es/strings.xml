@@ -13,7 +13,7 @@
     <string name="storage_preference">Almacenamiento principal</string>
     <string name="recent">Recientes</string>
     <string name="browser">Navegador</string>
-    <string name="parent_folder">Directorio anterior</string>
+    <string name="parent_folder">Directorio principal</string>
     <string name="toast_on_minimize">Clic para maximizar</string>
     <string name="loading">Cargando</string>
     <string name="add_note">Añadir nota</string>
@@ -24,11 +24,11 @@
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="general_header">General</string>
     <string name="paiement_header">Financiar</string>
-    <string name="donate_liberapay">Donar (Libeeapay)</string>
+    <string name="donate_liberapay">Donar (Liberapay)</string>
     <string name="donate_paypal">Donar (PayPal)</string>
     <string name="donate">Donar</string>
-    <string name="report_bug_or_propose">Bug / caracteristica</string>
-    <string name="report_bug_or_propose_description">Reporta un bug o pregunta por una característica</string>
+    <string name="report_bug_or_propose">Bug / característica</string>
+    <string name="report_bug_or_propose_description">Informa de un fallo o pregunta por una característica</string>
     <string name="delete_confirm">¿Seguro que desea eliminar esta imagen?</string>
     <string name="wrong_password">Pin erroneo: por defecto 0000</string>
     <string name="checking_password">Verificación...</string>
