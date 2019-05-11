@@ -70,7 +70,7 @@
     <string name="sync_intro_text">Carnet supports synchronisation with NextCloud, don\'t forget to download Desktop version to find your notes back on your computer. Carnet is also available online on the NextCloud App Store.</string>
     <string name="google_drive">Google Drive</string>
     <string name="sync_intro_gdrive_text">Easy, most of you already have a gmail address, not OpenSource</string>
-    <string name="sync_select_nextcloud_text">Carnet is compatible with ever NextCloud providers. Please, find and register with a provider (some are available for free)</string>
+    <string name="sync_select_nextcloud_text">Carnet is compatible with every NextCloud providers. Please, find and register with a provider (some are available for free)</string>
     <string name="skip">Skip</string>
     <string name="welcome">Welcome !</string>
     <string name="welcome_subtitle">Let\'s discover Carnet</string>
