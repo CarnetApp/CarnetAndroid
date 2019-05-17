@@ -96,4 +96,8 @@
     <string name="toast_on_minimize">Klikněte na mě pro zvětšení</string>
     <string name="paiement_header">Finanční dary</string>
     <string name="add_screenshot">Přidat do poznámky snímek obrazovky\?</string>
+<string name="floating">Plovoucí poznámka</string>
+    <string name="authorisation_issue">Problém s oprávněním</string>
+    <string name="debug_log">Povolit zaznamenávání chyb</string>
+    <string name="faster_editor_load">Rychlejší načítání editoru (experimentální)</string>
 </resources>
