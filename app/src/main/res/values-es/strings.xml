@@ -5,7 +5,7 @@
     <string name="action_settings">Opciones</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">•Lista de tareas: Eliminar o cambiar el texto del marcador de posición•</string>
     <string name="floating">Nota flotante</string>
     <string name="rename">Renombrar</string>
     <string name="delete">Borrar</string>
@@ -21,7 +21,7 @@
     <string name="name">Nombre</string>
     <string name="new_folder_name">Nuevo directorio</string>
     <string name="storage_preference_details"/>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">ActividadAjustes</string>
     <string name="general_header">General</string>
     <string name="paiement_header">Financiar</string>
     <string name="donate_liberapay">Donar (Liberapay)</string>
@@ -62,14 +62,14 @@
     <string name="file_operation_in_progress">Operación con archivos</string>
     <string name="please_wait">Por favor espere</string>
     <string name="new_keyword">Nueva etiqueta</string>
-    <string name="title_activity_account_config">AccountConfigActivity</string>
+    <string name="title_activity_account_config">Configuración de Cuenta</string>
     <string name="remote_folder">Directorio remoto</string>
     <string name="keywords">Etiquetas</string>
     <string name="sync_intro_title">Sincronizar Carnet</string>
     <string name="sync_intro_text">Carner soporta la sincronización tanto con Google Drive como con Nexctcloud, no olvide descargar la versión de escritorio para tener sus notas también en su pc.</string>
     <string name="google_drive">Google Drive</string>
     <string name="sync_intro_gdrive_text">Fácil, muchos de vosotros usan una dirección gmail, no es de código abierto.</string>
-    <string name="sync_select_nextcloud_text">Carnet es compatible con cualquier proveedor de nextcloud. Por favor encuentre y regístrese en alguno (Muchos son gratuitos)</string>
+    <string name="sync_select_nextcloud_text">Carnet es compatible con cualquier proveedor de Nextcloud. Por favor encuentre y regístrese en alguno (Muchos son gratuitos)</string>
     <string name="skip">Saltar</string>
     <string name="welcome">¡Bienvenido!</string>
     <string name="welcome_subtitle">Descubra Carnet</string>
@@ -107,4 +107,18 @@
     <string name="fake_note_todo_item_2">Comparte Carnet</string>
     <string name="changelog">Historial de cambios</string>
     <string name="restore_recent">Restaurar a la última</string>
+<string name="fake_note_1">Estas notas de demostración desaparecerán cuando sea creada una nueva nota pulsando el boton derecho</string>
+    <string name="fake_note_2">Seleccionar nota/color, añadir palabras clave</string>
+    <string name="fake_note_3">Clasificar tus notas y textos</string>
+    <string name="fake_note_5">Formatear tus notas y documentos, añadir imágenes y grabaciones de audio</string>
+    <string name="fake_notes_warning">Las notas de demostración no son editables</string>
+    <string name="fake_note_6">Añadir listas de tareas y enlaces</string>
+    <string name="sort_reversed">Orden inverso</string>
+    <string name="sort_default">Por defecto</string>
+    <string name="sort_creation_date">Fecha de creación</string>
+    <string name="sort_modification_date">Fecha de modificación</string>
+    <string name="sort_custom_date">Fecha personalizada</string>
+    <string name="system_header">Sistema</string>
+    <string name="debug_log">Activar el registro de depuración</string>
+    <string name="faster_editor_load">Carga rápida del editor (experimental)</string>
 </resources>
