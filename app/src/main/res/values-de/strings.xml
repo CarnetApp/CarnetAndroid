@@ -2,7 +2,7 @@
 <resources><string name="hello_world">Hallo Welt!</string>
     <string name="action_settings">Einstellungen</string>
 
-    <string name="hello_blank_fragment">Dies ist nur ein Beispielsatz!</string>
+    <string name="hello_blank_fragment">Dies ist ein Beispielsatz</string>
     <string name="rename">Umbenennen</string>
     <string name="delete">Löschen</string>
     <string name="remove_recent">Aus \"Neueste\" entfernen</string>
