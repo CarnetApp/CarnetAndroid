@@ -76,13 +76,21 @@ public class CacheManager {
             e.printStackTrace();
         }
     }
-
+    public synchronized HashMap<String, Note> getCache(){
+        return cache;
+    }
     public synchronized void addToCache(Note note){
         if(cache == null ) return;
         note.needsUpdateInfo = false;
         cache.put(note.path, note);
+        RemindersManager.Companion.getInstance(mContext).add(note);
     }
 
+    public synchronized void removeFromCache(String path){
+        if(cache == null ) return;
+        cache.remove(path);
+        RemindersManager.Companion.getInstance(mContext).remove(path);
+    }
     public synchronized void addToCache(String notePath){
         if(cache == null ) return;
         File f = new File(notePath);

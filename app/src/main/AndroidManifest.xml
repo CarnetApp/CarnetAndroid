@@ -107,6 +107,8 @@
             android:exported="true" />
         <activity android:name=".WebBasedActivity"
             android:exported="true"></activity>
+
+        <receiver android:name=".reminders.NotificationPublisher" />
     </application>
 
 </manifest>
