@@ -141,7 +141,9 @@ public class Note implements Serializable{
 
     public static class Reminder implements Serializable{
         public List<String> days = new ArrayList<>();
-        public long date = -1;
+        public int dayOfMonth = -1;
+        public int month = -1;
+        public int year = -1;
         public long time = -1;
         public String frequency = null;
         public String id = "";
@@ -160,14 +162,20 @@ public class Note implements Serializable{
             Reminder reminder = new Reminder();
             try {
                 reminder.id = jsonObject.getString("id");
-                JSONArray array =  jsonObject.getJSONArray("days");
-                for (int i = 0; i < array.length(); i++) {
-                    reminder.days.add(array.getString(i));
+                if(jsonObject.has("days")) {
+                    JSONArray array = jsonObject.getJSONArray("days");
+                    for (int i = 0; i < array.length(); i++) {
+                        reminder.days.add(array.getString(i));
+                    }
                 }
-                reminder.frequency = jsonObject.getString("reminder");
-                reminder.time = jsonObject.getLong("reminder");
-                if(jsonObject.has("date"))
-                    reminder.date = jsonObject.getLong("date");
+                reminder.frequency = jsonObject.getString("frequency");
+                reminder.time = jsonObject.getLong("time");
+                if(jsonObject.has("dayOfMonth"))
+                    reminder.dayOfMonth = jsonObject.getInt("dayOfMonth");
+                if(jsonObject.has("year"))
+                    reminder.year = jsonObject.getInt("year");
+                if(jsonObject.has("month"))
+                    reminder.month = jsonObject.getInt("month");
 
 
             } catch (JSONException e) {
@@ -186,7 +194,9 @@ public class Note implements Serializable{
                 }
                 object.put("days",days);
                 object.put("time",time);
-                object.put("date",date);
+                object.put("dayOfMonth",dayOfMonth);
+                object.put("year",year);
+                object.put("month",month);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

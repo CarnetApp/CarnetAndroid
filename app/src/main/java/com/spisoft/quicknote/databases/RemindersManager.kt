@@ -9,12 +9,15 @@ import android.os.SystemClock
 import com.spisoft.quicknote.Note
 import com.spisoft.quicknote.R
 import com.spisoft.quicknote.reminders.NotificationPublisher
+import com.spisoft.sync.Log
 import java.util.*
+
+
 
 class RemindersManager(ct: Context){
     private var alarmMgr: AlarmManager
     private val ct: Context = ct
-
+    private val TAG = "RemindersManager"
     init {
         alarmMgr = ct.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -31,7 +34,7 @@ class RemindersManager(ct: Context){
         }
 
         alarmMgr?.set(
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                AlarmManager.RTC_WAKEUP,
                 time,
                 alarmIntent
         )
@@ -53,17 +56,31 @@ class RemindersManager(ct: Context){
         return builder.build()
     }
     fun add(note: Note){
-
+        var next:Long = -1;
+        Log.d(TAG, "Note with "+note.mMetadata.reminders.size+" reminders")
+        var selRem: Note.Reminder? = null
         for(reminder in note.mMetadata.reminders){
-            var next:Long = -1;
             if(reminder.frequency.equals("once")){
-                if(SystemClock.elapsedRealtime() < reminder.time + reminder.date){
-                    next = reminder.date + reminder.time
+                val timeCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+                timeCal.timeInMillis = reminder.time
+                val date = Calendar.getInstance()
+                date.timeInMillis = 0
+                date.set(Calendar.YEAR, reminder.year)
+                date.set(Calendar.MONTH, reminder.month-1)
+                date.set(Calendar.DAY_OF_MONTH, reminder.dayOfMonth)
+                date.set(Calendar.HOUR_OF_DAY, timeCal.get(Calendar.HOUR_OF_DAY))
+                date.set(Calendar.MINUTE, timeCal.get(Calendar.MINUTE))
+                Log.d(TAG, "once with "+date.timeInMillis)
+                Log.d(TAG, "once day "+reminder.dayOfMonth)
+                Log.d(TAG, "once month "+reminder.month)
+                Log.d(TAG, "once year "+reminder.year)
+                if(System.currentTimeMillis() < date.timeInMillis && (next == -1.toLong() || next > date.timeInMillis)){
+                    next = date.timeInMillis
+                    selRem = reminder
                 }
             }
             else
             if(reminder.frequency.equals("days")){
-                var nextReminder:Long = -1;
                 for(day in reminder.days){
                     val dayInt:Int = when(day) {
                         "monday" -> Calendar.MONDAY
@@ -77,23 +94,28 @@ class RemindersManager(ct: Context){
                     }
 
                     val date1 = Calendar.getInstance()
-                    date1.timeInMillis = SystemClock.elapsedRealtime()
+                    date1.timeInMillis = System.currentTimeMillis()
                     date1.set(Calendar.HOUR_OF_DAY, 0)
                     date1.set(Calendar.MINUTE, 0)
                     date1.set(Calendar.SECOND, 0)
                     date1.set(Calendar.MILLISECOND, 0)
                     date1.timeInMillis += reminder.time
 
-                    while (date1.get(Calendar.DAY_OF_WEEK) !== dayInt || date1.timeInMillis <= SystemClock.elapsedRealtime()) {
+                    while (date1.get(Calendar.DAY_OF_WEEK) !== dayInt || date1.timeInMillis <= System.currentTimeMillis()) {
                         date1.add(Calendar.DATE, 1)
                     }
-                    if(date1.timeInMillis < nextReminder || nextReminder < 0)
-                        nextReminder = date1.timeInMillis
+                    if(date1.timeInMillis < next || next < 0)
+                        next = date1.timeInMillis
+                    selRem = reminder
                 }
 
-                setAlarm(note, nextReminder)
             }
+
         }
+        Log.d(TAG, "next in "+ (next - System.currentTimeMillis()))
+        Log.d(TAG, "time "+ selRem?.time)
+
+        setAlarm(note, next)
     }
     fun remove(path: String){
 

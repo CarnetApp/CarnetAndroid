@@ -131,7 +131,7 @@ public class UpdaterActivity extends AppCompatActivity {
         int newVersion = getNewVersion(activity);
         Log.d(TAG, "current version "+oldVersion+" new "+newVersion);
 
-        if(newVersion != oldVersion){
+        if(newVersion != oldVersion || true){
 
             activity.startActivityForResult(new Intent(activity, UpdaterActivity.class),requestCode);
             return true;
