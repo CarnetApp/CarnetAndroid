@@ -83,7 +83,6 @@ public class CacheManager {
         if(cache == null ) return;
         note.needsUpdateInfo = false;
         cache.put(note.path, note);
-        RemindersManager.Companion.getInstance(mContext).add(note);
     }
 
     public synchronized void removeFromCache(String path){

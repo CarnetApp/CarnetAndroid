@@ -8,6 +8,7 @@ import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
+import com.spisoft.quicknote.databases.RemindersManager;
 import com.spisoft.sync.Log;
 
 import java.io.File;
@@ -135,6 +136,7 @@ public class NoteInfoRetriever {
                         note.mMetadata.last_modification_date = file.lastModified();
                     note.needsUpdateInfo = false;
                     CacheManager.getInstance(mContext).addToCache(note);
+                    RemindersManager.Companion.getInstance(mContext).add(note);
                     final Note finalNote = note;
                     Log.d(TAG, "finalNote");
                     mHandler.post(new Runnable() {

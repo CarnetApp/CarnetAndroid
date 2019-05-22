@@ -12,6 +12,7 @@ import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
+import com.spisoft.quicknote.databases.RemindersManager;
 import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.PictureUtils;
@@ -354,6 +355,8 @@ public class HttpServer extends NanoHTTPD {
         note.file_lastmodification = noteFile.lastModified();
         CacheManager.getInstance(mContext).addToCache(note);
         CacheManager.getInstance(mContext).writeCache();
+        RemindersManager.Companion.getInstance(mContext).add(note);
+
         return NanoHTTPD.newFixedLengthResponse("Saved !");
     }
 
