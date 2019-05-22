@@ -129,7 +129,7 @@ FileBrowser.prototype.list = function (callback) {
       var _iteratorError4 = undefined;
 
       try {
-        for (var _iterator4 = data[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+        for (var _iterator4 = data['files'][Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
           var node = _step4.value;
           console.log(node);
 
@@ -159,7 +159,7 @@ FileBrowser.prototype.list = function (callback) {
 
       files = files.concat(dirs_in);
       files = files.concat(files_in);
-      callback(files, endOfSearch);
+      callback(files, endOfSearch, data['metadata']);
     });
   }
 };

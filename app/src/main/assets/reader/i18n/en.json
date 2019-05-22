@@ -64,5 +64,18 @@
     "not_yet_implemented": "Not yet implemented",
     "open": "open",
     "date_time": "Date and time",
-    "media_empty_text": "Select the + button to add images / sounds"
+    "media_empty_text": "Select the + button to add images / sounds",
+    "reminders": "Reminders",
+    "once-a-month": "Once a month",
+    "once-a-year": "Once a year",
+    "days-of-week": "Days of week",
+    "once": "Once",
+    "frequency": "Frequency",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
 }

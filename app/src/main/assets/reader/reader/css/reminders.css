@@ -1,0 +1,18 @@
+.reminder-item .hour{
+    display: block;
+    font-size:18px;
+}
+.reminder-item{
+    padding-bottom:10px;
+    padding-top:10px;
+
+}
+.reminder-calendar-picker .c-datepicker__header-day,.reminder-date-picker .c-datepicker__toggle{
+    display:none;
+}
+.reminder-date-picker{
+    min-height: 354px !important;
+}
+.reminder-date-picker .c-datepicker__header{
+    display:none;
+}

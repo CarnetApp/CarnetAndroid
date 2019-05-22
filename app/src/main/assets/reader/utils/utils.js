@@ -17,6 +17,7 @@ Utils.sortByDefault = function (a, b) {
 };
 
 Utils.sortByCreationDate = function (a, b) {
+  if (a.metadata == undefined || b.metadata == undefined) return a.originalIndex < b.originalIndex ? -1 : 1;
   var dateA = a.metadata.last_modification_date;
 
   if (a.metadata.creation_date != undefined && a.metadata.creation_date !== "") {
@@ -33,6 +34,7 @@ Utils.sortByCreationDate = function (a, b) {
 };
 
 Utils.sortByCustomDate = function (a, b) {
+  if (a.metadata == undefined || b.metadata == undefined) return a.originalIndex < b.originalIndex ? -1 : 1;
   var dateA = a.metadata.custom_date;
 
   if (dateA == undefined || dateA == "") {
@@ -57,6 +59,7 @@ Utils.sortByCustomDate = function (a, b) {
 };
 
 Utils.sortByModificationDate = function (a, b) {
+  if (a.metadata == undefined || b.metadata == undefined) return a.originalIndex < b.originalIndex ? -1 : 1;
   var dateA = a.metadata.creation_date;
 
   if (a.metadata.last_modification_date != undefined) {

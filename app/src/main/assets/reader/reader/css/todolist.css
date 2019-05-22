@@ -1,4 +1,4 @@
-.mdl-checkbox{
+.todo-list .mdl-checkbox{
     height: auto;
 }
 
@@ -33,7 +33,7 @@
     cursor: text;
 }
 
-.mdl-checkbox {
+.todo-list .mdl-checkbox {
     width: calc(100% - 40px);
 
 }

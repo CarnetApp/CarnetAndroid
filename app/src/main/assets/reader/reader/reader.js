@@ -816,6 +816,12 @@ Writer.prototype.init = function () {
     writer.askToExit();
   };
 
+  document.getElementById("reminders-button").onclick = function () {
+    var remindersDialog = new RemindersDialog(document.getElementById("reminders"), writer.note.metadata.reminders);
+    remindersDialog.dialog.showModal();
+    return false;
+  };
+
   document.getElementById("add-file-button").onclick = function () {
     writer.addMedia();
   };
