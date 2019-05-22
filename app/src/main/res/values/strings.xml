@@ -121,4 +121,5 @@
     <string name="system_header">System</string>
     <string name="debug_log">Enable debug log</string>
     <string name="faster_editor_load">Faster editor load (experimental)</string>
+    <string name="reminder">Reminder</string>
 </resources>

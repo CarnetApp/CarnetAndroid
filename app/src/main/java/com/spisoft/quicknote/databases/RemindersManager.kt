@@ -29,7 +29,7 @@ class RemindersManager(ct: Context){
         val requestCode = 1000
         val alarmIntent = Intent(ct, NotificationPublisher::class.java).let { intent ->
             intent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
-            intent.putExtra(NotificationPublisher.NOTIFICATION, getNotification(note.title));
+            intent.putExtra(NotificationPublisher.NOTIFICATION, getNotification(note));
             PendingIntent.getBroadcast(ct, requestCode, intent, 0)
         }
 
@@ -48,11 +48,14 @@ class RemindersManager(ct: Context){
         }
         alarmMgr?.cancel(alarmIntent)
     }
-    private fun getNotification(content: String): Notification {
+    private fun getNotification(note: Note): Notification {
         val builder = Notification.Builder(ct)
-        builder.setContentTitle("Reminder")
-        builder.setContentText(content)
-        builder.setSmallIcon(R.drawable.ic_launcher)
+        builder.setContentTitle(ct.getString(R.string.reminder))
+        if(!note.title!!.startsWith("untitled"))
+            builder.setContentText(note.title)
+        else
+            builder.setContentText(note.shortText.substring(0,15))
+        builder.setSmallIcon(R.mipmap.ic_launcher)
         return builder.build()
     }
     fun add(note: Note){
