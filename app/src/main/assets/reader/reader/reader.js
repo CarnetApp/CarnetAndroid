@@ -348,7 +348,7 @@ var saveTextIfChanged = function saveTextIfChanged(onSaved) {
 };
 
 Writer.prototype.setNextSaveTask = function () {
-  setTimeout(saveTextIfChanged, 4000);
+  this.lastSavedTimeout = setTimeout(saveTextIfChanged, 4000);
 };
 
 Writer.prototype.createEditableZone = function () {
@@ -455,7 +455,7 @@ Writer.prototype.fillWriter = function (extractedHTML) {
   this.oDoc.addEventListener("input", function () {
     writer.hasTextChanged = true;
   }, false);
-  this.saveInterval = setTimeout(saveTextIfChanged, 4000);
+  this.lastSavedTimeout = setTimeout(saveTextIfChanged, 4000);
   this.sDefTxt = this.oDoc.innerHTML;
   /*simple initialization*/
 
@@ -902,6 +902,11 @@ Writer.prototype.askToExit = function () {
 
     return false;
   } else {
+    if (this.lastSavedTimeout != undefined) {
+      clearTimeout(this.lastSavedTimeout);
+      this.lastSavedTimeout = undefined;
+    }
+
     this.closeFullscreenMediaToolbar();
     compatibility.exit();
   }
@@ -1014,7 +1019,6 @@ Writer.prototype.removeKeyword = function (word) {
 
 Writer.prototype.reset = function () {
   this.exitOnSaved = false;
-  if (this.saveInterval !== undefined) clearInterval(this.saveInterval);
   this.putDefaultHTML();
   var dias = document.getElementsByClassName("mdl-dialog");
 

@@ -16,6 +16,14 @@ RemindersUtils.translateTimeToLocalTime = function (timestamp) {
     return d.getTime()
 }
 
+RemindersUtils.translateLocalTimeToTimestamp = function (time) {
+    var dUtc = new Date(time);
+    var d = new Date();
+    d.setUTCHours(dUtc.getHours())
+    d.setUTCMinutes(dUtc.getMinutes())
+    return d.getTime()
+}
+
 var RemindersDialog = function (element, reminders) {
     this.dialog = element
     this.dialog.getElementsByClassName("mdl-dialog__content")[0].innerHTML = ""
@@ -27,6 +35,9 @@ var RemindersDialog = function (element, reminders) {
         element.close()
         var reminderItemDialog = new ReminderItemDialog(document.getElementById("reminder-item"))
         reminderItemDialog.dialog.showModal()
+    }
+    this.dialog.getElementsByClassName("close")[0].onclick = function () {
+        element.close()
     }
 }
 
@@ -128,22 +139,10 @@ var ReminderItemDialog = function (element, reminder) {
             });
         picker.open();
     }
-    document.getElementById("time").onclick = function () {
-        itemDialog.dialog.close()
-        const picker = new MaterialDatetimePicker({
-            default: moment(itemDialog.time),
-        }).on('open', function () {
-            this.$('.js-show-clock').click()
-            this.pickerEl.classList.add("reminder-date-picker");
-        })
-            .on('submit', (val) => {
-                itemDialog.setTime(val)
-                itemDialog.dialog.showModal()
-            })
-            .on('cancel', () => {
-                itemDialog.dialog.showModal()
-            });
-        picker.open();
+    document.getElementById("reminder-time-picker").onchange = function () {
+        var array = document.getElementById("reminder-time-picker").value.split(":")
+        itemDialog.time = array[0] * 60 * 60 * 1000 + array[1] * 60 * 1000
+
     }
     this.okButton = element.getElementsByClassName("ok")[0]
     this.okButton.onclick = function () {
@@ -181,12 +180,10 @@ var ReminderItemDialog = function (element, reminder) {
     for (var opt of this.frequencyContainer.getElementsByClassName('mdl-menu__item')) {
         opt.onclick = function (event) {
             itemDialog.setFrequency(event.target.getAttribute("data-val"))
-
-
         }
     }
 
-    this.setTime(RemindersUtils.translateTimeToLocalTime(this.reminder.time))
+    this.setTime(this.reminder.time)
     this.setDate(this.reminder.date)
     this.setFrequency(this.reminder.frequency)
 }
@@ -234,22 +231,6 @@ ReminderItemDialog.prototype.setDate = function (date) {
 }
 
 ReminderItemDialog.prototype.setTime = function (time) {
-    var d = new Date(time);
-
-    this.time = d.getHours() * 60 * 60 * 1000 + d.getMinutes() * 60 * 1000;
-    console.log("set time to " + this.time)
-    document.getElementById("time").value = d.toLocaleTimeString();
+    var date = new Date(time)
+    document.getElementById("reminder-time-picker").value = ("0" + date.getUTCHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);//cheat to have two digits
 }
-
-$(document).ready(
-    function () {
-        setTimeout(function () {
-            //var reminderItemDialog = new ReminderItemDialog(document.getElementById("reminder-item"))
-            //reminderItemDialog.dialog.showModal()
-
-            var remindersDialog = new RemindersDialog(document.getElementById("reminders"), writer.note.metadata.reminders)
-            remindersDialog.dialog.showModal()
-        }, 3000)
-
-    })
-

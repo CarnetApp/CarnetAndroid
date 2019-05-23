@@ -515,3 +515,8 @@ div#container-button::-webkit-scrollbar {
 .c-datepicker__header-date {
 	height: 30px !important;
 }
+
+.timer-label {
+	font-size:12px;
+	color: var(--label-text-color) !important;
+}

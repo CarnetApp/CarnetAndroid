@@ -181,12 +181,14 @@
 			<br />
 			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="date-container">
 				<input class="mdl-textfield__input" type="text" id="date" value="13/04">
-				<label class="mdl-textfield__label" for="date">Date</label>
+				<label class="mdl-textfield__label" for="date" data-i18n="date">Date</label>
 			</div>
-			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-				<input class="mdl-textfield__input" type="text" id="time" value="8:00">
-				<label class="mdl-textfield__label" for="time">At</label>
+
+			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="time-container">
+				<input class="mdl-textfield__input" type="time" id="reminder-time-picker" value="01:00" />
+				<label class="mdl-textfield__label" for="time" data-i18n="time">Time</label>
 			</div>
+
 		</div>
 		<div class="mdl-dialog__actions">
 			<button type="button" class="mdl-button ok" data-i18n="ok">OK</button>
