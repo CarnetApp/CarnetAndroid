@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class Database(private val mContext: Context) {
     private var mDatabaseHelper: DatabaseHelper? = null
+    public val lock = Object();
 
     fun open(): SQLiteDatabase {
         if (mDatabaseHelper == null)

@@ -3,15 +3,18 @@ package com.spisoft.quicknote.databases
 import android.app.AlarmManager
 import android.app.Notification
 import android.app.PendingIntent
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
 import android.os.SystemClock
 import com.spisoft.quicknote.Note
 import com.spisoft.quicknote.R
 import com.spisoft.quicknote.reminders.NotificationPublisher
 import com.spisoft.sync.Log
+import com.spisoft.sync.database.SyncDatabase
 import java.util.*
-
+import kotlin.collections.ArrayList
 
 
 class RemindersManager(ct: Context){
@@ -26,7 +29,25 @@ class RemindersManager(ct: Context){
 
 
     private fun setAlarm(note:Note, time:Long):Int{
-        val requestCode = 1000
+        var requestCode = 2500
+        //select a request code not in DB
+        val database = Database.getInstance(ct)!!
+        var requestCodes = ArrayList<Int>()
+        synchronized(database.lock) {
+            val sqLiteDatabase = database.open()
+            val cursor = sqLiteDatabase.query(TABLE_NAME, COLUMNS, null, null, null, null, null)
+            if(cursor.count > 0){
+                val requestCodeCol = cursor.getColumnIndex(KEY_REQUEST_CODE)
+                while(cursor.moveToNext()){
+                    requestCodes.add(cursor.getInt(requestCodeCol))
+                }
+                cursor.close()
+            }
+            database.close()
+        }
+        while(requestCodes.contains(requestCode))
+            requestCode ++ ;
+
         val alarmIntent = Intent(ct, NotificationPublisher::class.java).let { intent ->
             intent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
             intent.putExtra(NotificationPublisher.NOTIFICATION, getNotification(note));
@@ -59,6 +80,7 @@ class RemindersManager(ct: Context){
         return builder.build()
     }
     fun add(note: Note){
+        remove(note.path)
         var next:Long = -1;
         Log.d(TAG, "Note with "+note.mMetadata.reminders.size+" reminders")
         var selRem: Note.Reminder? = null
@@ -118,9 +140,36 @@ class RemindersManager(ct: Context){
         Log.d(TAG, "next in "+ (next - System.currentTimeMillis()))
         Log.d(TAG, "time "+ selRem?.time)
 
-        setAlarm(note, next)
+        val code = setAlarm(note, next)
+        val database = Database.getInstance(ct)!!
+        synchronized(database.lock) {
+            val sqLiteDatabase = database.open()
+            val initialValues = ContentValues()
+            initialValues.put(KEY_PATH, note.path)
+            initialValues.put(KEY_TIME, next)
+            initialValues.put(KEY_REQUEST_CODE, code)
+            sqLiteDatabase.insertWithOnConflict(TABLE_NAME, null, initialValues, SQLiteDatabase.CONFLICT_IGNORE)
+            database.close()
+        }
     }
     fun remove(path: String){
+        val database = Database.getInstance(ct)!!
+        synchronized(database.lock) {
+            val sqLiteDatabase = database.open()
+            val cursor = sqLiteDatabase.query(TABLE_NAME, COLUMNS, KEY_PATH+" = ?", arrayOf(path), null, null, null)
+            if(cursor.count > 0){
+                val pathCol = cursor.getColumnIndex(KEY_PATH)
+                val requestCodeCol = cursor.getColumnIndex(KEY_REQUEST_CODE)
+                val timeCol = cursor.getColumnIndex(KEY_TIME)
+                while(cursor.moveToNext()){
+                    cancelAlarm(cursor.getInt(requestCodeCol))
+                }
+                cursor.close()
+            }
+            sqLiteDatabase.delete(TABLE_NAME, KEY_PATH+" = ?", arrayOf(path))
+            database.close()
+        }
+
 
     }
 
@@ -139,7 +188,7 @@ class RemindersManager(ct: Context){
         val KEY_PATH = "path"
         val KEY_REQUEST_CODE = "request_code"
         val KEY_TIME = "time"
-
+        var COLUMNS = arrayOf(KEY_PATH, KEY_REQUEST_CODE, KEY_TIME)
         val CREATE_TABLE = ("create table " + TABLE_NAME + "( "
                 + KEY_PATH + " TEXT,"
                 + KEY_REQUEST_CODE + " integer, "
