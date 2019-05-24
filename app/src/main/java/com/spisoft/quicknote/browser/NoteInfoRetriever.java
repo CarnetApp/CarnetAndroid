@@ -8,7 +8,7 @@ import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
-import com.spisoft.quicknote.databases.RemindersManager;
+import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.sync.Log;
 
 import java.io.File;

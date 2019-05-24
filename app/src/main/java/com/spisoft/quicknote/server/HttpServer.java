@@ -1,7 +1,6 @@
 package com.spisoft.quicknote.server;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
@@ -11,8 +10,7 @@ import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
-import com.spisoft.quicknote.databases.RecentHelper;
-import com.spisoft.quicknote.databases.RemindersManager;
+import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.PictureUtils;
@@ -27,14 +25,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.util.ServerRunner;

@@ -1,4 +1,4 @@
-package com.spisoft.quicknote.databases
+package com.spisoft.quicknote.reminders
 
 import android.app.AlarmManager
 import android.app.Notification
@@ -7,13 +7,12 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
-import android.os.SystemClock
 import android.preference.PreferenceManager
 import com.spisoft.quicknote.Note
 import com.spisoft.quicknote.R
-import com.spisoft.quicknote.reminders.NotificationPublisher
+import com.spisoft.quicknote.databases.CacheManager
+import com.spisoft.quicknote.databases.Database
 import com.spisoft.sync.Log
-import com.spisoft.sync.database.SyncDatabase
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -86,6 +85,7 @@ class RemindersManager(ct: Context){
         Log.d(TAG, "Note with "+note.mMetadata.reminders.size+" reminders")
         var selRem: Note.Reminder? = null
         for(reminder in note.mMetadata.reminders){
+            Log.d(TAG, "reminder freq: "+reminder.frequency)
             if(reminder.frequency.equals("once")){
                 val timeCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
                 timeCal.timeInMillis = reminder.time
@@ -165,7 +165,7 @@ class RemindersManager(ct: Context){
         val database = Database.getInstance(ct)!!
         synchronized(database.lock) {
             val sqLiteDatabase = database.open()
-            val cursor = sqLiteDatabase.query(TABLE_NAME, COLUMNS, KEY_PATH+" = ?", arrayOf(path), null, null, null)
+            val cursor = sqLiteDatabase.query(TABLE_NAME, COLUMNS, KEY_PATH +" = ?", arrayOf(path), null, null, null)
             if(cursor.count > 0){
                 val pathCol = cursor.getColumnIndex(KEY_PATH)
                 val requestCodeCol = cursor.getColumnIndex(KEY_REQUEST_CODE)
@@ -175,7 +175,7 @@ class RemindersManager(ct: Context){
                 }
                 cursor.close()
             }
-            sqLiteDatabase.delete(TABLE_NAME, KEY_PATH+" = ?", arrayOf(path))
+            sqLiteDatabase.delete(TABLE_NAME, KEY_PATH +" = ?", arrayOf(path))
             database.close()
         }
 
@@ -204,7 +204,7 @@ class RemindersManager(ct: Context){
                 + KEY_REQUEST_CODE + " integer, "
                 + KEY_TIME + " integer);");
         var instance: RemindersManager? = null;
-        fun getInstance(ct:Context):RemindersManager?{
+        fun getInstance(ct:Context): RemindersManager?{
             if(instance == null){
                 instance = RemindersManager(ct)
             }

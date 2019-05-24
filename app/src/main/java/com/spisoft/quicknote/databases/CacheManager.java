@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.browser.NoteInfoRetriever;
+import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.sync.Log;
 
 import org.json.JSONArray;

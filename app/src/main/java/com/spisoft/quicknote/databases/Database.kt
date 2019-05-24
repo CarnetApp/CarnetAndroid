@@ -3,6 +3,7 @@ package com.spisoft.quicknote.databases
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.spisoft.quicknote.reminders.RemindersManager
 
 class Database(private val mContext: Context) {
     private var mDatabaseHelper: DatabaseHelper? = null

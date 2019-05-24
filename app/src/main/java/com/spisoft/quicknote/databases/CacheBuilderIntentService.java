@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
+import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.sync.Log;
 
 import java.io.File;
