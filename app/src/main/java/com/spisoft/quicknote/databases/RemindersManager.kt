@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.SystemClock
+import android.preference.PreferenceManager
 import com.spisoft.quicknote.Note
 import com.spisoft.quicknote.R
 import com.spisoft.quicknote.reminders.NotificationPublisher
@@ -29,7 +30,7 @@ class RemindersManager(ct: Context){
 
 
     private fun setAlarm(note:Note, time:Long):Int{
-        var requestCode = 2500
+        var requestCode = PreferenceManager.getDefaultSharedPreferences(ct).getInt("last_reminder_request_code",2600) + 1
         //select a request code not in DB
         val database = Database.getInstance(ct)!!
         var requestCodes = ArrayList<Int>()
@@ -47,18 +48,18 @@ class RemindersManager(ct: Context){
         }
         while(requestCodes.contains(requestCode))
             requestCode ++ ;
-
         val alarmIntent = Intent(ct, NotificationPublisher::class.java).let { intent ->
-            intent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+            intent.putExtra(NotificationPublisher.NOTIFICATION_ID, 123);
+            intent.putExtra(NotificationPublisher.NOTE_PATH, note.path);
             intent.putExtra(NotificationPublisher.NOTIFICATION, getNotification(note));
             PendingIntent.getBroadcast(ct, requestCode, intent, 0)
         }
-
         alarmMgr?.set(
                 AlarmManager.RTC_WAKEUP,
                 time,
                 alarmIntent
         )
+        PreferenceManager.getDefaultSharedPreferences(ct).edit().putInt("last_reminder_request_code",requestCode).apply()
         return requestCode
     }
 
@@ -173,7 +174,8 @@ class RemindersManager(ct: Context){
 
     }
 
-    fun refresh(){
+    fun onBoot(){
+        PreferenceManager.getDefaultSharedPreferences(ct).edit().putInt("last_reminder_request_code",2600).apply()
         CacheManager.getInstance(ct).cache.values.map { note -> add(note) }
     }
 
