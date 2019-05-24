@@ -96,6 +96,9 @@ class RemindersManager(ct: Context){
                 date.set(Calendar.DAY_OF_MONTH, reminder.dayOfMonth)
                 date.set(Calendar.HOUR_OF_DAY, timeCal.get(Calendar.HOUR_OF_DAY))
                 date.set(Calendar.MINUTE, timeCal.get(Calendar.MINUTE))
+                date.set(Calendar.SECOND, 0)
+                date.set(Calendar.MILLISECOND, 0)
+
                 Log.d(TAG, "once with "+date.timeInMillis)
                 Log.d(TAG, "once day "+reminder.dayOfMonth)
                 Log.d(TAG, "once month "+reminder.month)
@@ -106,7 +109,9 @@ class RemindersManager(ct: Context){
                 }
             }
             else
-            if(reminder.frequency.equals("days")){
+            if(reminder.frequency.equals("days-of-week")){
+                Log.d(TAG, "days of week ok "+reminder.days)
+
                 for(day in reminder.days){
                     val dayInt:Int = when(day) {
                         "monday" -> Calendar.MONDAY
@@ -118,26 +123,29 @@ class RemindersManager(ct: Context){
                         "sunday" -> Calendar.SUNDAY
                         else -> return
                     }
-
+                    Log.d(TAG, "day: "+dayInt)
+                    val timeCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+                    timeCal.timeInMillis = reminder.time
                     val date1 = Calendar.getInstance()
-                    date1.timeInMillis = System.currentTimeMillis()
-                    date1.set(Calendar.HOUR_OF_DAY, 0)
-                    date1.set(Calendar.MINUTE, 0)
+                    Log.d(TAG, "Today is "+date1.get(Calendar.DAY_OF_WEEK))
+                    date1.set(Calendar.HOUR_OF_DAY, timeCal.get(Calendar.HOUR_OF_DAY))
+                    date1.set(Calendar.MINUTE, timeCal.get(Calendar.MINUTE))
                     date1.set(Calendar.SECOND, 0)
                     date1.set(Calendar.MILLISECOND, 0)
-                    date1.timeInMillis += reminder.time
-
                     while (date1.get(Calendar.DAY_OF_WEEK) !== dayInt || date1.timeInMillis <= System.currentTimeMillis()) {
                         date1.add(Calendar.DATE, 1)
                     }
-                    if(date1.timeInMillis < next || next < 0)
+                    if(date1.timeInMillis < next || next < 0) {
                         next = date1.timeInMillis
-                    selRem = reminder
+                        selRem = reminder
+                    }
                 }
 
             }
 
         }
+        if(next - System.currentTimeMillis()<=0)
+            return
         Log.d(TAG, "next in "+ (next - System.currentTimeMillis()))
         Log.d(TAG, "time "+ selRem?.time)
 
