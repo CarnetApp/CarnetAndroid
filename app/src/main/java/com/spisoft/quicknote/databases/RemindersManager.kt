@@ -73,7 +73,7 @@ class RemindersManager(ct: Context){
     private fun getNotification(note: Note): Notification {
         val builder = Notification.Builder(ct)
         builder.setContentTitle(ct.getString(R.string.reminder))
-        if(!note.title!!.startsWith("untitled"))
+        if(!note.title!!.startsWith("untitled") || note.shortText == null || note.shortText.length == 0)
             builder.setContentText(note.title)
         else
             builder.setContentText(if(note.shortText.length>15) note.shortText.substring(0,15) else note.shortText)
