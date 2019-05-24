@@ -75,7 +75,7 @@ class RemindersManager(ct: Context){
         if(!note.title!!.startsWith("untitled"))
             builder.setContentText(note.title)
         else
-            builder.setContentText(note.shortText.substring(0,15))
+            builder.setContentText(if(note.shortText.length>15) note.shortText.substring(0,15) else note.shortText)
         builder.setSmallIcon(R.mipmap.ic_launcher)
         return builder.build()
     }

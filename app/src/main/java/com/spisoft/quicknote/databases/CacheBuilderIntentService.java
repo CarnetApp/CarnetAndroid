@@ -46,7 +46,7 @@ public class CacheBuilderIntentService extends IntentService {
             if(note == null || note.file_lastmodification != file.lastModified()){
                 Log.d(TAG, "building cache for "+file.getName());
                 CacheManager.getInstance(this).addToCache(file.getAbsolutePath());
-                RemindersManager.Companion.getInstance(this).add(note);
+                RemindersManager.Companion.getInstance(this).add(CacheManager.getInstance(this).get(file.getAbsolutePath()));
             } else {
                 Log.d(TAG, "is in cache: "+file.getName());
             }
