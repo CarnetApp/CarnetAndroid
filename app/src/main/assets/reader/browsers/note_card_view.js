@@ -32,7 +32,7 @@ NoteCardView.prototype.refreshTodoList = function () {
       var span = document.createElement("span");
       span.classList.add("mdl-checkbox__label");
       span.classList.add("todo-item-text");
-      span.innerHTML = todolist.todo[j];
+      span.innerHTML = todolist.todo[j].replace(/(?:\r\n|\r|\n)/g, '<br />');
       label.appendChild(span);
       var noteCard = this;
       label.i = i;

@@ -216,16 +216,16 @@ TodoList.prototype.createItem = function (text, ischecked, after) {
   input.id = id;
   input.classList.add("mdl-checkbox__input");
   label.appendChild(input);
-  var span = document.createElement("input");
+  var span = document.createElement("textarea");
+  span.rows = 1;
   span.classList.add("mdl-checkbox__label");
   span.classList.add("todo-item-text");
   span.contentEditable = true;
   span.div = div;
   $(span).keydown(function (e) {
     var key = e.which || e.keyCode;
-    console.log("key " + key + " lenght " + span.value.trim().length);
 
-    if (key === 13) {
+    if (e.ctrlKey && key === 13) {
       if (span.value.trim().length > 0) {
         // 13 is enter
         todolist.createItem("", false, div).span.focus();
@@ -234,12 +234,13 @@ TodoList.prototype.createItem = function (text, ischecked, after) {
       }
     }
 
-    console.log("removing? " + span.value.length);
-
-    if (key === 8 && span.value.trim().length == 0) {
-      console.log("removing");
+    if (key === 8 && span.value.length == 0) {
       todolist.removeItem(div);
     }
+
+    setTimeout(function () {
+      resizeTextArea(span);
+    }, 20);
   });
   span.value = text;
 
@@ -292,6 +293,7 @@ TodoList.prototype.createItem = function (text, ischecked, after) {
   span.onfocus = function () {};
 
   span.focus();
+  resizeTextArea(span);
   return div;
 };
 
@@ -313,3 +315,8 @@ TodoList.prototype.uncheck = function (item, after) {
   var event = new Event('todolist-changed');
   this.element.parentNode.dispatchEvent(event);
 };
+
+function resizeTextArea(textarea) {
+  textarea.style.height = "";
+  textarea.style.height = textarea.scrollHeight + "px";
+}

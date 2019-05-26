@@ -14,10 +14,10 @@
 .todo-list .todo-item-text{
     width: calc(100% - 50px);
     display: block;
-    min-height: 25px;
     margin-left: 15px;
     margin-top:-5px;
     padding: 5px;
+    border: rgba(128, 128, 128, 0.233) 1px solid;
 }
 
 .add-item{
@@ -73,7 +73,7 @@
 .todo-list-content{
     margin:auto;
     margin-top:0px;
-    max-width: 300px;
+    max-width: 600px;
     width:100%;  
 }
 .done .move-item{

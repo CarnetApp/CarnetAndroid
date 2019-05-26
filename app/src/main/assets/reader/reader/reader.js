@@ -392,6 +392,7 @@ Writer.prototype.placeCaretAtEnd = function (el) {
 };
 
 Writer.prototype.fillWriter = function (extractedHTML) {
+  compatibility.onNoteLoaded();
   console.log("fill " + extractedHTML);
   var writer = this;
   if (extractedHTML != undefined && extractedHTML != "") this.oEditor.innerHTML = extractedHTML;else this.putDefaultHTML();
@@ -462,8 +463,6 @@ Writer.prototype.fillWriter = function (extractedHTML) {
   this.oDoc.focus();
   resetScreenHeight();
   this.refreshKeywords(); //  $("#editor").webkitimageresize().webkittableresize().webkittdresize();
-
-  compatibility.onNoteLoaded();
 }; //var KeywordsDBManager = require(rootpath + "keywords/keywords_db_manager").KeywordsDBManager;
 
 
