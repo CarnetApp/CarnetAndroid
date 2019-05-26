@@ -20,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.spisoft.quicknote.Note;
@@ -275,15 +276,10 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             container.removeAllViews();
             for(final Note.TodoList todoList:todolists){
                 for(final String item : todoList.todo){
-                    final LinearLayout cblayout = new LinearLayout(mContext);
-                    cblayout.setOrientation(LinearLayout.HORIZONTAL);
-                    final CheckBox checkBox = new CheckBox(mContext);
-                    final TextView tv = new TextView(mContext);
-
+                    final RelativeLayout cblayout = (RelativeLayout) LayoutInflater.from(mContext).inflate(R.layout.todolist_item, container, false);
+                    final CheckBox checkBox = cblayout.findViewById(R.id.checkbox);
+                    final TextView tv = cblayout.findViewById(R.id.textview);
                     tv.setText(item);
-                    cblayout.addView(checkBox);
-                    cblayout.addView(tv);
-                    container.addView(cblayout);
                     checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -298,6 +294,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                             });
                         }
                     });
+                    container.addView(cblayout);
 
                 }
             }
