@@ -5,15 +5,15 @@
     <solid android:color="?attr/ActionButtonBorderColor" />
     <size android:width="10dp"/>
     <padding android:bottom="0dp" android:left="0dp" android:right="0dp" android:top="0dp"/>
-    <corners android:topLeftRadius="5dp"/>
+    <corners android:topLeftRadius="5dp" android:topRightRadius="5dp"/>
 
 </shape>
     </item>
-    <item android:top="2dp" android:left="2dp" android:right="0dp" android:bottom="0dp">
+    <item android:top="2dp" android:left="0dp" android:right="0dp" android:bottom="0dp">
         <shape  >
             <solid android:color="?attr/ActionButtonBackground" />
             <size android:width="10dp"/>
-            <corners android:topLeftRadius="5dp"/>
+            <corners android:topLeftRadius="5dp" android:topRightRadius="5dp"/>
         </shape>
     </item>
 </layer-list>
