@@ -32,6 +32,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/MainViewBackground"
+                android:clipToPadding="false"
+                android:paddingBottom="50dp"
                 />
         </android.support.v4.widget.SwipeRefreshLayout>
 
