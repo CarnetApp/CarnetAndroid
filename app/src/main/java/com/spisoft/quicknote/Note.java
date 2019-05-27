@@ -197,6 +197,7 @@ public class Note implements Serializable{
                 object.put("dayOfMonth",dayOfMonth);
                 object.put("year",year);
                 object.put("month",month);
+                object.put("frequency",frequency);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -324,6 +325,12 @@ public class Note implements Serializable{
                     urlsObj.put(url, new JSONObject());
                 }
                 object.put("urls", urlsObj);
+                JSONArray reminders = new JSONArray();
+                for(Reminder reminder : this.reminders){
+                    reminders.put(reminder.toJsonObject());
+                }
+                object.put("reminders",reminders);
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
