@@ -143,6 +143,7 @@ Writer.prototype.setMediaList = function (list) {
   writer.currentFullscreen = 0;
   writer.fullscreenableMedia = [];
   writer.mediaList.innerHTML = "";
+  writer.listOfMediaURL = list;
   var mediaCount = 0;
   if (list == undefined) list = [];
 
@@ -208,6 +209,8 @@ Writer.prototype.setMediaList = function (list) {
 
     _loop();
   }
+
+  resetScreenHeight();
 };
 
 Writer.prototype.refreshMedia = function () {
@@ -392,11 +395,11 @@ Writer.prototype.placeCaretAtEnd = function (el) {
 };
 
 Writer.prototype.fillWriter = function (extractedHTML) {
-  compatibility.onNoteLoaded();
   console.log("fill " + extractedHTML);
   var writer = this;
   if (extractedHTML != undefined && extractedHTML != "") this.oEditor.innerHTML = extractedHTML;else this.putDefaultHTML();
-  document.getElementById("name-input").value = FileUtils.stripExtensionFromName(FileUtils.getFilename(this.note.path));
+  var name = FileUtils.stripExtensionFromName(FileUtils.getFilename(this.note.path));
+  document.getElementById("name-input").value = name.startsWith("untitled") ? "" : name;
 
   this.oCenter.onscroll = function () {
     lastscroll = $(writer.oCenter).scrollTop();
@@ -462,7 +465,8 @@ Writer.prototype.fillWriter = function (extractedHTML) {
 
   this.oDoc.focus();
   resetScreenHeight();
-  this.refreshKeywords(); //  $("#editor").webkitimageresize().webkittableresize().webkittdresize();
+  this.refreshKeywords();
+  compatibility.onNoteLoaded();
 }; //var KeywordsDBManager = require(rootpath + "keywords/keywords_db_manager").KeywordsDBManager;
 
 
@@ -551,6 +555,11 @@ Writer.prototype.warnNotYetImplemented = function () {
 Writer.prototype.displaySnack = function (data) {
   var snackbarContainer = document.querySelector('#snackbar');
   if (!(_typeof(snackbarContainer.MaterialSnackbar) == undefined)) snackbarContainer.MaterialSnackbar.showSnackbar(data);
+};
+
+Writer.prototype.openRemindersDialog = function () {
+  var remindersDialog = new RemindersDialog(document.getElementById("reminders"), writer.note.metadata.reminders);
+  remindersDialog.dialog.showModal();
 };
 
 Writer.prototype.init = function () {
@@ -816,8 +825,8 @@ Writer.prototype.init = function () {
   };
 
   document.getElementById("reminders-button").onclick = function () {
-    var remindersDialog = new RemindersDialog(document.getElementById("reminders"), writer.note.metadata.reminders);
-    remindersDialog.dialog.showModal();
+    writer.toggleDrawer();
+    writer.openRemindersDialog();
     return false;
   };
 
@@ -1249,6 +1258,21 @@ RenameNoteTask.prototype.run = function (callback) {
   var path = FileUtils.getParentFolderFromPath(this.writer.note.path);
   var hasOrigin = false;
   var nameInput = document.getElementById("name-input");
+
+  if (nameInput.value.trim() == "") {
+    task.writer.setDoNotEdit(false);
+    $("#loading").fadeOut();
+    var name = FileUtils.stripExtensionFromName(FileUtils.getFilename(task.writer.note.path));
+    nameInput.value = name.startsWith("untitled") ? "" : name;
+    var data = {
+      message: 'Note couldn\'t be renamed',
+      timeout: 2000
+    };
+    task.writer.displaySnack(data);
+    callback();
+    return;
+  }
+
   var _iteratorNormalCompletion3 = true;
   var _didIteratorError3 = false;
   var _iteratorError3 = undefined;
@@ -1298,7 +1322,8 @@ RenameNoteTask.prototype.run = function (callback) {
     } else {
       task.writer.setDoNotEdit(false);
       $("#loading").fadeOut();
-      nameInput.value = FileUtils.stripExtensionFromName(FileUtils.getFilename(task.writer.note.path));
+      var name = FileUtils.stripExtensionFromName(FileUtils.getFilename(task.writer.note.path));
+      nameInput.value = name.startsWith("untitled") ? "" : name;
       var data = {
         message: 'Note couldn\'t be renamed',
         timeout: 2000
@@ -1447,7 +1472,7 @@ function resetScreenHeight() {
   var style = window.getComputedStyle(document.getElementById("header-carnet"));
   if (style.getPropertyValue('display') == "none") content = screen;
   $("#center").height(content);
-  $("#editor").height(content - 45 - $("#media-toolbar").height());
+  $("#text").css('min-height', content - 45 - $("#name-input").height() - 20 - (writer == undefined || writer.listOfMediaURL == undefined || writer.listOfMediaURL.length == 0 ? $("#media-toolbar").height() + 5 : 0) + "px");
   $("#center").scrollTop(lastscroll);
 
   if (writer != undefined) {

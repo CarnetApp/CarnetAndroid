@@ -26,11 +26,7 @@ RemindersUtils.translateLocalTimeToTimestamp = function (time) {
 
 var RemindersDialog = function (element, reminders) {
     this.dialog = element
-    this.dialog.getElementsByClassName("mdl-dialog__content")[0].innerHTML = ""
-    if (reminders != undefined)
-        for (var reminder of reminders) {
-            this.addItem(reminder)
-        }
+    this.reminders = reminders
     this.dialog.getElementsByClassName("add")[0].onclick = function () {
         element.close()
         var reminderItemDialog = new ReminderItemDialog(document.getElementById("reminder-item"))
@@ -39,11 +35,27 @@ var RemindersDialog = function (element, reminders) {
     this.dialog.getElementsByClassName("close")[0].onclick = function () {
         element.close()
     }
+    this.refresh()
+}
+
+RemindersDialog.prototype.refresh = function () {
+    this.dialog.getElementsByClassName("reminders-container")[0].innerHTML = ""
+    if (this.reminders != undefined)
+        for (var reminder of this.reminders) {
+            this.addItem(reminder)
+        }
 }
 
 RemindersDialog.prototype.addItem = function (reminder) {
+    var dialog = this
     var reminderDiv = document.createElement("div")
     reminderDiv.classList.add("reminder-item")
+    var deleteButton = document.createElement("button")
+    deleteButton.classList.add("delete-reminder")
+    deleteButton.classList.add("mdl-button")
+    deleteButton.innerHTML = "<i class=\"material-icons\">delete</i>"
+
+    reminderDiv.appendChild(deleteButton)
     var time = document.createElement("span")
     time.classList.add("hour")
 
@@ -84,11 +96,20 @@ RemindersDialog.prototype.addItem = function (reminder) {
     var remindersManager = this;
 
     reminderDiv.onclick = function () {
+
         var reminderItemDialog = new ReminderItemDialog(document.getElementById("reminder-item"), reminder)
         reminderItemDialog.dialog.showModal()
         remindersManager.dialog.close()
     }
-    this.dialog.getElementsByClassName("mdl-dialog__content")[0].appendChild(reminderDiv)
+
+    $(deleteButton).click(function (e) {
+        dialog.reminders.splice(dialog.reminders.indexOf(reminder), 1);
+        dialog.refresh()
+        e.stopPropagation();
+        writer.hasTextChanged = true;
+
+    });
+    this.dialog.getElementsByClassName("reminders-container")[0].appendChild(reminderDiv)
 
 }
 
@@ -170,7 +191,7 @@ var ReminderItemDialog = function (element, reminder) {
             writer.note.metadata.reminders.push(itemDialog.reminder)
             writer.hasTextChanged = true;
             saveTextIfChanged()
-
+            writer.openRemindersDialog()
         }
     }
     this.frequencyInput = document.getElementById("frequency")

@@ -104,9 +104,10 @@ function openNote(notePath) {
         //open in new tab for firefox android
         window.open("writer?path=" + encodeURIComponent(notePath), "_blank");
       } else {
-        writerFrame.src = data + "?path=" + encodeURIComponent(notePath);
-        writerFrame.style.display = "inline-flex";
-        $(loadingView).fadeIn("fast");
+        $(loadingView).fadeIn(function () {
+          writerFrame.src = data + "?path=" + encodeURIComponent(notePath);
+          writerFrame.style.display = "inline-flex";
+        });
       }
       /*setTimeout(function () {
           writerFrame.openDevTools()
@@ -114,8 +115,10 @@ function openNote(notePath) {
 
     } else {
       console.log("reuse old iframe");
-      if (compatibility.isElectron) writerFrame.send('loadnote', notePath);else writerFrame.contentWindow.loadPath(notePath);
-      writerFrame.style.display = "inline-flex";
+      $(loadingView).fadeIn(function () {
+        if (compatibility.isElectron) writerFrame.send('loadnote', notePath);else writerFrame.contentWindow.loadPath(notePath);
+        writerFrame.style.display = "inline-flex";
+      });
     }
   });
 }
@@ -821,7 +824,7 @@ registerWriterEvent("exit", function () {
 var isLoadCanceled = false;
 registerWriterEvent("loaded", function () {
   if (!isLoadCanceled) {
-    $(loadingView).fadeOut("fast");
+    $(loadingView).fadeOut();
     $("#no-drag-bar").show();
   }
 });

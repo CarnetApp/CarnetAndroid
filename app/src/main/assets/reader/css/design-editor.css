@@ -516,7 +516,12 @@ div#container-button::-webkit-scrollbar {
 	height: 30px !important;
 }
 
-.timer-label {
-	font-size:12px;
-	color: var(--label-text-color) !important;
+#reminders{
+	max-height: calc(100% - 50px);
+	overflow-y:auto;
+}
+.delete-reminder{
+	float:right;
+	padding: 0px;
+	margin-right: 10px;
 }

@@ -109,17 +109,21 @@
 	<dialog class="mdl-dialog" id="reminders">
 		<h4 class="mdl-dialog__title" data-i18n="reminders">Reminders</h4>
 		<div class="mdl-dialog__content">
-			<div class="reminder-item">
-				<span class="hour">18:19</span>
-				<span class="day">Monday</span> <span class="day">Tuesday</span> <span class="day">Wednesday</span>
-			</div>container
-			<div class="reminder-item">
-				<span class="hour">10:30</span>
-				<span class="frequency">Every day</span>
+			<div data-i18n="beta_warning_reminders">
 			</div>
-			<div class="reminder-item">
-				<span class="hour">11:30</span>
-				<span class="frequency">Once</span><span class="date">25/03/2019</span>
+			<div class="reminders-container">
+				<div class="reminder-item">
+					<span class="hour">18:19</span>
+					<span class="day">Monday</span> <span class="day">Tuesday</span> <span class="day">Wednesday</span>
+				</div>container
+				<div class="reminder-item">
+					<span class="hour">10:30</span>
+					<span class="frequency">Every day</span>
+				</div>
+				<div class="reminder-item">
+					<span class="hour">11:30</span>
+					<span class="frequency">Once</span><span class="date">25/03/2019</span>
+				</div>
 			</div>
 		</div>
 		<div class="mdl-dialog__actions">
@@ -142,8 +146,8 @@
 				<ul for="frequency" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
 					<li class="mdl-menu__item" data-val="once" data-i18n="once">Once</li>
 					<li class="mdl-menu__item" data-val="days-of-week" data-i18n="days-of-week">Days of week</li>
-					<li class="mdl-menu__item" data-val="once-a-month" data-i18n="once-a-month">Once a month</li>
-					<li class="mdl-menu__item" data-val="once-a-year" data-i18n="once-a-year">Once a year</li>
+					<!--<li class="mdl-menu__item" data-val="once-a-month" data-i18n="once-a-month">Once a month</li>
+					<li class="mdl-menu__item" data-val="once-a-year" data-i18n="once-a-year">Once a year</li>-->
 
 				</ul>
 			</div>
@@ -288,10 +292,7 @@ mdl-layout--fixed-header">
 		<div class="mdl-layout__drawer">
 			<nav class="mdl-navigation">
 				<span style="text-align:center; margin:10px;" data-i18n="file"> File</span>
-				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="name-container">
-					<input class="mdl-textfield__input" type="text" name="name" id="name-input" value="Untitled">
-					<label class="mdl-textfield__label" for="name" data-i18n="note_name">Note name</label>
-				</div>
+
 				<a class="mdl-navigation__link" href="" id="date-button" data-i18n="date_time">Date and time</a>
 				<a class="mdl-navigation__link" href="" id="reminders-button" data-i18n="reminders">Reminders</a>
 				<a class="mdl-navigation__link" id="exit" data-i18n="exit">Exit</a>
@@ -465,7 +466,11 @@ mdl-layout--fixed-header">
 						<div style="clear:both"></div>
 
 					</div>
-					<div id="editor" style="height:100%;overflow-x: none;margin:0px;position: relative;">
+					<div id="name-container">
+						<input class="mdl-textfield__input" type="text" name="name" id="name-input" value=""
+							placeholder="Title" data-i18n="[placeholder]note_name">
+					</div>
+					<div id="editor" style="overflow-x: none;position: relative;">
 
 					</div>
 				</div>
