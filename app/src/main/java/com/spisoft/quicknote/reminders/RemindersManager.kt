@@ -184,6 +184,7 @@ class RemindersManager(ct: Context){
 
     fun onBoot(){
         PreferenceManager.getDefaultSharedPreferences(ct).edit().putInt("last_reminder_request_code",2600).apply()
+        CacheManager.getInstance(ct).loadCache()
         CacheManager.getInstance(ct).cache.values.map { note -> add(note) }
     }
 
