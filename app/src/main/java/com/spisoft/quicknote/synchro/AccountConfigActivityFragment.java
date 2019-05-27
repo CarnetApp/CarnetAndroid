@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
+import com.spisoft.quicknote.StorageDialog;
 import com.spisoft.sync.Log;
 import com.spisoft.sync.account.DBAccountHelper;
 import com.spisoft.sync.browsing.FilePickerActivity;
@@ -73,12 +75,21 @@ public class AccountConfigActivityFragment extends PreferenceFragment implements
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (preference == mBrowsePreference) {
-            Intent intent = new Intent(getActivity(), FilePickerActivity.class);
-            intent.putExtra(FilePickerActivity.EXTRA_ACCOUNT_ID, mAccountId);
-            intent.putExtra(FilePickerActivity.EXTRA_START_PATH, mCurrentlySetPath);
-            intent.putExtra(FilePickerActivity.EXTRA_AS_FILE_PICKER, true);
-            intent.putExtra(FilePickerActivity.EXTRA_DISPLAY_ONLY_MIMETYPE, "DIR");
-            startActivityForResult(intent, REQUEST_FILE_PICK);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(getResources().getString(R.string.beta_feature)+"\n"+getResources().getString(R.string.warning_sync_cloud));
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(getActivity(), FilePickerActivity.class);
+                    intent.putExtra(FilePickerActivity.EXTRA_ACCOUNT_ID, mAccountId);
+                    intent.putExtra(FilePickerActivity.EXTRA_START_PATH, mCurrentlySetPath);
+                    intent.putExtra(FilePickerActivity.EXTRA_AS_FILE_PICKER, true);
+                    intent.putExtra(FilePickerActivity.EXTRA_DISPLAY_ONLY_MIMETYPE, "DIR");
+                    startActivityForResult(intent, REQUEST_FILE_PICK);
+                }
+            }).setCancelable(true).setNegativeButton(android.R.string.cancel, null).show();
+            return true;
+
         } else if (preference == mChangeCredentialsPreference){
             mWrapper.startAuthorizeActivityForResult(getActivity(), 0);
         } else if (preference == mDeleteAccountPreference){

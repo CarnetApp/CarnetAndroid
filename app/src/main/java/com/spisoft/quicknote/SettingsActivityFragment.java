@@ -82,9 +82,17 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
     @Override
     public boolean onPreferenceClick(final Preference preference) {
         if(preference==findPreference("pref_root_path")){
-            StorageDialog dialog = new StorageDialog();
-            dialog.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(),"" );
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(R.string.beta_feature);
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    StorageDialog dialogs = new StorageDialog();
+                    dialogs.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(),"" );
+                }
+            }).setCancelable(true).setNegativeButton(android.R.string.cancel, null).show();
             return true;
+
         }
         if(preference==findPreference("pref_google_drive")){
             Cursor cursor = DBAccountHelper.getInstance(getActivity()).getCursor();
