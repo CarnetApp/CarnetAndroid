@@ -59,7 +59,7 @@ RemindersDialog.prototype.addItem = function (reminder) {
     var time = document.createElement("span")
     time.classList.add("hour")
 
-    var d = new Date(RemindersUtils.translateTimeToLocalTime(reminder.time));
+    var d = new Date(reminder.time);
 
     time.innerHTML = ("0" + d.getUTCHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
     reminderDiv.appendChild(time)
