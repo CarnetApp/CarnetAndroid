@@ -1,3 +1,33 @@
+# Version 0.16.0
+
+New feature : Reminders
+
+Multilines todolists
+
+
+UI:
+
+Bigger note creation button
+
+Title bar directly in editor
+
+Do not check todolist in note list when touching text
+
+
+Experimental faster editor load
+
+Logs not by default
+
+
+Languages:
+
+Esperanto (mallabori), Spanish (Rafael Yáñez), Arabic (Butterfly of fire)
+
+
+Lighter app size
+
+
+
 # Version 0.15.1
 
 Bug fix
