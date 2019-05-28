@@ -10,12 +10,14 @@ import android.support.multidex.MultiDex;
 import com.spisoft.quicknote.browser.NoteListFragment;
 import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.DBMergerService;
+import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.quicknote.synchro.AccountConfigActivity;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.Log;
 import com.spisoft.sync.utils.Utils;
 import com.spisoft.sync.wrappers.WrapperFactory;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +68,7 @@ public class MyApplication extends Application implements Configuration.PathObse
     }
 
     @Override
-    public void onPathChanged(String path, final List<String> modifiedPaths) {
+    public void onPathChanged(final String path, final List<String> modifiedPaths) {
         Log.d(TAG, "onPathChanged "+path);
         new AsyncTask<Void, Void, ArrayList<Note>>(){
 
@@ -79,7 +81,14 @@ public class MyApplication extends Application implements Configuration.PathObse
                         Log.d(TAG, "onPathChanged "+filepath);
 
                         CacheManager.getInstance(MyApplication.this).loadCache();//won't load twice
-                        CacheManager.getInstance(MyApplication.this).addToCache(filepath);
+                        if(new File(filepath).exists()){
+                            CacheManager.getInstance(MyApplication.this).addToCache(filepath);
+                            RemindersManager.Companion.getInstance().add(CacheManager.getInstance(MyApplication.this).get(filepath));
+                        }
+                        else {
+                            CacheManager.getInstance(MyApplication.this).removeFromCache(filepath);
+                            RemindersManager.Companion.getInstance().remove(filepath);
+                        }
                         hasAddedSmt = true;
                         notes.add(new Note(filepath));
                     }
