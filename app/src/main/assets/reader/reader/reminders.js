@@ -61,7 +61,7 @@ RemindersDialog.prototype.addItem = function (reminder) {
 
     var d = new Date(RemindersUtils.translateTimeToLocalTime(reminder.time));
 
-    time.innerHTML = d.toLocaleTimeString();
+    time.innerHTML = ("0" + d.getUTCHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
     reminderDiv.appendChild(time)
 
     if (reminder.frequency == "days-of-week") {
@@ -124,7 +124,9 @@ var ReminderItemDialog = function (element, reminder) {
         this.reminder.month = new Date().getMonth() + 1
         this.reminder.year = new Date().getFullYear()
         this.reminder.date = new Date().getTime()
-        this.reminder.time = new Date().getTime()
+        var time = new Date()
+        time.setSeconds(0)
+        this.reminder.time = RemindersUtils.translateLocalTimeToTimestamp(time)
         this.reminder.id = Utils.generateUID();
 
     } else if (this.reminder.frequency !== "days-of-week") {

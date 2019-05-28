@@ -78,5 +78,7 @@
     "friday": "Friday",
     "saturday": "Saturday",
     "sunday": "Sunday",
+    "time": "Time",
+    "date": "Date",
     "beta_warning_reminders": "\"Reminders\" are still a beta features and will only work on Android"
 }
