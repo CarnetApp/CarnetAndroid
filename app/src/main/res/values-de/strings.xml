@@ -118,4 +118,8 @@
     <string name="debug_log">Debug-Protokoll aktivieren</string>
     <string name="faster_editor_load">Schnelleres Laden des Editors (experimentell)</string>
 <string name="floating">Schwebende Notiz</string>
-    </resources>
+    <string name="reminder">Erinnerung</string>
+    <string name="create_note">Eine Notiz erstellen</string>
+    <string name="beta_feature">Es handelt sich immer noch um eine Beta-Funktion und sollte daher mit Vorsicht genutzt werden</string>
+    <string name="warning_sync_cloud">Wählen Sie keine Ordner, in dem sich Dateien befinden, die nichts mit Carnet zu tun haben. Wenn Sie Nextcloud/ownCloud Stammordner auswählen, wird Ihre gesamte Cloud mit Ihrem Telefon synchronisiert.</string>
+</resources>
