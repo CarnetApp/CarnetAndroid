@@ -28,6 +28,7 @@
 -keep,allowshrinking class org.apache.jackrabbit.webdav.** { *; }
 -keep,allowshrinking class org.apache.commons.codec.** { *; }
 -keep,allowshrinking class org.apache.commons.logging.** { *; }
+-keep class org.apache.commons.httpclient.** { *; }
 -keep,allowshrinking class org.parceler.** { *; }
 -keep,allowshrinking class org.slf4j.** { *; }
 
