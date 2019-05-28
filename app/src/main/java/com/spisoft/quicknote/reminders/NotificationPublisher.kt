@@ -16,10 +16,10 @@ class NotificationPublisher : BroadcastReceiver() {
         val notification = intent.getParcelableExtra<Notification>(NOTIFICATION)
         val path = intent.getStringExtra(NOTE_PATH)
         val id = intent.getIntExtra(NOTIFICATION_ID, 4)
-        if(notification != null)
+        if(notification != null) {
             notificationManager.notify(id, notification)
-        else
             RemindersManager.getInstance(context)!!.onNotified(path)
+        }
 
         Log.d(TAG, "notification "+(notification == null))
         Log.d(TAG, "notification id "+id)
