@@ -75,7 +75,7 @@
     <string name="delete_confirm">Opravdu tohle chcete smazat\?</string>
     <string name="unable_to_rename_use">Používaný dokument nelze smazat</string>
     <string name="move">Přesunout</string>
-    <string name="paste_how_to">Určete složku, do které chcete přesunout poznámku/složku a pak vyberte Vložit</string>
+    <string name="paste_how_to">Určete složku, do které chcete přesunout poznámku/složku a pak vyberte „Vložit“</string>
     <string name="please_wait">Počkejte, prosím</string>
     <string name="remote_folder">Vzdálená složka</string>
     <string name="app_restart">Aplikace bude nyní restartována</string>
@@ -100,4 +100,9 @@
     <string name="authorisation_issue">Problém s oprávněním</string>
     <string name="debug_log">Povolit zaznamenávání chyb</string>
     <string name="faster_editor_load">Rychlejší načítání editoru (experimentální)</string>
-</resources>
+<string name="add_note">Přidat poznámku</string>
+    <string name="add_folder">Přidat složku</string>
+    <string name="reminder">Upozornění</string>
+    <string name="create_note">Vytvořit poznámku</string>
+    <string name="beta_feature">Tohle je stále ještě beta funkce, která by měla být používána opatrně</string>
+    </resources>
