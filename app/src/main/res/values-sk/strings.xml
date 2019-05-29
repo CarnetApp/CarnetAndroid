@@ -58,7 +58,7 @@
     <string name="file_operation_in_progress">Operácia so súborom</string>
     <string name="please_wait">Čakajte, prosím</string>
     <string name="new_keyword">Nové kľúčové slovo</string>
-    <string name="title_activity_account_config">AccountConfigActivity</string>
+    <string name="title_activity_account_config">Konfigurácia účtu</string>
     <string name="remote_folder">Vzdialený priečinok</string>
     <string name="keywords">Kľúčové slová</string>
     <string name="sync_intro_title">Synchronizovať Carnet</string>
@@ -115,4 +115,11 @@
     <string name="sort_creation_date">Dátum vytvorenia</string>
     <string name="sort_modification_date">Dátum úpravy</string>
     <string name="sort_custom_date">Vlastný dátum</string>
-    </resources>
+    <string name="system_header">Systém</string>
+    <string name="debug_log">Zapnúť denník ladenia</string>
+    <string name="faster_editor_load">Rýchlejšie načítanie editora (experimentálne)</string>
+    <string name="reminder">Pripomienka</string>
+    <string name="create_note">Vytvoriť poznámku</string>
+    <string name="beta_feature">Toto je stále beta funkcia a treba ju používať opatrne</string>
+    <string name="warning_sync_cloud">Nevoľte priečinky so súbormi nesúvisiacimi s Carnetom. Výberom koreňového priečinka NextCloudu/ownCloudu zosynchronizujete celý cloud so svojim telefónom.</string>
+</resources>
