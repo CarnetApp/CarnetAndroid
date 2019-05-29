@@ -185,8 +185,13 @@ var ReminderItemDialog = function (element, reminder) {
             itemDialog.reminder.frequency = itemDialog.getFrequency()
             if (itemDialog.reminder.frequency == "days-of-week")
                 itemDialog.reminder.days = itemDialog.getDays();
-            else
+            else {
                 itemDialog.reminder.date = itemDialog.date;
+                itemDialog.reminder.dayOfMonth = itemDialog.dayOfMonth
+                itemDialog.reminder.month = itemDialog.month
+                itemDialog.reminder.year = itemDialog.year
+
+            }
             itemDialog.reminder.time = itemDialog.time
             if (writer.note.metadata.reminders == undefined)
                 writer.note.metadata.reminders = []
