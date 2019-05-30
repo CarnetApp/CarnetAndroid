@@ -90,7 +90,7 @@
     <string name="carnet_note_taking_app">Carnet est une application de prise de notes polyvalente</string>
     <string name="say_hi_subtitle">Cliquer sur \"Me prévenir\" m\'aidera à déterminer combien d\'utilisateurices ont téléchargé Carnet. Ce n\'est bien sûr pas obligatoire :)</string>
     <string name="say_hi_subtitle2">" "</string>
-    <string name="nextcloud_connect">Se connecter avec Nexctloud</string>
+    <string name="nextcloud_connect">Se connecter avec Nextcloud</string>
     <string name="other_sync_options">Autres options</string>
 
 <string name="hello_blank_fragment">Hello blank fragment</string>
