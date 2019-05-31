@@ -83,11 +83,11 @@ public class MyApplication extends Application implements Configuration.PathObse
                         CacheManager.getInstance(MyApplication.this).loadCache();//won't load twice
                         if(new File(filepath).exists()){
                             CacheManager.getInstance(MyApplication.this).addToCache(filepath);
-                            RemindersManager.Companion.getInstance().add(CacheManager.getInstance(MyApplication.this).get(filepath));
+                            RemindersManager.Companion.getInstance(MyApplication.this).add(CacheManager.getInstance(MyApplication.this).get(filepath));
                         }
                         else {
                             CacheManager.getInstance(MyApplication.this).removeFromCache(filepath);
-                            RemindersManager.Companion.getInstance().remove(filepath);
+                            RemindersManager.Companion.getInstance(MyApplication.this).remove(filepath);
                         }
                         hasAddedSmt = true;
                         notes.add(new Note(filepath));
