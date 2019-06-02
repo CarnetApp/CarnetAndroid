@@ -1,2 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="hello_world">世界，你好！</string>
+    <string name="action_settings">设置</string>
+
+    <string name="hello_blank_fragment">空白片段，你好</string>
+    <string name="floating">浮动笔记</string>
+    <string name="rename">重命名</string>
+    <string name="delete">删除</string>
+    <string name="remove_recent">从最新删除</string>
+    <string name="storage_preference">主存储</string>
+    <string name="recent">最新的</string>
+    <string name="browser">浏览器</string>
+    <string name="parent_folder">上级文件夹</string>
+    <string name="toast_on_minimize">点击我最大化</string>
+    <string name="loading">加载中</string>
+    <string name="add_note">添加笔记</string>
+    <string name="add_folder">添加文件夹</string>
+    <string name="name">名字</string>
+    <string name="new_folder_name">新文件夹</string>
+    <string name="storage_preference_details">" "</string>
+    <string name="title_activity_settings">设置活动</string>
+    <string name="general_header">通用</string>
+    <string name="paiement_header">付款</string>
+    <string name="donate_liberapay">捐赠（Liberapay）</string>
+    <string name="donate_paypal">捐赠（PayPal）</string>
+    <string name="donate">捐赠</string>
+    <string name="report_bug_or_propose">缺陷/特点</string>
+    <string name="report_bug_or_propose_description">报告错误或请求功能</string>
+    <string name="delete_confirm">你确定要删除这个？</string>
+    <string name="wrong_password">错误的 pin 码：默认 0000</string>
+    <string name="checking_password">验证……</string>
+    </resources>
