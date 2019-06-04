@@ -121,4 +121,6 @@
     <string name="system_header">Sistema</string>
     <string name="debug_log">Activar el registro de depuración</string>
     <string name="faster_editor_load">Carga rápida del editor (experimental)</string>
-</resources>
+<string name="reminder">Recordatorio</string>
+    <string name="create_note">Crear nota</string>
+    </resources>
