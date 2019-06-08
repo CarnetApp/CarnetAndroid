@@ -1,3 +1,10 @@
+# Version 0.16.3
+
+Fix issue with sync by nextcloud app
+
+New translation: Chinese by 水货
+Corrections by: Mac Guffin, Rafael Yáñez, Ian Beardslee
+
 # Version 0.16.0
 
 New feature : Reminders

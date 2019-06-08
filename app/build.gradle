@@ -53,8 +53,8 @@ android {
     productFlavors {
         fdroid {
             dimension "version"
-            versionCode 162
-            versionName '0.16.2'
+            versionCode 164
+            versionName '0.16.4'
         }
         google {
             dimension "version"

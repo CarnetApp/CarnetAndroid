@@ -32,6 +32,7 @@ public class MyApplication extends Application implements Configuration.PathObse
     protected void attachBaseContext(Context base) {
 
         super.attachBaseContext(base);
+
         Utils.context = this;
         Log.isDebug = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_debug_log",false);
         MultiDex.install(this);
