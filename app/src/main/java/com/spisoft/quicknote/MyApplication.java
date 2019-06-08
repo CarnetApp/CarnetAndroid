@@ -32,8 +32,12 @@ public class MyApplication extends Application implements Configuration.PathObse
     protected void attachBaseContext(Context base) {
 
         super.attachBaseContext(base);
+        if(PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.LAUNCH_COUNT, 0)>1){
+            // has already been launched, but back old root path
+            PreferenceHelper.setRootPath(this, PreferenceHelper.OLD_DEFAULT_ROOT_PATH);
+        }
         Utils.context = this;
-        Log.isDebug = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_debug_log",false);
+        Log.isDebug = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_debug_log",BuildConfig.DEBUG);
         MultiDex.install(this);
         Log.d("uiddebug",PreferenceHelper.getUid(this));
 
