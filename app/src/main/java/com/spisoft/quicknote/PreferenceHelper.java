@@ -19,7 +19,7 @@ import java.util.UUID;
  */
 public class PreferenceHelper {
 
-    public static final String OLD_DEFAULT_ROOT_PATH = new File(Environment.getExternalStorageDirectory(),"QuickNote").getAbsolutePath();
+    public static final String DEFAULT_ROOT_PATH = new File(Environment.getExternalStorageDirectory(),"QuickNote").getAbsolutePath();
     public static final String ROOT_PATH_PREFERENCE = "pref_root_path";
     public static final String CURRENT_PASSWORD_PREFERENCE = "pref_password";
     public static final String LAUNCH_COUNT = "pref_launch_count";
@@ -80,8 +80,7 @@ public class PreferenceHelper {
         return sPreferenceHelper;
     }
     public static String getRootPath(Context context){
-
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(ROOT_PATH_PREFERENCE, new File(context.getExternalFilesDir(null), "notes").getAbsolutePath());
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(ROOT_PATH_PREFERENCE, Utils.isDebug(context)?DEFAULT_ROOT_PATH+"Debug":DEFAULT_ROOT_PATH);
     }
     public static void setRootPath(Context context, String rootPath){
         getInstance(context).setRootPath(rootPath);
