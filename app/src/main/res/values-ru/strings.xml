@@ -99,7 +99,7 @@
     <string name="carnet_note_taking_app">Carnet – гибкое приложение для заметок</string>
     <string name="nextcloud_connect">Подключение к Nextсloud</string>
     <string name="other_sync_options">Другие способы синхронизации</string>
-    <string name="fake_note_1">Эта демонстрация исчезнет, как только Вы создадите первую запись при помощи кнопки внизу экрана</string>
+    <string name="fake_note_1">Эта демонстрация исчезнет, как только Вы создадите первую запись при помощи кнопки в нижней части экрана</string>
     <string name="fake_note_2">Выбирайте цвет заметок и текста, добавляйте ключевые слова</string>
     <string name="fake_note_3">"Оценивайте свои заметки и тексты "</string>
     <string name="fake_note_4">Синхронизируйте свои устройства</string>
