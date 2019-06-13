@@ -40,6 +40,7 @@ public class StorageDialog extends DialogFragment implements DialogInterface.OnC
     private File mFile;
     private View mParentFolderButton;
     private Handler mHandler;
+    private TextView mCurrentFolderView;
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mListAdapter = new ListAdapter();
@@ -56,10 +57,14 @@ public class StorageDialog extends DialogFragment implements DialogInterface.OnC
         mListView = (ListView) v.findViewById(R.id.listView);
         mListView.setAdapter(mListAdapter);
         mParentFolderButton =v.findViewById(R.id.parent_folder);
+        mCurrentFolderView =v.findViewById(R.id.current_folder);
+        mCurrentFolderView.setText(mFile.getAbsolutePath());
+
         mParentFolderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mFile = mFile.getParentFile();
+                mCurrentFolderView.setText(mFile.getAbsolutePath());
                 ListingEngine engine1 = new ListingEngine(mFile,StorageDialog.this);
                 engine1.setFilter(true, null);
                 engine1.list();
@@ -122,6 +127,7 @@ public class StorageDialog extends DialogFragment implements DialogInterface.OnC
     @Override
     public void onClick(DialogInterface dialog, int which) {
         mFile = mListAdapter.getItem(which);
+        mCurrentFolderView.setText(mFile.getAbsolutePath());
         ListingEngine engine = new ListingEngine(mFile, this);
         engine.setFilter(true, null);
 
