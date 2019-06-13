@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
             DBMergerService.scheduleJob(this,true, DBMergerService.ALL_DATABASES);
         }
         int count = PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.LAUNCH_COUNT, 1);
-        if(count%6 == 0 && !PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(PreferenceHelper.HAS_DONATE, false)){
+       /* if(count%6 == 0 && !PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(PreferenceHelper.HAS_DONATE, false)){
             Snackbar.make(findViewById(R.id.root), R.string.donation_ask,
                     Snackbar.LENGTH_LONG)
                     .setAction(R.string.donate, new View.OnClickListener() {
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
                     })
                     .setDuration(6000)
                     .show();
-        }
+        }*/
 
         if(count%20 == 0 && !PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(PreferenceHelper.HAS_RATED, false)){
             Snackbar.make(findViewById(R.id.root), R.string.rate_ask,
