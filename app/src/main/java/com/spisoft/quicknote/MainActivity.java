@@ -188,8 +188,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
                     .show();
         }
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(PreferenceHelper.LAUNCH_COUNT, count+1).commit();
-        mPermissionChecker = new PermissionChecker();
-        mPermissionChecker.checkAndRequestPermission(this);
+
 
         // startService(new Intent(this, FloatingService.class));
         startService(new Intent(this, CacheBuilderIntentService.class));

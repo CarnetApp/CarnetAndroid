@@ -13,10 +13,13 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.spisoft.quicknote.browser.PermissionChecker;
+import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.intro.HelpActivity;
 import com.spisoft.quicknote.utils.PinView;
 import com.spisoft.sync.account.AccountListActivity;
@@ -28,6 +31,8 @@ import com.spisoft.sync.account.DBAccountHelper;
 public class SettingsActivityFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
     private SharedPreferences.OnSharedPreferenceChangeListener changeListener;
+    private PermissionChecker mPermissionChecker;
+
     public SettingsActivityFragment() {
     }
 
@@ -37,6 +42,7 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
 
         addPreferencesFromResource(R.xml.pref_general);
         findPreference("pref_root_path").setOnPreferenceClickListener(this);
+        findPreference("pref_root_path").setSummary(PreferenceHelper.getRootPath(getActivity()));
         findPreference("pref_google_drive").setOnPreferenceClickListener(this);
         findPreference("pref_password_on_minimize").setOnPreferenceChangeListener(this);
         findPreference("pref_set_password").setOnPreferenceClickListener(this);
@@ -87,8 +93,17 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    StorageDialog dialogs = new StorageDialog();
-                    dialogs.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(),"" );
+                    ((SettingsActivity)getActivity()).getStoragePermission(new PermissionChecker.PermissionCallback() {
+                        @Override
+                        public void onPermission(boolean given) {
+                            if(given){
+                                StorageDialog dialogs = new StorageDialog();
+                                dialogs.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(),"" );
+                            }
+                        }
+                    });
+
+
                 }
             }).setCancelable(true).setNegativeButton(android.R.string.cancel, null).show();
             return true;

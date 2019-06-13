@@ -1,11 +1,18 @@
 package com.spisoft.quicknote;
 
+import android.app.Fragment;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.spisoft.quicknote.browser.PermissionChecker;
+
 public class SettingsActivity extends AppCompatActivity {
+
+    private PermissionChecker mPermissionChecker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,5 +41,15 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+        mPermissionChecker.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public void getStoragePermission(PermissionChecker.PermissionCallback callback) {
+        mPermissionChecker = new PermissionChecker();
+        mPermissionChecker.checkAndRequestPermission(this,callback);
     }
 }
