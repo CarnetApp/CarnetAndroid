@@ -45,7 +45,7 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
         findPreference("pref_paypal").setOnPreferenceClickListener(this);
         findPreference("pref_desktop_version").setOnPreferenceClickListener(this);
         findPreference("pref_changelog").setOnPreferenceClickListener(this);
-
+        ((CheckBoxPreference)findPreference("pref_debug_log")).setChecked(BuildConfig.DEBUG);
     }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
