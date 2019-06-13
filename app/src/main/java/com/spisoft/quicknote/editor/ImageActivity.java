@@ -118,6 +118,7 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private int mCurrentOrientation = 0;
+    private boolean mHasAlreadyAsked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,8 +226,13 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
     public void onResume(){
         super.onResume();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_DENIED)
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 1001);
+                == PackageManager.PERMISSION_DENIED) {
+            if(mHasAlreadyAsked)
+                finish();
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1001);
+            mHasAlreadyAsked = true;
+
+        }
         else mCameraView.start();
         customOrientationEventListener = new CustomOrientationEventListener(this) {
             @Override
