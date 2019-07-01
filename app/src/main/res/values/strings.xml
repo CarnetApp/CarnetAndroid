@@ -23,7 +23,7 @@
     <string name="storage_preference_details"/>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="general_header">General</string>
-    <string name="paiement_header">Paiement</string>
+    <string name="paiement_header">Payment</string>
     <string name="donate_liberapay">Donate (Liberapay)</string>
     <string name="donate_paypal">Donate (PayPal)</string>
     <string name="donate">Donate</string>
@@ -31,7 +31,7 @@
     <string name="report_bug_or_propose_description">Report a bug or ask for a feature</string>
     <string name="delete_confirm">Are you sure you want to delete this ?</string>
     <string name="wrong_password">Wrong pin code: default 0000</string>
-    <string name="checking_password">Vérification...</string>
+    <string name="checking_password">Verification...</string>
     <string name="password_on_minimize">Pin code on minimize</string>
     <string name="pref_set_password">Set password</string>
     <string name="new_password">New password</string>
