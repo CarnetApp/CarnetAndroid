@@ -9,7 +9,7 @@
     <string name="floating">Note flottante</string>
     <string name="rename">Renommer</string>
     <string name="delete">Supprimer</string>
-    <string name="remove_recent">Archiver</string>
+    <string name="remove_recent">Supprimer depuis le plus récent</string>
     <string name="storage_preference">Stockage principal</string>
     <string name="recent">Récent</string>
     <string name="browser">Explorateur</string>
@@ -27,17 +27,17 @@
     <string name="donate_liberapay">Faire un don (Liberapay)</string>
     <string name="donate_paypal">Faire un don (PayPal)</string>
     <string name="report_bug_or_propose">Bogue / Idée</string>
-    <string name="report_bug_or_propose_description">Report a bug or ask for a feature</string>
+    <string name="report_bug_or_propose_description">Reporter un bogue ou demander une fonctionnalité</string>
     <string name="delete_confirm">Action non réversible: confirmez-vous la suppression ?</string>
-    <string name="wrong_password">Wrong pin code: default 0000</string>
+    <string name="wrong_password">Code pin erroné: par défaut 0000</string>
     <string name="checking_password">Vérification...</string>
     <string name="password_on_minimize">Protéger par code pin</string>
     <string name="pref_set_password">Code pin</string>
     <string name="new_password">Nouveau code</string>
     <string name="old_password">Code actuel</string>
     <string name="empty_message">Aucun document trouvé\nCréez un nouveau document avec le bouton +</string>
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_open">Ouvrir le tiroir de navigation</string>
+    <string name="drawer_close">Fermer le tiroir de navigation</string>
     <string name="title_activity_help_authorize_floating_window">
         HelpAuthorizeFloatingWindowActivity
     </string>
@@ -51,7 +51,7 @@
     <string name="unable_to_rename_use">Impossible de renommer un document en cours d\'édition</string>
     <string name="unable_to_delete_use">Impossible de supprimer un document en cours d\'édition</string>
     <string name="add_screenshot">Ajouter la capture d\'écran à la note \?</string>
-    <string name="say_hi">Me prévenir</string>
+    <string name="say_hi">Dire bonjour !</string>
     <string name="donation_ask">Carnet a été créée gratuitement, n\'hésitez pas à faire un don :)</string>
     <string name="donate">Faire un don</string>
     <string name="sync_cloud_preference">Synchronisation</string>
@@ -59,11 +59,11 @@
     <string name="paste">Coller</string>
     <string name="paste_how_to">Naviguez jusqu\'au dossier de votre choix</string>
     <string name="please_wait">Attendez s\'il vous plaît</string>
-    <string name="new_keyword">Nouveau mot clef</string>
+    <string name="new_keyword">Nouveau mot-clef</string>
     <string name="remote_folder">Dossier distant</string>
-    <string name="keywords">Mots clefs</string>
+    <string name="keywords">Mots-clefs</string>
     <string name="sync_intro_title">Synchroniser Carnet</string>
-    <string name="sync_intro_text">Carnet peut se synchroniser avec NextCloud. N\'hésitez pas à télécharger le client pour ordinateur pour y retrouver toutes vos notes. Carnet est aussi disponible en ligne sur le magasin d\'applications de NextCloud</string>
+    <string name="sync_intro_text">Carnet peut se synchroniser avec NextCloud. N\'hésitez pas à télécharger le client pour ordinateur pour y retrouver toutes vos notes. Carnet est aussi disponible en ligne sur le magasin d\'applications de NextCloud.</string>
     <string name="sync_intro_gdrive_text">Facile, la plupart d\'entre vous ont une adresse Gmail, pas OpenSource</string>
     <string name="skip">Passer</string>
     <string name="welcome">Bienvenue !</string>
@@ -82,18 +82,18 @@
     <string name="theme">Thème</string>
     <string name="blue">Bleu</string>
     <string name="dark">Sombre</string>
-    <string name="first_start">Premier démarrage, patientez s\'il-vous-plaît.</string>
+    <string name="first_start">Premier démarrage, patientez s\'il-vous-plaît</string>
     <string name="sync">Synchronisation</string>
     <string name="change_credentials">Changer les identifiants</string>
     <string name="carnet_doesnt_spy">Carnet ne vous espionne pas et ne contient aucune publicité</string>
     <string name="carnet_open">Carnet est libre et gratuite</string>
     <string name="carnet_note_taking_app">Carnet est une application de prise de notes polyvalente</string>
     <string name="say_hi_subtitle">Cliquer sur \"Me prévenir\" m\'aidera à déterminer combien d\'utilisateurices ont téléchargé Carnet. Ce n\'est bien sûr pas obligatoire :)</string>
-    <string name="say_hi_subtitle2">" "</string>
+    <string name="say_hi_subtitle2">"Je comprends que l\'application a été téléchargée une fois de plus (pas obligatoire du tout mais utile). "</string>
     <string name="nextcloud_connect">Se connecter avec Nextcloud</string>
     <string name="other_sync_options">Autres options</string>
 
-<string name="hello_blank_fragment">Hello blank fragment</string>
+<string name="hello_blank_fragment">Salut fragment vide</string>
     <string name="fake_note_1">Ces fausses notes disparaîtrons sitôt que vous créerez une nouvelle note en sélectionnant le bouton en bas à droite</string>
     <string name="fake_note_2">"Choisissez la couleurs de vos notes, ajoutez des mots clefs           "</string>
     <string name="fake_note_3">Attribuez une note à vos notes et textes</string>
@@ -106,7 +106,7 @@
 <string name="title_activity_account_config">Configuration du compte</string>
     <string name="rate_ask">SI vous aimez cette application, notez-nous 5 étoiles :)</string>
     <string name="rate">Noter</string>
-    <string name="changelog">Changelog</string>
+    <string name="changelog">Journal des changements</string>
     <string name="restore_recent">Restaurer dans récent</string>
     <string name="please_wait_update">Attendez SVP pendant la mise-à-jour de vos notes</string>
     <string name="write_error">Erreur lors de la sauvegarde du texte</string>
@@ -122,4 +122,8 @@
     <string name="create_note">Créer une note</string>
     <string name="beta_feature">Cette fonctionnalité est expérimentale et doit être utilisée avec prudence</string>
     <string name="warning_sync_cloud">Ne sélectionnez pas de dossier avec des fichiers non créés par Carnet. Sélectionner la racine de NextCloud/ownCloud synchronisera l\'ensemble de votre cloud sur votre téléphone.</string>
-</resources>
+<string name="title_activity_help">Aide</string>
+    <string name="file_operation_in_progress">Opération sur le fichier</string>
+    <string name="google_drive">Google Drive</string>
+    <string name="sync_select_nextcloud_text">Carnet est compatible avec toutes les instances NextCloud. Trouvez et inscrivez-vous sur une instance (certaines sont gratuites)</string>
+    </resources>
