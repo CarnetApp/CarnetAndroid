@@ -100,7 +100,7 @@
     <string name="carnet_doesnt_spy">Carnet doesn\'t spy on you and contains no ads</string>
     <string name="carnet_open">Carnet is free and open source</string>
     <string name="carnet_note_taking_app">Carnet is a versatile note application</string>
-    <string name="nextcloud_connect">Connect with Nextcloud</string>
+    <string name="nextcloud_connect">Connect with NextCloud</string>
     <string name="other_sync_options">Other sync options</string>
     <string name="fake_note_1">These fake notes will disappear as soon as you create a new note by selecting the bottom right button</string>
     <string name="fake_note_2">Choose note/text colors, add keywords</string>
