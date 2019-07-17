@@ -2,10 +2,12 @@ package com.spisoft.quicknote.reminders
 
 
 import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import com.spisoft.sync.Log
 
 class NotificationPublisher : BroadcastReceiver() {
@@ -31,5 +33,6 @@ class NotificationPublisher : BroadcastReceiver() {
         var NOTIFICATION_ID = "notification-id"
         var NOTIFICATION = "notification"
         var NOTE_PATH = "note_path"
+        val CHANNEL_ID: String = "channel_id"
     }
 }

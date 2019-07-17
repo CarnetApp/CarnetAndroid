@@ -1,13 +1,13 @@
 package com.spisoft.quicknote.reminders
 
-import android.app.AlarmManager
-import android.app.Notification
-import android.app.PendingIntent
+import android.app.*
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
+import android.os.Build
 import android.preference.PreferenceManager
+import android.support.v4.app.NotificationCompat
 import com.spisoft.quicknote.Note
 import com.spisoft.quicknote.R
 import com.spisoft.quicknote.databases.CacheManager
@@ -50,6 +50,7 @@ class RemindersManager(ct: Context){
         val alarmIntent = Intent(ct, NotificationPublisher::class.java).let { intent ->
             intent.putExtra(NotificationPublisher.NOTIFICATION_ID, 123);
             intent.putExtra(NotificationPublisher.NOTE_PATH, note.path);
+            intent.putExtra(NotificationPublisher.CHANNEL_ID, CHANNEL_ID);
             intent.putExtra(NotificationPublisher.NOTIFICATION, getNotification(note));
             PendingIntent.getBroadcast(ct, requestCode, intent, 0)
         }
@@ -70,7 +71,8 @@ class RemindersManager(ct: Context){
         alarmMgr?.cancel(alarmIntent)
     }
     private fun getNotification(note: Note): Notification {
-        val builder = Notification.Builder(ct)
+        prepareNotificationChannel()
+        val builder = NotificationCompat.Builder(ct, CHANNEL_ID)
         builder.setContentTitle(ct.getString(R.string.reminder))
         if(!note.title!!.startsWith("untitled") || note.shortText == null || note.shortText.length == 0)
             builder.setContentText(note.title)
@@ -78,6 +80,26 @@ class RemindersManager(ct: Context){
             builder.setContentText(if(note.shortText.length>15) note.shortText.substring(0,15) else note.shortText)
         builder.setSmallIcon(R.mipmap.ic_launcher)
         return builder.build()
+    }
+
+    private val CHANNEL_ID: String = "reminders"
+
+    private fun prepareNotificationChannel(){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                    ct.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if(notificationManager.getNotificationChannel(CHANNEL_ID) != null)
+                return
+            val name = ct.getString(R.string.reminder)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+            }
+
+            notificationManager.createNotificationChannel(channel)
+        }
+
     }
     fun add(note: Note){
         remove(note.path)
