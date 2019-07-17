@@ -78,7 +78,7 @@ class RemindersManager(ct: Context){
             builder.setContentText(note.title)
         else
             builder.setContentText(if(note.shortText.length>15) note.shortText.substring(0,15) else note.shortText)
-        builder.setSmallIcon(R.mipmap.ic_launcher)
+        builder.setSmallIcon(R.drawable.icon_status)
         return builder.build()
     }
 
