@@ -7,7 +7,7 @@
     <string name="storage_preference">التخزين الرئيسي</string>
     <string name="browser">المتصفح</string>
     <string name="parent_folder">المجلد الرئيسي</string>
-    <string name="loading">التحميل جارٍ…</string>
+    <string name="loading">التحميل جارٍ</string>
     <string name="add_note">إضافة ملاحظة</string>
     <string name="add_folder">إضافة مجلد</string>
     <string name="name">التسمية</string>
@@ -61,4 +61,34 @@
     <string name="carnet_open">كارني \"Carnet\" تطبيق حر ومفتوح المصدر</string>
     <string name="nextcloud_connect">التوصيل بـ NextCloud</string>
     <string name="other_sync_options">خيارات أخرى للمزامنة</string>
+    <string name="remove_recent">إزالة مِن الحديثة</string>
+    <string name="recent">الحديثة</string>
+    <string name="toast_on_minimize">اضغط للتوسيع</string>
+    <string name="title_activity_settings">الإعدادات</string>
+    <string name="paiement_header">الدفع</string>
+    <string name="wrong_password">رمز خاطئ: الافتراضي هو 0000</string>
+    <string name="unable_to_rename_use">لا يمكن إعادة تسمية وثيقة قيد التحرير</string>
+    <string name="unable_to_delete_use">لا يمكن حذف ملف مفتوح</string>
+    <string name="please_wait_update">يرجى الانتظار ريثما يتم تحديث ملاحظاتك</string>
+    <string name="title_activity_help">المساعدة</string>
+    <string name="file_operation_in_progress">إجراء على ملف</string>
+    <string name="title_activity_account_config">إعداد الحساب</string>
+    <string name="say_hi_subtitle">بإمكانكم مساعدتي في معرفة عدد مستخدمي هذا التطبيق بالضغط على زر \"قل مرحبًا!\" 
+\n:)</string>
+    <string name="donation_ask">تم تطوير التطبيق للاستخدام المجاني، يرجى التبرع</string>
+    <string name="rate">تقييم</string>
+    <string name="carnet_doesnt_spy">Carnet لا يتعقبكم ولا يحتوي على إعلانات</string>
+    <string name="carnet_note_taking_app">Carnet تطبيق رائع للملاحظات</string>
+    <string name="fake_note_4">زامنوا أجهزتكم</string>
+    <string name="fake_note_todo_item_1">جرّبوا كارني Carnet</string>
+    <string name="fake_note_todo_item_2">شارك كارني Carnet</string>
+    <string name="changelog">سجلّ التغييرات</string>
+    <string name="sort_reversed">ترتيب عكسي</string>
+    <string name="sort_default">افتراضي</string>
+    <string name="sort_creation_date">تاريخ الإنشاء</string>
+    <string name="sort_modification_date">تاريخ التعديل</string>
+    <string name="sort_custom_date">تاريخ مخصص</string>
+    <string name="system_header">النظام</string>
+    <string name="reminder">تذكير</string>
+    <string name="create_note">إنشاء ملاحظة</string>
     </resources>
