@@ -1,3 +1,21 @@
+:root{
+    --header-bg:white;
+    --header-text-color:black;
+    --main-text-color:black;
+    --green-text-color:#15BC15;
+    --red-text-color:#FF0000;
+    --blue-text-color:#0000FF;
+    --yellow-text-color:#EDEF1D;
+    --violet-text-color:#F27FF2;
+    --main-back-color:white;
+    --green-back-color:#B3FAB3;
+    --red-back-color:#FFC8C8;
+    --blue-back-color:#BEBEFF;
+    --yellow-back-color:#FBFCBC;
+    --violet-back-color:#FFDBFF;
+
+}
+
 body {
 	height: 100%;
 	padding: 0px;
@@ -24,8 +42,37 @@ html {
 	background-color: rgba(199, 196, 196, 0.452);
 }
 
-#header-carnet i{
-	color:white;
+#header-carnet .mdl-button{
+	padding: 0 6px;
+}
+.more .first{
+	display:none;
+}
+.second, .third{
+	display:none;
+}
+.more .second, .more .third{
+	display: inline;
+}
+.more-button.second{
+	display: none;
+}
+@media screen and (min-width: 1280px) {
+	.second{
+		display:inline;
+	}
+	.more-button.second{
+		display: inline;
+	}
+	.more .second{
+		display: none;
+	}
+	.more-button.first{
+		display: none;
+	}
+
+	
+	
 }
 
 #loading {
@@ -134,9 +181,15 @@ html {
 }
 
 .toolbar {
-	background: rgb(63, 81, 181);
+	color:black;
 	overflow-x: auto;
 	white-space: nowrap;
+	width:100%;
+}
+
+.toolbar .mdl-textfield {
+	padding:15px 0;
+	top: -8px;
 }
 
 .quicknote-img {
@@ -156,6 +209,7 @@ html {
 	height: 100%;
 	margin: 0 auto;
 	background: white;
+	color: var(--main-text-color);
 }
 
 #text:focus {
@@ -217,9 +271,7 @@ button {
 	-webkit-app-region: no-drag;
 }
 
-.headerbar-button {
-	color: white;
-}
+
 
 body {
 	-webkit-animation: 1s ease 0s normal forwards 1 fadein;
@@ -244,6 +296,7 @@ body {
 div.stars {
 	width: 200px;
 	display: inline-block;
+	margin-bottom: 20px;
 }
 
 input.star {
@@ -408,13 +461,15 @@ div#container-button::-webkit-scrollbar {
 }
 #media-toolbar{
 	position: relative;
-	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
 }
 .fullscreen-media-toolbar	#media-header{
 		position: fixed;
 		height:60px;
 		width: 100%;
 		background: rgba(0, 0, 0, 0.479);
+	}
+	.fullscreen-media-toolbar	#media-header .mdl-button{
+		color: white;
 	}
 	.fullscreen-media-toolbar {
 		position: fixed !important;
@@ -524,4 +579,46 @@ div#container-button::-webkit-scrollbar {
 	float:right;
 	padding: 0px;
 	margin-right: 10px;
+}
+
+.option-button:not(.ok){
+	width:100%;
+	text-align: left;
+}
+
+.color-p{
+    font-size: unset;
+    letter-spacing: unset;
+    margin: unset;
+}
+.color-item{
+	cursor: pointer;
+	width:38px;
+	height:30px;
+	border: 0px;
+	display:inline-block;
+	padding-right:10px:
+}
+
+.color-item:hover, .color-item:active {
+    box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.5);
+}
+
+
+#color-items-container{
+	margin:auto;
+	margin-top:10px;
+	position:absolute;/*android hack, buttons didn't work*/
+	width:250px;/*android hack*/
+}
+#color-picker-div{
+	padding:10px 35px 10px 35px;
+	margin-top: -35px;
+	margin-left: -37px;
+	margin-right: -37px;
+
+}
+
+#color-picker-dialog  .mdl-dialog__actions{
+	margin-top: 50px; /*android hack*/
 }

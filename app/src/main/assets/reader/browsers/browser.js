@@ -104,6 +104,7 @@ function openNote(notePath) {
         //open in new tab for firefox android
         window.open("writer?path=" + encodeURIComponent(notePath), "_blank");
       } else {
+        $("#editor-container").show();
         $(loadingView).fadeIn(function () {
           writerFrame.src = data + "?path=" + encodeURIComponent(notePath);
           writerFrame.style.display = "inline-flex";
@@ -115,6 +116,7 @@ function openNote(notePath) {
 
     } else {
       console.log("reuse old iframe");
+      $("#editor-container").show();
       $(loadingView).fadeIn(function () {
         if (compatibility.isElectron) writerFrame.send('loadnote', notePath);else writerFrame.contentWindow.loadPath(notePath);
         writerFrame.style.display = "inline-flex";
@@ -806,6 +808,7 @@ function registerWriterEvent(event, callback) {
 
 registerWriterEvent("exit", function () {
   $(writerFrame).fadeOut();
+  $("#editor-container").hide();
   $("#no-drag-bar").hide();
 
   if (!wasNewNote) {
@@ -836,6 +839,7 @@ function cancelLoad() {
   isLoadCanceled = true;
   $(loadingView).fadeOut();
   $(writerFrame).fadeOut();
+  $("#editor-container").hide();
   $("#no-drag-bar").hide();
 }
 
@@ -927,12 +931,12 @@ RequestBuilder.sRequestBuilder.get("/settings/browser_css", function (error, dat
     if (data.length == 0) $("#carnet-icon-view").fadeOut('slow');
   } else $("#carnet-icon-view").fadeOut('slow');
 });
-var isDebug = false;
+var isDebug = true;
 console.oldlog = console.log;
-
-console.log = function (m) {
-  if (isDebug) console.oldlog(m);
-};
+/*console.log = function (m) {
+    if (isDebug)
+        console.oldlog(m)
+}*/
 
 var uiSettings = {};
 
@@ -942,9 +946,13 @@ function setDefaultSettings(key, value) {
 
 compatibility.loadLang(function () {
   $('body').i18n();
+  console.log("lang loaded");
   RequestBuilder.sRequestBuilder.get("/settings/browser", function (error, data) {
     if (data != undefined && data != "") {
-      data = JSON.parse(data);
+      try {
+        data = JSON.parse(data);
+      } catch (e) {}
+
       uiSettings = data; //set default settings
     }
 

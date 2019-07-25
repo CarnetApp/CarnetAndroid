@@ -5,7 +5,7 @@
     "settings": "Paramètres",
     "keywords": "Labels",
     "welcome": "Bienvenue",
-    "discover_carnet": "À la découverte de Carnet !",
+    "discover_carnet": "Découvrons Carnet",
     "modern": "Moderne",
     "modern_subtext": "Profitez de vos notes et vos textes dans une interface moderne",
     "synchronize": "Synchroniser",
@@ -80,5 +80,6 @@
     "reminders": "Rappels",
     "time": "Heure",
     "date": "Date",
-    "beta_warning_reminders": "Les \"Rappels\" sont toujours une fonctionnalité en test et ne fonctionneront que sur Android"
+    "beta_warning_reminders": "Les \"Rappels\" sont toujours une fonctionnalité en test et ne fonctionneront que sur Android",
+    "more-options": "Options supplémentaires"
 }

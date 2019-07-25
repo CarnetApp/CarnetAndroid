@@ -5,6 +5,10 @@
 .todo-list{
     display:block;
     width: 100%;
+    border-top: solid 1px rgba(128, 128, 128, 0.199);
+    padding-top: 10px;
+    border-bottom: solid 1px rgba(128, 128, 128, 0.199);
+    padding-bottom: 10px;
 }
 .todo-list h3{
     font-size:16px;
@@ -12,7 +16,7 @@
     margin-bottom:10px;
 }
 .todo-list .todo-item-text{
-    width: calc(100% - 50px);
+    width: calc(100% - 30px);
     display: block;
     margin-left: 15px;
     margin-top:-5px;
@@ -34,14 +38,14 @@
 }
 
 .todo-list .mdl-checkbox {
-    width: calc(100% - 40px);
+    width: calc(100% - 70px);
 
 }
 .move-item{
     float: left;
     margin-right: 7px;
     margin-top: 1px;
-
+    
     font-size: 15px;
 }
 
@@ -56,6 +60,8 @@
     float: right;
     margin-right: 7px;
     cursor: pointer;
+    min-width:0px;
+    margin-top: -5px;
 }
 
 .done .todo-item-text {

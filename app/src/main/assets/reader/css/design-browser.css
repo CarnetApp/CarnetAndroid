@@ -50,14 +50,7 @@ body{
     background: var(--carnet-icon-view-bg);
 }
 
-#loading-view{
-    background: var(--loading-view-bg);
-    color:white;
-}
 
-#loading-view button{
-    color:white;
-}
 
 #page-container {
     background: var(--grid-bg);
@@ -120,7 +113,7 @@ body{
 }
 
 .editor {
-    position:absolute; 
+    position:relative; 
     top:0px; 
     left:0px;
     display: none; 
@@ -129,6 +122,48 @@ body{
     z-index:100; 
     right:0;
     bottom:0;
+    max-width: 1300px;
+    margin: auto;
+}
+
+#editor-container{
+	background:rgba(0,0,0,0.5);
+	position:fixed;
+	width:100%;
+	height:100%;
+	top:0;
+	left:0;
+	z-index:10;
+	display:none;
+	text-align: center;
+}
+
+#loading-view{
+    background: var(--loading-view-bg);
+    color:white;
+    max-width: 1300px;
+    margin:auto;
+    top:0px; 
+    position:absolute; 
+    display:none; 
+    left:0px;
+    z-index:100;
+    right:0; 
+}
+
+#loading-view button{
+    color:white;
+}
+
+@media screen and (min-width: 1400px) {
+	#loading-view {
+		top: 20px;
+		height: calc(100% - 40px);
+	}
+	#editor-container{
+		padding-top:20px;
+		padding-bottom:20px;
+	}
 }
 
 @media (max-width: 900px) {

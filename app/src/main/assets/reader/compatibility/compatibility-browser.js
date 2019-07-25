@@ -95,7 +95,11 @@ function (_Compatibility) {
             var win = new BrowserWindow({
               width: 500,
               height: 500,
-              frame: true
+              frame: true,
+              webPreferences: {
+                nodeIntegration: true,
+                webviewTag: true
+              }
             });
 
             var url = require('url');

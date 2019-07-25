@@ -1,3 +1,6 @@
+:root{
+    --main-text-color:white;
+}
 .toolbar {
     background: #22252f;
 }
@@ -9,5 +12,12 @@
 
 #center {
     background: #393c44;
-    color: #f9f9f9;
+}
+
+.headerbar-button {
+	color: white;
+}
+
+#header-carnet i{
+	color:white;
 }

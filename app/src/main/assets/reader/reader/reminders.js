@@ -146,13 +146,11 @@ var ReminderItemDialog = function (element, reminder) {
         const picker = new MaterialDatetimePicker({
             default: moment(itemDialog.date),
         }).on('open', function () {
-            //this.$('.js-show-clock').click()
             this.pickerEl.classList.add("reminder-calendar-picker");
             this.pickerEl.classList.add("reminder-date-picker");
 
             console.log('opened ' + this.scrimEl)
-        })        //this.$('.js-show-clock').click()
-
+        })
             .on('submit', (val) => {
                 itemDialog.setDate(val)
                 itemDialog.dialog.showModal()

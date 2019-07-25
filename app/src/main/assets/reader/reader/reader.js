@@ -149,6 +149,7 @@ Writer.prototype.setMediaList = function (list) {
 
   if (list.length > 0) {
     document.getElementById("fullscreen-media-button").style.display = "block";
+    writer.mediaList.style.display = "block";
     this.addMediaMenu.parentNode.style.left = "unset";
 
     if (this.oDoc.innerText.trim() == "") {
@@ -157,7 +158,7 @@ Writer.prototype.setMediaList = function (list) {
     }
   } else {
     //this.addMediaMenu.parentNode.style.left = "0px"
-    writer.mediaList.innerHTML = "<span id='media-empty-view'>" + $.i18n("media_empty_text") + "</span>";
+    writer.mediaList.style.display = "none";
     document.getElementById("fullscreen-media-button").style.display = "none";
   }
 
@@ -467,6 +468,10 @@ Writer.prototype.fillWriter = function (extractedHTML) {
   resetScreenHeight();
   this.refreshKeywords();
   compatibility.onNoteLoaded();
+  $("#toolbar").scrollLeft(500);
+  $("#toolbar").animate({
+    scrollLeft: '0'
+  }, 2000);
 }; //var KeywordsDBManager = require(rootpath + "keywords/keywords_db_manager").KeywordsDBManager;
 
 
@@ -527,16 +532,73 @@ Writer.prototype.setPickerColor = function (picker) {
   currentColor = "#" + picker.toString();
 };
 
+var getCssVar = function getCssVar(v) {
+  return getComputedStyle(document.documentElement).getPropertyValue(v);
+};
+
 Writer.prototype.displayColorPicker = function (callback) {
-  var call = function call() {
-    writer.colorPickerDialog.querySelector('.ok').removeEventListener('click', call);
+  //   var call = 
+  this.colorPickerDialog.querySelector('.ok').onclick = function () {
     writer.colorPickerDialog.close();
     callback(currentColor);
   };
 
-  this.colorPickerDialog.querySelector('.ok').addEventListener('click', call);
   this.colorPickerDialog.showModal();
+  var picker = new jscolor(document.getElementById('color-picker-div'), {
+    width: 200,
+    padding: 0,
+    border: 0,
+    backgroundColor: 'unset',
+    valueElement: 'chosen-value',
+    container: document.getElementById('color-picker-div'),
+    onFineChange: function onFineChange() {
+      writer.setPickerColor(this);
+    },
+    shadow: false
+  });
   document.getElementById('color-picker-div').show();
+  var colorItemsContainer = this.colorPickerDialog.querySelector('#color-items-container');
+  colorItemsContainer.innerHTML = "";
+  console.log("color " + getCssVar('--main-text-color'));
+  var frontcolors = [getCssVar('--main-text-color'), getCssVar('--red-text-color'), getCssVar('--green-text-color'), getCssVar('--blue-text-color'), getCssVar('--yellow-text-color'), getCssVar('--violet-text-color')];
+
+  for (var _i = 0, _frontcolors = frontcolors; _i < _frontcolors.length; _i++) {
+    var color = _frontcolors[_i];
+    var item = document.createElement("button");
+    item.classList.add("color-item");
+
+    item.onclick = function (e) {
+      e.preventDefault();
+      writer.colorPickerDialog.close();
+      console.log("selecting" + this.color);
+      callback(this.color);
+      return false;
+    };
+
+    item.color = color;
+    item.style.background = color;
+    colorItemsContainer.appendChild(item);
+  }
+
+  var backcolors = [getCssVar('--main-back-color'), getCssVar('--red-back-color'), getCssVar('--green-back-color'), getCssVar('--blue-back-color'), getCssVar('--yellow-back-color'), getCssVar('--violet-back-color')];
+
+  for (var _i2 = 0, _backcolors = backcolors; _i2 < _backcolors.length; _i2++) {
+    var color = _backcolors[_i2];
+    var item = document.createElement("button");
+    item.classList.add("color-item");
+
+    item.onclick = function (e) {
+      e.preventDefault();
+      writer.colorPickerDialog.close();
+      console.log("selecting" + this.color);
+      callback(this.color);
+      return false;
+    };
+
+    item.color = color;
+    item.style.background = color;
+    colorItemsContainer.appendChild(item);
+  }
 };
 
 Writer.prototype.displayStyleDialog = function () {
@@ -634,27 +696,22 @@ Writer.prototype.init = function () {
     }
   });
   ;
-  this.toolbarManager = new ToolbarManager();
-  var toolbarManager = this.toolbarManager;
-  var toolbars = document.getElementsByClassName("toolbar");
-
+  /*this.toolbarManager = new ToolbarManager()
+  var toolbarManager = this.toolbarManager
+  var toolbars = document.getElementsByClassName("toolbar")
   for (var i = 0; i < toolbars.length; i++) {
-    this.toolbarManager.addToolbar(toolbars[i]);
-  }
-
-  ;
-  var toolbarButtons = document.getElementsByClassName("toolbar-button");
-
+      this.toolbarManager.addToolbar(toolbars[i]);
+  };
+  var toolbarButtons = document.getElementsByClassName("toolbar-button")
   for (var i = 0; i < toolbarButtons.length; i++) {
-    var toolbar = toolbarButtons[i];
-    console.log("tool " + toolbar.getAttribute("for"));
-    toolbar.addEventListener("click", function (event) {
-      console.log("display " + event.target.getAttribute("for"));
-      toolbarManager.toggleToolbar(document.getElementById(event.target.getAttribute("for")));
-    });
-  }
+      var toolbar = toolbarButtons[i]
+      console.log("tool " + toolbar.getAttribute("for"))
+       toolbar.addEventListener("click", function (event) {
+          console.log("display " + event.target.getAttribute("for"))
+          toolbarManager.toggleToolbar(document.getElementById(event.target.getAttribute("for")))
+      });
+  };*/
 
-  ;
   this.searchInput = document.getElementById("search-input");
 
   this.searchInput.onfocus = function () {
@@ -699,12 +756,53 @@ Writer.prototype.init = function () {
     return false;
   };
 
+  document.getElementById("options-button").onclick = function () {
+    writer.toggleDrawer();
+    document.getElementById("options-dialog").showModal();
+    return false;
+  };
+
   document.getElementById("button-add-keyword-ok").onclick = function () {
     writer.addKeyword(document.getElementById('keyword-input').value);
     writer.newKeywordDialog.close();
   };
 
   this.mediaToolbar = document.getElementById("media-toolbar");
+  var optionButtons = document.getElementsByClassName("option-button");
+
+  for (var i = 0; i < optionButtons.length; i++) {
+    var button = optionButtons[i];
+
+    button.onclick = function (ev) {
+      console.log("on click " + this.id);
+      document.getElementById("options-dialog").close();
+
+      switch (this.id) {
+        case "print-button":
+          writer.openPrintDialog();
+          break;
+
+        case "statistics-button":
+          writer.displayCountDialog();
+          break;
+
+        case "date-button":
+          var date = writer.note.metadata.custom_date;
+          if (date == undefined) date = writer.note.metadata.last_modification_date;
+          if (date == undefined) date = writer.note.metadata.creation_date;
+          if (date == undefined) date = new Date().now();
+          var picker = new MaterialDatetimePicker({
+            "default": moment(date)
+          }).on('submit', function (val) {
+            writer.note.metadata.custom_date = val.unix() * 1000;
+            writer.hasTextChanged = true;
+          });
+          picker.open();
+          break;
+      }
+    };
+  }
+
   var inToolbarButtons = document.getElementsByClassName("in-toolbar-button");
 
   for (var i = 0; i < inToolbarButtons.length; i++) {
@@ -739,10 +837,6 @@ Writer.prototype.init = function () {
           writer.increaseFontSize();
           break;
 
-        case "statistics-button":
-          writer.displayCountDialog();
-          break;
-
         case "todolist-button":
           writer.manager.createTodolist().createItem("");
 
@@ -750,6 +844,16 @@ Writer.prototype.init = function () {
             writer.onEditableClick(event);
           };
 
+          break;
+
+        case "open-second-toolbar":
+          document.getElementById("toolbar").classList.add("more");
+          $("#toolbar").scrollLeft(0);
+          break;
+
+        case "close-second-toolbar":
+          document.getElementById("toolbar").classList.remove("more");
+          $("#toolbar").scrollLeft(0);
           break;
 
         case "copy-button":
@@ -762,10 +866,6 @@ Writer.prototype.init = function () {
 
         case "select-all-button":
           document.execCommand("selectAll");
-          break;
-
-        case "print-button":
-          writer.openPrintDialog();
           break;
 
         case "fullscreen-media-button":
@@ -837,22 +937,6 @@ Writer.prototype.init = function () {
   document.getElementById("add-recording-button").onclick = function () {
     writer.recorder["new"]();
     writer.recorderDialog.showModal();
-  };
-
-  document.getElementById("date-button").onclick = function () {
-    writer.toggleDrawer();
-    var date = writer.note.metadata.custom_date;
-    if (date == undefined) date = writer.note.metadata.last_modification_date;
-    if (date == undefined) date = writer.note.metadata.creation_date;
-    if (date == undefined) date = new Date().now();
-    var picker = new MaterialDatetimePicker({
-      "default": moment(date)
-    }).on('submit', function (val) {
-      writer.note.metadata.custom_date = val.unix() * 1000;
-      writer.hasTextChanged = true;
-    });
-    picker.open();
-    return false;
   };
 
   writer.nameTimout = undefined;
@@ -1028,6 +1112,7 @@ Writer.prototype.removeKeyword = function (word) {
 Writer.prototype.reset = function () {
   this.exitOnSaved = false;
   this.putDefaultHTML();
+  document.getElementById("toolbar").classList.remove("more");
   var dias = document.getElementsByClassName("mdl-dialog");
 
   for (var i = 0; i < dias.length; i++) {
@@ -1059,6 +1144,7 @@ Writer.prototype.putDefaultHTML = function () {
 };
 
 Writer.prototype.setColor = function (color) {
+  console.log("setting color: " + color);
   document.execCommand('styleWithCSS', false, true);
   document.execCommand('foreColor', false, color);
 };
@@ -1414,8 +1500,8 @@ SaveNoteTask.prototype.trySave = function (onEnd, trial) {
     }
   }
 
-  for (var _i = 0, _currentUrls = currentUrls; _i < _currentUrls.length; _i++) {
-    var url = _currentUrls[_i];
+  for (var _i3 = 0, _currentUrls = currentUrls; _i3 < _currentUrls.length; _i3++) {
+    var url = _currentUrls[_i3];
     if (urls.indexOf(url) < 0) delete this.writer.note.metadata.urls[url];
   }
 

@@ -432,7 +432,7 @@ if (!window.jscolor) {
 
           var x = pp[a];
           var y = pp[b];
-          var positionValue = thisObj.fixed ? 'fixed' : 'absolute';
+          var positionValue = 'unset';
           var contractShadow = (pp[0] + ps[0] > tp[0] || pp[0] < tp[0] + ts[0]) && pp[1] + ps[1] < tp[1] + ts[1];
 
           jsc._drawPosition(thisObj, x, y, positionValue, contractShadow);
@@ -1417,8 +1417,8 @@ if (!window.jscolor) {
           p.boxS.style.height = '100%';
           jsc.setBorderRadius(p.boxS, borderRadius + 'px'); // picker border
 
-          p.boxB.style.position = 'relative';
-          p.boxB.style.border = THIS.borderWidth + 'px solid';
+          p.boxB.style.position = 'relative'; //p.boxB.style.border = THIS.borderWidth + 'px solid';
+
           p.boxB.style.borderColor = THIS.borderColor;
           p.boxB.style.background = THIS.backgroundColor;
           jsc.setBorderRadius(p.boxB, borderRadius + 'px'); // IE hack:
@@ -1686,7 +1686,7 @@ if (!window.jscolor) {
         	if (currStyle && currStyle.position.toLowerCase() === 'fixed') {
         		this.fixed = true;
         	}
-        			if (elm !== this.targetElement) {
+        					if (elm !== this.targetElement) {
         		// attach onParentScroll so that we can recompute the picker position
         		// when one of the offsetParents is scrolled
         		if (!elm._jscEventsAttached) {

@@ -5,7 +5,7 @@
     "settings": "Ajustes",
     "keywords": "Palabras clave",
     "welcome": "Bienvenid@",
-    "discover_carnet": "Vamos a descubrir Carnet",
+    "discover_carnet": "Descubre Carnet",
     "modern": "Moderno",
     "modern_subtext": "Disfruta tomar notas y escribir textos en una interfaz moderna",
     "synchronize": "Sincroniza",
@@ -77,5 +77,8 @@
     "thursday": "Jueves",
     "friday": "Viernes",
     "saturday": "Sábado",
-    "sunday": "Domingo"
+    "sunday": "Domingo",
+    "time": "Hora",
+    "date": "Fecha",
+    "beta_warning_reminders": "Los \"recordatorios\" son por el momento caracteristicaa beta que solo funcionarán en Android"
 }

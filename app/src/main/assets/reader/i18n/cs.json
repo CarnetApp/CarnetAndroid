@@ -64,5 +64,21 @@
     "not_yet_implemented": "Zatím neimplementováno",
     "open": "Otevřít",
     "date_time": "Datum a čas",
-    "media_empty_text": "Pro přidání obrázků/zvuků použijte tlačítko +"
+    "media_empty_text": "Pro přidání obrázků/zvuků použijte tlačítko +",
+    "reminders": "Upozornění",
+    "once-a-month": "Jednou za měsíc",
+    "once-a-year": "Jednou za rok",
+    "days-of-week": "V určené dny v týdnu",
+    "once": "Jednou",
+    "frequency": "Četnost",
+    "monday": "Pondělí",
+    "tuesday": "Úterý",
+    "wednesday": "Středa",
+    "thursday": "Čtvrtek",
+    "friday": "Pátek",
+    "saturday": "Sobota",
+    "sunday": "Neděle",
+    "time": "Čas",
+    "date": "Datum",
+    "beta_warning_reminders": "„Upozornění“ jsou stále ještě beta funkce, která funguje zatím pouze na Androidu"
 }
