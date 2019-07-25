@@ -9,7 +9,7 @@
     <string name="floating">Note flottante</string>
     <string name="rename">Renommer</string>
     <string name="delete">Supprimer</string>
-    <string name="remove_recent">Supprimer depuis le plus récent</string>
+    <string name="remove_recent">Archiver</string>
     <string name="storage_preference">Stockage principal</string>
     <string name="recent">Récent</string>
     <string name="browser">Explorateur</string>
@@ -89,7 +89,7 @@
     <string name="carnet_open">Carnet est libre et gratuite</string>
     <string name="carnet_note_taking_app">Carnet est une application de prise de notes polyvalente</string>
     <string name="say_hi_subtitle">Cliquer sur \"Me prévenir\" m\'aidera à déterminer combien d\'utilisateurices ont téléchargé Carnet. Ce n\'est bien sûr pas obligatoire :)</string>
-    <string name="say_hi_subtitle2">"Je comprends que l\'application a été téléchargée une fois de plus (pas obligatoire du tout mais utile). "</string>
+    <string name="say_hi_subtitle2">""</string>
     <string name="nextcloud_connect">Se connecter avec Nextcloud</string>
     <string name="other_sync_options">Autres options</string>
 
