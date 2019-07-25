@@ -35,7 +35,7 @@
     <string name="drawer_open">Öffne Navigationsleiste</string>
     <string name="drawer_close">Schließe Navigationsleiste</string>
     <string name="authorize">Genehmigen</string>
-    <string name="authorize_description">Carnet benötigt spezielle Berechtigung, um als Fenster angezeigt zu werden. Diese bitte durch Aktivierung von \"Über anderen Apps einblenden\" erteilen.</string>
+    <string name="authorize_description">Carnet benötigt spezielle Berechtigung, um als Fenster angezeigt zu werden. Diese bitte durch Aktivierung von \"Über anderen Apps einblenden\" erteilen</string>
     <string name="title_activity_settings">Einstellungen</string>
     <string name="authorisation_issue">Berechtigungsproblem</string>
     <string name="error">Fehler</string>
