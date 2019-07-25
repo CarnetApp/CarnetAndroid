@@ -1,3 +1,12 @@
+# Version 0.17.0
+
+reworked toolbar
+reworked color picker
+reworked todo-list
+better design for large screens
+notification sound
+translations:  Mac Guffin, Rafael Yáñez, Ian Beardslee, ButterflyOfFire, Henrik Larsson
+
 # Version 0.16.3
 
 Fix issue with sync by nextcloud app
