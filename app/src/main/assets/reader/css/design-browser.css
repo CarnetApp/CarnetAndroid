@@ -149,6 +149,7 @@ body{
     left:0px;
     z-index:100;
     right:0; 
+    height:100%;
 }
 
 #loading-view button{
