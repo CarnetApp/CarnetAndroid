@@ -94,7 +94,7 @@
     <string name="other_sync_options">Autres options</string>
 
 <string name="hello_blank_fragment">Salut fragment vide</string>
-    <string name="fake_note_1">Ces fausses notes disparaîtrons sitôt que vous créerez une nouvelle note en sélectionnant le bouton en bas à droite</string>
+    <string name="fake_note_1">Ces fausses notes disparaîtront sitôt que vous créerez une nouvelle note en sélectionnant le bouton en bas à droite</string>
     <string name="fake_note_2">"Choisissez la couleurs de vos notes, ajoutez des mots clefs           "</string>
     <string name="fake_note_3">Attribuez une note à vos notes et textes</string>
     <string name="fake_note_4">Synchronisez vos appareils</string>
