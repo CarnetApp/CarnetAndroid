@@ -1,5 +1,7 @@
 # CarnetAndroid
 
+[<img src="https://weblate.lostpod.me/widgets/carnethtml/-/android/svg-badge.svg" alt="État de la traduction" />](https://weblate.lostpod.me/engage/carnethtml/?utm_source=widget)
+
 Android version of Carnet
 
 For feature request, see [Carnet Documentation](../../../CarnetDocumentation) for github or
@@ -45,7 +47,9 @@ This will build and copy every JS html css files needed by the android app
 
 You can help with translations on the dedicated platform
 
-[weblate](https://weblate.lostpod.me)
+[Weblate](https://weblate.lostpod.me)
+
+[<img src="https://weblate.lostpod.me/widgets/carnethtml/-/android/multi-auto.svg" alt="État de la traduction" />](https://weblate.lostpod.me/engage/carnethtml/?utm_source=widget)
 
 ## Thanks
 
