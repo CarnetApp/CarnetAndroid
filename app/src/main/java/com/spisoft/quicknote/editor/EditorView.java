@@ -48,6 +48,7 @@ import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
+import com.spisoft.quicknote.editor.recorder.AudioRecorderJS;
 import com.spisoft.quicknote.server.HttpServer;
 import com.spisoft.quicknote.serviceactivities.CropWrapperActivity;
 import com.spisoft.quicknote.utils.FileUtils;
@@ -112,6 +113,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
     private PermissionRequest myRequest;
     private String mSharedText;
     public static String sNextExtension;
+    private AudioRecorderJS mAudioRecorder;
 
     private void rename(String stringExtra, String path) {
         mWebView.loadUrl("javascript:replace('" + StringEscapeUtils.escapeEcmaScript(stringExtra) + "','" + StringEscapeUtils.escapeEcmaScript(path) + "')");
@@ -394,6 +396,8 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         mHasLoaded = false;
         mRootPath = getContext().getFilesDir().getAbsolutePath();
         mServer2 = new HttpServer(getContext());
+        mWebView.addJavascriptInterface(new AudioRecorderJS(getContext(), mServer2, mWebView), "AndroidRecorderJava");
+
         mWebView.loadUrl(mServer2.getUrl(getUrl()));
         //prepare Reader
         //extract
@@ -474,6 +478,17 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
          */
         public WebViewJavaScriptInterface(Context context) {
             this.context = context;
+        }
+
+
+        @JavascriptInterface
+        public void AudioRecorderStart(String channels, String bitrate, String sampleRate) {
+            mAudioRecorder.start(channels, bitrate, sampleRate);
+        }
+
+        @JavascriptInterface
+        public void AudioRecorderStop(String channels, String bitrate, String sampleRate) {
+            mAudioRecorder.stop();
         }
 
         @JavascriptInterface
