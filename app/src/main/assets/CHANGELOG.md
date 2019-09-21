@@ -9,6 +9,9 @@ Fix audio icon
 Fix checkbox with dark theme
 Fix save after moving item in todolist
 Fix scrollbar in dark theme
+translations:  Mac Guffin, ButterflyOfFire, Devfreedom, Christian Scholz
+
+
 
 # Version 0.17.0
 
