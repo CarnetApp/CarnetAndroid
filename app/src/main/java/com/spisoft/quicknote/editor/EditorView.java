@@ -142,20 +142,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
 
     public boolean onRequestPermissionsResult(int requestCode,
                                               String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_RECORD_AUDIO: {
-                Log.d("WebView", "PERMISSION FOR AUDIO");
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    myRequest.grant(myRequest.getResources());
-
-                } else {
-
-                }
-                return true;
-            }
-        }
-        return false;
+        return mAudioRecorder.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -396,7 +383,8 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         mHasLoaded = false;
         mRootPath = getContext().getFilesDir().getAbsolutePath();
         mServer2 = new HttpServer(getContext());
-        mWebView.addJavascriptInterface(new AudioRecorderJS(getContext(), mServer2, mWebView), "AndroidRecorderJava");
+        mAudioRecorder = new AudioRecorderJS((Activity)getContext(), mServer2, mWebView);
+        mWebView.addJavascriptInterface(mAudioRecorder, "AndroidRecorderJava");
 
         mWebView.loadUrl(mServer2.getUrl(getUrl()));
         //prepare Reader

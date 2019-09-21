@@ -1,16 +1,15 @@
 package com.spisoft.quicknote.editor.recorder
 
+import android.app.Activity
 import android.content.Context
-import android.content.Intent
+import android.content.pm.PackageManager
 import android.media.AudioFormat
-import android.webkit.JavascriptInterface
-import android.media.AudioFormat.CHANNEL_IN_MONO
-import android.media.AudioFormat.ENCODING_PCM_16BIT
 import android.media.MediaRecorder
-import android.media.MediaRecorder.AudioSource.MIC
-import android.os.Bundle
+import android.os.Build
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.webkit.JavascriptInterface
 import android.webkit.WebView
-import com.spisoft.quicknote.databases.RecentHelper
 import com.spisoft.quicknote.server.HttpServer
 import com.spisoft.sync.Log
 import omrecorder.*
@@ -18,17 +17,14 @@ import org.apache.commons.lang3.StringEscapeUtils
 import top.oply.opuslib.OpusConverter
 import top.oply.opuslib.OpusEvent
 import java.io.File
-import java.text.DateFormat
 import java.util.*
 
 
-
-
-public class AudioRecorderJS (ct: Context, server: HttpServer, webview:WebView) {
+public class AudioRecorderJS (ct: Activity, server: HttpServer, webview:WebView) {
 
 
 
-    private val ct: Context = ct
+    private val ct: Activity = ct
     private val webview: WebView = webview
     private val server: HttpServer = server
     private var recorder: Recorder ?= null;
@@ -46,8 +42,7 @@ public class AudioRecorderJS (ct: Context, server: HttpServer, webview:WebView) 
                 File(ct.cacheDir,"/tmpaudio.wav").delete()
 
                 webview.post {
-                    webview.loadUrl("javascript:AndroidRecorder.instance.setState('none')")
-                    webview.loadUrl("javascript:AndroidRecorder.instance.onstop()")
+                    webview.loadUrl("javascript:AndroidRecorder.instance.onEncodingEnd()")
                     webview.loadUrl("javascript:AndroidRecorder.instance.onFileReady('" + StringEscapeUtils.escapeEcmaScript(server.getUrl("/api/note/open/0/getMedia/"+File(msg!!).name)) + "')")
                 }
             }
@@ -57,6 +52,20 @@ public class AudioRecorderJS (ct: Context, server: HttpServer, webview:WebView) 
     @JavascriptInterface
     public fun start(channels: String, bitrate:String, sampleRate:String) {
         Log.d("AudioRecorderJS", "starting");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(ct.getApplicationContext(),
+                        android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) run {
+            // No explanation needed, we can request the permission.
+            ActivityCompat.requestPermissions(ct,
+                    arrayOf(android.Manifest.permission.RECORD_AUDIO),
+                    1301)
+
+        } else
+            startRecording(channels, bitrate, sampleRate)
+
+    }
+
+    private fun startRecording(channels: String, bitrate:String, sampleRate:String) {
         File(ct.cacheDir,"/tmpaudio.wav").delete()
         File(ct.cacheDir,"/tmpaudio.wav").parentFile.mkdirs()
         recorder = OmRecorder.wav(
@@ -71,9 +80,22 @@ public class AudioRecorderJS (ct: Context, server: HttpServer, webview:WebView) 
             webview.loadUrl("javascript:AndroidRecorder.instance.setState('recording')")
             webview.loadUrl("javascript:AndroidRecorder.instance.onstart()")
         }
+    }
+    fun onRequestPermissionsResult(requestCode: Int,
+                                   permissions: Array<String>, grantResults: IntArray): Boolean {
+        when (requestCode) {
+            1301 -> {
+                Log.d("WebView", "PERMISSION FOR AUDIO")
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startRecording("", "", "");
 
+                } else {
 
-
+                }
+                return true
+            }
+        }
+        return false
     }
 
     @JavascriptInterface
@@ -103,7 +125,10 @@ public class AudioRecorderJS (ct: Context, server: HttpServer, webview:WebView) 
         val opusName = android.text.format.DateFormat.format("yyyy-MM-dd hh:mm:ss a",Date()).toString()+".opus"
         val out = File(ct.cacheDir,"/currentnote/data/"+opusName)
         out.parentFile.mkdirs()
-
+        webview.post {
+            webview.loadUrl("javascript:AndroidRecorder.instance.onstop()")
+            webview.loadUrl("javascript:AndroidRecorder.instance.onEncodingStart()")
+        }
         OpusConverter.getInstance().encode( File(ct.cacheDir,"/tmpaudio.wav").absolutePath,  out.absolutePath, "")
         //
     }
