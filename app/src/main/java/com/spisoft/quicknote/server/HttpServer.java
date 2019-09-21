@@ -136,6 +136,13 @@ public class HttpServer extends NanoHTTPD {
 
                               case "note/open/0/listMedia":
                             return listOpenMedia();
+                        case "recorder/encoderWorker.min.wasm":
+                        case "recorder/decoderWorker.min.wasm":
+                        case "recorder/encoderWorker.min.js":
+                        case "recorder/decoderWorker.min.js": {
+                            File f = new File(mContext.getFilesDir(), "reader/reader/libs/" + subpath);
+                            return NanoHTTPD.newChunkedResponse(Response.Status.OK, subpath.endsWith("wasm") ? "application/wasm" : "application/javascript", new ByteArrayInputStream(FileUtils.readFile(f.getAbsolutePath()).getBytes()));
+                        }
                         case "settings/lang/json":
                             String lang = parms.get("lang").get(0);
                             if(lang.contains("../"))
