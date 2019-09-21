@@ -3,6 +3,10 @@
     --header-bg: #171a20;
     --background-todolist-item: rgba(255, 255, 255, 0.05);
 }
+.mdl-data-table {
+    color: var(--main-text-color);
+    background: var(--header-bg);
+}
 .mdl-layout__drawer,
 .toolbar {
     background-color: #171a20 !important;
