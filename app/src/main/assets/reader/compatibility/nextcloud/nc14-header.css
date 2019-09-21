@@ -6,6 +6,11 @@
     top: 50px;
     height: calc(100% - 50px) !important;
 }
+
+#editor-container {
+    top: 50px;
+    height: 100% !important;
+}
 #loading-view {
     top: 50px !important;
     height: calc(100% - 50px) !important;

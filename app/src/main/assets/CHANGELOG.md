@@ -1,3 +1,15 @@
+# Version 0.18.0
+
+better design for todo-list
+Stereo recorder + better quality
+Ability to remove rating
+
+Fix audio player with bromite
+Fix audio icon
+Fix checkbox with dark theme
+Fix save after moving item in todolist
+Fix scrollbar in dark theme
+
 # Version 0.17.0
 
 reworked toolbar

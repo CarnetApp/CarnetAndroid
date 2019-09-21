@@ -20,16 +20,15 @@ html {
     scrollbar-dark-shadow-color: #646464;
   }
   
-  ::-webkit-scrollbar { width: 8px; height: 3px;}
   ::-webkit-scrollbar-button {  height: 0px; background-color: #666; }
   ::-webkit-scrollbar-track {  background-color: #646464;}
   ::-webkit-scrollbar-track-piece { background-color: #22252f;}
-  ::-webkit-scrollbar-thumb { height: 1px; background-color: #666; }
+  ::-webkit-scrollbar-thumb { height: 0px; background-color: #666; }
   ::-webkit-scrollbar-corner { background-color: #646464;}
   ::-webkit-resizer { background-color: #666;}
 
 .mdl-layout__drawer {
-    border-right-color:grey;
+    border-right: 0px;
 }
 
 

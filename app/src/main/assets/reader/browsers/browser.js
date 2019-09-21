@@ -38,6 +38,9 @@ var store = new Store();
 var noteCacheStr = String(store.get("note_cache"));
 if (noteCacheStr == "undefined") noteCacheStr = "{}";
 var cachedMetadata = JSON.parse(noteCacheStr);
+var recentCacheStr = String(store.get("recent_cache"));
+var cachedRecentDB = undefined;
+if (recentCacheStr != "undefined") cachedRecentDB = JSON.parse(recentCacheStr);
 
 var TextGetterTask = function TextGetterTask(list) {
   this.list = list;
@@ -415,8 +418,7 @@ var mNoteContextualDialog = new NoteContextualDialog();
 var mNewFolderDialog = new NewFolderDialog();
 var refreshTimeout = undefined;
 
-function sortBy(sortBy, reversed) {
-  console.oldlog("sort " + sortBy + "reversed " + reversed);
+function sortBy(sortBy, reversed, discret) {
   notePath = [];
   var sorter = Utils.sortByDefault;
 
@@ -434,20 +436,154 @@ function sortBy(sortBy, reversed) {
       break;
   }
 
-  resetGrid(false);
+  resetGrid(discret);
   notes.sort(reversed ? function (a, b) {
     return -sorter(a, b);
   } : sorter);
+  var _iteratorNormalCompletion2 = true;
+  var _didIteratorError2 = false;
+  var _iteratorError2 = undefined;
 
-  for (var _i2 = 0, _notes = notes; _i2 < _notes.length; _i2++) {
-    var item = _notes[_i2];
-    notePath.push(item.path);
+  try {
+    for (var _iterator2 = notes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      var item = _step2.value;
+      notePath.push(item.path);
+    }
+  } catch (err) {
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+        _iterator2["return"]();
+      }
+    } finally {
+      if (_didIteratorError2) {
+        throw _iteratorError2;
+      }
+    }
   }
 
   noteCardViewGrid.setNotesAndFolders(notes);
   currentTask = new TextGetterTask(notes);
   console.log("stopping and starting task");
   currentTask.startList();
+}
+
+function onListEnd(pathToList, files, metadatas, discret) {
+  if (!_.isEqual(files, oldFiles)) {
+    var scroll = resetGrid(discret);
+    oldFiles = files;
+    var noteCardViewGrid = this.noteCardViewGrid;
+    notes = [];
+    notePath = [];
+    if (currentTask != undefined) currentTask["continue"] = false;
+    var i = 0;
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
+
+    try {
+      for (var _iterator3 = files[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        var file = _step3.value;
+        var filename = getFilenameFromPath(file.path);
+
+        if (file.isFile && filename.endsWith(".sqd")) {
+          var metadata = metadatas != undefined ? metadatas[file.path] : undefined;
+          var noteTestTxt = new Note(stripExtensionFromName(filename), metadata != undefined ? metadata.shorttext : "", file.path, metadata != undefined ? metadata.metadata : undefined, metadata != undefined ? metadata.previews : undefined, metadata == undefined);
+          noteTestTxt.isPinned = file.isPinned;
+          noteTestTxt.originalIndex = i;
+          notes.push(noteTestTxt);
+          if (metadata != undefined) cachedMetadata[file.path] = metadata;
+        } else if (!file.isFile) {
+          file.originalIndex = i;
+          notes.push(file);
+        }
+
+        i++;
+      }
+    } catch (err) {
+      _didIteratorError3 = true;
+      _iteratorError3 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+          _iterator3["return"]();
+        }
+      } finally {
+        if (_didIteratorError3) {
+          throw _iteratorError3;
+        }
+      }
+    }
+
+    if (files.length == 0 && pathToList === "recentdb://") {
+      $("#emty-view").fadeOut("fast");
+      var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_1"), "untitleddonotedit.sqd", {
+        creation_date: new Date().getTime(),
+        last_modification_date: new Date().getTime(),
+        keywords: [],
+        rating: 5,
+        color: "none"
+      }, undefined);
+      notes.push(noteTestTxt);
+      var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_5"), "untitleddonotedit.sqd", {
+        creation_date: new Date().getTime(),
+        last_modification_date: new Date().getTime(),
+        keywords: [],
+        rating: -1,
+        color: "red"
+      }, undefined);
+      noteTestTxt.previews = [];
+      noteTestTxt.previews.push(root_url + "img/bike.png");
+      notes.push(noteTestTxt);
+      var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_2"), "untitleddonotedit.sqd", {
+        creation_date: new Date().getTime(),
+        last_modification_date: new Date().getTime(),
+        keywords: ["keyword"],
+        rating: -1,
+        color: "orange"
+      }, undefined);
+      notes.push(noteTestTxt);
+      var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_3"), "untitleddonotedit.sqd", {
+        creation_date: new Date().getTime(),
+        last_modification_date: new Date().getTime(),
+        keywords: [],
+        rating: 3,
+        color: "none"
+      }, undefined);
+      notes.push(noteTestTxt);
+      var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_4"), "untitleddonotedit.sqd", {
+        creation_date: new Date().getTime(),
+        last_modification_date: new Date().getTime(),
+        keywords: [],
+        rating: -1,
+        color: "green"
+      }, undefined);
+      notes.push(noteTestTxt);
+      var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_6"), "untitleddonotedit.sqd", {
+        creation_date: new Date().getTime(),
+        last_modification_date: new Date().getTime(),
+        keywords: [],
+        rating: -1,
+        urls: {
+          "https://carnet.live": {}
+        },
+        todolists: [{
+          todo: [$.i18n("fake_note_todo_item_1"), $.i18n("fake_note_todo_item_2")]
+        }],
+        color: "none"
+      }, undefined);
+      notes.push(noteTestTxt);
+    }
+
+    sortBy(uiSettings['sort_by'], uiSettings['reversed'], discret);
+
+    if (discret) {
+      document.getElementById("grid-container").scrollTop = scroll;
+      console.log("scroll : " + scroll);
+    }
+  }
 }
 
 var notes = [];
@@ -482,124 +618,16 @@ function list(pathToList, discret) {
       document.getElementById("note-loading-view").style.display = "none";
     }
 
-    if (!_.isEqual(files, oldFiles)) {
-      var scroll = resetGrid(discret);
-      oldFiles = files;
-      var noteCardViewGrid = this.noteCardViewGrid;
-      notes = [];
-      notePath = [];
-      if (currentTask != undefined) currentTask["continue"] = false;
-
-      if (files.length > 0) {
-        $("#emty-view").fadeOut("fast");
-      } else if (endOfSearch) $("#emty-view").fadeIn("fast");
-
-      var i = 0;
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = files[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var file = _step2.value;
-          var filename = getFilenameFromPath(file.path);
-
-          if (file.isFile && filename.endsWith(".sqd")) {
-            var metadata = metadatas != undefined ? metadatas[file.path] : undefined;
-            console.oldlog("jfkjkfjk is " + (metadata != undefined));
-            var noteTestTxt = new Note(stripExtensionFromName(filename), metadata != undefined ? metadata.shorttext : "", file.path, metadata != undefined ? metadata.metadata : undefined, metadata != undefined ? metadata.previews : undefined, metadata == undefined);
-            noteTestTxt.isPinned = file.isPinned;
-            noteTestTxt.originalIndex = i;
-            notes.push(noteTestTxt);
-          } else if (!file.isFile) {
-            file.originalIndex = i;
-            notes.push(file);
-          }
-
-          i++;
-        }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
-            _iterator2["return"]();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
-          }
-        }
-      }
-
-      if (files.length == 0 && pathToList === "recentdb://") {
-        $("#emty-view").fadeOut("fast");
-        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_1"), "untitleddonotedit.sqd", {
-          creation_date: new Date().getTime(),
-          last_modification_date: new Date().getTime(),
-          keywords: [],
-          rating: 5,
-          color: "none"
-        }, undefined);
-        notes.push(noteTestTxt);
-        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_5"), "untitleddonotedit.sqd", {
-          creation_date: new Date().getTime(),
-          last_modification_date: new Date().getTime(),
-          keywords: [],
-          rating: -1,
-          color: "red"
-        }, undefined);
-        noteTestTxt.previews = [];
-        noteTestTxt.previews.push(root_url + "img/bike.png");
-        notes.push(noteTestTxt);
-        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_2"), "untitleddonotedit.sqd", {
-          creation_date: new Date().getTime(),
-          last_modification_date: new Date().getTime(),
-          keywords: ["keyword"],
-          rating: -1,
-          color: "orange"
-        }, undefined);
-        notes.push(noteTestTxt);
-        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_3"), "untitleddonotedit.sqd", {
-          creation_date: new Date().getTime(),
-          last_modification_date: new Date().getTime(),
-          keywords: [],
-          rating: 3,
-          color: "none"
-        }, undefined);
-        notes.push(noteTestTxt);
-        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_4"), "untitleddonotedit.sqd", {
-          creation_date: new Date().getTime(),
-          last_modification_date: new Date().getTime(),
-          keywords: [],
-          rating: -1,
-          color: "green"
-        }, undefined);
-        notes.push(noteTestTxt);
-        var noteTestTxt = new Note("untitleddonotedit.sqd", $.i18n("fake_note_6"), "untitleddonotedit.sqd", {
-          creation_date: new Date().getTime(),
-          last_modification_date: new Date().getTime(),
-          keywords: [],
-          rating: -1,
-          urls: {
-            "https://carnet.live": {}
-          },
-          todolists: [{
-            todo: [$.i18n("fake_note_todo_item_1"), $.i18n("fake_note_todo_item_2")]
-          }],
-          color: "none"
-        }, undefined);
-        notes.push(noteTestTxt);
-      }
-
-      sortBy(uiSettings['sort_by'], uiSettings['reversed']);
-
-      if (discret) {
-        document.getElementById("grid-container").scrollTop = scroll;
-        console.log("scroll : " + scroll);
-      }
+    if (files != null && pathToList === "recentdb://" && files.length > 0) {
+      //save to cache
+      store.set("recent_cache", JSON.stringify(files));
     }
+
+    if (files.length > 0) {
+      $("#emty-view").fadeOut("fast");
+    } else if (endOfSearch) $("#emty-view").fadeIn("fast");
+
+    onListEnd(pathToList, files, metadatas, discret);
 
     if (!endOfSearch) {
       refreshTimeout = setTimeout(function () {
@@ -721,8 +749,8 @@ function isFullScreen() {
   return document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
 }
 
-RequestBuilder.sRequestBuilder.get("/recentdb/merge", function (error, data) {
-  if (data == true && currentPath == "recentdb://") list("recentdb://", true);
+RequestBuilder.sRequestBuilder.get("/recentdb/merge", function (error, data) {//  if (data == true && currentPath == "recentdb://")
+  //    list("recentdb://", true);
 });
 RequestBuilder.sRequestBuilder.get("/keywordsdb/merge", function (error, data) {
   if (data == true) refreshKeywords();
@@ -738,45 +766,12 @@ if (isElectron) {
   writerFrame = document.getElementById("writer-webview");
   writerFrame.addEventListener('ipc-message', function (event) {
     if (events[event.channel] !== undefined) {
-      var _iteratorNormalCompletion3 = true;
-      var _didIteratorError3 = false;
-      var _iteratorError3 = undefined;
-
-      try {
-        for (var _iterator3 = events[event.channel][Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-          var callback = _step3.value;
-          callback();
-        }
-      } catch (err) {
-        _didIteratorError3 = true;
-        _iteratorError3 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
-            _iterator3["return"]();
-          }
-        } finally {
-          if (_didIteratorError3) {
-            throw _iteratorError3;
-          }
-        }
-      }
-    }
-  });
-} else {
-  writerFrame = document.getElementById("writer-iframe"); //iframe events
-
-  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-  var eventer = window[eventMethod];
-  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
-  eventer(messageEvent, function (e) {
-    if (events[e.data] !== undefined) {
       var _iteratorNormalCompletion4 = true;
       var _didIteratorError4 = false;
       var _iteratorError4 = undefined;
 
       try {
-        for (var _iterator4 = events[e.data][Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+        for (var _iterator4 = events[event.channel][Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
           var callback = _step4.value;
           callback();
         }
@@ -791,6 +786,39 @@ if (isElectron) {
         } finally {
           if (_didIteratorError4) {
             throw _iteratorError4;
+          }
+        }
+      }
+    }
+  });
+} else {
+  writerFrame = document.getElementById("writer-iframe"); //iframe events
+
+  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+  var eventer = window[eventMethod];
+  var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+  eventer(messageEvent, function (e) {
+    if (events[e.data] !== undefined) {
+      var _iteratorNormalCompletion5 = true;
+      var _didIteratorError5 = false;
+      var _iteratorError5 = undefined;
+
+      try {
+        for (var _iterator5 = events[e.data][Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+          var callback = _step5.value;
+          callback();
+        }
+      } catch (err) {
+        _didIteratorError5 = true;
+        _iteratorError5 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+            _iterator5["return"]();
+          }
+        } finally {
+          if (_didIteratorError5) {
+            throw _iteratorError5;
           }
         }
       }
@@ -901,29 +929,29 @@ RequestBuilder.sRequestBuilder.get("/settings/browser_css", function (error, dat
   if (!error && data != null && data != undefined) {
     store.set("css_sheets", JSON.stringify(data));
     var num = 0;
-    var _iteratorNormalCompletion5 = true;
-    var _didIteratorError5 = false;
-    var _iteratorError5 = undefined;
+    var _iteratorNormalCompletion6 = true;
+    var _didIteratorError6 = false;
+    var _iteratorError6 = undefined;
 
     try {
-      for (var _iterator5 = data[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-        var sheet = _step5.value;
+      for (var _iterator6 = data[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+        var sheet = _step6.value;
         Utils.applyCss(sheet, function () {
           num++;
           if (num == data.length) $("#carnet-icon-view").fadeOut('slow');
         });
       }
     } catch (err) {
-      _didIteratorError5 = true;
-      _iteratorError5 = err;
+      _didIteratorError6 = true;
+      _iteratorError6 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
-          _iterator5["return"]();
+        if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
+          _iterator6["return"]();
         }
       } finally {
-        if (_didIteratorError5) {
-          throw _iteratorError5;
+        if (_didIteratorError6) {
+          throw _iteratorError6;
         }
       }
     }
@@ -966,9 +994,15 @@ compatibility.loadLang(function () {
       document.getElementById("reversed-order").parentNode.classList.add("is-checked");
     }
 
-    list(initPath);
+    list(initPath, cachedRecentDB != undefined ? true : false);
   });
 });
+
+function loadCachedRecentDB() {
+  if (cachedRecentDB != undefined) onListEnd("recentdb://", cachedRecentDB, cachedMetadata);
+}
+
+loadCachedRecentDB();
 $.i18n().locale = navigator.language;
 $(".sort-item").click(function () {
   var radioValue = $("input[name='sort-by']:checked").val();

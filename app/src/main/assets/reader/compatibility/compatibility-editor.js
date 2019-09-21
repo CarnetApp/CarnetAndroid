@@ -91,6 +91,12 @@ function (_Compatibility) {
         parent.postMessage("exit", "*");
     }
   }, {
+    key: "getRecorder",
+    value: function getRecorder(options) {
+      if (this.isAndroid) return new AndroidRecorder(options);
+      return new Recorder(options);
+    }
+  }, {
     key: "onNoteLoaded",
     value: function onNoteLoaded() {
       if (this.isGtk) {

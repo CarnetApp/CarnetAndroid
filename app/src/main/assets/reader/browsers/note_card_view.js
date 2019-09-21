@@ -7,11 +7,9 @@ var NoteCardView = function NoteCardView(elem, onTodoListChange) {
 };
 
 NoteCardView.prototype.refreshTodoList = function () {
-  console.oldlog("refreshTodoList");
   this.cardTodoLists.innerHTML = "";
 
   for (var i = 0; i < this.note.metadata.todolists.length; i++) {
-    console.oldlog("arr");
     var todolist = this.note.metadata.todolists[i];
     if (todolist.todo == undefined) continue;
     var todolistDiv = document.createElement("div");
@@ -246,7 +244,8 @@ var NoteCardViewGrid = function NoteCardViewGrid(elem, discret, dragCallback) {
 NoteCardViewGrid.prototype.init = function () {
   this.noteCards = [];
   this.lastAdded = 0;
-  this.notes = []; //calculating card width
+  this.notes = [];
+  var grid = this; //calculating card width
 
   this.width = 200;
 
@@ -254,14 +253,13 @@ NoteCardViewGrid.prototype.init = function () {
     if (document.body.clientWidth > 300) this.width = document.body.clientWidth / 2 - 13;else this.width = document.body.clientWidth - 10;
   }
 
-  console.log("width " + document.body.clientWidth);
   var Masonry = compatibility.getMasonry();
   this.msnry = new Masonry(this.elem, {
     // options
     itemSelector: '.demo-card-wide.mdl-card',
     fitWidth: true,
     columnWidth: this.width + 10,
-    transitionDuration: this.discret ? 0 : "0.6s",
+    transitionDuration: grid.discret ? 0 : "0.6s",
     animationOptions: {
       queue: false,
       isAnimated: false

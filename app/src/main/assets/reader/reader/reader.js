@@ -174,6 +174,7 @@ Writer.prototype.setMediaList = function (list) {
         img = document.createElement("img");
         img.src = filePath;
         el.appendChild(img);
+        el.classList.add("image-media");
         writer.fullscreenableMedia.push(filePath);
         img.mediaIndex = mediaCount;
 
@@ -185,19 +186,22 @@ Writer.prototype.setMediaList = function (list) {
         mediaCount++;
       }
     } else {
-      img = document.createElement("img");
-      img.src = rootpath + "/img/file.svg";
-      el.appendChild(img);
-      el.innerHTML += "<br /> " + name.substr(0, 15);
+      img = document.createElement("i");
+      img.classList.add("material-icons");
       el.classList.add("media-file");
       el.filePath = filePath;
 
-      if (filePath.endsWith("opus")) {
+      if (FileUtils.isFileAudio(filePath)) {
+        img.innerHTML = "audiotrack";
+
         el.onclick = function () {
           writer.recorder.setAudioUrl(filePath, name);
           writer.recorderDialog.showModal();
         };
-      }
+      } else img.innerHTML = "insert_drive_file";
+
+      el.appendChild(img);
+      el.innerHTML += "<br /> " + name.substr(0, 15);
     }
 
     writer.mediaList.appendChild(el);
@@ -323,6 +327,17 @@ Writer.prototype.extractNote = function () {
     writer.updateRating(writer.note.metadata.rating);
     writer.updateNoteColor(writer.note.metadata.color != undefined ? writer.note.metadata.color : "none");
     writer.setDoNotEdit(false);
+    setTimeout(function () {
+      if (!writer.isBigNote()) {
+        var elements = writer.oDoc.getElementsByClassName("edit-zone");
+        writer.placeCaretAtEnd(elements[elements.length - 1]);
+        writer.oFloating = document.getElementById("floating");
+        writer.scrollBottom.style.display = "none";
+      } else {
+        $(writer.oCenter).scrollTop(0);
+        writer.scrollBottom.style.display = "block";
+      }
+    }, 200);
   });
 };
 
@@ -330,6 +345,16 @@ var saveTextIfChanged = function saveTextIfChanged(onSaved) {
   console.log("has text changed ? " + writer.hasTextChanged);
 
   if (writer.hasTextChanged) {
+    if (writer.isBigNote()) {
+      if (writer.scrollBottom.style.display == "none") {
+        writer.scrollBottom.style.display = "block";
+      }
+    } else {
+      if (writer.scrollBottom.style.display == "block") {
+        writer.scrollBottom.style.display = "none";
+      }
+    }
+
     writer.seriesTaskExecutor.addTask(writer.saveNoteTask, function () {
       console.log("exitOnSaved " + writer.exitOnSaved);
       writer.note.is_not_created = false;
@@ -395,8 +420,11 @@ Writer.prototype.placeCaretAtEnd = function (el) {
   }
 };
 
+Writer.prototype.isBigNote = function () {
+  return this.oCenter.scrollHeight > this.oCenter.clientHeight + 200;
+};
+
 Writer.prototype.fillWriter = function (extractedHTML) {
-  console.log("fill " + extractedHTML);
   var writer = this;
   if (extractedHTML != undefined && extractedHTML != "") this.oEditor.innerHTML = extractedHTML;else this.putDefaultHTML();
   var name = FileUtils.stripExtensionFromName(FileUtils.getFilename(this.note.path));
@@ -404,7 +432,6 @@ Writer.prototype.fillWriter = function (extractedHTML) {
 
   this.oCenter.onscroll = function () {
     lastscroll = $(writer.oCenter).scrollTop();
-    console.log("onscroll");
   };
 
   this.oDoc = document.getElementById("text");
@@ -450,16 +477,12 @@ Writer.prototype.fillWriter = function (extractedHTML) {
       var elements = event.target.getElementsByClassName("edit-zone");
       writer.placeCaretAtEnd(elements[elements.length - 1]);
     }
-  }; //focus on last editable element
+  };
 
-
-  var elements = this.oDoc.getElementsByClassName("edit-zone");
-  writer.placeCaretAtEnd(elements[elements.length - 1]);
-  this.oFloating = document.getElementById("floating");
-  var writer = this;
   this.oDoc.addEventListener("input", function () {
     writer.hasTextChanged = true;
-  }, false);
+  }, false); //focus on last editable element
+
   this.lastSavedTimeout = setTimeout(saveTextIfChanged, 4000);
   this.sDefTxt = this.oDoc.innerHTML;
   /*simple initialization*/
@@ -674,6 +697,14 @@ Writer.prototype.init = function () {
   this.printDialog = this.elem.querySelector('#print-dialog');
   this.oEditor = document.getElementById("editor");
   this.oCenter = document.getElementById("center");
+  this.scrollBottom = document.getElementById("scroll-bottom");
+
+  this.scrollBottom.onclick = function () {
+    $(writer.oCenter).animate({
+      scrollTop: $(writer.oCenter).prop("scrollHeight")
+    });
+  };
+
   this.mediaList = document.getElementById("media-list");
   this.fullscreenViewer = document.getElementById("fullscreen-viewer");
   $(document).bind('keydown', function (event) {
@@ -1112,6 +1143,7 @@ Writer.prototype.removeKeyword = function (word) {
 Writer.prototype.reset = function () {
   this.exitOnSaved = false;
   this.putDefaultHTML();
+  this.setMediaList([]);
   document.getElementById("toolbar").classList.remove("more");
   var dias = document.getElementsByClassName("mdl-dialog");
 
@@ -1144,7 +1176,6 @@ Writer.prototype.putDefaultHTML = function () {
 };
 
 Writer.prototype.setColor = function (color) {
-  console.log("setting color: " + color);
   document.execCommand('styleWithCSS', false, true);
   document.execCommand('foreColor', false, color);
 };
@@ -1155,7 +1186,8 @@ Writer.prototype.fillColor = function (color) {
 };
 
 Writer.prototype.saveRating = function (rating) {
-  this.note.metadata.rating = rating;
+  if (rating == undefined) return;
+  if (this.note.metadata.rating != rating) this.note.metadata.rating = rating;else this.note.metadata.rating = -1;
   console.log("new rating " + this.note.metadata.rating);
   writer.hasTextChanged = true;
 };

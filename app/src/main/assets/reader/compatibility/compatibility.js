@@ -43,37 +43,12 @@ function () {
   }, {
     key: "loadLang",
     value: function loadLang(callback) {
-      var langs = ["en", "fr", "de", "ru", "nl", "cs", "sk", "ar", "eo", "es"];
-      var toLoad = {};
-
-      for (var _i = 0, _langs = langs; _i < _langs.length; _i++) {
-        var lang = _langs[_i];
-        toLoad[lang] = (!this.isElectron ? RequestBuilder.sRequestBuilder.api_url : "/") + 'settings/lang/json?lang=' + lang;
-      }
-
-      if (!this.isElectron) {
-        $.i18n().load(toLoad).done(callback);
-      } else {
-        var size = Object.keys(toLoad).length;
-        var i = 0;
-        var total = {};
-
-        var _loop = function _loop() {
-          var key = _Object$keys[_i2];
-          RequestBuilder.sRequestBuilder.get(toLoad[key], function (error, data) {
-            i++;
-            total[key] = data;
-
-            if (i == size) {
-              $.i18n().load(total).done(callback);
-            }
-          });
-        };
-
-        for (var _i2 = 0, _Object$keys = Object.keys(toLoad); _i2 < _Object$keys.length; _i2++) {
-          _loop();
-        }
-      }
+      var langs = ["tot"];
+      var toLoad;
+      toLoad = 'settings/lang/json?lang=tot';
+      RequestBuilder.sRequestBuilder.get('settings/lang/json?lang=tot', function (error, data) {
+        $.i18n().load(data).done(callback);
+      });
     }
   }]);
 

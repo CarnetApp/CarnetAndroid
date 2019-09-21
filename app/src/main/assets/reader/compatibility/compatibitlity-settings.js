@@ -30,7 +30,7 @@ function (_Compatibility) {
 
     $(document).ready(function () {
       if (compatibility.isElectron) {
-        var SettingsHelper = require("./settings/settings_helper").SettingsHelper;
+        var SettingsHelper = require("./server/settings_helper").SettingsHelper;
 
         var settingsHelper = new SettingsHelper();
         document.getElementById("window-frame-switch").checked = settingsHelper.displayFrame();
@@ -88,6 +88,14 @@ function (_Compatibility) {
         document.getElementById("window-frame").parentElement.style.display = "none";
         document.getElementById("connect").parentElement.style.display = "none";
         document.getElementById("disconnect").parentElement.style.display = "none";
+
+        document.getElementById("account").onclick = function () {
+          compatibility.openUrl("../../settings/user");
+        };
+
+        document.getElementById("logout").onclick = function () {
+          compatibility.openUrl("../../logout?requesttoken=" + document.getElementById("logout-token").innerHTML);
+        };
       }
     });
     return _this;

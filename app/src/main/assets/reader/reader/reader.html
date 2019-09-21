@@ -6,6 +6,7 @@
 	<script src="<!ROOTPATH>compatibility/electron/request_builder.js"></script>
 	<script src="<!ROOTPATH>compatibility/compatibility.js"></script>
 	<script src="<!ROOTPATH>compatibility/compatibility-editor.js"></script>
+	<script src="<!ROOTPATH>compatibility/android/android_recorder.js"></script>
 
 	<script src="<!ROOTPATH>libs/jquery.min.js"></script>
 	<script src="<!ROOTPATH>libs/polyfill.js"></script>
@@ -37,7 +38,7 @@
 	<script src="<!ROOTPATH>utils/utils.js"></script>
 	<script src="<!ROOTPATH>browsers/note.js"></script>
 	<script src="<!ROOTPATH>browsers/file-browser.js"></script>
-	<script defer src="<!ROOTPATH>libs/material.js"></script>
+	<script src="<!ROOTPATH>libs/material.js"></script>
 	<script src="<!ROOTPATH>reader/libs/jquery.webkitresize.js"></script>
 	<script src="<!ROOTPATH>reader/libs/jquery-ui.min.js"></script>
 	<!-- jquery mobile make nextcloud bug :(
@@ -476,15 +477,23 @@ mdl-layout--fixed-header">
 						<div style="clear:both"></div>
 
 					</div>
+					<button id="scroll-bottom" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button">
+						<i class="material-icons">
+							arrow_downward
+						</i>
+					</button>
 					<div id="name-container">
 						<input class="mdl-textfield__input" type="text" name="name" id="name-input" value=""
 							placeholder="Title" data-i18n="[placeholder]note_name">
+
 					</div>
+
 					<div id="editor" style="overflow-x: none;position: relative;">
 
 					</div>
 				</div>
 			</div>
+
 			<div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
 				<div class="mdl-snackbar__text"></div>
 				<button class="mdl-snackbar__action" type="button"></button>
@@ -494,16 +503,22 @@ mdl-layout--fixed-header">
 	<div id="fullscreen-viewer"></div>
 	<dialog class="mdl-dialog" id="recorder-container">
 		<div id="recorder-file-buttons">
+
 			<button id="delete-button" class="mdl-button mdl-js-button"><i class="material-icons">
 					delete
 				</i></button>
-			<button id="save-button" class="mdl-button mdl-js-button"><i class="material-icons">
-					save
-				</i></button>
+			<button id="save-button" class="mdl-button mdl-js-button">OK</button>
 		</div>
 		<div style="clear: right;"></div>
 		<canvas id="analyser"></canvas>
-		<div id="waveform"></div>
+		<div id="waveform" style="display:none"></div>
+		<div id="recorder-loading" style="display:none">
+			<div class="mdl-spinner mdl-js-spinner is-active"
+				style="width:50px; height:50px; top:50%; left:50%; margin-top:-25px; margin-left:-25px;"></div>
+		</div>
+		<input class="mdl-slider mdl-js-slider" id="audio-progress" type="range" min="0" max="100" value="0"
+			tabindex="0">
+		<audio id="audio-player" preload="metadata"></audio>
 		<div id="controller">
 			<span id="current-time">0:00</span>
 

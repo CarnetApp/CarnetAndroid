@@ -23,6 +23,11 @@ FileUtils.isFileImage = function (filePath) {
   return filePath.endsWith(".png") || filePath.endsWith(".jpg") || filePath.endsWith(".jpeg") || filePath.endsWith(".gif") || filePath.endsWith(".bmp");
 };
 
+FileUtils.isFileAudio = function (filePath) {
+  filePath = filePath.toLowerCase();
+  return filePath.endsWith(".opus") || filePath.endsWith(".mp3") || filePath.endsWith(".ogg") || filePath.endsWith(".flac") || filePath.endsWith(".wav");
+};
+
 FileUtils.getExtensionFromMimetype = function (mimetype) {
   switch (mimetype) {
     case "audio/3gpp":

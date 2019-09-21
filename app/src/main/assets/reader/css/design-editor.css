@@ -13,7 +13,7 @@
     --blue-back-color:#BEBEFF;
     --yellow-back-color:#FBFCBC;
     --violet-back-color:#FFDBFF;
-
+	--background-todolist-item: rgba(0, 0, 0, 0.05);
 }
 
 body {
@@ -36,6 +36,10 @@ html {
 	to {
 		opacity: 1;
 	}
+}
+
+.mdl-checkbox__box-outline {
+    border: 2px solid var(--main-text-color);
 }
 
 .selectedButton {
@@ -126,6 +130,11 @@ html {
 	text-decoration: none;
 }
 
+#scroll-bottom{
+	float:right;
+	margin-top:10px;
+}
+
 #media-list {
 	display: inline;
 }
@@ -139,7 +148,7 @@ html {
 
 .media-file {
 	text-align: center;
-	color: white;
+	color: var(--header-text-color);
 	width: 100px;
 	word-wrap: break-word;
 }
@@ -157,7 +166,6 @@ html {
 
 #editor {
 	font-size: 20px;
-	padding: 20px;
 	margin: 0px;
 }
 
@@ -342,6 +350,7 @@ div#container-button::-webkit-scrollbar {
 }
 #name-container{
 	margin-top:5px;
+	margin-right:69px;
 }
 #name-container label{
 	padding-left: 40px;
@@ -431,7 +440,8 @@ div#container-button::-webkit-scrollbar {
   }
 
   .edit-zone{
-	  width:100%;
+	  width: calc(100% - 40px);
+	  padding: 20px;
   }
 
   .edit-zone:focus {
@@ -485,6 +495,10 @@ div#container-button::-webkit-scrollbar {
 	.is-small-screen .mdl-layout--fixed-drawer > .mdl-layout__drawer {
     -webkit-transform: translateX(-250);
     transform: translateX(-250);
+}
+
+.fullscreen-media-toolbar .media-file:not(.media-image){
+	display:none;
 }
 	.mdl-layout__drawer-button{
 		background: unset !important;
@@ -597,7 +611,7 @@ div#container-button::-webkit-scrollbar {
 	height:30px;
 	border: 0px;
 	display:inline-block;
-	padding-right:10px:
+	padding-right:10px;
 }
 
 .color-item:hover, .color-item:active {

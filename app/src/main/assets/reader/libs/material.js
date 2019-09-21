@@ -2113,6 +2113,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   var MaterialSlider = function MaterialSlider(element) {
     this.element_ = element; // Browser feature detection.
 
+    element.material = this;
     this.isIE_ = window.navigator.msPointerEnabled; // Initialize instance.
 
     this.init();
