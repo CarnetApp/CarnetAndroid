@@ -125,4 +125,5 @@
     <string name="create_note">Create a note</string>
     <string name="beta_feature">This is still a beta feature and has to be used carefully</string>
     <string name="warning_sync_cloud">Do not select any folders with non Carnet files. Selecting NextCloud/ownCloud root folder will sync your whole cloud to your phone.</string>
+    <string name="start_with_browser_view">Start with browser view</string>
 </resources>

@@ -10,6 +10,11 @@
             android:key="pref_google_drive"
             android:title="@string/sync_cloud_preference"
             />
+        <CheckBoxPreference
+            android:key="pref_start_browser_view"
+            android:defaultValue="false"
+            android:title="@string/start_with_browser_view"
+            />
     </PreferenceCategory>
     <CheckBoxPreference
         android:key="pref_password_on_minimize"

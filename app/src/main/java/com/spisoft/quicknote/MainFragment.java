@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -143,7 +144,13 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
 
         if(savedInstanceState==null&&this.fragment==null) {
 
-            Fragment fragment = RecentNoteListFragment.newInstance();
+            Fragment fragment;
+            if( PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_start_browser_view", false)){
+                fragment = RecentNoteListFragment.newInstance();
+            }
+            else {
+                fragment = BrowserFragment.newInstance(PreferenceHelper.getRootPath(getContext()));
+            }
             setFragment(fragment);
         }
         return mRoot;
