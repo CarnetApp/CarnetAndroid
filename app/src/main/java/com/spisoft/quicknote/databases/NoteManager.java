@@ -50,6 +50,7 @@ public class NoteManager
     public static final String ACTION_UPDATE_END = "update_note_end";
     public static final int PREVIEW_WIDTH = 400;
     public static final int PREVIEW_HEIGHT = 400;
+    public static final char[] RESERVED_CHARS = "|\\?*<\":>+[]/'".toCharArray();
 
 
     public static void updateMetadata(final Context context, final Note note){
@@ -116,6 +117,9 @@ public class NoteManager
     }
 
     public static String moveNote(Context context,Note note, String to){
+        if(!isNoteNameValid(to.split("/notes/")[1]))
+            return null;
+
         File notFile = new File(note.path);
         File toFile = new File(to);
         Log.d(TAG,"renaming to "+to+" "+toFile.exists());
@@ -237,6 +241,14 @@ public class NoteManager
             }
         }
         return false;
+    }
+
+    public static boolean isNoteNameValid(String noteName) {
+        for(char c : RESERVED_CHARS)
+            if(noteName.indexOf(c) != -1)
+                return false;
+
+        return true;
     }
 
     public static String getDefaultHTML() {
