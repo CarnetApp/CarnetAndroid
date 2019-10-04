@@ -145,7 +145,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
         if(savedInstanceState==null&&this.fragment==null) {
 
             Fragment fragment;
-            if( PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_start_browser_view", false)){
+            if(!PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_start_browser_view", false)){
                 fragment = RecentNoteListFragment.newInstance();
             }
             else {
