@@ -1,3 +1,7 @@
+# Version 0.18.5
+
+Option to choose to start with browser
+
 # Version 0.18.0
 
 better design for todo-list
