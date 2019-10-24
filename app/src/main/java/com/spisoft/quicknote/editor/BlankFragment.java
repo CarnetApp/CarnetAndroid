@@ -128,8 +128,13 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
         if(getActivity()==null) return;
         getActivity().startService(new Intent(getActivity(), SynchroService.class));
         ((EditorActivity)getActivity()).superOnBackPressed();
+    }
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(getActivity()==null) return;
+            getActivity().startService(new Intent(getActivity(), SynchroService.class));
     }
 
 }
