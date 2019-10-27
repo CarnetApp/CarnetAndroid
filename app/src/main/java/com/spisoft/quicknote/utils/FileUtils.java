@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.databases.RecentHelper;
+import com.spisoft.sync.utils.FileLocker;
 
 import java.io.BufferedReader;
 import java.io.File;

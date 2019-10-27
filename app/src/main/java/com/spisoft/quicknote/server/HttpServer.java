@@ -15,6 +15,7 @@ import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.PictureUtils;
 import com.spisoft.quicknote.utils.ZipUtils;
+import com.spisoft.sync.utils.FileLocker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -340,7 +341,8 @@ public class HttpServer extends NanoHTTPD {
     private Response saveNote(Note note) {
         List <String> except = new ArrayList<>();
         except.add(extractedNotePath+"/reader.html");
-        ZipUtils.zipFolder(new File(extractedNotePath), note.path,except);
+        ZipUtils.zipFolder(new File(extractedNotePath), note.path, except);
+
         File noteFile = new File(PreferenceHelper.getRootPath(mContext),note.path);
         File f = new File(extractedNotePath, "data");
         note.previews.clear();

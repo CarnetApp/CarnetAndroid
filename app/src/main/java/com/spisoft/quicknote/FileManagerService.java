@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 
 import com.spisoft.quicknote.browser.NoteListFragment;
 import com.spisoft.quicknote.databases.RecentHelper;
-import com.spisoft.quicknote.utils.FileLocker;
+import com.spisoft.sync.utils.FileLocker;
 import com.spisoft.quicknote.utils.FileUtils;
 
 import java.io.File;

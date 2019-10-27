@@ -8,6 +8,7 @@ import android.util.Log;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.page.PageManager;
+import com.spisoft.sync.utils.FileLocker;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
