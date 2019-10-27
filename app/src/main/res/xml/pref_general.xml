@@ -15,6 +15,13 @@
             android:defaultValue="false"
             android:title="@string/start_with_browser_view"
             />
+        <ListPreference
+            android:title="@string/sync_frequency"
+            android:key="sync_frequency"
+            android:defaultValue="60"
+            android:entries="@array/sync_frequency_entries"
+            android:summary="@string/values_below_15_battery"
+            android:entryValues="@array/sync_frequency_values" />
     </PreferenceCategory>
     <CheckBoxPreference
         android:key="pref_password_on_minimize"
