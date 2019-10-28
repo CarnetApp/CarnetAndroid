@@ -5,6 +5,7 @@ import android.content.Context;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.sync.Log;
+import com.spisoft.sync.utils.FileLocker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -106,51 +107,55 @@ public class KeywordsHelper {
     }
 
     private void write(String s) {
-        File file= new File (mPath);
-        FileWriter fw = null;
-        if (!file.exists()) {
+        synchronized (FileLocker.getLockOnPath(mPath)) {
+            File file = new File(mPath);
+            FileWriter fw = null;
+            if (!file.exists()) {
 
-            file.getParentFile().mkdirs();
+                file.getParentFile().mkdirs();
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             try {
-                file.createNewFile();
+                fw = new FileWriter(mPath, false);
+                fw.append(s + "\n");
+                fw.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        try {
-            fw = new FileWriter(mPath,false);
-            fw.append(s + "\n");
-            fw.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private String read(){
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-        try {
-            br = new BufferedReader(new FileReader(mPath));
-            String line = br.readLine();
-            while (line != null) {
-                sb.append(line);
-                sb.append("\n");
-                line = br.readLine();
-            }
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if(br!=null)
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+        synchronized (FileLocker.getLockOnPath(mPath)) {
+            BufferedReader br = null;
+            StringBuilder sb = new StringBuilder();
+            try {
+                br = new BufferedReader(new FileReader(mPath));
+                String line = br.readLine();
+                while (line != null) {
+                    sb.append(line);
+                    sb.append("\n");
+                    line = br.readLine();
                 }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (br != null)
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+            }
+            return sb.toString();
         }
-        return sb.toString();
     }
 
     public JSONObject getJson() throws JSONException {

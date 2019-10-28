@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
+import com.spisoft.sync.utils.FileLocker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -131,54 +132,58 @@ public class RecentHelper {
 
     private synchronized void write(String s) {
         mCurrentJsonStr = s;
-        File file= new File (getRecentPath());
-        FileWriter fw = null;
-        if (!file.exists()) {
+        synchronized (FileLocker.getLockOnPath(getRecentPath())) {
+            File file = new File(getRecentPath());
+            FileWriter fw = null;
+            if (!file.exists()) {
 
-            file.getParentFile().mkdirs();
+                file.getParentFile().mkdirs();
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             try {
-                file.createNewFile();
+                fw = new FileWriter(getRecentPath(), false);
+                fw.append(s + "\n");
+                fw.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            reloadCache();
         }
-        try {
-            fw = new FileWriter(getRecentPath(),false);
-            fw.append(s + "\n");
-            fw.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        reloadCache();
     }
 
     private synchronized String read(){
         if(mCurrentJsonStr != null)
             return mCurrentJsonStr;
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-        try {
-            br = new BufferedReader(new FileReader(getRecentPath()));
-            String line = br.readLine();
-            while (line != null) {
-                sb.append(line);
-                sb.append("\n");
-                line = br.readLine();
-            }
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if(br!=null)
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+        synchronized (FileLocker.getLockOnPath(getRecentPath())) {
+            BufferedReader br = null;
+            StringBuilder sb = new StringBuilder();
+            try {
+                br = new BufferedReader(new FileReader(getRecentPath()));
+                String line = br.readLine();
+                while (line != null) {
+                    sb.append(line);
+                    sb.append("\n");
+                    line = br.readLine();
                 }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (br != null)
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+            }
+            mCurrentJsonStr = sb.toString();
         }
-        mCurrentJsonStr = sb.toString();
         return mCurrentJsonStr;
     }
     private String getRecentPath() {
