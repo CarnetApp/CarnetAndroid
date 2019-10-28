@@ -81,5 +81,6 @@
     "time": "Time",
     "date": "Date",
     "beta_warning_reminders": "\"Reminders\" are still a beta features and will only work on Android",
-    "more-options": "More options"
+    "more-options": "More options",
+    "start_with_browser_view": "Start with browser view"
 }

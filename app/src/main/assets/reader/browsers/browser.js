@@ -577,7 +577,7 @@ function onListEnd(pathToList, files, metadatas, discret) {
       notes.push(noteTestTxt);
     }
 
-    sortBy(uiSettings['sort_by'], uiSettings['reversed'], discret);
+    sortBy(UISettingsHelper.getInstance().get('sort_by'), UISettingsHelper.getInstance().get('reversed'), discret);
 
     if (discret) {
       document.getElementById("grid-container").scrollTop = scroll;
@@ -595,7 +595,7 @@ function list(pathToList, discret) {
   var hasPathChanged = currentPath !== pathToList;
   currentPath = pathToList;
 
-  if (pathToList == "/" || pathToList == initPath || pathToList.startsWith("keyword://")) {
+  if (pathToList == "/" || pathToList == "recentdb://" || pathToList.startsWith("keyword://")) {
     if (pathToList != "/") {
       $("#add-directory-button").hide();
     } else $("#add-directory-button").show();
@@ -662,7 +662,7 @@ function closeW() {
 
 document.getElementById("add-note-button").onclick = function () {
   var path = currentPath;
-  if (path == initPath || path.startsWith("keyword://")) path = "";
+  if (path == "recentdb://" || path.startsWith("keyword://")) path = "";
   RequestBuilder.sRequestBuilder.get("/note/create?path=" + encodeURIComponent(path), function (error, data) {
     if (error) return;
     console.log("found " + data);
@@ -749,8 +749,8 @@ function isFullScreen() {
   return document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
 }
 
-RequestBuilder.sRequestBuilder.get("/recentdb/merge", function (error, data) {//  if (data == true && currentPath == "recentdb://")
-  //    list("recentdb://", true);
+RequestBuilder.sRequestBuilder.get("/recentdb/merge", function (error, data) {
+  if (data == true && currentPath == "recentdb://") list("recentdb://", true);
 });
 RequestBuilder.sRequestBuilder.get("/keywordsdb/merge", function (error, data) {
   if (data == true) refreshKeywords();
@@ -966,53 +966,36 @@ console.oldlog = console.log;
         console.oldlog(m)
 }*/
 
-var uiSettings = {};
-
-function setDefaultSettings(key, value) {
-  if (uiSettings[key] == undefined) uiSettings[key] = value;
-}
-
-compatibility.loadLang(function () {
-  $('body').i18n();
-  console.log("lang loaded");
-  RequestBuilder.sRequestBuilder.get("/settings/browser", function (error, data) {
-    if (data != undefined && data != "") {
-      try {
-        data = JSON.parse(data);
-      } catch (e) {}
-
-      uiSettings = data; //set default settings
-    }
-
-    setDefaultSettings('sort_by', 'default');
-    setDefaultSettings('reversed', false);
-    $("input[name='sort-by'][value='" + uiSettings['sort_by'] + "']").parent().addClass("is-checked");
-    $("input[name='sort-by'][value='" + uiSettings['sort_by'] + "']").attr('checked', 'checked');
-    document.getElementById("reversed-order").checked = uiSettings['reversed'];
-
-    if (uiSettings['reversed']) {
-      document.getElementById("reversed-order").parentNode.classList.add("is-checked");
-    }
-
-    list(initPath, cachedRecentDB != undefined ? true : false);
-  });
-});
-
 function loadCachedRecentDB() {
   if (cachedRecentDB != undefined) onListEnd("recentdb://", cachedRecentDB, cachedMetadata);
 }
 
-loadCachedRecentDB();
+UISettingsHelper.getInstance().loadSettings(function (settings, fromCache) {
+  console.oldlog("settings from cache " + fromCache + " order " + settings["sort_by"]);
+  if (settings['start_page'] == 'recent') initPath = "recentdb://";
+  if (settings['start_page'] == 'browser') initPath = "/";
+  $("input[name='sort-by'][value='" + settings['sort_by'] + "']").parent().addClass("is-checked");
+  $("input[name='sort-by'][value='" + settings['sort_by'] + "']").attr('checked', 'checked');
+  document.getElementById("reversed-order").checked = settings['reversed'];
+
+  if (settings['reversed']) {
+    document.getElementById("reversed-order").parentNode.classList.add("is-checked");
+  }
+
+  if (fromCache) loadCachedRecentDB();else list(initPath, cachedRecentDB != undefined ? true : false);
+});
+compatibility.loadLang(function () {
+  $('body').i18n();
+  console.oldlog("lang loaded");
+});
 $.i18n().locale = navigator.language;
 $(".sort-item").click(function () {
   var radioValue = $("input[name='sort-by']:checked").val();
 
   if (radioValue) {
-    uiSettings['sort_by'] = radioValue;
-    uiSettings['reversed'] = document.getElementById("reversed-order").checked;
+    UISettingsHelper.getInstance().set('sort_by', radioValue);
+    UISettingsHelper.getInstance().set('reversed', document.getElementById("reversed-order").checked);
     sortBy(radioValue, document.getElementById("reversed-order").checked);
-    RequestBuilder.sRequestBuilder.post("/settings/browser", {
-      jsonSettings: JSON.stringify(uiSettings)
-    }, function (error, data) {});
+    UISettingsHelper.getInstance().postSettings();
   }
 });

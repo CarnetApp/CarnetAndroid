@@ -45,17 +45,21 @@ TodoListManager.prototype.createTodolist = function (data) {
   var todo = document.createElement("div");
   todo.classList.add("todo");
   todo.id = "todooo" + generateUID();
-  var addItem = document.createElement("a");
-  addItem.innerHTML = "+ Add item";
-  addItem.classList.add("add-item");
-  addItem.classList.add("mdl-button");
-  addItem.href = "#";
   var done = document.createElement("div");
   done.classList.add("done");
   todolistContent.appendChild(deleteElem);
   todolistContent.appendChild(todoTitle);
   todolistContent.appendChild(todo);
   todolistDiv.todo = todo;
+  var addItem = document.createElement("button");
+  addItem.innerHTML = "<i class=\"material-icons\">add</i>";
+  addItem.classList.add("add-todolist-item");
+  addItem.classList.add("mdl-button");
+  addItem.classList.add("mdl-js-button");
+  addItem.classList.add("mdl-button--fab");
+  addItem.classList.add("mdl-button--colored");
+  addItem.classList.add("mdl-js-ripple-effect");
+  addItem.href = "#";
   todolistContent.appendChild(addItem);
   todolistContent.appendChild(doneTitle);
   todolistContent.appendChild(done);
@@ -77,6 +81,57 @@ TodoListManager.prototype.createTodolist = function (data) {
   };
 
   console.log("todoodod");
+
+  var isWindowLarge = function isWindowLarge() {
+    return $(writer.oCenter).width() > 920;
+  };
+
+  self.setAddItem = function (event) {
+    if (event != undefined && event.type == "resize" && isWindowLarge() != window.wasLarge) {
+      addItem.isRelative = undefined;
+      addItem.isDisplayed = undefined;
+    }
+
+    window.wasLarge = isWindowLarge();
+
+    var setFixed = function setFixed() {
+      addItem.isRelative = false;
+      addItem.style.position = "fixed";
+      addItem.style.bottom = "30px";
+      if (isWindowLarge()) addItem.style.right = "80px";else addItem.style.right = "20px";
+    };
+
+    var setRelative = function setRelative() {
+      addItem.isRelative = true;
+      addItem.style.position = "absolute";
+      addItem.style.bottom = "unset";
+      addItem.style.top = "unset";
+      if (isWindowLarge()) addItem.style.right = "68px";else addItem.style.right = "8px";
+    };
+
+    var rect = todolistDiv.getBoundingClientRect();
+    var rectdoneTitle = doneTitle.getBoundingClientRect();
+
+    if (rect.top + 120 < $(writer.oCenter).height()) {
+      if (!addItem.isDisplayed || addItem.isDisplayed == undefined) {
+        addItem.isDisplayed = true;
+        $(addItem).fadeIn();
+      }
+
+      if (rectdoneTitle.bottom < $(writer.oCenter).height()) {
+        if (!addItem.isRelative || addItem.isRelative == undefined) setRelative();
+      } else if (addItem.isRelative || addItem.isRelative == undefined) {
+        setFixed();
+      }
+    } else if (addItem.isDisplayed || addItem.isDisplayed == undefined) {
+      $(addItem).fadeOut();
+      addItem.isDisplayed = false;
+    }
+  };
+
+  writer.oCenter.addEventListener("scroll", setAddItem);
+  $(window).on('resize', setAddItem);
+  setAddItem();
   return todolist;
 };
 
@@ -94,6 +149,8 @@ TodoListManager.prototype.removeTodolist = function (id) {
   event.next = document.getElementById(id).nextElementSibling;
   console.log("remove next");
   console.log(document.getElementById(id).nextElementSibling);
+  writer.oCenter.removeEventListener("scroll", setAddItem);
+  $(window).off('resize', setAddItem);
   this.element.dispatchEvent(event);
   $("#" + id).remove();
 
@@ -122,9 +179,9 @@ var TodoList = function TodoList(element) {
   this.element = element;
   this.todo = element.todo;
   this.done = element.done;
-  this.addItem = element.getElementsByClassName("add-item")[0];
+  this.addItem = element.getElementsByClassName("add-todolist-item")[0];
   if (this.addItem != undefined) this.addItem.onclick = function () {
-    todolist.createItem("", false);
+    todolist.createItem("", false, undefined, true);
   };
   $(this.todo).sortable({
     handle: ".move-item",
@@ -162,11 +219,11 @@ TodoList.prototype.fromData = function (data) {
   if (data.todo == undefined) return;
 
   for (var i = 0; i < data.todo.length; i++) {
-    this.createItem(data.todo[i], false);
+    this.createItem(data.todo[i], false, undefined, false);
   }
 
   for (var i = 0; i < data.done.length; i++) {
-    this.createItem(data.done[i], true);
+    this.createItem(data.done[i], true, undefined, false);
   }
 };
 
@@ -182,7 +239,7 @@ TodoList.prototype.removeItem = function (item) {
   });
 };
 
-TodoList.prototype.createItem = function (text, ischecked, after) {
+TodoList.prototype.createItem = function (text, ischecked, after, scroll) {
   var todolist = this;
   var id = generateUID();
   var div = document.createElement("div");
@@ -191,6 +248,7 @@ TodoList.prototype.createItem = function (text, ischecked, after) {
   var move = document.createElement("span");
   move.innerHTML = "|||";
   move.classList.add("move-item");
+  move.classList.add("block-scroll");
   move.addEventListener('mousedown', function () {
     move.classList.add("grabbing");
   }, false);
@@ -220,7 +278,7 @@ TodoList.prototype.createItem = function (text, ischecked, after) {
     if (e.ctrlKey && key === 13) {
       if (span.value.trim().length > 0) {
         // 13 is enter
-        todolist.createItem("", false, div).span.focus();
+        todolist.createItem("", false, div, true);
       } else {
         e.preventDefault();
       }
@@ -283,9 +341,22 @@ TodoList.prototype.createItem = function (text, ischecked, after) {
   div.material = new window['MaterialCheckbox'](label);
   if (ischecked) this.check(div);else this.uncheck(div, after);
 
-  span.onfocus = function () {};
+  span.resizeListener = function () {
+    if ($(span).is(':focus')) {
+      var bottom = div.getBoundingClientRect().bottom + 56;
+      if (bottom > $(writer.oCenter).height()) $(writer.oCenter).animate({
+        scrollTop: $(writer.oCenter).scrollTop() + bottom - $(writer.oCenter).height()
+      }, 'fast');
+    }
+  }; // $(window).on('resize', span.resizeListener);
 
-  span.focus();
+
+  $(span).on('focus', span.resizeListener);
+
+  if (scroll) {
+    span.focus();
+  }
+
   resizeTextArea(span);
   return div;
 };

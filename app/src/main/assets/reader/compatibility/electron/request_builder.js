@@ -39,6 +39,7 @@ function (_RequestBuilder) {
   _createClass(ElectronRequestBuilder, [{
     key: "get",
     value: function get(path, callback) {
+      path = this.buildUrl(this.cleanPath(path));
       console.log("getting " + path);
       this.main.sendRequestToServer("GET", path, undefined, function (err, data) {
         if (data != undefined) {
@@ -53,6 +54,7 @@ function (_RequestBuilder) {
   }, {
     key: "post",
     value: function post(path, data, callback) {
+      path = this.buildUrl(this.cleanPath(path));
       this.main.sendRequestToServer("POST", path, data, function (err, data) {
         if (data != undefined) {
           try {
@@ -66,6 +68,7 @@ function (_RequestBuilder) {
   }, {
     key: "postFiles",
     value: function postFiles(path, data, files, callback) {
+      path = this.buildUrl(this.cleanPath(path));
       if (data == undefined) data = {};
       data.files = [];
       var request = this;
@@ -105,6 +108,7 @@ function (_RequestBuilder) {
   }, {
     key: "delete",
     value: function _delete(path, callback) {
+      path = this.buildUrl(this.cleanPath(path));
       this.main.sendRequestToServer("DELETE", path, undefined, function (err, data) {
         if (data != undefined) {
           try {
@@ -114,6 +118,11 @@ function (_RequestBuilder) {
 
         callback(err, data);
       });
+    }
+  }, {
+    key: "buildUrl",
+    value: function buildUrl(path) {
+      return "/" + path;
     }
   }]);
 

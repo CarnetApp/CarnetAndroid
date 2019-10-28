@@ -220,13 +220,6 @@ function (_Compatibility) {
       if (this.isElectron) return "";else if (!this.isAndroid) return "writer";
     }
   }, {
-    key: "getStore",
-    value: function getStore() {
-      if (this.isElectron) {
-        return ElectronStore;
-      } else return NextcloudStore;
-    }
-  }, {
     key: "getMasonry",
     value: function getMasonry() {
       if (this.isElectron) {

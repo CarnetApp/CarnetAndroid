@@ -296,6 +296,10 @@ Writer.prototype.extractNote = function () {
 
     console.log(data);
     writer.saveID = data.id;
+    RequestBuilder.sRequestBuilder.get("/note/extract?path=" + encodeURIComponent(writer.note.path) + "&id=" + data.id, function (error, data) {
+      writer.refreshKeywords();
+      writer.refreshMedia();
+    });
     writer.fillWriter(data.html);
 
     if (data.metadata == null) {
@@ -315,8 +319,6 @@ Writer.prototype.extractNote = function () {
     if (writer.note.metadata.todolists != undefined) writer.manager.fromData(writer.note.metadata.todolists);
     console.log("todo " + writer.note.metadata.todolists);
     console.log(writer.note.metadata.todolists);
-    writer.refreshKeywords();
-    writer.refreshMedia();
     var ratingStars = document.querySelectorAll("input.star");
 
     for (var i = 0; i < ratingStars.length; i++) {
@@ -429,11 +431,9 @@ Writer.prototype.fillWriter = function (extractedHTML) {
   if (extractedHTML != undefined && extractedHTML != "") this.oEditor.innerHTML = extractedHTML;else this.putDefaultHTML();
   var name = FileUtils.stripExtensionFromName(FileUtils.getFilename(this.note.path));
   document.getElementById("name-input").value = name.startsWith("untitled") ? "" : name;
-
-  this.oCenter.onscroll = function () {
+  this.oCenter.addEventListener("scroll", function () {
     lastscroll = $(writer.oCenter).scrollTop();
-  };
-
+  });
   this.oDoc = document.getElementById("text");
   this.oDoc.contentEditable = false;
 
@@ -1600,6 +1600,10 @@ function resetScreenHeight() {
   }
 
   console.log(content - 45);
+
+  if (document.activeElement != undefined && document.activeElement.resizeListener != undefined) {
+    document.activeElement.resizeListener();
+  }
 }
 
 function loadPath(path) {
@@ -1693,4 +1697,12 @@ $(document).ready(function () {
     $('body').i18n();
   });
   $.i18n().locale = navigator.language;
+});
+$(window).on('touchstart', function (e) {
+  if ($(e.target).closest('.block-scroll').length >= 1) {
+    writer.oCenter.style.overflowY = "hidden";
+  }
+});
+$(window).on('touchend', function () {
+  writer.oCenter.style.overflowY = "auto";
 });

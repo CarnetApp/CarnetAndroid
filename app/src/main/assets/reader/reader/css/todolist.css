@@ -10,14 +10,17 @@
     border-bottom: solid 1px rgba(128, 128, 128, 0.199);
     padding-bottom: 10px;
 }
-
-
+.todo-list .todo{
+    /*margin-top:80px;*/
+}
 .todo-list h3{
     font-size:16px;
     margin:0px;
-    margin-bottom:10px;
-    margin-left: 15px;
+    margin-top:15px;
+    margin-bottom:20px;
+    margin-left:10px
 }
+
 .todo-list .todo-item-text{
     width: calc(100% - 30px);
     display: block;
@@ -26,10 +29,14 @@
     padding: 5px;
     border: none;
 }
-
-.add-item{
-    font-size:14px;
+.add-todolist-item{
+    position: fixed;
+    float:right;
+    bottom:50px;
+    right:80px;
+    z-index:200;
 }
+
 .remove-todo-list{
     float: right;
     cursor: pointer;
@@ -42,14 +49,15 @@
 }
 
 .todo-list .mdl-checkbox {
-    width: calc(100% - 70px);
+    width: calc(100% - 80px);
 
 }
 .move-item{
     float: left;
     margin-right: 7px;
     margin-top: 1px;
-    
+    padding-left: 5px;
+    padding-right: 5px;
     font-size: 15px;
 }
 
@@ -83,6 +91,10 @@
 @media screen and (min-width: 620px) {
     .todo-item{
         border-radius: 10px;
+    }
+
+    .add-item{
+        right:80px;
     }
 }
 
