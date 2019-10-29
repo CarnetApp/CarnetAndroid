@@ -98,6 +98,8 @@ public class NoteInfoRetriever {
                 if(entry.getName().startsWith("data/preview_")) {
                     note.previews.add(entry.getName());
                     Log.d(TAG, "preview found");
+                } else if(entry.getName().startsWith("data/")) {
+                    note.medias.add(entry.getName());
                 }
             }
             note.file_lastmodification = new File(path).lastModified();

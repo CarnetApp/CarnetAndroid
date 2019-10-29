@@ -353,6 +353,8 @@ public class HttpServer extends NanoHTTPD {
                 for (File c : f.listFiles()) {
                     if (c.getName().startsWith("preview_")) {
                         note.previews.add("data/"+c.getName());
+                    } else{
+                        note.medias.add("data/"+c.getName());
                     }
                 }
             }

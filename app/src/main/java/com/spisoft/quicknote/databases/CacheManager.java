@@ -63,10 +63,10 @@ public class CacheManager {
                         note.previews.add(previews.getString(j));
                     }
                 }
-                if(noteJson.has("medias")){
-                    JSONArray medias = noteJson.getJSONArray("medias");
-                    for (int j = 0; j<medias.length(); j++){
-                        note.medias.add(medias.getString(j));
+                if(noteJson.has("media")){
+                    JSONArray media = noteJson.getJSONArray("media");
+                    for (int j = 0; j<media.length(); j++){
+                        note.medias.add(media.getString(j));
                     }
                 }
                 Log.d(TAG,"adding "+path);
@@ -168,7 +168,7 @@ public class CacheManager {
                 for(String media : note.medias){
                     mediasJson.put(media);
                 }
-                noteObj.put("medias",mediasJson);
+                noteObj.put("media",mediasJson);
                 data.put(noteObj);
             }
             write(root.toString());
