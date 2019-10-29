@@ -1,3 +1,19 @@
+# Version 0.18.7
+
+Todolists:
+- floating add item button
+- correct scroll when focusing an item
+- bigger space to move items
+
+Choose sync frequency
+Faster check when remote has no changes
+Sync when stop editing a note
+
+Filelocker for more secured sync
+
+Fix
+Folder creation with nextcloud SSO
+
 # Version 0.18.5
 
 Option to choose to start with browser
