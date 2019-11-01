@@ -1,0 +1,73 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_500"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+
+
+    <TextView
+        android:textColor="@android:color/white"
+        android:id="@+id/textView"
+        style="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/battery_optimization"
+        android:padding="10dp"
+        android:textSize="40dp" />
+
+    <TextView
+        android:id="@+id/subtitle1"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:layout_below="@+id/textView"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/battery_optimization_subtitle"
+        />
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:layout_below="@+id/subtitle1"
+        android:id="@+id/subtitle2"
+
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/battery_optimization_subtitle2" />
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:layout_below="@+id/subtitle2"
+        android:textColor="@android:color/holo_orange_light"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/battery_optimization_help" />
+    <Button
+        android:id="@+id/disable_optimization"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/disable_optimization"
+        android:textColor="@android:color/white"
+        android:background="@null"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:onClick="next"
+        android:layout_margin="0dp"
+        android:layout_toLeftOf="@id/skip"
+        android:layout_alignParentBottom="true"/>
+    <Button
+        android:id="@+id/skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/skip"
+        android:textColor="@android:color/white"
+        android:background="@null"
+        android:onClick="next"
+        android:layout_alignParentRight="true"
+        android:layout_margin="0dp"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>
