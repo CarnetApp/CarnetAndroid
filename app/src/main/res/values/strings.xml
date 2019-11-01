@@ -140,4 +140,9 @@
     <string name="twelve_hours">12 hours</string>
     <string name="values_below_15_battery">Values below 15 might drain the battery</string>
     <string name="sync_frequency">Sync frequency</string>
+    <string name="battery_optimization">Battery optimization</string>
+    <string name="battery_optimization_subtitle">To be able to sync in background, battery optimization has to be disabled for Carnet</string>
+    <string name="battery_optimization_subtitle2">On next screen, allow carnet to ignore optimizations</string>
+    <string name="battery_optimization_help">Need more help ? Click here</string>
+    <string name="disable_optimization">Disable optimization</string>
 </resources>

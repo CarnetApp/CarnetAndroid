@@ -102,13 +102,16 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
                 return new ChooseInstanceFragment();
             else if(position == 3)
                 return new SynchroIntroductionFragment();
-            else {
+            else  if(position == 4){
                 mNextCloudFragment = new NextCloudAuthorizeFragment();
                 mNextCloudFragment.setOnConnectClickListener(HelpActivity.this);
                 if(mInstance != null)
                     mNextCloudFragment.setInstance(mInstance);
                 mInstance = null;
                 return mNextCloudFragment;
+            } else {
+                return new DisableOptimizationFragment();
+
             }
         }
 
@@ -119,7 +122,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
     }
 
     public void goToNextcloudFrag(String instance){
-        mPager.setCurrentItem(mSyncOnly?2:4);
+        mPager.setCurrentItem(mSyncOnly?3:5);
         if(mNextCloudFragment == null)
             mInstance = instance;
         else

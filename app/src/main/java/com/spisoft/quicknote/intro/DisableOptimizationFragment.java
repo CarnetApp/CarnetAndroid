@@ -1,8 +1,11 @@
 package com.spisoft.quicknote.intro;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +23,8 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 
-public class DisableOptimisationFragment extends Fragment {
-    public DisableOptimisationFragment() {
+public class DisableOptimizationFragment extends Fragment {
+    public DisableOptimizationFragment() {
         // Required empty public constructor
     }
     @Override
@@ -33,14 +36,23 @@ public class DisableOptimisationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_sayhi_introduction, container, false);
-        v.findViewById(R.id.sayhi).setOnClickListener(new View.OnClickListener() {
+        View v = inflater.inflate(R.layout.fragment_disable_battery_optimization_introduction, container, false);
+        v.findViewById(R.id.disable_optimization).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                ((HelpActivity)getActivity()).next();
+                Intent myIntent = new Intent();
+                myIntent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                startActivity(myIntent);
             }
         });
+        v.findViewById(R.id.more_help).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/PhieF/CarnetAndroid/blob/master/documentation/disable_optimization/disable_optimization.md"));
+                startActivity(browserIntent);
+            }
+        });
+
 
         return v;
     }

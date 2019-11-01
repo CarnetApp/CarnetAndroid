@@ -39,6 +39,7 @@
         android:layout_marginTop="10dp"
         android:text="@string/battery_optimization_subtitle2" />
     <TextView
+        android:id="@+id/more_help"
         style="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_below="@+id/subtitle2"
         android:textColor="@android:color/holo_orange_light"
