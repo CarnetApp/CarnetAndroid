@@ -26,7 +26,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
     public static final String SYNC_ONLY = "sync_only";
     private static final String SHOULD_START_ACTIVITY = "should_start_gdrive_act";
 
-    private  int NUM_PAGES = 5;
+    private  int NUM_PAGES = 6;
     public String TAG = "HelpActivity";
     private ViewPager mPager;
     private ScreenSlidePagerAdapter mPagerAdapter;
@@ -66,7 +66,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
                 .addOrReplaceAccount(new com.spisoft.sync.account.DBAccountHelper.Account(-1, NextCloudWrapper.ACCOUNT_TYPE, "NextCloud"));
         NextCloudCredentialsHelper.getInstance(this).addOrReplaceAccount(new NextCloudCredentialsHelper.Credentials(-1, account.accountID, remote, username, password));
         com.spisoft.sync.wrappers.WrapperFactory.getWrapper(this,NextCloudWrapper.ACCOUNT_TYPE, account.accountID).addFolderSync(PreferenceHelper.getRootPath(this), "Documents/QuickNote");
-        finish();
+        next();
     }
 
     public void connectGoogleDrive() {
@@ -122,7 +122,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
     }
 
     public void goToNextcloudFrag(String instance){
-        mPager.setCurrentItem(mSyncOnly?3:5);
+        mPager.setCurrentItem(mSyncOnly?2:4);
         if(mNextCloudFragment == null)
             mInstance = instance;
         else
