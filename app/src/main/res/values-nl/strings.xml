@@ -15,7 +15,7 @@
     <string name="browser">Verkenner</string>
     <string name="parent_folder">Bovenliggende mappen</string>
     <string name="toast_on_minimize">Maximaliseren</string>
-    <string name="loading">Bezig met laden...</string>
+    <string name="loading">Bezig met laden</string>
     <string name="add_note">Nieuwe Notitie</string>
     <string name="add_folder">Nieuwe map</string>
     <string name="name">Naam</string>
@@ -51,7 +51,7 @@
     <string name="unable_to_rename_use">Kan niet hernoemen om document in gebruik is</string>
     <string name="unable_to_delete_use">Kan geopende documenten niet verwijderen</string>
     <string name="add_screenshot">Schermafdruk toevoegen aan notitie?</string>
-    <string name="please_wait_update">Moment, notities worden bijgewerkt...</string>
+    <string name="please_wait_update">Moment, notities worden bijgewerkt</string>
     <string name="write_error">Fout bij opslaan van tekst</string>
     <string name="sync_cloud_preference">Synchroniseren met cloud</string>
 
@@ -60,7 +60,7 @@
     <string name="paste">Plakken</string>
     <string name="paste_how_to">Blader naar de gewenste map en kies \'Plakken\'</string>
     <string name="file_operation_in_progress">Bestandsbewerking</string>
-    <string name="please_wait">Moment...</string>
+    <string name="please_wait">Moment geduld</string>
     <string name="new_keyword">Nieuw trefwoord</string>
     <string name="title_activity_account_config">Accountinstellingen</string>
     <string name="remote_folder">Externe map</string>
@@ -92,7 +92,7 @@
     <string name="blue">Blauw</string>
     <string name="dark">Donker</string>
     <string name="donation_ask">Deze app is gratis; overweeg een donatie om het onderhoud te steunen</string>
-    <string name="first_start">Eerste keer opstarten, moment..</string>
+    <string name="first_start">Eerste keer opstarten, moment geduld</string>
     <string name="sync">Synchroniseren</string>
     <string name="change_credentials">Inloggegevens aanpassen</string>
     <string name="carnet_doesnt_spy">Carnet bespioneert je niet en is reclamevrij</string>
@@ -124,5 +124,25 @@
     <string name="reminder">Herinnering</string>
     <string name="create_note">Nieuwe notitie</string>
     <string name="beta_feature">Let op: dit is nog een beta functie</string>
-    <string name="warning_sync_cloud">Selecteer een folder die speciaal voor Carnet is gemaakt. Selecteer nooit de root voor deze functie</string>
+    <string name="warning_sync_cloud">Selecteer een folder die speciaal voor Carnet is gemaakt. Selecteer nooit de NextCloud/ownCloud root voor deze functie.</string>
+<string name="start_with_browser_view">Begin met browserweergave</string>
+    <string name="one_minute">1 minuut</string>
+    <string name="two_minutes">2 minuten</string>
+    <string name="five_minutes">5 minuten</string>
+    <string name="ten_minutes">10 minuten</string>
+    <string name="fifteen_minutes">15 minuten</string>
+    <string name="thirty_minutes">30 minuten</string>
+    <string name="one_hour">1 uur</string>
+    <string name="two_hours">2 uren</string>
+    <string name="six_hours">6 uren</string>
+    <string name="once_a_day">Een keer per dag</string>
+    <string name="disabled">Uitgeschakeld</string>
+    <string name="twelve_hours">12 uren</string>
+    <string name="values_below_15_battery">Waarden onder 15 kunnen de accu snel leeglopen</string>
+    <string name="sync_frequency">Frequentie van syncen</string>
+    <string name="battery_optimization">Accu optimalisering</string>
+    <string name="battery_optimization_subtitle">Om in het achtergrond te syncen moet accu optimalisering voor Carnet uitgeschakeld worden</string>
+    <string name="battery_optimization_subtitle2">Op de volgende scherm, geef Carnet toestemming om optimalisering te negeren</string>
+    <string name="battery_optimization_help">Hulp nodig\? Klik hier</string>
+    <string name="disable_optimization">Optimalisering uitschakelen</string>
 </resources>
