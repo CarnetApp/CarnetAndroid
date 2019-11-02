@@ -122,4 +122,19 @@
     <string name="create_note">Eine Notiz erstellen</string>
     <string name="beta_feature">Es handelt sich immer noch um eine Beta-Funktion und sollte daher mit Vorsicht genutzt werden</string>
     <string name="warning_sync_cloud">Wählen Sie keine Ordner, in dem sich Dateien befinden, die nichts mit Carnet zu tun haben. Wenn Sie Nextcloud/ownCloud Stammordner auswählen, wird Ihre gesamte Cloud mit Ihrem Telefon synchronisiert.</string>
-</resources>
+<string name="start_with_browser_view">In der Browser-Ansicht starten</string>
+    <string name="one_minute">1 Minute</string>
+    <string name="two_minutes">2 Minuten</string>
+    <string name="five_minutes">5 Minuten</string>
+    <string name="ten_minutes">10 Minuten</string>
+    <string name="fifteen_minutes">15 Minuten</string>
+    <string name="thirty_minutes">30 Minuten</string>
+    <string name="one_hour">1 Stunde</string>
+    <string name="two_hours">2 Stunden</string>
+    <string name="six_hours">6 Stunden</string>
+    <string name="once_a_day">Einmal am Tag</string>
+    <string name="disabled">Deaktiviert</string>
+    <string name="twelve_hours">12 Stunden</string>
+    <string name="values_below_15_battery">Werte unter 15 Minuten können die Akkulaufzeit beeinträchtigen</string>
+    <string name="sync_frequency">Synchronisationsfrequenz</string>
+    </resources>
