@@ -126,4 +126,24 @@
     <string name="file_operation_in_progress">Opération sur le fichier</string>
     <string name="google_drive">Google Drive</string>
     <string name="sync_select_nextcloud_text">Carnet est compatible avec toutes les instances NextCloud. Trouvez et inscrivez-vous sur une instance (certaines sont gratuites)</string>
-    </resources>
+    <string name="start_with_browser_view">Démarrer directement sur l\'explorateur</string>
+    <string name="one_minute">1 minute</string>
+    <string name="two_minutes">2 minutes</string>
+    <string name="five_minutes">5 minutes</string>
+    <string name="ten_minutes">10 minutes</string>
+    <string name="fifteen_minutes">15 minutes</string>
+    <string name="thirty_minutes">30 minutes</string>
+    <string name="one_hour">1 heure</string>
+    <string name="two_hours">2 heures</string>
+    <string name="six_hours">6 heures</string>
+    <string name="once_a_day">Une fois par jour</string>
+    <string name="disabled">Désactivée</string>
+    <string name="twelve_hours">12 heures</string>
+    <string name="values_below_15_battery">Sous 15 minutes, la batterie peut diminuer drastiquement</string>
+    <string name="sync_frequency">Fréquence de synchronisation</string>
+    <string name="battery_optimization">Optimisation de la batterie</string>
+    <string name="battery_optimization_subtitle">Pour synchroniser en arrière plan, les optimisations de batterie doivent être désactivées pour Carnet</string>
+    <string name="battery_optimization_subtitle2">Sur l\'écran suivant, autorisez Carnet à ignorer les optimisations</string>
+    <string name="battery_optimization_help">Besoin d\'aide \? Cliquez ici</string>
+    <string name="disable_optimization">Désactiver optimisations</string>
+</resources>
