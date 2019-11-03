@@ -11,7 +11,7 @@
     <string name="browser">Explorer</string>
     <string name="parent_folder">Übergeordneter Ordner</string>
     <string name="toast_on_minimize">Zum Maximieren anklicken</string>
-    <string name="loading">Lade...</string>
+    <string name="loading">Lädt</string>
     <string name="add_note">Notiz hinzufügen</string>
     <string name="add_folder">Ordner hinzufügen</string>
     <string name="name">Name</string>
@@ -136,5 +136,11 @@
     <string name="disabled">Deaktiviert</string>
     <string name="twelve_hours">12 Stunden</string>
     <string name="values_below_15_battery">Werte unter 15 Minuten können die Akkulaufzeit beeinträchtigen</string>
-    <string name="sync_frequency">Synchronisationsfrequenz</string>
-    </resources>
+    <string name="sync_frequency">Synchronisierungshäufigkeit</string>
+    <string name="storage_preference_details">.</string>
+    <string name="battery_optimization">Akku-Optimierung</string>
+    <string name="battery_optimization_subtitle">Damit es möglich ist, im Hintergrund zu synchronisieren, muss die Akku-Optimierung für Carnet deaktiviert werden</string>
+    <string name="battery_optimization_subtitle2">Erlauben Sie Carnet auf dem nächsten Bildschirm die Optimierung zu ignorieren</string>
+    <string name="battery_optimization_help">Brauchen Sie zusätzliche Hilfe\? Klicken Sie hier</string>
+    <string name="disable_optimization">Optimierung deaktivieren</string>
+</resources>
