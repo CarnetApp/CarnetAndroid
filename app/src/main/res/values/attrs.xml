@@ -37,5 +37,7 @@
     <attr name="SortIcon" format="reference"/>
 
     <attr name="UrlColor" format="reference|color"/>
+    <attr name="PlayIcon" format="reference" />
+    <attr name="PauseIcon" format="reference" />
 
 </resources>

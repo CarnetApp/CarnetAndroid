@@ -23,11 +23,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.spisoft.quicknote.AudioService;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.sync.Log;
+import com.spisoft.sync.utils.FileUtils;
+import com.spisoft.sync.utils.Utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -193,6 +197,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         private final ImageView mPreview2;
         private final CardView mCard;
         private final LinearLayout mUrlContainer;
+        private final LinearLayout mAudioContainer;
         private Note mNote;
 
         public NoteViewHolder(View itemView) {
@@ -205,6 +210,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             mPreview1= (ImageView) itemView.findViewById(R.id.preview1);
             mPreview2 = (ImageView) itemView.findViewById(R.id.preview2);
             mUrlContainer = (LinearLayout) itemView.findViewById(R.id.url_container);
+            mAudioContainer = (LinearLayout) itemView.findViewById(R.id.audio_container);
         }
 
         public void setName(String title) {
@@ -252,7 +258,35 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             setKeywords(note.mMetadata.keywords);
             setBackground(note.mMetadata.color);
             setTodoLists(note.mMetadata.todolists);
+            setMedia(note.medias);
             setUrls(note.mMetadata.urls);
+        }
+
+        private void setMedia(ArrayList<String> medias) {
+            mAudioContainer.removeAllViews();
+            for(final String media : medias){
+                if(FileUtils.isAudioFile(media)){
+                    View cont = LayoutInflater.from(mContext).inflate(R.layout.audio_layout, mUrlContainer, false);
+                    if(mNote.equals(AudioService.sNote) && media.equals(AudioService.sMedia) && AudioService.isPlaying()){
+                        cont.findViewById(R.id.play_button).setVisibility(View.GONE);
+                    }
+                    else {
+                        cont.findViewById(R.id.pause_button).setVisibility(View.GONE);
+                    }
+
+                    TextView tv = cont.findViewById(R.id.textview);
+                    tv.setText(new File(media).getName());
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mOnNoteClick.onAudioClick(mNote, media);
+                        }
+                    });
+                    mAudioContainer.addView(cont);
+
+                }
+
+            }
         }
 
         private void setUrls(List<String> urls){
@@ -354,6 +388,15 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             }
 
         }
+
+        public void setAudioStatus(boolean isPlaying){
+
+        }
+
+        public void setAudioFiles(List<String> names) {
+
+        }
+
         public void setPreview1(Bitmap bitmap) {
             if(bitmap == null)
                 mPreview1.setVisibility(View.GONE);
@@ -504,6 +547,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         void onLongClick(Note note, View v);
 
         void onUrlClick(String url);
+
+        void onAudioClick(Note note, String media);
     }
 
     @Override

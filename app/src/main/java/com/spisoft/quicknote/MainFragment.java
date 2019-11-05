@@ -1,15 +1,18 @@
 package com.spisoft.quicknote;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -166,7 +169,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
             mKeywordsTask.cancel(true);
 
     }
-    
     
     public void onResume(){
         super.onResume();

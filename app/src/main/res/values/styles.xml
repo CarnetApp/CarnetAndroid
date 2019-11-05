@@ -48,7 +48,8 @@
         <item name="SortIcon">@drawable/sort_black</item>
 
         <item name="UrlColor">#e33d78</item>
-
+        <item name="PlayIcon">@drawable/play_black</item>
+        <item name="PauseIcon">@drawable/pause_black</item>
     </style>
 
     <!-- Base application theme. -->
@@ -94,7 +95,8 @@
         <item name="NoteBGPurple">#3e2b44</item>
         <item name="NoteBGPink">#3f1a2f</item>
         <item name="UrlColor">#e33d78</item>
-
+        <item name="PlayIcon">@drawable/play_white</item>
+        <item name="PauseIcon">@drawable/pause_white</item>
     </style>
 
     <style name="CarnetTheme.Darkest" parent="CarnetTheme.Dark">

@@ -41,6 +41,7 @@
             </intent-filter>
         </service>
         <service android:name=".FileManagerService" />
+        <service android:name=".AudioService" />
 
         <activity
             android:name=".MainActivity"

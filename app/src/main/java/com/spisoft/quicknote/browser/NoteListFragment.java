@@ -2,14 +2,17 @@ package com.spisoft.quicknote.browser;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,6 +31,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.spisoft.quicknote.AudioService;
 import com.spisoft.quicknote.FileManagerService;
 import com.spisoft.quicknote.FloatingService;
 import com.spisoft.quicknote.MainActivity;
@@ -80,6 +84,8 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                 mGridLayout.setSpanCount(spanCount);
         }
     };
+    private Note mNoteToPlay;
+    private String mMediaToPlay;
 
     public void onPause(){
         super.onPause();
@@ -466,6 +472,40 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(browserIntent);
     }
+
+    @Override
+    public void onAudioClick(Note note, String media){
+        Log.d("audiodebug","media click: "+note.path+" "+media, Log.LEVEL_ALWAYS_LOG);
+        if(mIsAudioServiceBound == false){
+            Log.d("audiodebug","not bound", Log.LEVEL_ALWAYS_LOG);
+
+            mNoteToPlay = note;
+            mMediaToPlay = media;
+            getContext().bindService(new Intent(getContext(), AudioService.class), mAudioServiceConnectionListener, Context.BIND_AUTO_CREATE);
+        } else {
+            AudioService.sAudioService.toggleMedia(note, media);
+        }
+    }
+
+    private boolean mIsAudioServiceBound = false;
+    private ServiceConnection mAudioServiceConnectionListener = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mIsAudioServiceBound = true;
+            Log.d("audiodebug","connected", Log.LEVEL_ALWAYS_LOG);
+
+            if(mNoteToPlay != null && mMediaToPlay != null){
+                AudioService.sAudioService.toggleMedia(mNoteToPlay, mMediaToPlay);
+            }
+            mNoteToPlay = null;
+            mMediaToPlay = null;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mIsAudioServiceBound = false;
+        }
+    };
 
     @Override
     public void onInfoClick(final Note note, View view){

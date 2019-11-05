@@ -118,6 +118,12 @@
                 android:paddingTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"></LinearLayout>
+            <LinearLayout
+                android:id="@+id/audio_container"
+                android:orientation="vertical"
+                android:paddingTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></LinearLayout>
             <ImageView
                 android:id="@+id/preview1"
                 android:layout_width="match_parent"
