@@ -186,6 +186,10 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         setText(note, note.shortText);
     }
 
+    public List getNotes() {
+        return mNotes;
+    }
+
     public class NoteViewHolder extends RecyclerView.ViewHolder {
 
 
@@ -262,26 +266,29 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
             setUrls(note.mMetadata.urls);
         }
 
-        private void setMedia(ArrayList<String> medias) {
+        private void setMedia(final ArrayList<String> medias) {
             mAudioContainer.removeAllViews();
             for(final String media : medias){
                 if(FileUtils.isAudioFile(media)){
                     View cont = LayoutInflater.from(mContext).inflate(R.layout.audio_layout, mUrlContainer, false);
+                    View currentButton = null;
                     if(mNote.equals(AudioService.sNote) && media.equals(AudioService.sMedia) && AudioService.isPlaying()){
                         cont.findViewById(R.id.play_button).setVisibility(View.GONE);
+                        currentButton = cont.findViewById(R.id.pause_button);
                     }
                     else {
                         cont.findViewById(R.id.pause_button).setVisibility(View.GONE);
+                        currentButton = cont.findViewById(R.id.play_button);
                     }
-
-                    TextView tv = cont.findViewById(R.id.textview);
-                    tv.setText(new File(media).getName());
-                    tv.setOnClickListener(new View.OnClickListener() {
+                    currentButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             mOnNoteClick.onAudioClick(mNote, media);
                         }
                     });
+                    TextView tv = cont.findViewById(R.id.textview);
+                    tv.setText(new File(media).getName());
+
                     mAudioContainer.addView(cont);
 
                 }

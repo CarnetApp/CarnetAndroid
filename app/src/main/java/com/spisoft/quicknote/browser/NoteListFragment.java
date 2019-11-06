@@ -55,7 +55,7 @@ import java.util.List;
 /**
  * Created by alexandre on 03/02/16.
  */
-public abstract class NoteListFragment extends Fragment implements NoteAdapter.OnNoteItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, Configuration.SyncStatusListener {
+public abstract class NoteListFragment extends Fragment implements NoteAdapter.OnNoteItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, Configuration.SyncStatusListener, AudioService.StatusListener {
     public static final String ACTION_RELOAD = "action_reload";
     private static final String TAG = "NoteListFragment";
     protected RecyclerView mRecyclerView;
@@ -427,6 +427,13 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         }
     }
 
+    @Override
+    public void onStatusChange(Note note, String media, boolean isPlaying) {
+        int index = mNoteAdapter.getNotes().indexOf(note);
+        if(index >= 0)
+            mNoteAdapter.notifyItemChanged(index);
+    }
+
     public class ReadReturnStruct{
         boolean hasFound;
         String readText;
@@ -475,10 +482,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
 
     @Override
     public void onAudioClick(Note note, String media){
-        Log.d("audiodebug","media click: "+note.path+" "+media, Log.LEVEL_ALWAYS_LOG);
         if(mIsAudioServiceBound == false){
-            Log.d("audiodebug","not bound", Log.LEVEL_ALWAYS_LOG);
-
             mNoteToPlay = note;
             mMediaToPlay = media;
             getContext().bindService(new Intent(getContext(), AudioService.class), mAudioServiceConnectionListener, Context.BIND_AUTO_CREATE);
@@ -493,7 +497,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         public void onServiceConnected(ComponentName name, IBinder service) {
             mIsAudioServiceBound = true;
             Log.d("audiodebug","connected", Log.LEVEL_ALWAYS_LOG);
-
+            AudioService.sAudioService.setListener(NoteListFragment.this);
             if(mNoteToPlay != null && mMediaToPlay != null){
                 AudioService.sAudioService.toggleMedia(mNoteToPlay, mMediaToPlay);
             }

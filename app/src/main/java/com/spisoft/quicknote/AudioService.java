@@ -7,15 +7,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.IInterface;
-import android.os.Parcel;
-import android.os.RemoteException;
 import android.webkit.MimeTypeMap;
 
-import com.spisoft.sync.Log;
-
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,12 +29,22 @@ public class AudioService extends Service {
     public static AudioService sAudioService;
     private AudioHttpServer mHttpServer;
     private MediaPlayer mMediaPlayer;
+    private StatusListener mStatusListener;
 
 
     public AudioService(){
         sAudioService = this;
 
     }
+
+    public void setListener(StatusListener statusListener) {
+        mStatusListener = statusListener;
+    }
+
+    public interface StatusListener{
+        void onStatusChange(Note note, String media, boolean isPlaying);
+    }
+
     public class LocalBinder extends Binder {
         AudioService getService() {
             return AudioService.this;
@@ -58,12 +62,11 @@ public class AudioService extends Service {
 
 
     public void setMedia(Note note, String media){
+        if(sNote != null && sIsPlaying)
+            stop();
         sNote = note;
         sMedia = media;
         reset();
-        Log.d("audiodebug","setMedia", Log.LEVEL_ALWAYS_LOG);
-
-
     }
 
     public void toggleMedia(Note note, String media){
@@ -92,20 +95,18 @@ public class AudioService extends Service {
             mMediaPlayer.start();
             sIsPlaying = true;
             sIsPaused = false;
+            mStatusListener.onStatusChange(sNote, sMedia, sIsPlaying);
             return;
         }
         try {
-            Log.d("audiodebug","play", Log.LEVEL_ALWAYS_LOG);
-
             mMediaPlayer.setDataSource(getApplicationContext(), Uri.parse(mHttpServer.getUrl()));
             mMediaPlayer.prepare();
             mMediaPlayer.start();
             sIsPlaying = true;
             sIsPaused = false;
+            mStatusListener.onStatusChange(sNote, sMedia, sIsPlaying);
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d("audiodebug","exxcept "+e.getMessage(), Log.LEVEL_ALWAYS_LOG);
-
         }
 
     }
@@ -114,19 +115,24 @@ public class AudioService extends Service {
        mMediaPlayer.pause();
        sIsPlaying = false;
        sIsPaused = true;
+       mStatusListener.onStatusChange(sNote, sMedia, sIsPlaying);
     }
 
     public void stop(){
         mMediaPlayer.stop();
         sIsPlaying = false;
         sIsPaused = false;
+        mStatusListener.onStatusChange(sNote, sMedia, sIsPlaying);
     }
 
     public void reset(){
         if(sIsPlaying)
             stop();
+        if(mMediaPlayer != null)
+            mMediaPlayer.reset();
         sIsPlaying = false;
         sIsPaused = false;
+        mStatusListener.onStatusChange(sNote, sMedia, sIsPlaying);
 
     }
     class AudioHttpServer extends NanoHTTPD {
@@ -144,14 +150,12 @@ public class AudioService extends Service {
         @Override
         public Response serve(IHTTPSession session) {
             Method method = session.getMethod();
-            Log.d("audiodebug","method "+method, Log.LEVEL_ALWAYS_LOG);
 
             if (Method.GET.equals(method)) {
                 try {
                     ZipFile zp = new ZipFile(sNote.path);
                     ZipEntry ze = zp.getEntry(sMedia);
                     InputStream is = zp.getInputStream(ze);
-                    Log.d("audiodebug","asking media "+ ze +" "+ is, Log.LEVEL_ALWAYS_LOG);
 
                     return  NanoHTTPD.newChunkedResponse(Response.Status.OK,
                             MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(sMedia)),is);
