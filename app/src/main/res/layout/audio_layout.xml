@@ -27,7 +27,6 @@
         android:paddingRight="10dp"
         android:textColor="?attr/UrlColor"
         android:layout_height="wrap_content"
-        android:lines="1"
         android:ellipsize="end"
         android:layout_gravity="center"/>
 </LinearLayout>
