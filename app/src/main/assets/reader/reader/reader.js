@@ -1322,6 +1322,45 @@ Writer.prototype.getWord = function (elem) {
   return word;
 };
 
+Writer.prototype.handleAction = function (type, value) {
+  if (type === "prefill") {
+    document.execCommand('insertHTML', false, value);
+    var elements = document.getElementsByClassName("edit-zone");
+    var element = elements[elements.length - 1];
+    element.innerHTML += value;
+  } else if (type === "record-audio") {
+    writer.recorder["new"]();
+    writer.recorderDialog.showModal();
+  } else if (type === "add-media") {}
+};
+
+Writer.prototype.handleActions = function (actions) {
+  if (actions === undefined) return;
+  var _iteratorNormalCompletion3 = true;
+  var _didIteratorError3 = false;
+  var _iteratorError3 = undefined;
+
+  try {
+    for (var _iterator3 = actions[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+      var action = _step3.value;
+      this.handleAction(action.type, action.value);
+    }
+  } catch (err) {
+    _didIteratorError3 = true;
+    _iteratorError3 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+        _iterator3["return"]();
+      }
+    } finally {
+      if (_didIteratorError3) {
+        throw _iteratorError3;
+      }
+    }
+  }
+};
+
 Writer.prototype.onEditableClick = function (event) {
   var word = this.getWord(event.target);
   var match = word.match(Utils.httpReg);
@@ -1391,13 +1430,13 @@ RenameNoteTask.prototype.run = function (callback) {
     return;
   }
 
-  var _iteratorNormalCompletion3 = true;
-  var _didIteratorError3 = false;
-  var _iteratorError3 = undefined;
+  var _iteratorNormalCompletion4 = true;
+  var _didIteratorError4 = false;
+  var _iteratorError4 = undefined;
 
   try {
-    for (var _iterator3 = nameInput.value.split("/")[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-      var part = _step3.value;
+    for (var _iterator4 = nameInput.value.split("/")[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+      var part = _step4.value;
 
       if (part == ".." && !hasOrigin) {
         path = FileUtils.getParentFolderFromPath(path);
@@ -1407,16 +1446,16 @@ RenameNoteTask.prototype.run = function (callback) {
       }
     }
   } catch (err) {
-    _didIteratorError3 = true;
-    _iteratorError3 = err;
+    _didIteratorError4 = true;
+    _iteratorError4 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
-        _iterator3["return"]();
+      if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
+        _iterator4["return"]();
       }
     } finally {
-      if (_didIteratorError3) {
-        throw _iteratorError3;
+      if (_didIteratorError4) {
+        throw _iteratorError4;
       }
     }
   }
@@ -1507,27 +1546,27 @@ SaveNoteTask.prototype.trySave = function (onEnd, trial) {
   }
 
   var currentUrls = Object.keys(this.writer.note.metadata.urls);
-  var _iteratorNormalCompletion4 = true;
-  var _didIteratorError4 = false;
-  var _iteratorError4 = undefined;
+  var _iteratorNormalCompletion5 = true;
+  var _didIteratorError5 = false;
+  var _iteratorError5 = undefined;
 
   try {
-    for (var _iterator4 = urls[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-      var url = _step4.value;
+    for (var _iterator5 = urls[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+      var url = _step5.value;
       url = url.toLowerCase();
       if (currentUrls.indexOf(url) < 0) this.writer.note.metadata.urls[url] = {};
     }
   } catch (err) {
-    _didIteratorError4 = true;
-    _iteratorError4 = err;
+    _didIteratorError5 = true;
+    _iteratorError5 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
-        _iterator4["return"]();
+      if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+        _iterator5["return"]();
       }
     } finally {
-      if (_didIteratorError4) {
-        throw _iteratorError4;
+      if (_didIteratorError5) {
+        throw _iteratorError5;
       }
     }
   }
@@ -1606,13 +1645,15 @@ function resetScreenHeight() {
   }
 }
 
-function loadPath(path) {
+function loadPath(path, actions) {
   if (writer == undefined) return;
   writer.reset();
   var note = new Note("", "", path, undefined);
   writer.setNote(note);
   console.log("extract");
-  writer.extractNote();
+  writer.extractNote(function () {
+    writer.handleActions(actions);
+  });
 }
 
 if (loaded == undefined) var loaded = false; //don't know why, loaded twice on android
@@ -1625,27 +1666,27 @@ $(document).ready(function () {
   RequestBuilder.sRequestBuilder.get("/settings/editor_css", function (error, data) {
     if (!error && data != null && data != undefined) {
       console.log("data " + data);
-      var _iteratorNormalCompletion5 = true;
-      var _didIteratorError5 = false;
-      var _iteratorError5 = undefined;
+      var _iteratorNormalCompletion6 = true;
+      var _didIteratorError6 = false;
+      var _iteratorError6 = undefined;
 
       try {
-        for (var _iterator5 = data[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-          var sheet = _step5.value;
+        for (var _iterator6 = data[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+          var sheet = _step6.value;
           console.log("sheet " + sheet);
           Utils.applyCss(sheet);
         }
       } catch (err) {
-        _didIteratorError5 = true;
-        _iteratorError5 = err;
+        _didIteratorError6 = true;
+        _iteratorError6 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
-            _iterator5["return"]();
+          if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
+            _iterator6["return"]();
           }
         } finally {
-          if (_didIteratorError5) {
-            throw _iteratorError5;
+          if (_didIteratorError6) {
+            throw _iteratorError6;
           }
         }
       }

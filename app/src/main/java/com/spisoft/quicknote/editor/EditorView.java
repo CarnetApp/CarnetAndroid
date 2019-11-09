@@ -58,6 +58,7 @@ import com.spisoft.sync.Log;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,9 +112,14 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
     private String mSelectFileCallback;
     private ValueCallback mUploadMessage;
     private PermissionRequest myRequest;
-    private String mSharedText;
+    private List<Action> mActions;
     public static String sNextExtension;
     private AudioRecorderJS mAudioRecorder;
+
+    public static class Action implements Serializable{
+        public String type;
+        public String value;
+    }
 
     private void rename(String stringExtra, String path) {
         mWebView.loadUrl("javascript:replace('" + StringEscapeUtils.escapeEcmaScript(stringExtra) + "','" + StringEscapeUtils.escapeEcmaScript(path) + "')");
@@ -428,9 +434,9 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
 
     }
 
-    public void setNote(Note note, String sharedText) {
+    public void setNote(Note note, List<Action> actions) {
         mProgressLayout.setAlpha(1);
-        mSharedText = sharedText;
+        mActions = actions;
         try {
             getContext().registerReceiver(mBroadcastReceiver, mFilter);
         } catch (Exception e) {
@@ -531,9 +537,11 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
                 @Override
                 public void run() {
                     mProgressLayout.animate().alpha(0).setDuration(500).start();
-                    if (mSharedText != null) {
-                        mWebView.loadUrl("javascript:document.execCommand('insertHTML', false, '" + StringEscapeUtils.escapeEcmaScript(mSharedText) + "');");
-                        mSharedText = null;
+                    if (mActions != null) {
+                        for(Action action : mActions){
+                            mWebView.loadUrl("javascript:writer.handleAction('" + StringEscapeUtils.escapeEcmaScript(action.type) + "', '" + StringEscapeUtils.escapeEcmaScript(action.value) + "');");
+                        }
+                        mActions = null;
                     }
                 }
             },1);

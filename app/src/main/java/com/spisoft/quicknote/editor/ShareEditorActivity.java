@@ -13,6 +13,8 @@ import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 
+import java.util.ArrayList;
+
 public class ShareEditorActivity extends AppCompatActivity implements EditorActivity{
 
     private Fragment fragment;
@@ -36,7 +38,12 @@ public class ShareEditorActivity extends AppCompatActivity implements EditorActi
 
         Note note = NoteManager.createNewNote(PreferenceHelper.getRootPath(this));
         RecentHelper.getInstance(this).addNote(note);
-        setFragment(BlankFragment.newInstance(note, title+text));
+        EditorView.Action fillText = new EditorView.Action();
+        fillText.type="prefill";
+        fillText.value=title+text;
+        ArrayList<EditorView.Action>actions = new ArrayList<>();
+        actions.add(fillText);
+        setFragment(BlankFragment.newInstance(note, actions));
 
     }
 

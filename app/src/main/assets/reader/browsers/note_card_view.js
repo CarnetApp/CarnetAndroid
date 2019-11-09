@@ -189,6 +189,99 @@ NoteCardView.prototype.setNote = function (note) {
       _loop();
     }
   }
+
+  this.audioList.innerHTML = "";
+
+  if (note.media != undefined) {
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
+
+    try {
+      var _loop2 = function _loop2() {
+        var url = _step3.value;
+        var audio = url.substr(url.lastIndexOf("/") + 1);
+        if (!FileUtils.isFileAudio(audio)) return "continue";
+        table = document.createElement('table');
+        tr = document.createElement('tr');
+        td1 = document.createElement('td');
+        td2 = document.createElement('td');
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        table.appendChild(tr);
+        table.classList.add("note-audio");
+        playpause = document.createElement('button');
+        playpause.classList.add('mdl-button');
+        playpause.classList.add('mdl-js-button');
+        playpause.innerHTML = "<i class=\"material-icons\">play_arrow</i>";
+
+        playpause.onclick = function (event) {
+          event.stopPropagation();
+          var audioplayer = document.getElementById("audio-player");
+          if (audioplayer.onended != undefined) audioplayer.onended();
+
+          audioplayer.onended = function () {
+            playpause.innerHTML = "<i class=\"material-icons\">play_arrow</i>";
+          };
+
+          audioplayer.onpause = function () {
+            playpause.innerHTML = "<i class=\"material-icons\">play_arrow</i>";
+          };
+
+          audioplayer.onplay = function () {
+            playpause.innerHTML = "<i class=\"material-icons\">pause</i>";
+          };
+
+          audioplayer.src = url;
+          audioplayer.play();
+        };
+
+        td1.appendChild(playpause);
+        a = document.createElement('a');
+        a.href = url;
+
+        a.onclick = function () {
+          return false;
+        };
+
+        table.onclick = function (event) {
+          event.stopPropagation();
+          compatibility.openUrl(url);
+        };
+
+        a.innerHTML = audio;
+        td2.appendChild(a);
+
+        _this.audioList.appendChild(table);
+      };
+
+      for (var _iterator3 = note.media[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        var table;
+        var tr;
+        var td1;
+        var td2;
+        var playpause;
+        var a;
+
+        var _ret = _loop2();
+
+        if (_ret === "continue") continue;
+      }
+    } catch (err) {
+      _didIteratorError3 = true;
+      _iteratorError3 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+          _iterator3["return"]();
+        }
+      } finally {
+        if (_didIteratorError3) {
+          throw _iteratorError3;
+        }
+      }
+    }
+  }
 };
 
 NoteCardView.prototype.init = function () {
@@ -227,6 +320,9 @@ NoteCardView.prototype.init = function () {
   this.cardUrls = document.createElement('div');
   this.cardUrls.classList.add("card-urls");
   this.cardContent.appendChild(this.cardUrls);
+  this.audioList = document.createElement('div');
+  this.audioList.classList.add("card-audio-list");
+  this.cardContent.appendChild(this.audioList);
   this.cardMedias = document.createElement('div');
   this.cardMedias.classList.add("card-medias");
   this.cardContent.appendChild(this.cardMedias);
@@ -335,6 +431,7 @@ NoteCardViewGrid.prototype.addNext = function (num) {
       }, function (event) {
         if (!$(this).hasClass('noclick')) {
           var data = event.data;
+          event.preventDefault();
           data.callback(data.note);
           return false;
         }

@@ -15,20 +15,23 @@ import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.R;
 import com.spisoft.sync.synchro.SynchroService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BlankFragment extends Fragment implements View.OnClickListener, EditorView.HideListener {
     public static final String NOTE = "param1";
-    public static final String TEXT_TO_SHARE = "text_to_share";
+    public static final String ACTIONS = "ACTIONS";
     private Note mNote;
     private View mRoot;
     private boolean mHasAskedMinimize;
     private EditorView mEditor;
-    private String mTextToShare;
+    private List<EditorView.Action> mActions;
 
-    public static BlankFragment newInstance(Note param1, String textToShare) {
+    public static BlankFragment newInstance(Note param1, ArrayList<EditorView.Action> actions) {
         BlankFragment fragment = new BlankFragment();
         Bundle args = new Bundle();
         args.putSerializable(NOTE, param1);
-        args.putSerializable(TEXT_TO_SHARE, textToShare);
+        args.putSerializable(ACTIONS, actions);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,7 +46,7 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mNote = (Note) getArguments().getSerializable(NOTE);
-            mTextToShare = getArguments().getString(TEXT_TO_SHARE);
+            mActions = (List<EditorView.Action>) getArguments().getSerializable(ACTIONS);
         }
         setHasOptionsMenu(true);
 
@@ -58,13 +61,13 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
         // Inflate the layout for this fragment
         if(mRoot!=null) {
             if(mNote!=null)
-                mEditor.setNote(mNote, mTextToShare);
+                mEditor.setNote(mNote, mActions);
             return mRoot;
         }
         mRoot = inflater.inflate(R.layout.floating_note, container, false);
         mEditor = ((EditorView) mRoot.findViewById(R.id.editor_view));
         if(mNote!=null)
-            mEditor.setNote(mNote, mTextToShare);
+            mEditor.setNote(mNote, mActions);
         mEditor.reset();
         mEditor.setHideListener(this);
 

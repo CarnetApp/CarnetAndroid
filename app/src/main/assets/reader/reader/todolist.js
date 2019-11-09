@@ -229,6 +229,7 @@ TodoList.prototype.fromData = function (data) {
 
 TodoList.prototype.removeItem = function (item) {
   var todolist = this;
+  $(item.span).off('focus', item.span.resizeListener);
   $(item).animate({
     height: '0px'
   }, 150, function () {

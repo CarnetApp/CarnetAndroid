@@ -140,7 +140,9 @@ FileBrowser.prototype.list = function (callback) {
 
           if (node.path == "quickdoc") continue;
           file = new File(node.path, !node.isDir, node.name);
-          if (!node.isDir) files_in.push(file);else dirs_in.push(file);
+          if (!node.isDir) files_in.push(file);else {
+            dirs_in.push(file);
+          }
         }
       } catch (err) {
         _didIteratorError4 = true;

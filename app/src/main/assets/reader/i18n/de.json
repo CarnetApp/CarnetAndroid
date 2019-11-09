@@ -81,5 +81,6 @@
     "time": "Zeit",
     "date": "Datum",
     "beta_warning_reminders": "Erinnerungen sind immer noch eine Beta-Funktion und funktionieren nur unter Android",
-    "more-options": "Weitere Optionen"
+    "more-options": "Weitere Optionen",
+    "start_with_browser_view": "In der Browser-Ansicht starten"
 }

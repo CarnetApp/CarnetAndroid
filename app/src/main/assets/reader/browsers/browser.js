@@ -69,6 +69,7 @@ TextGetterTask.prototype.getNext = function () {
     //do it 20 by 20
     this.current = i + 1;
     if (!(this.list[i] instanceof Note) || !this.list[i].needsRefresh) continue;
+    console.log("adding path " + this.list[i].path);
     paths += this.list[i].path + ",";
     if (cachedMetadata[this.list[i].path] == undefined) cachedMetadata[this.list[i].path] = this.list[i];
   }
@@ -78,7 +79,7 @@ TextGetterTask.prototype.getNext = function () {
   if (paths.length > 0) {
     RequestBuilder.sRequestBuilder.get("/metadata?paths=" + encodeURIComponent(paths), function (error, data) {
       for (var meta in data) {
-        var note = new Note(stripExtensionFromName(getFilenameFromPath(meta)), data[meta].shorttext, meta, data[meta].metadata, data[meta].previews, false);
+        var note = new Note(Utils.cleanNoteName(getFilenameFromPath(meta)), data[meta].shorttext, meta, data[meta].metadata, data[meta].previews, false, data[meta].media);
         cachedMetadata[meta] = note;
         notes[notePath.indexOf(meta)] = note;
         noteCardViewGrid.updateNote(note);
@@ -488,9 +489,9 @@ function onListEnd(pathToList, files, metadatas, discret) {
         var file = _step3.value;
         var filename = getFilenameFromPath(file.path);
 
-        if (file.isFile && filename.endsWith(".sqd")) {
+        if (filename.endsWith(".sqd")) {
           var metadata = metadatas != undefined ? metadatas[file.path] : undefined;
-          var noteTestTxt = new Note(stripExtensionFromName(filename), metadata != undefined ? metadata.shorttext : "", file.path, metadata != undefined ? metadata.metadata : undefined, metadata != undefined ? metadata.previews : undefined, metadata == undefined);
+          var noteTestTxt = new Note(Utils.cleanNoteName(filename), metadata != undefined ? metadata.shorttext : "", file.path, metadata != undefined ? metadata.metadata : undefined, metadata != undefined ? metadata.previews : undefined, metadata == undefined, metadata != undefined ? metadata.media : undefined);
           noteTestTxt.isPinned = file.isPinned;
           noteTestTxt.originalIndex = i;
           notes.push(noteTestTxt);

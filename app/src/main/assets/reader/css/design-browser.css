@@ -272,3 +272,25 @@ body{
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
+.note-audio{
+    padding-top:15px;
+    padding-bottom: 15px;
+    max-width: calc(100% - 15px);
+    border-top: #9e9d9d6e solid 1px;
+    cursor: pointer;
+    word-break: break-all;
+    overflow: hidden;
+}
+
+.note-audio button{
+    min-width: unset;
+    padding: unset;
+    padding-left:5px;
+    padding-right:5px;
+    margin-right:5px;
+}
+
+#audio-player{
+    display: none;
+}
