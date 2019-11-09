@@ -1328,6 +1328,7 @@ Writer.prototype.handleAction = function (type, value) {
     var elements = document.getElementsByClassName("edit-zone");
     var element = elements[elements.length - 1];
     element.innerHTML += value;
+    this.hasTextChanged = true;
   } else if (type === "record-audio") {
     writer.recorder["new"]();
     writer.recorderDialog.showModal();
