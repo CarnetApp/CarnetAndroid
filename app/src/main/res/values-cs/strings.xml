@@ -105,4 +105,19 @@
     <string name="reminder">Upozornění</string>
     <string name="create_note">Vytvořit poznámku</string>
     <string name="beta_feature">Tohle je stále ještě beta funkce, která by měla být používána opatrně</string>
+    <string name="start_with_browser_view">Spustit v režimu „Prohlížeč“</string>
+    <string name="one_minute">1 minuta</string>
+    <string name="two_minutes">2 minuty</string>
+    <string name="five_minutes">5 minut</string>
+    <string name="ten_minutes">10 minut</string>
+    <string name="fifteen_minutes">15 minut</string>
+    <string name="thirty_minutes">30 minut</string>
+    <string name="one_hour">1 hodina</string>
+    <string name="two_hours">2 hodiny</string>
+    <string name="six_hours">6 hodin</string>
+    <string name="once_a_day">Jednou denně</string>
+    <string name="disabled">Zakázáno</string>
+    <string name="twelve_hours">12 hodin</string>
+    <string name="values_below_15_battery">Nastavení pod 15 minut může vybíjet baterii</string>
+    <string name="sync_frequency">Četnost synchronizace</string>
     </resources>
