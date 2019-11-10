@@ -42,6 +42,7 @@ import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.editor.BlankFragment;
+import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.editor.ImageActivity;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.Log;
@@ -191,6 +192,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         mEmptyViewMessage = (TextView) mRoot.findViewById(R.id.empty_message);
         mRoot.findViewById(R.id.add_note_button).setOnClickListener(this);
         mRoot.findViewById(R.id.add_photos_button).setOnClickListener(this);
+        mRoot.findViewById(R.id.add_record_button).setOnClickListener(this);
         mNoteAdapter = getAdapter();
         mNoteAdapter.setOnNoteClickListener(this);
         mGridLayout = new StaggeredGridLayoutManager( 2, StaggeredGridLayoutManager.VERTICAL);
@@ -565,10 +567,14 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     protected abstract void internalCreateOptionMenu(Menu menu, Note note);
 
     protected void createAndOpenNewNote(String path){
+        createAndOpenNewNote(path, null);
+    }
+
+    protected void createAndOpenNewNote(String path, ArrayList<EditorView.Action> action){
         Note note = NoteManager.createNewNote(path);
         RecentHelper.getInstance(getContext()).addNote(note);
         mLastSelected = note;
-        ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(note, null));
+        ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(note, action));
     }
 
     @Override
@@ -577,6 +583,12 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
               createAndOpenNewNote(PreferenceHelper.getRootPath(getActivity()));
         } else if (view == mRoot.findViewById(R.id.add_photos_button)){
             startActivityForResult(new Intent(getActivity(), ImageActivity.class), 1002);
+        } else if (view == mRoot.findViewById(R.id.add_record_button)){
+            ArrayList<EditorView.Action> actions = new ArrayList<>();
+            EditorView.Action record = new EditorView.Action();
+            record.type = "record-audio";
+            actions.add(record);
+            createAndOpenNewNote(PreferenceHelper.getRootPath(getActivity()),actions);
         }
     }
 

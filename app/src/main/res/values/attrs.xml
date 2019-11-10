@@ -31,6 +31,7 @@
     <attr name="AddFolderIcon" format="reference" />
     <attr name="AddNoteIcon" format="reference" />
     <attr name="AddPhotoIcon" format="reference" />
+    <attr name="AddRecordIcon" format="reference" />
     <attr name="DotsIcon" format="reference" />
     <attr name="SyncIcon" format="reference"/>
     <attr name="SyncDisabled" format="reference"/>

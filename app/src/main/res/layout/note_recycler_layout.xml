@@ -67,6 +67,13 @@
             android:background="@drawable/transparent_ripple"
             app:srcCompat="?attr/AddFolderIcon" />
         <ImageButton
+            android:id="@+id/add_record_button"
+            android:padding="10dp"
+            android:layout_width="60dip"
+            android:layout_height="45dip"
+            android:background="@drawable/transparent_ripple"
+            app:srcCompat="?attr/AddRecordIcon" />
+        <ImageButton
             android:id="@+id/add_photos_button"
             android:padding="10dp"
             android:layout_width="60dip"
