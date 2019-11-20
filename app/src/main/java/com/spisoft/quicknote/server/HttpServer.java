@@ -341,8 +341,11 @@ public class HttpServer extends NanoHTTPD {
     private Response saveNote(Note note) {
         List <String> except = new ArrayList<>();
         except.add(extractedNotePath+"/reader.html");
-        ZipUtils.zipFolder(new File(extractedNotePath), note.path, except);
-
+        File file = new File(note.path);
+        if(!file.exists() || file.isFile())
+            ZipUtils.zipFolder(new File(extractedNotePath), note.path, except);
+        else
+            FileUtils.copyDirectoryOneLocationToAnotherLocation(new File(extractedNotePath),file);
         File noteFile = new File(PreferenceHelper.getRootPath(mContext),note.path);
         File f = new File(extractedNotePath, "data");
         note.previews.clear();
@@ -409,11 +412,14 @@ public class HttpServer extends NanoHTTPD {
             FileUtils.deleteRecursive(dir, except);
             JSONObject object = new JSONObject();
             object.put("id","0");
-            if(new File(path).exists()) {
-
-                ZipUtils.unzip(path, extractedNotePath);
-                File f = new File(extractedNotePath, "index.html")
-                        ;
+            File noteFile = new File(path);
+            if(noteFile.exists()) {
+                if(noteFile.isFile())
+                    ZipUtils.unzip(path, extractedNotePath);
+                else
+                    FileUtils.copyDirectoryOneLocationToAnotherLocation(noteFile, new File(extractedNotePath))
+                            ;
+                File f = new File(extractedNotePath, "index.html");
                 if (f.exists()) {
                     String index = FileUtils.readFile(f.getAbsolutePath());
                     object.put("html",index);

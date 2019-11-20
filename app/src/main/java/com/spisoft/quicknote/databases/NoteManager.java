@@ -121,8 +121,7 @@ public class NoteManager
     }
 
     public static boolean needToUpdate(String path) {
-        File file = new File(path);
-        return file.exists()&&getNoteVersion(file)< NEW_VERSION;
+        return false;
     }
 
     public static String getDontTouchFolder(Context ct) {

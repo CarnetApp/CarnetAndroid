@@ -12,6 +12,7 @@ import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.sync.Log;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Stack;
@@ -70,6 +71,56 @@ public class NoteInfoRetriever {
     public Note getNoteInfo(String path, String toSearch, int length){
         if(toSearch != null)
             toSearch = NoteInfoSearchHelper.cleanText(toSearch);
+        File f = new File(path);
+        if(f.isFile())
+            return getNoteInfoZip(path, toSearch, length);
+        else
+            return getNoteInfoFolder(path, toSearch, length);
+    }
+
+    public Note getNoteInfoFolder(String path, String toSearch, int length){
+        Note note = new Note(path);
+        try {
+            Pair<String, Boolean> result = mNoteInfoSearchHelper
+                    .readInputStream(new FileInputStream(new File(path, NoteManager.getHtmlPath(0))),
+                            length, 10, toSearch);
+            note.setShortText(result.first);
+            note.hasFound(result.second);
+            Note.Metadata metadata = new Note.Metadata();
+            String metadataStr = mNoteInfoSearchHelper.readInputStream(new FileInputStream(new File(path, "metadata.json")), -1,-1, null).first;
+            if(metadataStr!=null && metadataStr.length()>0){
+                metadata = Note.Metadata.fromString(metadataStr);
+            }
+            if(!result.second){
+                for(String keyword : metadata.keywords){
+                    if(NoteInfoSearchHelper.cleanText(keyword).contains(toSearch)){
+                        note.hasFound(true);
+                        break;
+                    }
+                }
+            }
+            File dataFolder = new File(path, "data");
+            if(dataFolder.exists()){
+                File[] dataFiles = dataFolder.listFiles();
+                for(File dataFile : dataFiles){
+                    if(dataFile.getName().startsWith("preview_")){
+                        note.previews.add("data/"+dataFile.getName());
+                    }
+                    else {
+                        note.medias.add("data/"+dataFile.getName());
+                    }
+                }
+            }
+            note.file_lastmodification = new File(path).lastModified();
+            note.setMetaData(metadata);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return note;
+    }
+
+    public Note getNoteInfoZip(String path, String toSearch, int length){
+
         Note note = new Note(path);
         ZipFile zp = null;
         try {

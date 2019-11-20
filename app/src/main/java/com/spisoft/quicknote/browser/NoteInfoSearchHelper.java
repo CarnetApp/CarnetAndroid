@@ -14,6 +14,7 @@ import org.jsoup.Jsoup;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
@@ -35,6 +36,15 @@ public class NoteInfoSearchHelper {
 
 
     protected Pair<String, Boolean> readZipEntry(ZipFile zp, ZipEntry entry, long length, int maxLines, String toFind){
+        try {
+            return readInputStream(zp.getInputStream(entry), length, maxLines, toFind);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new Pair<>("", false);
+    }
+
+    protected Pair<String, Boolean> readInputStream(InputStream is, long length, int maxLines, String toFind){
         String sb = new String();
         BufferedReader br = null;
 
@@ -42,7 +52,7 @@ public class NoteInfoSearchHelper {
         if(toFind!=null)
             toFind = cleanText(toFind);
         try {
-            br = new BufferedReader(  br = new BufferedReader(new InputStreamReader(zp.getInputStream(entry))));
+            br = new BufferedReader(  br = new BufferedReader(new InputStreamReader(is)));
 
             String line = br.readLine();
             long total=0;
