@@ -26,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -323,12 +324,53 @@ public class HttpServer extends NanoHTTPD {
         if(txt.length()>100)
             txt = txt.substring(0, 100);
         note.shortText = txt;
-        Response res = saveNote(note);
+
+        List files = new ArrayList();
+        files.add("metadata.json");
+        files.add("index.html");
+        try {
+            saveFilesToNote(files, note, null);
+        } catch (NoteSaveException e) {
+            e.printStackTrace();
+            return NanoHTTPD.newFixedLengthResponse(Response.Status.INTERNAL_ERROR,"",e.getMessage());
+        }
 
 
-        return res;
+        return NanoHTTPD.newFixedLengthResponse("Saved !");
     }
 
+    class NoteSaveException extends Exception{
+
+    }
+
+    private boolean saveFilesToNote(List<String> files, Note note, String relativePath) throws NoteSaveException{
+        if(note == null){
+            File noteFile = new File(PreferenceHelper.getRootPath(mContext),relativePath);
+            note = CacheManager.getInstance(mContext).get(noteFile.getAbsolutePath());
+            if(note == null){
+                note = new Note(noteFile.getAbsolutePath());
+            }
+        }
+
+        File file = new File(note.path);
+        if(!file.exists() || file.isFile()) {
+            saveNote(note);
+            return false;
+        }
+        else{
+            for(String filePath :files){
+                try {
+                    FileUtils.copy(new FileInputStream(new File(extractedNotePath, filePath)), new FileOutputStream(new File(note.path, filePath)));
+                } catch (IOException e) {
+                   throw new NoteSaveException();
+                }
+            }
+            refreshCache(note);
+            return true;
+        }
+
+
+    }
     private Response saveNote(String relativePath) {
         File noteFile = new File(PreferenceHelper.getRootPath(mContext),relativePath);
         Note note = CacheManager.getInstance(mContext).get(noteFile.getAbsolutePath());
@@ -346,6 +388,13 @@ public class HttpServer extends NanoHTTPD {
             ZipUtils.zipFolder(new File(extractedNotePath), note.path, except);
         else
             FileUtils.copyDirectoryOneLocationToAnotherLocation(new File(extractedNotePath),file);
+
+        refreshCache(note);
+
+        return NanoHTTPD.newFixedLengthResponse("Saved !");
+    }
+
+    private void refreshCache(Note note){
         File noteFile = new File(PreferenceHelper.getRootPath(mContext),note.path);
         File f = new File(extractedNotePath, "data");
         note.previews.clear();
@@ -366,8 +415,6 @@ public class HttpServer extends NanoHTTPD {
         CacheManager.getInstance(mContext).addToCache(note);
         CacheManager.getInstance(mContext).writeCache();
         RemindersManager.Companion.getInstance(mContext).add(note);
-
-        return NanoHTTPD.newFixedLengthResponse("Saved !");
     }
 
     private Response moveNote(String from, String to) {
