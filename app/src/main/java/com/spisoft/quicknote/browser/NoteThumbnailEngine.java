@@ -9,6 +9,8 @@ import com.spisoft.quicknote.Note;
 import com.spisoft.sync.Log;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Stack;
@@ -86,43 +88,83 @@ public class NoteThumbnailEngine {
                 final File file = new File(noteAndVG.note.path);
                 Log.d(TAG, "retrieving " + noteAndVG.note.path);
                 if (file.exists()) {
-                    ZipFile zp = null;
-                    try {
-                        zp = new ZipFile(noteAndVG.note.path);
-                        Enumeration<? extends ZipEntry> entries = zp.entries();
-                        int i = 0;
-                        Bitmap b1 = null;
-                        Bitmap b2 = null;
-                        while(entries.hasMoreElements() && i < 2){
-                            ZipEntry entry = entries.nextElement();
-                            if(entry.getName().startsWith("data/preview_")) {
-                                if(i==0) {
-                                    b1 = BitmapFactory.decodeStream(zp.getInputStream(entry));
-                                    b1.setDensity(Bitmap.DENSITY_NONE);
+                    if(file.isFile()){
+                        ZipFile zp = null;
+                        try {
+                            zp = new ZipFile(noteAndVG.note.path);
+                            Enumeration<? extends ZipEntry> entries = zp.entries();
+                            int i = 0;
+                            Bitmap b1 = null;
+                            Bitmap b2 = null;
+                            while(entries.hasMoreElements() && i < 2){
+                                ZipEntry entry = entries.nextElement();
+                                if(entry.getName().startsWith("data/preview_")) {
+                                    if(i==0) {
+                                        b1 = BitmapFactory.decodeStream(zp.getInputStream(entry));
+                                        b1.setDensity(Bitmap.DENSITY_NONE);
+                                    }
+                                    else {
+                                        b2 = BitmapFactory.decodeStream(zp.getInputStream(entry));
+                                        b2.setDensity(Bitmap.DENSITY_NONE);
+                                    }
+                                    i++;
                                 }
-                                else {
-                                    b2 = BitmapFactory.decodeStream(zp.getInputStream(entry));
-                                    b2.setDensity(Bitmap.DENSITY_NONE);
-                                }
-                                i++;
                             }
+
+
+                            final Bitmap finalB2 = b2;
+                            final Bitmap finalB1 = b1;
+                            final NoteAndViewHolder finalNoteAndVG = noteAndVG;
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finalNoteAndVG.viewHolder.setPreview1(finalB1);
+                                    finalNoteAndVG.viewHolder.setPreview2(finalB2);
+                                }
+                            });
+
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-
-                        final Bitmap finalB2 = b2;
-                        final Bitmap finalB1 = b1;
-                        final NoteAndViewHolder finalNoteAndVG = noteAndVG;
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                finalNoteAndVG.viewHolder.setPreview1(finalB1);
-                                finalNoteAndVG.viewHolder.setPreview2(finalB2);
-                            }
-                        });
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
+                    else {
+                        File dataFolder = new File(file, "data");
+                        if(dataFolder.exists() && dataFolder.isDirectory()){
+                            int i = 0;
+                            Bitmap b1 = null;
+                            Bitmap b2 = null;
+                            for (File dataFile : dataFolder.listFiles()){
+                                if(dataFile.getName().startsWith("preview_")){
+                                    try {
+                                        if(i==0) {
+                                            b1 = BitmapFactory.decodeStream(new FileInputStream(dataFile));
+                                            b1.setDensity(Bitmap.DENSITY_NONE);
+                                        }
+                                        else {
+                                            b2 = BitmapFactory.decodeStream(new FileInputStream(dataFile));
+                                            b2.setDensity(Bitmap.DENSITY_NONE);
+                                        }
+                                    } catch (FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
+                                    i++;
+                                }
+                                if(i >= 1 ) break;
+                            }
+                            final Bitmap finalB2 = b2;
+                            final Bitmap finalB1 = b1;
+                            final NoteAndViewHolder finalNoteAndVG = noteAndVG;
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finalNoteAndVG.viewHolder.setPreview1(finalB1);
+                                    finalNoteAndVG.viewHolder.setPreview2(finalB2);
+                                }
+                            });
+                        }
+                    }
+
                 }
             }
         }
