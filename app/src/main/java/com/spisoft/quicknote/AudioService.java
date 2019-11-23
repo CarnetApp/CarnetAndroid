@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -153,9 +154,19 @@ public class AudioService extends Service {
 
             if (Method.GET.equals(method)) {
                 try {
-                    ZipFile zp = new ZipFile(sNote.path);
-                    ZipEntry ze = zp.getEntry(sMedia);
-                    InputStream is = zp.getInputStream(ze);
+                    File noteFile = new File(sNote.path);
+                    InputStream is = null;
+                    if(noteFile.exists()){
+                        if(noteFile.isDirectory()){
+                            is = new FileInputStream(new File(noteFile, sMedia));
+                        }
+                        else {
+                            ZipFile zp = new ZipFile(sNote.path);
+                            ZipEntry ze = zp.getEntry(sMedia);
+                            is = zp.getInputStream(ze);
+                        }
+                    }
+
 
                     return  NanoHTTPD.newChunkedResponse(Response.Status.OK,
                             MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(sMedia)),is);
