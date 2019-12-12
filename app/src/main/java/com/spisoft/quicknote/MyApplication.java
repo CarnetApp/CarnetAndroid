@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.support.multidex.MultiDex;
+import androidx.multidex.MultiDex;
 
 import com.spisoft.quicknote.browser.NoteListFragment;
 import com.spisoft.quicknote.databases.CacheManager;

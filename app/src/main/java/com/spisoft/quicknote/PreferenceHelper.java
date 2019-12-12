@@ -3,11 +3,8 @@ package com.spisoft.quicknote;
 import android.content.Context;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 
 import com.spisoft.quicknote.databases.NoteManager;
-import com.spisoft.quicknote.utils.Utils;
-import com.spisoft.sync.Configuration;
 
 import java.io.File;
 import java.util.ArrayList;

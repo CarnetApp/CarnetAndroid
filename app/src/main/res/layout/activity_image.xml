@@ -93,7 +93,7 @@
         android:visibility="gone"
 
         >
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/title_text_input_layout"
             android:visibility="gone"
             android:layout_width="match_parent"
@@ -108,7 +108,7 @@
                 android:ems="10"
                 android:hint="Note title" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
             android:layout_marginTop="20dp"

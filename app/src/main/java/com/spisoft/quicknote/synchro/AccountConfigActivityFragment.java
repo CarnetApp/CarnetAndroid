@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;

@@ -145,4 +145,6 @@
     <string name="battery_optimization_subtitle2">On next screen, allow carnet to ignore optimizations</string>
     <string name="battery_optimization_help">Need more help ? Click here</string>
     <string name="disable_optimization">Disable optimization</string>
+    <string name="audio_player">Audio Player</string>
+    <string name="pause">Pause</string>
 </resources>

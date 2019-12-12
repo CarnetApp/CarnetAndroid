@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     >
 
-    <android.support.v4.widget.DrawerLayout
+    <androidx.drawerlayout.widget.DrawerLayout
 
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
 
             <!-- We use a Toolbar so that our drawer can be displayed
                  in front of the action bar -->
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/my_awesome_toolbar"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
@@ -57,7 +57,7 @@
             layout="@layout/my_navigation_drawer"
             />
 
-    </android.support.v4.widget.DrawerLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 </FrameLayout>
 

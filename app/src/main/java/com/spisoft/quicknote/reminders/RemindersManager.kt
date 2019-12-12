@@ -7,7 +7,7 @@ import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Build
 import android.preference.PreferenceManager
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import com.spisoft.quicknote.Note
 import com.spisoft.quicknote.R
 import com.spisoft.quicknote.databases.CacheManager

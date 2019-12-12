@@ -6,8 +6,8 @@ import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.MediaRecorder
 import android.os.Build
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import com.spisoft.quicknote.server.HttpServer
