@@ -35,14 +35,7 @@ public class CacheBuilderIntentService extends IntentService {
     }
 
     private void explore(File file) {
-        if(file.isDirectory()){
-            File [] children = file.listFiles();
-            if(children != null){
-                for (File child:children){
-                    explore(child);
-                }
-            }
-        } else if(file.getName().endsWith(".sqd")){
+        if(file.getName().endsWith(".sqd")){
             Note note = CacheManager.getInstance(this).get(file.getAbsolutePath());
             if(note == null || note.file_lastmodification != file.lastModified()){
                 Log.d(TAG, "building cache for "+file.getName());
@@ -51,6 +44,13 @@ public class CacheBuilderIntentService extends IntentService {
             } else {
                 Log.d(TAG, "is in cache: "+file.getName());
             }
-        }
+        } else if(file.isDirectory()){
+             File [] children = file.listFiles();
+             if(children != null){
+                 for (File child:children){
+                     explore(child);
+                 }
+             }
+         }
     }
 }
