@@ -30,6 +30,7 @@ public class Note implements Serializable{
     public boolean needsUpdateInfo = true;
     public boolean hasFound;
     public boolean isFake;
+    public boolean pathHasChanged;
 
     @Override
     public boolean equals(Object o) {
@@ -64,6 +65,7 @@ public class Note implements Serializable{
 
 
     public void setPath(String path) {
+        pathHasChanged = true;
         String name = new File(path).getName();
         if(name.endsWith(".sqd"))
             name = name.substring(0, name.length()-".sqd".length());
