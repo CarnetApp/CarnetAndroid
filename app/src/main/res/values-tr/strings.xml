@@ -46,7 +46,7 @@
     <string name="authorize_description">Carnet, pencere görünümünde çalışabilmek için özel bir yetkilendirmeye ihtiyaç duyar. Bunun için "Uygulamaların üzerinde görüntüle" özelliğini açabilirsiniz.</string>
     <string name="authorisation_issue">Yetkilendirme hatası</string>
     <string name="error">Hata</string>
-    <string name="error_permission_storage">Android'in yeni yetkilendirme sistemi yüzünden Carnet, notlarınızı kaydedebilmek için depolama iznine ihtiyaç duyar. Bu izin, notlarınızı hem dahili depolamanıza hem de SD kartınıza kaydetmek için kullanılır.</string>
+    <string name="error_permission_storage">Android\'in yeni yetkilendirme sistemi yüzünden Carnet, notlarınızı kaydedebilmek için depolama iznine ihtiyaç duyar. Bu izin, notlarınızı hem dahili depolamanıza hem de SD kartınıza kaydetmek için kullanılır.</string>
     <string name="allow">İzin ver</string>
     <string name="exit">Çık</string>
     <string name="unable_to_rename_use">Belge kullanılırken ismi değiştirilemez</string>
@@ -59,21 +59,21 @@
     <string name="title_activity_help">HelpActivity</string>
     <string name="move">Taşı</string>
     <string name="paste">Yapıştır</string>
-    <string name="paste_how_to">Taşımak istediğiniz dizine gidin ve ardından Yapıştır'ı seçin</string>
+    <string name="paste_how_to">Taşımak istediğiniz dizine gidin ve ardından Yapıştır\'ı seçin</string>
     <string name="file_operation_in_progress">Dosya işlemi</string>
     <string name="please_wait">Lütfen bekleyin</string>
     <string name="new_keyword">Yeni anahtar kelime</string>
     <string name="title_activity_account_config">Hesap yapılandırması</string>
     <string name="remote_folder">Uzak dizin</string>
     <string name="keywords">Anahtar kelimeler</string>
-    <string name="sync_intro_title">Carnet'i eşitleyin</string>
-    <string name="sync_intro_text">Carnet, NextCloud ile eşitlemeyi (senkronizasyon) destekler. Notlarınızı bilgisayarınızda da görmek için masaüstü sürümünü indirebilirsiniz. Carnet'i ayrıca NextCloud App Store üzerinde de bulabilirsiniz.</string>
+    <string name="sync_intro_title">Carnet\'i eşitleyin</string>
+    <string name="sync_intro_text">Carnet, NextCloud ile eşitlemeyi (senkronizasyon) destekler. Notlarınızı bilgisayarınızda da görmek için masaüstü sürümünü indirebilirsiniz. Carnet\'i ayrıca NextCloud App Store üzerinde de bulabilirsiniz.</string>
     <string name="google_drive">Google Drive</string>
-    <string name="sync_intro_gdrive_text">Carnet, Google Drive ile eşitlemeyi destekler. Google Drive'ı kullanması kolaydır, ancak Google Drive özgür değildir.</string>
+    <string name="sync_intro_gdrive_text">Carnet, Google Drive ile eşitlemeyi destekler. Google Drive\'ı kullanması kolaydır, ancak Google Drive özgür değildir.</string>
     <string name="sync_select_nextcloud_text">Carnet, tüm NextCloud sağlayıcıları ile uyumludur. Ücretli veya ücretsiz birçok NextCloud sağlayıcısı vardır, birini bulup hemen üye olabilirsiniz</string>
     <string name="skip">Atla</string>
     <string name="welcome">Hoş geldiniz!</string>
-    <string name="welcome_subtitle">Carnet'i keşfedin</string>
+    <string name="welcome_subtitle">Carnet\'i keşfedin</string>
     <string name="next">İleri</string>
     <string name="app_restart">Uygulama yeniden başlayacak</string>
     <string name="pin">Tuttur</string>
@@ -81,7 +81,7 @@
     <string name="say_hi">Merhaba diyin!</string>
     <string name="say_hi_subtitle">\"Merhaba diyin!\" tuşuna basarak benim uygulamayı kaç kişinin kullandığını bilmeme yardımcı olabilirsiniz :)</string>
     <string name="say_hi_subtitle2"></string>
-    <string name="not_available_on_fdroid">F-Droid'de mevcut değildir</string>
+    <string name="not_available_on_fdroid">F-Droid\'de mevcut değildir</string>
     <string name="desktop_version">Masaüstü sürümü</string>
     <string name="sync_intro_text_carnet_instance">Carnet, notlarınızı otomatik olarak çevrimiçi yedekleyebilir.\nBir Carnet sağlayıcısı seçerek notlarınızı bir hem telefonunuzdan hem de bilgisayarınızdan bir web tarayıcısı üzerinde düzenleyebilirsiniz.</string>
     <string name="doesnt_accept_new_users">Yeni kullanıcıları kabul etmemektedir</string>
@@ -109,8 +109,8 @@
     <string name="fake_note_5">Notlarınızı ve belgelerinizi biçimlendirin, notlarınıza resim ve ses kayıtları ekleyin</string>
     <string name="fake_notes_warning">Sahte notlar düzenlenemez</string>
     <string name="fake_note_6">Yapılacaklar listesi ve linkler ekleyin</string>
-    <string name="fake_note_todo_item_1">Carnet'i deneyin</string>
-    <string name="fake_note_todo_item_2">Carnet'i paylaşın</string>
+    <string name="fake_note_todo_item_1">Carnet\'i deneyin</string>
+    <string name="fake_note_todo_item_2">Carnet\'i paylaşın</string>
     <string name="changelog">Sürüm notları</string>
     <string name="restore_recent">En sonuncuya döndür</string>
     <string name="sort_reversed">Ters sıralama</string>
@@ -124,6 +124,6 @@
     <string name="reminder">Hatırlatmalar</string>
     <string name="create_note">Not oluştur</string>
     <string name="beta_feature">Bu özellik hala geliştirilme aşamasındadır ve dikkatli kullanılmalıdır</string>
-    <string name="warning_sync_cloud">Carnet harici dosyalar içeren dizinleri lütfen seçmeyin. NextCloud'unuzun kök dizinini seçmek bütün NextCloud'unuzu telefonunuza eşitler.</string>
+    <string name="warning_sync_cloud">Carnet harici dosyalar içeren dizinleri lütfen seçmeyin. NextCloud\'unuzun kök dizinini seçmek bütün NextCloud\'unuzu telefonunuza eşitler.</string>
     <string name="start_with_browser_view">Tarayıcı görünümünde aç</string>
 </resources>
