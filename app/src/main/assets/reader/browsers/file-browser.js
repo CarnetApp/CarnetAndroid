@@ -15,6 +15,7 @@ FileBrowser.prototype.list = function (callback) {
     console.log("getting recent");
     var db = RecentDBManager.getInstance();
     db.getFlatenDB(function (err, flaten, pin, metadata) {
+      if (err) return callback(true);
       console.log(JSON.stringify(flaten));
       var files = [];
       var _iteratorNormalCompletion = true;
@@ -73,7 +74,7 @@ FileBrowser.prototype.list = function (callback) {
         }
       }
 
-      callback(files, true, metadata);
+      callback(false, files, true, metadata);
     });
   } else if (this.path.startsWith("keyword://")) {
     console.log("getting keyword");
@@ -110,7 +111,7 @@ FileBrowser.prototype.list = function (callback) {
         }
       }
 
-      callback(files, true);
+      callback(false, files, true);
     });
   } else {
     var fbrowser = this;
@@ -161,7 +162,7 @@ FileBrowser.prototype.list = function (callback) {
 
       files = files.concat(dirs_in);
       files = files.concat(files_in);
-      callback(files, endOfSearch, data['metadata']);
+      callback(false, files, endOfSearch, data['metadata']);
     });
   }
 };

@@ -80,5 +80,7 @@
     "sunday": "Neděle",
     "time": "Čas",
     "date": "Datum",
-    "beta_warning_reminders": "„Upozornění“ jsou stále ještě beta funkce, která funguje zatím pouze na Androidu"
+    "beta_warning_reminders": "„Upozornění“ jsou stále ještě beta funkce, která funguje zatím pouze na Androidu",
+    "more-options": "Více možností",
+    "start_with_browser_view": "Spustit v režimu „Prohlížeč“"
 }

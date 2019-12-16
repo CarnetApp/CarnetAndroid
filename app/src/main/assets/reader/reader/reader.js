@@ -284,7 +284,7 @@ Writer.prototype.setDoNotEdit = function (b) {
 
 Writer.prototype.displayErrorLarge = function (error) {};
 
-Writer.prototype.extractNote = function () {
+Writer.prototype.extractNote = function (callback) {
   console.log("Writer.prototype.extractNote");
   var writer = this;
   RequestBuilder.sRequestBuilder.get("/note/open?path=" + encodeURIComponent(this.note.path), function (error, data) {
@@ -329,6 +329,7 @@ Writer.prototype.extractNote = function () {
     writer.updateRating(writer.note.metadata.rating);
     writer.updateNoteColor(writer.note.metadata.color != undefined ? writer.note.metadata.color : "none");
     writer.setDoNotEdit(false);
+    callback();
     setTimeout(function () {
       if (!writer.isBigNote()) {
         var elements = writer.oDoc.getElementsByClassName("edit-zone");
@@ -690,6 +691,7 @@ Writer.prototype.init = function () {
   this.statsDialog.querySelector('.ok').addEventListener('click', function () {
     writer.statsDialog.close();
   });
+  this.genericDialog = this.elem.querySelector('#generic-dialog');
   this.colorPickerDialog = this.elem.querySelector('#color-picker-dialog');
   this.styleDialog = this.elem.querySelector('#style-dialog');
   this.recorderDialog = this.elem.querySelector('#recorder-container');
@@ -1646,14 +1648,14 @@ function resetScreenHeight() {
   }
 }
 
-function loadPath(path, actions) {
+function loadPath(path, action) {
   if (writer == undefined) return;
   writer.reset();
   var note = new Note("", "", path, undefined);
   writer.setNote(note);
   console.log("extract");
   writer.extractNote(function () {
-    writer.handleActions(actions);
+    writer.handleAction(action, undefined);
   });
 }
 
@@ -1702,27 +1704,15 @@ $(document).ready(function () {
   initDragAreas();
 
   if (!loaded) {
-    var getParameterByName = function getParameterByName(name, url) {
-      if (!url) {
-        url = window.location.href;
-      }
-
-      name = name.replace(/[\[\]]/g, "\\$&");
-      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-          results = regex.exec(url);
-      if (!results) return null;
-      if (!results[2]) return '';
-      return decodeURIComponent(results[2].replace(/\+/g, " ").replace(/%2F/g, "/"));
-    };
-
     $(window).on('resize', resetScreenHeight);
-    var path = getParameterByName("path");
-    var tmp = getParameterByName("tmppath");
+    var path = Utils.getParameterByName("path");
+    var action = Utils.getParameterByName("action");
+    var tmp = Utils.getParameterByName("tmppath");
     if (tmp != null) tmppath = tmp;
 
     if (path != undefined) {
-      console.log("path " + getParameterByName("path"));
-      loadPath(path);
+      console.log("path " + Utils.getParameterByName("action"));
+      loadPath(path, action);
     }
 
     loaded = true;

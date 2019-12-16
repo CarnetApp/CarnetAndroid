@@ -284,8 +284,6 @@ body{
 }
 
 .note-audio button{
-    min-width: unset;
-    padding: unset;
     padding-left:5px;
     padding-right:5px;
     margin-right:5px;

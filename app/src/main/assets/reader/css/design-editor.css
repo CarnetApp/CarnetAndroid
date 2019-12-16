@@ -636,3 +636,8 @@ div#container-button::-webkit-scrollbar {
 #color-picker-dialog  .mdl-dialog__actions{
 	margin-top: 50px; /*android hack*/
 }
+
+
+#generic-dialog .content{
+	padding:15px;
+}

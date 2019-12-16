@@ -137,7 +137,8 @@ NoteCardView.prototype.setNote = function (note) {
       for (var _iterator2 = note.previews[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
         var preview = _step2.value;
         var img = document.createElement('img');
-        img.src = preview;
+        img.src = (!preview.startsWith("data:") && note.path != "untitleddonotedit.sqd" ? api_url : '') + preview; //fake notes don't need api
+
         this.cardMedias.appendChild(img);
       }
     } catch (err) {
@@ -232,7 +233,7 @@ NoteCardView.prototype.setNote = function (note) {
             playpause.innerHTML = "<i class=\"material-icons\">pause</i>";
           };
 
-          audioplayer.src = url;
+          audioplayer.src = api_url + url;
           audioplayer.play();
         };
 
@@ -308,6 +309,9 @@ NoteCardView.prototype.init = function () {
   this.cardContent.appendChild(this.cardTitleText);
   this.cardContent.appendChild(this.cardText);
   this.cardContent.appendChild(this.cardTodoLists);
+  this.audioList = document.createElement('div');
+  this.audioList.classList.add("card-audio-list");
+  this.cardContent.appendChild(this.audioList);
   this.cardRating = document.createElement('div');
   this.cardRating.classList.add("card-rating");
   this.cardContent.appendChild(this.cardRating);
@@ -320,9 +324,6 @@ NoteCardView.prototype.init = function () {
   this.cardUrls = document.createElement('div');
   this.cardUrls.classList.add("card-urls");
   this.cardContent.appendChild(this.cardUrls);
-  this.audioList = document.createElement('div');
-  this.audioList.classList.add("card-audio-list");
-  this.cardContent.appendChild(this.audioList);
   this.cardMedias = document.createElement('div');
   this.cardMedias.classList.add("card-medias");
   this.cardContent.appendChild(this.cardMedias);
