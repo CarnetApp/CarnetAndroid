@@ -84,17 +84,9 @@ public class MyApplication extends Application implements Configuration.PathObse
                 boolean hasAddedSmt = false;
                 ArrayList<Note> notes = new ArrayList<>();
                 for (String filepath : modifiedPaths){
-                    File current = new File(filepath);
-                    if(!current.getName().endsWith(".sqd")) {
-                        if (current.getParentFile().getName().equals("data")){
-                            filepath = current.getParentFile().getAbsolutePath();
-                            current = new File(filepath);
-                        }
-                        if (current.getParentFile().getName().endsWith("sqd")){
-                            filepath = current.getParentFile().getAbsolutePath();
-                        }
-
-                    }
+                    String notePath = Utils.getCorrespondingNote(filepath);
+                    if(notePath != null)
+                        filepath = notePath;
                     if(filepath.endsWith(".sqd")){
                         Log.d(TAG, "onPathChanged "+filepath);
 
