@@ -125,11 +125,18 @@ public class NoteInfoRetriever {
         ZipFile zp = null;
         try {
             zp = new ZipFile(note.path);
-            Pair<String, Boolean> result = mNoteInfoSearchHelper.read(zp, zp.getEntry(NoteManager.getHtmlPath(0)), length, 10, toSearch);
+            ZipEntry entry = zp.getEntry(NoteManager.getHtmlPath(0));
+            if(entry == null) {
+                Log.d("notedebug","note path with error "+ path);
+                return note;
+            }
+            Pair<String, Boolean> result = mNoteInfoSearchHelper.read(zp, entry, length, 10, toSearch);
             note.setShortText(result.first);
             note.hasFound(result.second);
             Note.Metadata metadata = new Note.Metadata();
-            String metadataStr = mNoteInfoSearchHelper.readZipEntry(zp, zp.getEntry("metadata.json"), -1,-1, null).first;
+            entry = zp.getEntry("metadata.json");
+            String metadataStr = null;
+            if(entry != null) metadataStr = mNoteInfoSearchHelper.readZipEntry(zp, entry,  -1,-1, null).first;
             if(metadataStr!=null && metadataStr.length()>0){
                 metadata = Note.Metadata.fromString(metadataStr);
             }
@@ -143,7 +150,7 @@ public class NoteInfoRetriever {
             }
             Enumeration<? extends ZipEntry> entries = zp.entries();
             while(entries.hasMoreElements()){
-                ZipEntry entry = entries.nextElement();
+                entry = entries.nextElement();
                 Log.d(TAG, "media found "+entry.getName());
 
                 if(entry.getName().startsWith("data/preview_")) {
