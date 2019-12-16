@@ -31,6 +31,8 @@ import java.util.zip.ZipFile;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.util.ServerRunner;
 
+import static android.app.NotificationManager.IMPORTANCE_LOW;
+
 
 public class AudioService extends Service implements MediaPlayer.OnCompletionListener {
     private static final int NOTIFICATION_ID = 4;
@@ -163,7 +165,7 @@ public class AudioService extends Service implements MediaPlayer.OnCompletionLis
     @RequiresApi(api = Build.VERSION_CODES.O)
     private String createNotificationChannel(String channelId, String channelName){
         NotificationChannel chan = new NotificationChannel(channelId,
-                channelName, NotificationManager.IMPORTANCE_NONE);
+                channelName, NotificationManager.IMPORTANCE_LOW);
         chan.setLightColor(Color.BLUE);
         chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         NotificationManager service = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
