@@ -325,19 +325,27 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
                 .beginTransaction()
                 .setCustomAnimations(R.anim.fade_in,
                 R.anim.fade_out);
-        if(fragment instanceof BlankFragment){
+        Fragment toPut = fragment;
+        if(toPut instanceof BlankFragment){
             if(mEditorFrag!=null) {
-
                 mEditorFrag.setArguments(fragment.getArguments());
-                fragment = mEditorFrag;
+                toPut = mEditorFrag;
+            }
+            mEditorFrag = (BlankFragment) toPut;
+        }
+        try {
+            transaction.replace(R.id.root, toPut);
+        }
+        catch (java.lang.IllegalStateException e){
+            if(toPut == mEditorFrag){
+                transaction.replace(R.id.root, fragment);
+                mEditorFrag = (BlankFragment) fragment;
+                toPut = fragment;
 
             }
-            mEditorFrag = (BlankFragment) fragment;
         }
-        transaction.replace(R.id.root,fragment);
-
-        transaction.addToBackStack(fragment.getClass().getName()).commit();
-        this.fragment = fragment;
+        transaction.addToBackStack(toPut.getClass().getName()).commit();
+        this.fragment = toPut;
 
     }
     @Override
