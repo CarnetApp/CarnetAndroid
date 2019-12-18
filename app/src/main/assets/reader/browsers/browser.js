@@ -122,7 +122,11 @@ function openNote(notePath, action) {
       console.log("reuse old iframe");
       $("#editor-container").show();
       $(loadingView).fadeIn(function () {
-        if (compatibility.isElectron) writerFrame.send('loadnote', notePath);else writerFrame.contentWindow.loadPath(notePath, action);
+        if (compatibility.isElectron) {
+          writerFrame.send('loadnote', notePath);
+          writerFrame.send('action', action);
+        } else writerFrame.contentWindow.loadPath(notePath, action);
+
         writerFrame.style.display = "inline-flex";
       });
     }

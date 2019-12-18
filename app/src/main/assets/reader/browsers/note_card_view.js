@@ -219,6 +219,12 @@ NoteCardView.prototype.setNote = function (note) {
         playpause.onclick = function (event) {
           event.stopPropagation();
           var audioplayer = document.getElementById("audio-player");
+
+          if (audioplayer.src == api_url + url && !audioplayer.paused) {
+            audioplayer.pause();
+            return;
+          }
+
           if (audioplayer.onended != undefined) audioplayer.onended();
 
           audioplayer.onended = function () {

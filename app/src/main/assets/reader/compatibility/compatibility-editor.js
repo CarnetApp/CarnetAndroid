@@ -43,8 +43,13 @@ function (_Compatibility) {
     if (_this.isElectron) {
       module.paths.push(rootpath + 'node_modules');
 
-      require('electron').ipcRenderer.on('loadnote', function (event, path) {
+      var ipcRenderer = require('electron').ipcRenderer;
+
+      ipcRenderer.on('loadnote', function (event, path) {
         loadPath(path);
+      });
+      ipcRenderer.on('action', function (event, action) {
+        writer.handleAction(action);
       });
     } else {
       var exports = function exports() {};
