@@ -2,7 +2,7 @@
 <manifest>
   <remote  name="github" fetch=".." />
   <default revision="master" remote="github" />
-  <project path="QuickDoc" name="Phief/QuickDoc" />
+  <project path="QuickDoc" name="Phief/QuickDoc" revision="stable"/>
   <project path="Sync" name="Phief/Sync" />
   <project path="GoogleSync" name="Phief/GoogleSync" />
 </manifest>
