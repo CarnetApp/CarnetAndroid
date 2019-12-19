@@ -2,6 +2,7 @@ package com.spisoft.quicknote.intro;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import androidx.fragment.app.Fragment;
@@ -53,11 +54,14 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
         finish();
     }
     public static boolean shouldStartActivity(Context context){
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SHOULD_START_ACTIVITY, true);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SHOULD_START_ACTIVITY, true)||true;
     }
 
     public void next() {
-        mPager.setCurrentItem(mPager.getCurrentItem()+1);
+        if(mPager.getCurrentItem() < mPagerAdapter.getCount()-1)
+            mPager.setCurrentItem(mPager.getCurrentItem()+1);
+        else
+            finish();
     }
 
     @Override
@@ -117,7 +121,10 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
 
         @Override
         public int getCount() {
-            return mSyncOnly?NUM_PAGES-2:NUM_PAGES;
+	        int count = mSyncOnly?NUM_PAGES-2:NUM_PAGES;
+            if(Build.VERSION.SDK_INT< Build.VERSION_CODES.M)
+                count--;
+            return count;
         }
     }
 
