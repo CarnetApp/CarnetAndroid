@@ -11,6 +11,10 @@ class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
         RemindersManager.getInstance(context)!!.onBoot()
-        SynchroService.startOnBootIfNeeded(context)
+        try {
+            SynchroService.startOnBootIfNeeded(context)
+        } catch(ex:IllegalStateException){
+
+        }
     }
 }
