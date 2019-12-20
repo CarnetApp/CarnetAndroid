@@ -374,12 +374,16 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
             if(mEditorFrag==null) {
                 mShouldRemove = true;
-                mEditorFrag = BlankFragment.newInstance(null, null);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .addToBackStack(mEditorFrag.getClass().getName())
-                        .replace(R.id.behind_root,mEditorFrag)
-                        .commit();
+                try {
+                    mEditorFrag = BlankFragment.newInstance(null, null);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .addToBackStack(mEditorFrag.getClass().getName())
+                            .replace(R.id.behind_root, mEditorFrag)
+                            .commit();
+                } catch (IllegalStateException e){
+                    mShouldRemove = false;
+                }
             }
 
 
