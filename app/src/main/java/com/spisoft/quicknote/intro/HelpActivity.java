@@ -54,7 +54,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
         finish();
     }
     public static boolean shouldStartActivity(Context context){
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SHOULD_START_ACTIVITY, true)||true;
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SHOULD_START_ACTIVITY, true);
     }
 
     public void next() {
