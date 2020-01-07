@@ -427,7 +427,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                 s = "";
             if(mNote.mMetadata.urls.size()>0)//otherwise old notes will appear empty
                 s = Pattern.compile("(?:(?:https?|ftp|file):\\/\\/|www\\.|ftp\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])", Pattern.CASE_INSENSITIVE).matcher(s).replaceAll("");
-            s = s.trim();
+            
             if(s.isEmpty()){
                 mTextView.setVisibility(View.GONE);
             }

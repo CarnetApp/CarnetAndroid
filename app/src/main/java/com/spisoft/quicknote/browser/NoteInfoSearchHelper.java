@@ -10,6 +10,8 @@ import com.spisoft.quicknote.server.ZipReaderAndHttpProxy;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document.OutputSettings;
+import org.jsoup.safety.Whitelist;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -77,12 +79,15 @@ public class NoteInfoSearchHelper {
                     break;
 
             }
-            sb = Jsoup.parse(sb).text();
+ 
+       String sbcleanforreturn = NoteManager.getShortText(sb,(int)length);
+       sb = Jsoup.parse(sb).text();
             if(!hasFound){
                 if(cleanText(sb).contains(toFind)){
                     hasFound = true;
                 }
             }
+        return new Pair<>(sbcleanforreturn, hasFound);
         }catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -95,7 +100,7 @@ public class NoteInfoSearchHelper {
                     e.printStackTrace();
                 }
         }
-        return new Pair<>(sb.toString(), hasFound);
+        return new Pair<>(sb, hasFound);
     }
 
     protected Pair<String, Boolean> read(ZipFile zp, ZipEntry entry, long length, int maxLines, String toFind){

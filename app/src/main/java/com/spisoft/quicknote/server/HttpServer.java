@@ -21,6 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document.OutputSettings;
+import org.jsoup.safety.Whitelist;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -320,9 +322,9 @@ public class HttpServer extends NanoHTTPD {
         File noteFile = new File(PreferenceHelper.getRootPath(mContext),path);
         Note note = new Note(noteFile.getAbsolutePath());
         note.mMetadata = Note.Metadata.fromString(metadata);
-        String txt = Jsoup.parse(html).text();
-        if(txt.length()>100)
-            txt = txt.substring(0, 100);
+        
+
+        String txt = NoteManager.getShortText(html, 100);
         note.shortText = txt;
 
         List files = new ArrayList();
