@@ -101,13 +101,19 @@ public class NoteThumbnailEngine {
                                 if(entry.getName().startsWith("data/preview_")) {
                                     if(i==0) {
                                         b1 = BitmapFactory.decodeStream(zp.getInputStream(entry));
-                                        b1.setDensity(Bitmap.DENSITY_NONE);
+                                        if(b1 != null) {
+                                            b1.setDensity(Bitmap.DENSITY_NONE);
+                                            i++;
+                                        }
                                     }
                                     else {
                                         b2 = BitmapFactory.decodeStream(zp.getInputStream(entry));
-                                        b2.setDensity(Bitmap.DENSITY_NONE);
+                                        if(b2 != null) {
+                                            b2.setDensity(Bitmap.DENSITY_NONE);
+                                            i++;
+                                        }
                                     }
-                                    i++;
+
                                 }
                             }
 
