@@ -1,3 +1,7 @@
+# Version 0.19.4
+
+fix issue with bitmap decoding
+
 # Version 0.19.0
 
 Direct recording button
