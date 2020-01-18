@@ -9,8 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.spisoft.quicknote.R;
+import com.spisoft.quicknote.databases.NoteManager;
 
 /**
  * Created by phoenamandre on 14/02/16.
@@ -24,7 +26,9 @@ public class RenameDialog extends DialogFragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if(mRenameListener.renameTo(mTextView.getText().toString()))
-            dismiss();
+                dismiss();
+        else if(!NoteManager.isNoteNameValid(mTextView.getText().toString()))
+            Toast.makeText(getActivity(), R.string.unable_to_rename_invalid_name, Toast.LENGTH_LONG).show();
 
     }
 

@@ -50,6 +50,7 @@
     <string name="allow">Allow</string>
     <string name="exit">Exit</string>
     <string name="unable_to_rename_use">Unable to rename a document while being used</string>
+    <string name="unable_to_rename_invalid_name">Note contains invalid characters</string>
     <string name="unable_to_delete_use">Unable to delete an opened document</string>
     <string name="add_screenshot">Add screenshot to note ?</string>
     <string name="please_wait_update">Please wait while your notes are being updated</string>
