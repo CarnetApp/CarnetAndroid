@@ -83,5 +83,6 @@
     "beta_warning_reminders": "„Pripomenutia“ sú funkcie vo verzii beta a budú fungovať len v Androide",
     "more-options": "Ďalšie možnosti",
     "start_with_browser_view": "Začať zobrazením prehliadača",
-    "delete_todolist_confirmation": "Táto operácia je nevratná. Naozaj chcete odstrániť tento zoznam úloh?"
+    "delete_todolist_confirmation": "Táto operácia je nevratná. Naozaj chcete odstrániť tento zoznam úloh?",
+    "something_went_wrong_please_reload": "Vyskytol sa problém... Prosím, znova načítajte"
 }

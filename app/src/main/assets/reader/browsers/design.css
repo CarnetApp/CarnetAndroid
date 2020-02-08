@@ -109,7 +109,6 @@ body {
 }
 
 .mdl-layout__header {
-    -webkit-app-region: drag;
 }
 
 .mdl-layout__header .mdl-layout__drawer-button,

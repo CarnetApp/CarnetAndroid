@@ -83,5 +83,6 @@
     "beta_warning_reminders": "Erinnerungen sind immer noch eine Beta-Funktion und funktionieren nur unter Android",
     "more-options": "Weitere Optionen",
     "start_with_browser_view": "In der Browser-Ansicht starten",
-    "delete_todolist_confirmation": "Dieser Vorgang kann nicht rückgängig gemacht werden, soll die ToDo-Liste wirklich gelöscht werden?"
+    "delete_todolist_confirmation": "Dieser Vorgang kann nicht rückgängig gemacht werden, soll die ToDo-Liste wirklich gelöscht werden?",
+    "something_went_wrong_please_reload": "Etwas ist schiefgelaufen... Bitte neu laden"
 }

@@ -61,7 +61,7 @@ html {
 .more-button.second{
 	display: none;
 }
-@media screen and (min-width: 1280px) {
+@media screen and (min-width: 900px) {
 	.second{
 		display:inline;
 	}
@@ -192,7 +192,7 @@ html {
 	color:black;
 	overflow-x: auto;
 	white-space: nowrap;
-	width:100%;
+	height:100%;
 }
 
 .toolbar .mdl-textfield {
@@ -211,6 +211,9 @@ html {
 	padding: 3px;
 	margin: 0px;
 	box-shadow: 0px 7px 10px 0px grey;
+}
+.in-toolbar-button{
+	text-transform: unset;
 }
 
 #center {
@@ -404,7 +407,6 @@ div#container-button::-webkit-scrollbar {
 
   #note-color .none{
 	background: var(--note-none);
-	border: 1px solid rgb(158, 158, 158);
   }
 
   #note-color .red{
@@ -640,4 +642,64 @@ div#container-button::-webkit-scrollbar {
 
 #generic-dialog .content{
 	padding:15px;
+}
+
+#keywors-in-text-container{
+	padding-top: 10px;
+}
+.keyword-in-text{
+	padding-left: 10px;
+	padding-right: 10px;
+	border: 1px rgba(119, 119, 119, 0.5) solid;
+	cursor: pointer;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	font-size: 14px;
+	border-radius: 5px;
+	margin-right: 10px;
+}
+
+.in-dialog-keyword{
+	width:100%;
+}
+
+#keywords thead{
+	display: none;
+}
+
+#keywords-list{
+	word-break: break-all;
+	line-height: 30px;
+	padding-left: 5px;
+}
+#new-keyword-dialog{
+	height: 100%;
+	max-height:600px;
+}
+
+#new-keyword-dialog .mdl-dialog__content{
+	height: calc(100% - 120px);
+}
+#keywords-table-container{
+	height: calc(100% - 50px);
+	overflow-y: auto;
+}
+#toolbar-container{
+	background:var(--header-bg);
+	box-shadow: 0 3px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+	display: flex;
+}
+
+#header-content{
+
+	display: block;
+}
+
+.mdl-layout__header-row{
+	padding: 0 0px 0 0px;
+
+}
+
+.mdl-layout {
+	overflow-y: hidden;
 }

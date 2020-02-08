@@ -34,7 +34,6 @@
 
 <body>
 
-	<script src="<!ROOTPATH>utils/mdl_drawer_drag.js"></script>
 	<script src="<!ROOTPATH>utils/utils.js"></script>
 	<script src="<!ROOTPATH>browsers/note.js"></script>
 	<script src="<!ROOTPATH>browsers/file-browser.js"></script>
@@ -92,13 +91,13 @@
 				<form action="">
 					<input class="star star-5" id="star-5" type="radio" name="star" value="5" />
 					<label class="star star-5" for="star-5"></label>
-					<input class="star star-4" id="star-4" type="radio" name="star" value="4" //> <label
+					<input class="star star-4" id="star-4" type="radio" name="star" value="4" / /> <label
 						class="star star-4" for="star-4"></label>
-					<input class="star star-3" id="star-3" type="radio" name="star" value="3" //> <label
+					<input class="star star-3" id="star-3" type="radio" name="star" value="3" / /> <label
 						class="star star-3" for="star-3"></label>
-					<input class="star star-2" id="star-2" type="radio" name="star" value="2" //> <label
+					<input class="star star-2" id="star-2" type="radio" name="star" value="2" / /> <label
 						class="star star-2" for="star-2"></label>
-					<input class="star star-1" id="star-1" type="radio" name="star" value="1" //> <label
+					<input class="star star-1" id="star-1" type="radio" name="star" value="1" / /> <label
 						class="star star-1" for="star-1"></label>
 				</form>
 			</div>
@@ -274,6 +273,45 @@
 			<button type="button" class="mdl-button ok" data-i18n="ok">OK</button>
 		</div>
 	</dialog>
+	<dialog class="mdl-dialog" id="note-color-picker-dialog">
+		<div class="mdl-dialog__content">
+			<div id="note-color">
+				<input type="radio" name="color" id="none" />
+				<label for="none"><span class="none"></span></label>
+
+				<input type="radio" name="color" id="red" />
+				<label for="red"><span class="red"></span></label>
+
+				<input type="radio" name="color" id="green" />
+				<label for="green"><span class="green"></span></label>
+
+				<input type="radio" name="color" id="yellow" />
+				<label for="yellow"><span class="yellow"></span></label>
+
+				<input type="radio" name="color" id="orange" />
+				<label for="orange"><span class="orange"></span></label>
+
+				<input type="radio" name="color" id="teal" />
+				<label for="teal"><span class="teal"></span></label>
+
+				<input type="radio" name="color" id="blue" />
+				<label for="blue"><span class="blue"></span></label>
+
+				<input type="radio" name="color" id="violet" />
+				<label for="violet"><span class="violet"></span></label>
+
+				<input type="radio" name="color" id="purple" />
+				<label for="purple"><span class="purple"></span></label>
+
+				<input type="radio" name="color" id="pink" />
+				<label for="pink"><span class="pink"></span></label>
+
+			</div>
+		</div>
+		<div class="mdl-dialog__actions">
+			<button type="button" class="mdl-button ok" data-i18n="ok">OK</button>
+		</div>
+	</dialog>
 
 	<dialog class="mdl-dialog" id="new-keyword-dialog">
 		<div class="mdl-dialog__content">
@@ -281,10 +319,13 @@
 				<input class="mdl-textfield__input" type="text" id="keyword-input">
 				<label class="mdl-textfield__label" for="sample3" data-i18n="keyword">Keyword</label>
 			</div>
-			<table style="width:100%;" id="keywords"
-				class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+			<div id="keywords-table-container">
+				<table style="width:100%;" id="keywords"
+					class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 
-			</table>
+				</table>
+			</div>
+
 
 		</div>
 		<div class="mdl-dialog__actions">
@@ -292,27 +333,41 @@
 		</div>
 	</dialog>
 
-	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
-mdl-layout--fixed-header">
-		<header id="header-carnet" class="mdl-layout__header">
-			<div class="mdl-layout__header-row" id="container-button"
-				style="overflow-x: auto;overflow-y: hidden; margin-left:52px; padding-left:0px;">
-				<div id="toolbar" class="toolbar">
-					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button first"
-						id="add-media-button">
-						<i class=" material-icons">image</i> <b>/</b> <i class="material-icons">mic</i>
+	<div class="mdl-layout mdl-js-layout">
+
+		<header id="toolbar-container" class="mdl-layout__header mdl-layout__header--transparent">
+			<div class="mdl-layout__header-row" id="header-content">
+				<button id="exit" class="mdl-button mdl-js-button headerbar-button in-toolbar-button first"
+					style="float:right; right:0; margin-top: 10px;" data-i18n="exit">Close</button>
+				<div id="toolbar" class="toolbar mdl-layout__header-row">
+
+
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button first" id="more-button">
+						<i class=" material-icons">more_vert</i>
 					</button>
-					<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" id="add-media-menu"
-						for="add-media-button">
+					<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" id="more-menu"
+						for="more-button">
 						<li class="mdl-menu__item" id="add-file-button" data-i18n="file_photo">File/Photo</li>
 						<li class="mdl-menu__item" id="add-recording-button" data-i18n="recording">Recording
 						</li>
+						<li class="mdl-menu__item" id="button-add-keyword" data-i18n="keywords">Labels</li>
+						<li class="mdl-menu__item" id="note-color-button" data-i18n="note_color">Note Color
+						</li>
+						<li class="mdl-menu__item in-toolbar-button" href="" id="reminders-button"
+							data-i18n="reminders">
+							Reminders</li>
+
+						<li id="todolist-button" class="mdl-menu__item in-toolbar-button" data-i18n="new_todolist">
+							Todo-List
+						</li>
+
+						<li class="mdl-menu__item in-toolbar-button" href="" id="options-button"
+							data-i18n="more-options">
+							More options</li>
+
 					</ul>
 
-					<button id="todolist-button"
-						class="mdl-button mdl-js-button headerbar-button in-toolbar-button first">
-						<i class="material-icons">check_circle_outline</i>
-					</button>
+
 
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button first" id="bold">
 						<i class="material-icons">format_bold</i>
@@ -356,7 +411,7 @@ mdl-layout--fixed-header">
 						id="justifyright">
 						<i class="material-icons">format_align_right</i>
 					</button>
-					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button second" id="justify">
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button third" id="justify">
 						<i class="material-icons">format_align_justify</i>
 					</button>
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button more-button second"
@@ -386,72 +441,15 @@ mdl-layout--fixed-header">
 							<input class="mdl-textfield__input" type="text" name="sample" id="search-input">
 						</div>
 					</div>
+
+
 				</div>
-
-
-
-
 			</div>
 		</header>
-		<div class="mdl-layout__drawer">
-			<nav class="mdl-navigation">
-
-				<a class="mdl-navigation__link" href="" id="reminders-button" data-i18n="reminders">Reminders</a>
-				<a class="mdl-navigation__link" href="" id="options-button" data-i18n="more-options">More options</a>
-
-				<a class="mdl-navigation__link" id="exit" data-i18n="exit">Exit</a>
-
-				<div id="note-color">
-					<input type="radio" name="color" id="none" />
-					<label for="none"><span class="none"></span></label>
-
-					<input type="radio" name="color" id="red" />
-					<label for="red"><span class="red"></span></label>
-
-					<input type="radio" name="color" id="green" />
-					<label for="green"><span class="green"></span></label>
-
-					<input type="radio" name="color" id="yellow" />
-					<label for="yellow"><span class="yellow"></span></label>
-
-					<input type="radio" name="color" id="orange" />
-					<label for="orange"><span class="orange"></span></label>
-
-					<input type="radio" name="color" id="teal" />
-					<label for="teal"><span class="teal"></span></label>
-
-					<input type="radio" name="color" id="blue" />
-					<label for="blue"><span class="blue"></span></label>
-
-					<input type="radio" name="color" id="violet" />
-					<label for="violet"><span class="violet"></span></label>
-
-					<input type="radio" name="color" id="purple" />
-					<label for="purple"><span class="purple"></span></label>
-
-					<input type="radio" name="color" id="pink" />
-					<label for="pink"><span class="pink"></span></label>
-
-				</div>
-				<span style="text-align:center; margin:10px;" data-i18n="keywords"> Keywords</span>
-
-				<a class="mdl-navigation__link" href="" id="button-add-keyword" data-i18n="add_a_keyword">Add a
-					keyword</a>
-				<span id="keywords-list">
-				</span>
-
-			</nav>
-		</div>
-		<script>
-			var testtt = undefined;
-		</script>
 		<main class="mdl-layout__content" style="overflow-y: hidden">
-			<div id="toolbars">
 
-
-
-			</div>
 			<div id="page-content" class="page-content">
+
 				<div id="center" style="height:100%;padding:0px;overflow-y: auto;">
 					<div id="media-toolbar">
 						<div id="media-header">
@@ -487,11 +485,18 @@ mdl-layout--fixed-header">
 							placeholder="Title" data-i18n="[placeholder]note_name">
 
 					</div>
+					<div id="keywords-list">
+						<span class="keyword-in-text">keyword</span>
+						<span class="keyword-in-text">keyword2</span>
 
+						<span class="keyword-in-text">blabla</span>
+
+					</div>
 					<div id="editor" style="overflow-x: none;position: relative;">
 
 					</div>
 				</div>
+
 			</div>
 
 			<div id="snackbar" class="mdl-js-snackbar mdl-snackbar">

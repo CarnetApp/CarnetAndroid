@@ -150,14 +150,12 @@ Writer.prototype.setMediaList = function (list) {
   if (list.length > 0) {
     document.getElementById("fullscreen-media-button").style.display = "block";
     writer.mediaList.style.display = "block";
-    this.addMediaMenu.parentNode.style.left = "unset";
 
     if (this.oDoc.innerText.trim() == "") {
       var mediaBar = document.getElementById("media-toolbar");
       if (!$(mediaBar).is(":visible")) this.toolbarManager.toggleToolbar(mediaBar);
     }
   } else {
-    //this.addMediaMenu.parentNode.style.left = "0px"
     writer.mediaList.style.display = "none";
     document.getElementById("fullscreen-media-button").style.display = "none";
   }
@@ -508,19 +506,20 @@ Writer.prototype.refreshKeywords = function () {
 
   for (var i = 0; i < this.note.metadata.keywords.length; i++) {
     var word = this.note.metadata.keywords[i];
-    var keywordElem = document.createElement("a");
-    keywordElem.classList.add("mdl-navigation__link");
+    var keywordElem = document.createElement("span");
+    keywordElem.classList.add("keyword-in-text");
     keywordElem.innerHTML = word;
     keywordsContainer.appendChild(keywordElem);
     keywordElem.word = word;
     keywordElem.addEventListener('click', function () {
-      writer.removeKeyword(this.word);
+      writer.showKeywordsDialog();
     });
   }
 
   keywordsDBManager.getFlatenDB(function (error, data) {
     writer.availableKeyword = data;
   });
+  resetScreenHeight();
 };
 
 Writer.prototype.simulateKeyPress = function (character) {
@@ -646,6 +645,103 @@ Writer.prototype.displaySnack = function (data) {
 Writer.prototype.openRemindersDialog = function () {
   var remindersDialog = new RemindersDialog(document.getElementById("reminders"), writer.note.metadata.reminders);
   remindersDialog.dialog.showModal();
+};
+
+Writer.prototype.showKeywordsDialog = function () {
+  writer.newKeywordDialog.showModal();
+  writer.updateKeywordsListSelector();
+};
+
+Writer.prototype.updateKeywordsListSelector = function () {
+  var currentWord = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  currentWord = currentWord.trim();
+  writer.newKeywordDialog.currentWord = currentWord;
+  writer.keywordsList.innerHTML = "";
+  var head = document.createElement("thead");
+  writer.keywordsList.appendChild(head);
+  var tbody = document.createElement("tbody");
+  writer.keywordsList.appendChild(tbody);
+  var tr = document.createElement("tr");
+  head.appendChild(tr);
+  var th = document.createElement("th");
+  th.classList.add("mdl-data-table__cell--non-numeric");
+  th.innerHTML = "";
+  tr.appendChild(th);
+  var i = 0;
+
+  if (currentWord != "") {
+    var isIn = false;
+
+    for (var word in writer.availableKeyword) {
+      if (word == currentWord && writer.availableKeyword[word] != 0) {
+        isIn = true;
+        break;
+      }
+    }
+
+    if (!isIn) {
+      var o = document.createElement("tr");
+      var td = document.createElement("td");
+      td.classList.add("mdl-data-table__cell--non-numeric");
+      td.classList.add("in-dialog-keyword");
+      td.innerHTML = currentWord;
+      o.appendChild(td);
+      o.word = word;
+      tbody.appendChild(o);
+    }
+  }
+
+  for (var word in writer.availableKeyword) {
+    if (writer.availableKeyword[word] == 0) continue;
+
+    if (currentWord == "" || word.toLowerCase().indexOf(currentWord) >= 0) {
+      var o = document.createElement("tr");
+      var td = document.createElement("td");
+      td.classList.add("mdl-data-table__cell--non-numeric");
+      td.classList.add("in-dialog-keyword");
+      td.innerHTML = word;
+      if (writer.note.metadata.keywords.indexOf(word) >= 0) o.classList.add("is-selected");
+      o.appendChild(td);
+      o.word = word;
+      tbody.appendChild(o);
+    }
+  }
+
+  try {
+    new MaterialDataTable(writer.keywordsList);
+  } catch (e) {
+    console.log(e);
+  }
+
+  var _iteratorNormalCompletion3 = true;
+  var _didIteratorError3 = false;
+  var _iteratorError3 = undefined;
+
+  try {
+    for (var _iterator3 = writer.keywordsList.getElementsByClassName('mdl-checkbox__input')[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+      var checkbox = _step3.value;
+
+      checkbox.onchange = function (event) {
+        var word = event.target.parentElement.parentElement.parentElement.getElementsByClassName("in-dialog-keyword")[0].innerHTML;
+        console.log("on change " + $(event.target).is(":checked"));
+        if ($(event.target).is(":checked")) writer.addKeyword(word);else writer.removeKeyword(word);
+        console.log(word);
+      };
+    }
+  } catch (err) {
+    _didIteratorError3 = true;
+    _iteratorError3 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+        _iterator3["return"]();
+      }
+    } finally {
+      if (_didIteratorError3) {
+        throw _iteratorError3;
+      }
+    }
+  }
 };
 
 Writer.prototype.init = function () {
@@ -784,19 +880,11 @@ Writer.prototype.init = function () {
   ;
 
   document.getElementById("button-add-keyword").onclick = function () {
-    writer.toggleDrawer();
-    writer.newKeywordDialog.showModal();
-    return false;
-  };
-
-  document.getElementById("options-button").onclick = function () {
-    writer.toggleDrawer();
-    document.getElementById("options-dialog").showModal();
+    writer.showKeywordsDialog();
     return false;
   };
 
   document.getElementById("button-add-keyword-ok").onclick = function () {
-    writer.addKeyword(document.getElementById('keyword-input').value);
     writer.newKeywordDialog.close();
   };
 
@@ -879,6 +967,10 @@ Writer.prototype.init = function () {
 
           break;
 
+        case "options-button":
+          document.getElementById("options-dialog").showModal();
+          break;
+
         case "open-second-toolbar":
           document.getElementById("toolbar").classList.add("more");
           $("#toolbar").scrollLeft(0);
@@ -918,48 +1010,28 @@ Writer.prototype.init = function () {
   this.keywordsList = document.getElementById("keywords");
   writer.keywordsList.innerHTML = "";
   document.getElementById('keyword-input').addEventListener("input", function () {
+    var currentWord = this.value.toLowerCase();
     console.log("input i");
-    writer.keywordsList.innerHTML = "";
-    if (this.value.length < 2) return;
-    var i = 0;
-
-    for (var word in writer.availableKeyword) {
-      if (i > 2) break;
-      if (writer.availableKeyword[word] == 0) continue;
-
-      if (word.toLowerCase().indexOf(this.value.toLowerCase()) >= 0) {
-        var o = document.createElement("tr");
-        var td = document.createElement("td");
-        td.classList.add("mdl-data-table__cell--non-numeric");
-        td.innerHTML = word;
-        o.style = "cursor: pointer;";
-        o.appendChild(td);
-        o.word = word;
-
-        o.onclick = function () {
-          document.getElementById('keyword-input').value = this.word;
-          return false;
-        };
-
-        writer.keywordsList.appendChild(o);
-        i++;
-      }
-    }
-
-    try {
-      new MaterialDataTable(writer.keywordsList);
-    } catch (e) {}
+    writer.updateKeywordsListSelector(currentWord);
   });
   this.addMediaMenu = document.getElementById("add-media-menu");
 
   document.getElementById("exit").onclick = function () {
-    writer.toggleDrawer();
     writer.askToExit();
   };
 
   document.getElementById("reminders-button").onclick = function () {
-    writer.toggleDrawer();
     writer.openRemindersDialog();
+    return false;
+  };
+
+  document.getElementById("note-color-button").onclick = function () {
+    document.getElementById("note-color-picker-dialog").showModal();
+
+    document.getElementById("note-color-picker-dialog").getElementsByClassName("ok")[0].onclick = function () {
+      document.getElementById("note-color-picker-dialog").close();
+    };
+
     return false;
   };
 
@@ -993,25 +1065,13 @@ Writer.prototype.init = function () {
 };
 
 Writer.prototype.closeFullscreenMediaToolbar = function () {
-  var layout = document.getElementsByClassName("mdl-layout")[0];
+  this.mediaToolbar.classList.remove("fullscreen-media-toolbar");
 
-  if (!layout.classList.contains("mdl-layout--fixed-drawer")) {
-    document.getElementsByTagName("header")[0].style.zIndex = "3";
-    layout.classList.add("mdl-layout--fixed-drawer");
-    this.mediaToolbar.classList.remove("fullscreen-media-toolbar");
-
-    if (this.oDoc.innerText.trim() == "") {
-      //put focus
-      var elements = this.oDoc.getElementsByClassName("edit-zone");
-      this.placeCaretAtEnd(elements[elements.length - 1]);
-    }
+  if (this.oDoc.innerText.trim() == "") {
+    //put focus
+    var elements = this.oDoc.getElementsByClassName("edit-zone");
+    this.placeCaretAtEnd(elements[elements.length - 1]);
   }
-};
-
-Writer.prototype.toggleDrawer = function () {
-  if (document.getElementsByClassName("is-small-screen").length > 0 ||
-  /* close also on big screen when media toolbar is fullscreen */
-  document.getElementsByClassName("mdl-layout--fixed-drawer").length == 0) document.getElementsByClassName("mdl-layout__drawer-button")[0].click();
 };
 
 Writer.prototype.askToExit = function () {
@@ -1096,11 +1156,11 @@ Writer.prototype.displayCountDialog = function () {
 };
 
 Writer.prototype.increaseFontSize = function () {
-  this.surroundSelection(document.createElement('big'));
+  this.formatDoc("increaseFontSize", undefined);
 };
 
 Writer.prototype.decreaseFontSize = function () {
-  this.surroundSelection(document.createElement('small'));
+  this.formatDoc("decreaseFontSize", undefined);
 };
 
 Writer.prototype.surroundSelection = function (element) {
@@ -1208,12 +1268,14 @@ Writer.prototype.updateRating = function (rating) {
 
 Writer.prototype.saveNoteColor = function (color) {
   this.note.metadata.color = color;
+  document.getElementById("note-color-picker-dialog").style.background = "var(--note-" + color + ")";
   console.log("new color " + this.note.metadata.color);
   writer.hasTextChanged = true;
 };
 
 Writer.prototype.updateNoteColor = function (color) {
   console.log("color " + color);
+  document.getElementById("note-color-picker-dialog").style.background = "var(--note-" + color + ")";
   var inputs = document.querySelectorAll("input[name='color']");
 
   for (var i = 0; i < inputs.length; i++) {
@@ -1339,26 +1401,26 @@ Writer.prototype.handleAction = function (type, value) {
 
 Writer.prototype.handleActions = function (actions) {
   if (actions === undefined) return;
-  var _iteratorNormalCompletion3 = true;
-  var _didIteratorError3 = false;
-  var _iteratorError3 = undefined;
+  var _iteratorNormalCompletion4 = true;
+  var _didIteratorError4 = false;
+  var _iteratorError4 = undefined;
 
   try {
-    for (var _iterator3 = actions[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-      var action = _step3.value;
+    for (var _iterator4 = actions[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+      var action = _step4.value;
       this.handleAction(action.type, action.value);
     }
   } catch (err) {
-    _didIteratorError3 = true;
-    _iteratorError3 = err;
+    _didIteratorError4 = true;
+    _iteratorError4 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
-        _iterator3["return"]();
+      if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
+        _iterator4["return"]();
       }
     } finally {
-      if (_didIteratorError3) {
-        throw _iteratorError3;
+      if (_didIteratorError4) {
+        throw _iteratorError4;
       }
     }
   }
@@ -1433,13 +1495,13 @@ RenameNoteTask.prototype.run = function (callback) {
     return;
   }
 
-  var _iteratorNormalCompletion4 = true;
-  var _didIteratorError4 = false;
-  var _iteratorError4 = undefined;
+  var _iteratorNormalCompletion5 = true;
+  var _didIteratorError5 = false;
+  var _iteratorError5 = undefined;
 
   try {
-    for (var _iterator4 = nameInput.value.split("/")[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-      var part = _step4.value;
+    for (var _iterator5 = nameInput.value.split("/")[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+      var part = _step5.value;
 
       if (part == ".." && !hasOrigin) {
         path = FileUtils.getParentFolderFromPath(path);
@@ -1449,16 +1511,16 @@ RenameNoteTask.prototype.run = function (callback) {
       }
     }
   } catch (err) {
-    _didIteratorError4 = true;
-    _iteratorError4 = err;
+    _didIteratorError5 = true;
+    _iteratorError5 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
-        _iterator4["return"]();
+      if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+        _iterator5["return"]();
       }
     } finally {
-      if (_didIteratorError4) {
-        throw _iteratorError4;
+      if (_didIteratorError5) {
+        throw _iteratorError5;
       }
     }
   }
@@ -1540,36 +1602,32 @@ SaveNoteTask.prototype.trySave = function (onEnd, trial) {
   //var m;
   var urls = this.writer.oEditor.innerText.match(Utils.httpReg);
   if (urls == null) urls = [];
-  urls = urls.map(function (x) {
-    return x.toLowerCase();
-  });
 
   if (this.writer.note.metadata.urls == undefined) {
     this.writer.note.metadata.urls = {};
   }
 
   var currentUrls = Object.keys(this.writer.note.metadata.urls);
-  var _iteratorNormalCompletion5 = true;
-  var _didIteratorError5 = false;
-  var _iteratorError5 = undefined;
+  var _iteratorNormalCompletion6 = true;
+  var _didIteratorError6 = false;
+  var _iteratorError6 = undefined;
 
   try {
-    for (var _iterator5 = urls[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-      var url = _step5.value;
-      url = url.toLowerCase();
+    for (var _iterator6 = urls[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+      var url = _step6.value;
       if (currentUrls.indexOf(url) < 0) this.writer.note.metadata.urls[url] = {};
     }
   } catch (err) {
-    _didIteratorError5 = true;
-    _iteratorError5 = err;
+    _didIteratorError6 = true;
+    _iteratorError6 = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
-        _iterator5["return"]();
+      if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
+        _iterator6["return"]();
       }
     } finally {
-      if (_didIteratorError5) {
-        throw _iteratorError5;
+      if (_didIteratorError6) {
+        throw _iteratorError6;
       }
     }
   }
@@ -1627,12 +1685,10 @@ var lastscroll = 0;
 function resetScreenHeight() {
   console.log("resetScreenHeight");
   var screen = $(window).innerHeight(),
-      header = $("#header-carnet").height() + $("#toolbars").height(),
+      header = $("#toolbar-container").height(),
       content = screen - header;
-  var style = window.getComputedStyle(document.getElementById("header-carnet"));
-  if (style.getPropertyValue('display') == "none") content = screen;
   $("#center").height(content);
-  $("#text").css('min-height', content - 45 - $("#name-input").height() - 20 - (writer == undefined || writer.listOfMediaURL == undefined || writer.listOfMediaURL.length == 0 ? $("#media-toolbar").height() + 5 : 0) + "px");
+  $("#text").css('min-height', content - header - $("#keywords-list").height() - $("#name-input").height() - 20 - (writer == undefined || writer.listOfMediaURL == undefined || writer.listOfMediaURL.length == 0 ? $("#media-toolbar").height() + 5 : 0) + "px");
   $("#center").scrollTop(lastscroll);
 
   if (writer != undefined) {
@@ -1669,27 +1725,27 @@ $(document).ready(function () {
   RequestBuilder.sRequestBuilder.get("/settings/editor_css", function (error, data) {
     if (!error && data != null && data != undefined) {
       console.log("data " + data);
-      var _iteratorNormalCompletion6 = true;
-      var _didIteratorError6 = false;
-      var _iteratorError6 = undefined;
+      var _iteratorNormalCompletion7 = true;
+      var _didIteratorError7 = false;
+      var _iteratorError7 = undefined;
 
       try {
-        for (var _iterator6 = data[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-          var sheet = _step6.value;
+        for (var _iterator7 = data[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+          var sheet = _step7.value;
           console.log("sheet " + sheet);
           Utils.applyCss(sheet);
         }
       } catch (err) {
-        _didIteratorError6 = true;
-        _iteratorError6 = err;
+        _didIteratorError7 = true;
+        _iteratorError7 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
-            _iterator6["return"]();
+          if (!_iteratorNormalCompletion7 && _iterator7["return"] != null) {
+            _iterator7["return"]();
           }
         } finally {
-          if (_didIteratorError6) {
-            throw _iteratorError6;
+          if (_didIteratorError7) {
+            throw _iteratorError7;
           }
         }
       }
@@ -1700,8 +1756,6 @@ $(document).ready(function () {
     writer = new Writer(document);
     writer.init();
   }
-
-  initDragAreas();
 
   if (!loaded) {
     $(window).on('resize', resetScreenHeight);

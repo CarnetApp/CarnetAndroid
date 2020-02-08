@@ -84,5 +84,7 @@
     "more-options": "More options",
     "start_with_browser_view": "Start with browser view",
     "delete_todolist_confirmation": "This operation is irreversible, are you sure you want to delete this ToDo-List ?",
-    "something_went_wrong_please_reload": "Something went wrong… Please, reload"
+    "something_went_wrong_please_reload": "Something went wrong… Please, reload",
+    "note_color": "Note color",
+    "new_todolist": "New Todo-List"
 }
