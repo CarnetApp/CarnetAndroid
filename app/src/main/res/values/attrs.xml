@@ -12,7 +12,7 @@
     <attr name="MainNoteTextColor" format="reference|color" />
     <attr name="MainTextColor" format="reference|color" />
     <attr name="SecondaryTextColor" format="reference|color" />
-    <attr name="CardBorder" format="reference" />
+    <attr name="NoBackgroundCardBorderColor" format="reference" />
     <attr name="CardElevation" format="dimension" />
     <attr name="CardInsideMargin" format="dimension" />
 

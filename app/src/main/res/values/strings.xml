@@ -148,4 +148,5 @@
     <string name="disable_optimization">Disable optimization</string>
     <string name="audio_player">Audio Player</string>
     <string name="pause">Pause</string>
+    <string name="black">Black</string>
 </resources>

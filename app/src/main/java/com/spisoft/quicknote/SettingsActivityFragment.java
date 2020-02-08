@@ -60,7 +60,7 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 Log.d("prefdebug", "key "+key);
-                if(key.equals("theme")) {
+                if(key.equals("theme") || key.equals("pref_debug_log") ) {
                     getView().postDelayed(new Runnable() {
                         @Override
                         public void run() {

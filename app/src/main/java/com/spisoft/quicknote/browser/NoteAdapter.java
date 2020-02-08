@@ -345,6 +345,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
 
         public void setBackground(String color) {
             int attr = R.attr.NoteBGNone;
+            int borderColorAttr = R.attr.NoBackgroundCardBorderColor;
             if(color!=null)
             switch (color){
                 case "red":
@@ -375,12 +376,13 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                     attr = R.attr.NoteBGPink;
                     break;
             }
+            if(attr != R.attr.NoteBGNone)
+                borderColorAttr = attr;
             TypedValue typedValue = new TypedValue();
 
             mTheme.resolveAttribute(attr, typedValue, true);
             @ColorInt int colorInt = typedValue.data;
             mCard.setCardBackgroundColor(colorInt);
-
             Drawable background = mMainView.getBackground();
             if (background instanceof ShapeDrawable) {
                 // cast to 'ShapeDrawable'
@@ -396,6 +398,22 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                 colorDrawable.setColor(colorInt);
             }
 
+
+            mTheme.resolveAttribute(borderColorAttr, typedValue, true);
+            @ColorInt int borderColorInt = typedValue.data;
+            background = mCard.findViewById(R.id.border_layout).getBackground();
+            if (background instanceof ShapeDrawable) {
+                ShapeDrawable shapeDrawable = (ShapeDrawable) background;
+                shapeDrawable.getPaint().setColor(borderColorInt);
+            } else if (background instanceof GradientDrawable) {
+                // cast to 'GradientDrawable'
+                GradientDrawable gradientDrawable = (GradientDrawable) background;
+                gradientDrawable.setColor(borderColorInt);
+            } else if (background instanceof ColorDrawable) {
+                // alpha value may need to be set again after this call
+                ColorDrawable colorDrawable = (ColorDrawable) background;
+                colorDrawable.setColor(borderColorInt);
+            }
         }
 
         public void setAudioStatus(boolean isPlaying){

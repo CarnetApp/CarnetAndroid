@@ -102,6 +102,8 @@
     </style>
 
     <style name="CarnetTheme.Darkest" parent="CarnetTheme.Dark">
+
+        <item name="ActionButtonBackground">@android:color/black</item>
         <item name="android:actionBarStyle">@style/CarnetTheme.Darkest.Toolbar</item>
         <item name="actionBarStyle">@style/CarnetTheme.Darkest.Toolbar</item>
         <item name="windowActionModeOverlay">true</item>
@@ -113,10 +115,11 @@
         <item name="PinButton">@style/CarnetTheme.Blue.PinButton</item>
         <item name="MainViewBackground">@android:color/black</item>
         <item name="MainNoteBackground">@android:color/black</item>
+        <item name="NoteBGNone">@android:color/black</item>
         <item name="MainNoteTextColor">@android:color/white</item>
         <item name="MainTextColor">@android:color/white</item>
         <item name="SecondaryTextColor">@android:color/darker_gray</item>
-        <item name="CardBorder">@color/blue_darker</item>
+        <item name="NoBackgroundCardBorderColor">@color/blue_darker</item>
         <item name="CardElevation">0dp</item>
         <item name="CardInsideMargin">5dp</item>
 

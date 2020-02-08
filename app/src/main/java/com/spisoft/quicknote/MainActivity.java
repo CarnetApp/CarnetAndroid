@@ -67,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
             case "dark":
                 setTheme(R.style.CarnetTheme_Dark);
                 break;
+            case "black":
+                setTheme(R.style.CarnetTheme_Darkest);
+                break;
 
         }
         mSavedInstanceState = savedInstanceState;

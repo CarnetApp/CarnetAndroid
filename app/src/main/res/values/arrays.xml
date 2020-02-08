@@ -14,10 +14,13 @@
     <string-array name="theme_entries">
         <item>@string/blue</item>
         <item>@string/dark</item>
+        <item>@string/black</item>
+
     </string-array>
     <string-array name="theme_values">
         <item>carnet</item>
         <item>dark</item>
+        <item>black</item>
     </string-array>
     <string-array name="sync_frequency_entries">
         <item>@string/disabled</item>
