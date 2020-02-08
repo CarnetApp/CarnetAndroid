@@ -7,6 +7,7 @@ New note color dialog
 Authorize Url with capitalize letters
 Fix text resize on firefox
 Keep new line in short text
+Escaping invalid characters in note titles by MystikHub
 
 # Version 0.19.0
 
