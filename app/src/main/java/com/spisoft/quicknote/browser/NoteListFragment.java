@@ -1,15 +1,20 @@
 package com.spisoft.quicknote.browser;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -40,8 +45,10 @@ import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.editor.BlankFragment;
+import com.spisoft.quicknote.editor.EditorActivity;
 import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.editor.ImageActivity;
+import com.spisoft.quicknote.editor.ShareEditorActivity;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.Log;
 import com.spisoft.sync.synchro.SynchroService;
@@ -50,6 +57,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by alexandre on 03/02/16.
@@ -518,8 +526,42 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
+                    if (menuItem.getItemId() == R.string.create_home_shortcut) {
 
-                    if (menuItem.getItemId() == R.string.delete) {
+                        Intent shortcutIntent = new Intent(getActivity(), ShareEditorActivity.class);
+                        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        shortcutIntent.setAction(ShareEditorActivity.ACTION_OPEN_NOTE);
+                        shortcutIntent.putExtra(ShareEditorActivity.PATH, note.path);
+
+                        if(Build.VERSION.SDK_INT >= 26) {
+                            ShortcutManager shortcutManager =
+                                    getActivity().getSystemService(ShortcutManager.class);
+
+                            if (shortcutManager.isRequestPinShortcutSupported()) {
+                                ShortcutInfo pinShortcutInfo =
+                                        new ShortcutInfo.Builder(getActivity(), UUID.randomUUID().toString()).setIntent(shortcutIntent).setShortLabel(note.title)
+                                                .setIcon(Icon.createWithResource(getActivity(), R.mipmap.ic_launcher)).build();
+                                Intent pinnedShortcutCallbackIntent =
+                                        shortcutManager.createShortcutResultIntent(pinShortcutInfo);
+                                PendingIntent successCallback = PendingIntent.getBroadcast(getActivity(), 0,
+                                        pinnedShortcutCallbackIntent, 0);
+
+                                shortcutManager.requestPinShortcut(pinShortcutInfo,
+                                        successCallback.getIntentSender());
+                            }
+                        } else {
+                            Intent addIntent = new Intent();
+                            addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+                            addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME,note.title);
+                            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(getActivity(), R.mipmap.ic_launcher));
+                            addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+                            getActivity().sendBroadcast(addIntent);
+                        }
+
+
+                    }
+                    else if (menuItem.getItemId() == R.string.delete) {
                         if (FloatingService.sService != null && FloatingService.sService.getNote() != null && FloatingService.sService.getNote().path.equalsIgnoreCase(note.path)) {
 
                             Toast.makeText(getActivity(), R.string.unable_to_delete_use, Toast.LENGTH_LONG).show();
@@ -553,6 +595,8 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             });
             menu.getMenu().add(0, R.string.rename, 0, R.string.rename);
             menu.getMenu().add(0, R.string.delete, 0, R.string.delete);
+            menu.getMenu().add(0, R.string.create_home_shortcut, 0, R.string.create_home_shortcut);
+
             internalCreateOptionMenu(menu.getMenu(), note);
             menu.show();
         } else {
