@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/transparent_ripple"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        card_view:cardElevation="?attr/CardElevation"
+        card_view:cardCornerRadius="0dp"
+        android:id="@+id/rootcardview"
+
+        >
+        <FrameLayout
+            android:id="@+id/border_layout"
+            android:background="@drawable/line_card_border"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@drawable/line_card_background"
+            android:id="@+id/cardview"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_margin="?attr/CardInsideMargin"
+                android:padding="5dp"
+                android:layout_width="match_parent" android:layout_height="match_parent"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="?attr/MainNoteTextColor"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
+                    android:id="@+id/name_tv"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:visibility="gone"
+                    android:paddingLeft="5dp"
+                    />
+
+                <ImageButton
+                    android:src="?attr/DotsIcon"
+                    android:layout_width="30dp"
+                    android:padding="5dp"
+                    android:background="@drawable/transparent_ripple"
+                    android:scaleType="fitCenter"
+                    android:layout_height="30dp"
+                    android:id="@+id/optionsButton"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical|right" />
+
+                <TextView
+                    android:id="@+id/text_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/name_tv"
+                    android:maxLines="10"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="20dp"
+                    android:visibility="gone"
+                    android:paddingTop="5dp"
+                    android:textColor="?attr/MainNoteTextColor"
+                    android:text="texttexttexttexttexttexttexttexttexttexttexttext "
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="10sp" />
+                <LinearLayout
+                    android:layout_below="@id/text_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:orientation="vertical"
+                    android:id="@+id/todolist_items_container"></LinearLayout>
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/keywords"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/todolist_items_container"
+                    app:flexWrap="wrap"
+                    app:alignItems="stretch"
+                    app:alignContent="stretch" >
+
+                </com.google.android.flexbox.FlexboxLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Small Text"
+                    android:id="@+id/date_tv"
+                    android:textColor="?attr/MainNoteTextColor"
+                    android:layout_below="@id/keywords"
+                    android:layout_gravity="bottom" />
+
+                <TextView
+                    android:id="@+id/mark_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/optionsButton"
+                    android:textColor="?attr/MainNoteTextColor"
+                    android:text="Small Tfdfext"
+                    android:layout_below="@id/keywords"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/url_container"
+                android:orientation="vertical"
+                android:paddingTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></LinearLayout>
+            <LinearLayout
+                android:id="@+id/audio_container"
+                android:orientation="vertical"
+                android:paddingTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></LinearLayout>
+            <ImageView
+                android:id="@+id/preview1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/date_tv"
+                android:adjustViewBounds="true"
+                android:background="@color/blue_400"
+                android:src="@drawable/camera_shot"
+                android:maxHeight="1000px"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/preview2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/preview1"
+                android:background="@color/blue_400"
+                android:adjustViewBounds="true"
+                android:src="@drawable/camera_shot"
+                android:maxHeight="1000px"
+                android:scaleType="centerCrop" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

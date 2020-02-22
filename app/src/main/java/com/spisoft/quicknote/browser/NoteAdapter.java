@@ -44,7 +44,8 @@ import java.util.regex.Pattern;
  */
 public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriever.NoteInfoListener {
 
-    private static final int NOTE = 0;
+    private static final int NOTE_GRID = 0;
+    private static final int NOTE_LINE = 2;
     protected final Context mContext;
     private final HashMap<Note, String> mText;
     private final float mBigText;
@@ -58,6 +59,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
     private final Resources.Theme mTheme;
     protected List<Object> mNotes;
     private ArrayList<Object> mSelelectedNotes;
+    private boolean mIsInline;
 
     public NoteAdapter(Context context, List<Object> notes) {
         super();
@@ -192,6 +194,11 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         return mNotes;
     }
 
+    public void setIsInLine(boolean isInLine) {
+        mIsInline = isInLine;
+
+    }
+
     public class NoteViewHolder extends RecyclerView.ViewHolder {
 
 
@@ -201,7 +208,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         private final TextView mMarkView;
         private final ImageView mPreview1;
         private final ImageView mPreview2;
-        private final CardView mCard;
+        private final View mCard;
         private final LinearLayout mUrlContainer;
         private final LinearLayout mAudioContainer;
         private Note mNote;
@@ -382,7 +389,10 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
 
             mTheme.resolveAttribute(attr, typedValue, true);
             @ColorInt int colorInt = typedValue.data;
-            mCard.setCardBackgroundColor(colorInt);
+            if(mCard instanceof CardView)
+                ((CardView)mCard).setCardBackgroundColor(colorInt);
+            else
+                mCard.setBackgroundColor(colorInt);
             Drawable background = mMainView.getBackground();
             if (background instanceof ShapeDrawable) {
                 // cast to 'ShapeDrawable'
@@ -501,15 +511,19 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.d("notedebug", "" + viewType);
-        if (viewType == NOTE)
+        if (viewType == NOTE_GRID) {
             return new NoteViewHolder(LayoutInflater.from(mContext).inflate(R.layout.grid_note_layout, null));
+        }
+        else if (viewType == NOTE_LINE)
+            return new NoteViewHolder(LayoutInflater.from(mContext).inflate(R.layout.line_note_layout, null));
+
         else return null;
     }
 
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == NOTE) {
+        if (holder.getItemViewType() == NOTE_GRID || holder.getItemViewType() == NOTE_LINE) {
             final Note note = (Note) mNotes.get(position);
             final NoteViewHolder viewHolder = (NoteViewHolder) holder;
             if(viewHolder.getNote()!=null){
@@ -556,7 +570,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
 
     public int getItemViewType(int position) {
         if (mNotes.get(position) instanceof Note)
-            return NOTE;
+            return mIsInline?NOTE_LINE: NOTE_GRID;
         return -1;
     }
 

@@ -28,6 +28,7 @@ android {
         versionCode getDate()
         versionName version+"-" + getFormattedDate()
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {

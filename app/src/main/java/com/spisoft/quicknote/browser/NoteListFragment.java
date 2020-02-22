@@ -19,6 +19,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -85,12 +88,20 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         public void onGlobalLayout() {
             if(isDetached())
                 return;
-            int columnWidth = getResources().getDimensionPixelSize(R.dimen.column_size);
-            int spanCount = Math.max(1, mRoot.getWidth() / columnWidth);
-            if(spanCount != mGridLayout.getSpanCount())
-                mGridLayout.setSpanCount(spanCount);
+            setColumns();
         }
     };
+
+    private void setColumns(){
+        int columnWidth = getResources().getDimensionPixelSize(R.dimen.column_size);
+        boolean isInLine = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("note_list",false);
+        int spanCount = isInLine?1:Math.max(1, mRoot.getWidth() / columnWidth);
+        if(spanCount != mGridLayout.getSpanCount()) {
+            mGridLayout.setSpanCount(spanCount);
+            mNoteAdapter.setIsInLine(isInLine);
+            mNoteAdapter.notifyDataSetChanged();
+        }
+    }
     private Note mNoteToPlay;
     private String mMediaToPlay;
 
@@ -133,12 +144,38 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         Drawable drawable = getResources().getDrawable(attributeResourceId);
         sort.setIcon(drawable);
 
+        boolean isInLine = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("note_list",false);
+
+        SubMenu display = menu.addSubMenu("Sort");
+        display.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        display.add(1, R.string.display_grid, 0, R.string.display_grid).setChecked(!isInLine);
+        display.add(1, R.string.display_line, 0, R.string.display_line).setChecked(isInLine);
+
+        display.setGroupCheckable(1, true, true);
+        a = getContext().getTheme().obtainStyledAttributes(new int[] {R.attr.HeaderBarIconColor});
+        attributeResourceId = a.getResourceId(0, 0);
+        if(isInLine)
+            drawable = getResources().getDrawable(R.drawable.display_line);
+        else
+            drawable = getResources().getDrawable(R.drawable.display_grid);
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), attributeResourceId));
+        display.setIcon(drawable);
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.string.display_grid:
+                PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean("note_list",false).commit();
+                setColumns();
+                getActivity().invalidateOptionsMenu();
+                break;
+            case R.string.display_line:
+                PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean("note_list",true).commit();
+                setColumns();
+                getActivity().invalidateOptionsMenu();
+                break;
             case R.string.sort_reversed:
                 PreferenceHelper.setSortReverse(getActivity(),!PreferenceHelper.isSortReverse(getActivity()));
                 getActivity().invalidateOptionsMenu();
@@ -203,6 +240,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         mNoteAdapter.setOnNoteClickListener(this);
         mGridLayout = new StaggeredGridLayoutManager( 2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mGridLayout);
+        setColumns();
         mRecyclerView.setAdapter(mNoteAdapter);
 
 

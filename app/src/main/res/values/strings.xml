@@ -150,4 +150,6 @@
     <string name="pause">Pause</string>
     <string name="black">Black</string>
     <string name="create_home_shortcut">Create home shortcut</string>
+    <string name="display_grid">Grid</string>
+    <string name="display_line">Line</string>
 </resources>

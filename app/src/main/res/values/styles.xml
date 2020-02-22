@@ -47,6 +47,7 @@
         <item name="SyncIcon">@drawable/sync_black</item>
         <item name="SyncDisabled">@drawable/rotating_sync_black</item>
         <item name="SortIcon">@drawable/sort_black</item>
+        <item name="HeaderBarIconColor">@android:color/black</item>
 
         <item name="UrlColor">#e33d78</item>
         <item name="PlayIcon">@drawable/play_black</item>
@@ -84,6 +85,7 @@
         <item name="SyncIcon">@drawable/sync_white</item>
         <item name="SyncDisabled">@drawable/rotating_sync_white</item>
         <item name="SortIcon">@drawable/sort_white</item>
+        <item name="HeaderBarIconColor">@android:color/white</item>
 
 
         <item name="NoteBGNone">#2f3341</item>
