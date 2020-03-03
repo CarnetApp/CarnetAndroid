@@ -17,6 +17,11 @@ import com.spisoft.sync.Log;
 import com.spisoft.sync.utils.Utils;
 import com.spisoft.sync.wrappers.WrapperFactory;
 
+import org.acra.ACRA;
+import org.acra.annotation.AcraDialog;
+import org.acra.annotation.AcraMailSender;
+import org.acra.annotation.AcraNotification;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +29,10 @@ import java.util.List;
 /**
  * Created by alexandre on 22/02/16.
  */
+
+@AcraMailSender(mailTo = "spipinoza@gmail.com")
+@AcraDialog(resText = R.string.dialog_text,
+        resCommentPrompt = R.string.dialog_comment)
 public class MyApplication extends Application implements Configuration.PathObserver {
 
     private static final String TAG = "MyApplication";
@@ -32,6 +41,7 @@ public class MyApplication extends Application implements Configuration.PathObse
     protected void attachBaseContext(Context base) {
 
         super.attachBaseContext(base);
+        ACRA.init(this);
         if(PreferenceManager.getDefaultSharedPreferences(this).getString(PreferenceHelper.ROOT_PATH_PREFERENCE,null) == null){
             if(PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.LAUNCH_COUNT, 0)>1) {
                 // has already been launched, but back old root path

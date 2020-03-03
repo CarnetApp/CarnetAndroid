@@ -152,4 +152,6 @@
     <string name="create_home_shortcut">Create home shortcut</string>
     <string name="display_grid">Grid</string>
     <string name="display_line">Line</string>
+    <string name="dialog_text">Sorry, Carnet has crashed. Please, send a report to the developers.</string>
+    <string name="dialog_comment">You can add a comment here</string>
 </resources>

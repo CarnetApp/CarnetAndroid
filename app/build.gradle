@@ -51,6 +51,10 @@ android {
     lintOptions {
         disable 'MissingTranslation'
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     flavorDimensions "version"
     productFlavors {
         fdroid {
@@ -69,6 +73,9 @@ if (file("../../Internal").exists()) {
 }
 
 dependencies {
+    implementation 'com.github.ACRA.acra:acra-dialog:acra-5.2.1'
+    implementation 'com.github.ACRA.acra:acra-mail:acra-5.2.1'
+    implementation 'com.github.ACRA.acra:acra-notification:acra-5.2.1'
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
