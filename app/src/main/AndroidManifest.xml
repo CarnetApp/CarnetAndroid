@@ -47,11 +47,19 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize"
+            android:launchMode="singleTask"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
 
@@ -107,13 +115,7 @@
             android:screenOrientation="user"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".editor.ShareEditorActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".editor.ImageActivity"

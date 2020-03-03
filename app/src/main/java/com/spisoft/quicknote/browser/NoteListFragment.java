@@ -566,11 +566,12 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     if (menuItem.getItemId() == R.string.create_home_shortcut) {
 
-                        Intent shortcutIntent = new Intent(getActivity(), ShareEditorActivity.class);
+                        Intent shortcutIntent = new Intent(getActivity(), MainActivity.class);
                         shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         shortcutIntent.setAction(ShareEditorActivity.ACTION_OPEN_NOTE);
-                        shortcutIntent.putExtra(ShareEditorActivity.PATH, note.path);
+                        shortcutIntent.putExtra(MainActivity.PATH, note.path);
 
                         if(Build.VERSION.SDK_INT >= 26) {
                             ShortcutManager shortcutManager =

@@ -30,6 +30,7 @@ import com.spisoft.quicknote.browser.PermissionChecker;
 import com.spisoft.quicknote.databases.CacheBuilderIntentService;
 import com.spisoft.quicknote.databases.DBMergerService;
 import com.spisoft.quicknote.databases.NoteManager;
+import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.quicknote.editor.BlankFragment;
 import com.spisoft.quicknote.editor.EditorView;
@@ -40,6 +41,8 @@ import com.spisoft.quicknote.utils.PinView;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.account.DBAccountHelper;
 import com.spisoft.sync.synchro.SynchroService;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements PinView.PasswordListener, NoteManager.UpdaterListener, Configuration.SyncStatusListener, EditorActivity {
     public static final String ACTION_RELOAD_KEYWORDS = "action_reload_keywords";
@@ -59,6 +62,12 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     private boolean mShouldRemove;
     private Fragment mFragmentToPut;
     private Bundle mSavedInstanceState;
+    public static final String ACTION_OPEN_NOTE = "open_note";
+    public static final String PATH = "note_path";
+
+    private boolean mIsUpdateDone;
+    private Intent mNewIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         }
         setContentView(R.layout.activity_main);
         mLockLayout = (FrameLayout)findViewById(R.id.lock_layout);
+        onNewIntent(getIntent());
         if(!UpdaterActivity.startUpdateIfNeeded(this, UPDATE_REQUEST_CODE)){
             onUpdateDone();
         }
@@ -163,18 +173,6 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
             DBMergerService.scheduleJob(this,true, DBMergerService.ALL_DATABASES);
         }
         int count = PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.LAUNCH_COUNT, 1);
-       /* if(count%6 == 0 && !PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(PreferenceHelper.HAS_DONATE, false)){
-            Snackbar.make(findViewById(R.id.root), R.string.donation_ask,
-                    Snackbar.LENGTH_LONG)
-                    .setAction(R.string.donate, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            openDonation(null);
-                        }
-                    })
-                    .setDuration(6000)
-                    .show();
-        }*/
 
         if(count%20 == 0 && !PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(PreferenceHelper.HAS_RATED, false)){
             Snackbar.make(findViewById(R.id.root), R.string.rate_ask,
@@ -193,14 +191,15 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(PreferenceHelper.LAUNCH_COUNT, count+1).commit();
 
 
-        // startService(new Intent(this, FloatingService.class));
+        boolean fragmentIsHandled = handleNewIntent();
         startService(new Intent(this, CacheBuilderIntentService.class));
         lockOnStart= true;
         if(mSavedInstanceState==null) {
-            Fragment fragment = MainFragment.newInstance();
-
-            mFragmentToPut = fragment;
-            setFragment(mFragmentToPut);
+            if(!fragmentIsHandled) {
+                Fragment fragment = MainFragment.newInstance();
+                mFragmentToPut = fragment;
+                setFragment(mFragmentToPut);
+            }
             //setFragment(fragment);
             if(HelpActivity.shouldStartActivity(this))
                 startActivity(new Intent(this, HelpActivity.class));
@@ -238,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         if(FileManagerService.sIsCopying)
             displayPasteDialog();
         mSavedInstanceState = null;
-        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_faster_editor_load", false)) {
+        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_faster_editor_load", false) && !fragmentIsHandled) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -247,6 +246,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
                 }
             }, 1000);
         }
+        mIsUpdateDone = true;
     }
 
     public void openDonation(View view) {
@@ -319,11 +319,46 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
         mLockLayout.addView(pinView);
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
 
+        super.onNewIntent(intent);
+        mNewIntent = intent;
+        if(mIsUpdateDone)
+            handleNewIntent();
+    }
 
+    private boolean handleNewIntent() {
+        if(mNewIntent == null)
+            return false;
+        if(!(mNewIntent.getAction().equals(ACTION_OPEN_NOTE) || mNewIntent.getAction().equals(Intent.ACTION_SEND)))
+            return false;
+        ArrayList<EditorView.Action> actions = new ArrayList<>();
+        String path = mNewIntent.getStringExtra(PATH);
+        Note note;
+        if(path!=null){
+            note = new Note(path);
+        }
+        else {
+            String title = mNewIntent.getStringExtra(Intent.EXTRA_SUBJECT) != null ? mNewIntent.getStringExtra(Intent.EXTRA_SUBJECT) + "<br /><br />" : "";
+            String text = mNewIntent.getStringExtra(Intent.EXTRA_TEXT) != null ? mNewIntent.getStringExtra(Intent.EXTRA_TEXT) : "";
+
+            note = NoteManager.createNewNote(PreferenceHelper.getRootPath(this));
+            RecentHelper.getInstance(this).addNote(note);
+            EditorView.Action fillText = new EditorView.Action();
+            fillText.type = "prefill";
+            fillText.value = title + text;
+            actions.add(fillText);
+        }
+        setFragment(BlankFragment.newInstance(note, actions));
+        mNewIntent = null;
+        return true;
+    }
 
 
     public void setFragment(Fragment fragment) {
+        if(isFinishing())
+            return;
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.fade_in,
@@ -472,6 +507,15 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     @Override
     public void superOnBackPressed() {
         getSupportFragmentManager().popBackStackImmediate();
+        if(getSupportFragmentManager().getFragments().size() == 0) {
+            if(!(this.fragment instanceof BlankFragment)) {
+                finish();
+            } else{
+                setFragment(MainFragment.newInstance());
+            }
+            return;
+
+        }
         this.fragment  = getSupportFragmentManager().getFragments().get(0);
     }
 }
