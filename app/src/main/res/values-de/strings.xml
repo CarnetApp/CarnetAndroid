@@ -121,7 +121,7 @@
     <string name="reminder">Erinnerung</string>
     <string name="create_note">Eine Notiz erstellen</string>
     <string name="beta_feature">Es handelt sich immer noch um eine Beta-Funktion und sollte daher mit Vorsicht genutzt werden</string>
-    <string name="warning_sync_cloud">Wählen Sie keine Ordner, in dem sich Dateien befinden, die nichts mit Carnet zu tun haben. Wenn Sie Nextcloud/ownCloud Stammordner auswählen, wird Ihre gesamte Cloud mit Ihrem Telefon synchronisiert.</string>
+    <string name="warning_sync_cloud">Wählen Sie keine Ordner, in dem sich Dateien befinden, die nichts mit Carnet zu tun haben. Wenn Sie den Nextcloud/ownCloud Stammordner auswählen, wird Ihre gesamte Cloud mit Ihrem Telefon synchronisiert.</string>
 <string name="start_with_browser_view">In der Browser-Ansicht starten</string>
     <string name="one_minute">1 Minute</string>
     <string name="two_minutes">2 Minuten</string>
@@ -143,4 +143,13 @@
     <string name="battery_optimization_subtitle2">Erlauben Sie Carnet auf dem nächsten Bildschirm die Optimierung zu ignorieren</string>
     <string name="battery_optimization_help">Brauchen Sie zusätzliche Hilfe\? Klicken Sie hier</string>
     <string name="disable_optimization">Optimierung deaktivieren</string>
+<string name="unable_to_rename_invalid_name">Die Notiz enthält ungültige Zeichen</string>
+    <string name="audio_player">Audio-Player</string>
+    <string name="pause">Pause</string>
+    <string name="black">Schwarz</string>
+    <string name="create_home_shortcut">Erstelle Startbildschirm Shortcut</string>
+    <string name="display_grid">Raster</string>
+    <string name="display_line">Reihe</string>
+    <string name="dialog_text">Tut mir leid, Carnet ist abgestürzt. Bitte senden Sie einen Bericht an die Entwickler.</string>
+    <string name="dialog_comment">Hier können Sie einen Kommentar hinzufügen</string>
 </resources>
