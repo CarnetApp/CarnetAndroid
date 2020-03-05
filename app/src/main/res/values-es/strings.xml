@@ -45,7 +45,7 @@
     <string name="authorize_description">Carnet necesita autorización especial para mostrarse como una ventana. Por favor, hazlo activando \"Sobreponer frente a otras apps\"</string>
     <string name="authorisation_issue">Fallo de autorización</string>
     <string name="error">Error</string>
-    <string name="error_permission_storage">Debido a las nuevas políticas de permisos de android, necesitamos permiso para guardar tus notas en tu dispositivo (se usará para guardar texto tanto en el dispositivo como en la tarjeta sd)</string>
+    <string name="error_permission_storage">Debido a las nuevas políticas de permisos de android, necesitamos permiso para guardar tus notas en tu dispositivo (se usará para guardar texto tanto en el dispositivo como en la tarjeta sd).</string>
     <string name="allow">Permitir</string>
     <string name="exit">Salir</string>
     <string name="unable_to_rename_use">No se puede renombrar un documento mientras se esta editando</string>
@@ -68,7 +68,7 @@
     <string name="sync_intro_title">Sincronizar Carnet</string>
     <string name="sync_intro_text">Carner soporta la sincronización tanto con Google Drive como con Nexctcloud, no olvide descargar la versión de escritorio para tener sus notas también en su pc.</string>
     <string name="google_drive">Google Drive</string>
-    <string name="sync_intro_gdrive_text">Fácil, muchos de vosotros usan una dirección gmail, no es de código abierto.</string>
+    <string name="sync_intro_gdrive_text">Fácil, muchos de vosotros usan una dirección gmail, no es de código abierto</string>
     <string name="sync_select_nextcloud_text">Carnet es compatible con cualquier proveedor de Nextcloud. Por favor encuentre y regístrese en alguno (Muchos son gratuitos)</string>
     <string name="skip">Saltar</string>
     <string name="welcome">¡Bienvenido!</string>
@@ -79,11 +79,11 @@
     <string name="unpin">Quitar pin</string>
     <string name="say_hi">Decir hola!</string>
     <string name="say_hi_subtitle">Puede ayudarme a saber cuanta gente está usando la aplicación presionando el botón \"Decir hola!\" :)</string>
-    <string name="say_hi_subtitle2">Entenderé que la aplicación se descargó más de una vez (No obligatorio del todo pero de ayuda)</string>
+    <string name="say_hi_subtitle2">Entenderé que la aplicación se descargó más de una vez (No obligatorio del todo pero de ayuda).</string>
     <string name="not_available_on_fdroid">No disponible en fdroid</string>
     <string name="desktop_version">Versión de escritorio</string>
-    <string name="sync_intro_text_carnet_instance">Carnet puede hacer una copia de seguridad online automática. \n
-    Elija un proveedor de Carnet para permitir editar sus notas desde su navegador, su móvil o su pc.</string>
+    <string name="sync_intro_text_carnet_instance">Carnet puede hacer una copia de seguridad online automática. 
+\n Elija un proveedor de Carnet para permitir editar sus notas desde su navegador, su móvil o su pc</string>
     <string name="doesnt_accept_new_users">No se aceptan nuevos usuarios</string>
     <string name="open_for_registrations">Registro abierto</string>
     <string name="reliability">Confiabilidad</string>
@@ -93,7 +93,7 @@
     <string name="dark">Oscuro</string>
     <string name="donation_ask">Esta aplicación fue creada gratis, por favor, considere hacer una donación</string>
     <string name="first_start">Primer uso, por favor espere</string>
-<string name="rate_ask">Si te gusta esta App, danos 5 estrellas :)</string>
+<string name="rate_ask">Por favor, si te gusta esta App, danos 5 estrellas :)</string>
     <string name="rate">Califícalo</string>
     <string name="sync">Sincronizar</string>
     <string name="change_credentials">Cambiar contraseña</string>
@@ -123,4 +123,35 @@
     <string name="faster_editor_load">Carga rápida del editor (experimental)</string>
 <string name="reminder">Recordatorio</string>
     <string name="create_note">Crear nota</string>
-    </resources>
+    <string name="unable_to_rename_invalid_name">La nota contiene carácteres inválidos</string>
+    <string name="beta_feature">Esta sigue siendo una característica beta y tiene que ser usada cuidadosamente</string>
+    <string name="warning_sync_cloud">No seleccione ninguna carpeta con archivos que no sean de Carnet. Seleccionando la carpeta raiz de NextCloud/ownCloud se sincronizará toda la nube en tu teléfono.</string>
+    <string name="start_with_browser_view">Empezar con la vista de navegador</string>
+    <string name="one_minute">1 minuto</string>
+    <string name="two_minutes">2 minutos</string>
+    <string name="five_minutes">5 minutos</string>
+    <string name="ten_minutes">10 minutos</string>
+    <string name="fifteen_minutes">15 minutos</string>
+    <string name="thirty_minutes">30 minutos</string>
+    <string name="one_hour">1 hora</string>
+    <string name="two_hours">2 horas</string>
+    <string name="six_hours">6 horas</string>
+    <string name="once_a_day">Una vez al día</string>
+    <string name="disabled">Deshabilitado</string>
+    <string name="twelve_hours">12 horas</string>
+    <string name="values_below_15_battery">Valores por debajo de 15 podría agotar la batería</string>
+    <string name="sync_frequency">Frecuencia de sincronización</string>
+    <string name="battery_optimization">Optimización de batería</string>
+    <string name="battery_optimization_subtitle">Para poder sincronizar en segundo plano, la optimización de batería tiene que estar deshabilitada para Carnet</string>
+    <string name="battery_optimization_subtitle2">En la siguiente pantalla, permite a Carnet ignorar las optimizaciones</string>
+    <string name="battery_optimization_help">¿Necesitas más ayuda\? Pincha aquí</string>
+    <string name="disable_optimization">Deshabilitar optimización</string>
+    <string name="audio_player">Reproductor de audio</string>
+    <string name="pause">Pausa</string>
+    <string name="black">Negro</string>
+    <string name="create_home_shortcut">Crear acceso directo</string>
+    <string name="display_grid">Cuadrícula</string>
+    <string name="display_line">Línea</string>
+    <string name="dialog_text">Lo siento, Carnet se ha colgado. Por favor, envía un informe a los desarrolladores.</string>
+    <string name="dialog_comment">Puedes añadir un comentario aquí</string>
+</resources>
