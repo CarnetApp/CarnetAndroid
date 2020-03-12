@@ -157,7 +157,7 @@ public class RecentHelper {
     }
 
     private synchronized String read(){
-        if(mCurrentJsonStr != null)
+        if(mCurrentJsonStr != null && false) //disabling cache
             return mCurrentJsonStr;
         synchronized (FileLocker.getLockOnPath(getRecentPath())) {
             BufferedReader br = null;
