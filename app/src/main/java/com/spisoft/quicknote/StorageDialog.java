@@ -89,6 +89,8 @@ public class StorageDialog extends DialogFragment implements DialogInterface.OnC
                         String remote = wrapper.getRemoteSyncDir(PreferenceHelper.getRootPath(getContext()));
                         wrapper.removeSyncDir(PreferenceHelper.getRootPath(getContext()));
                         wrapper.addFolderSync(mFile.getAbsolutePath(), remote);
+                        new File(mFile.getAbsolutePath()).mkdirs();
+
 
                     }while(accountCursor.moveToNext());
                 }

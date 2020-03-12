@@ -22,6 +22,8 @@ import com.spisoft.sync.wrappers.nextcloud.NextCloudAuthorizeFragment;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudCredentialsHelper;
 import com.spisoft.sync.wrappers.nextcloud.NextCloudWrapper;
 
+import java.io.File;
+
 public class HelpActivity extends AppCompatActivity implements NextCloudAuthorizeFragment.OnConnectedListener {
 
     public static final String SYNC_ONLY = "sync_only";
@@ -70,6 +72,8 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
                 .addOrReplaceAccount(new com.spisoft.sync.account.DBAccountHelper.Account(-1, NextCloudWrapper.ACCOUNT_TYPE, "NextCloud"));
         NextCloudCredentialsHelper.getInstance(this).addOrReplaceAccount(new NextCloudCredentialsHelper.Credentials(-1, account.accountID, remote, username, password));
         com.spisoft.sync.wrappers.WrapperFactory.getWrapper(this,NextCloudWrapper.ACCOUNT_TYPE, account.accountID).addFolderSync(PreferenceHelper.getRootPath(this), "Documents/QuickNote");
+        new File(PreferenceHelper.getRootPath(this)).mkdirs();
+
         next();
     }
 
@@ -161,6 +165,7 @@ public class HelpActivity extends AppCompatActivity implements NextCloudAuthoriz
         com.spisoft.sync.account.DBAccountHelper.Account account = com.spisoft.sync.account.DBAccountHelper.getInstance(this)
                 .addOrReplaceAccount(new com.spisoft.sync.account.DBAccountHelper.Account(-1,mDriveWrapper.getAccountType(), "Google Drive"));
         com.spisoft.sync.wrappers.WrapperFactory.getWrapper(this,mDriveWrapper.getAccountType(), account.accountID).addFolderSync(PreferenceHelper.getRootPath(this), "Documents/QuickNote");
+        new File(PreferenceHelper.getRootPath(this)).mkdirs();
 
         finish();
 

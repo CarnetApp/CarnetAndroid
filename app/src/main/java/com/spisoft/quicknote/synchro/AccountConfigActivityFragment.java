@@ -17,6 +17,8 @@ import com.spisoft.sync.account.DBAccountHelper;
 import com.spisoft.sync.browsing.FilePickerActivity;
 import com.spisoft.sync.wrappers.Wrapper;
 
+import java.io.File;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -68,6 +70,7 @@ public class AccountConfigActivityFragment extends PreferenceFragment implements
                 Log.d(TAG,"New remote path "+path);
 
                 mWrapper.addFolderSync(PreferenceHelper.getRootPath(getActivity()), path);
+                new File(PreferenceHelper.getRootPath(getActivity())).mkdirs();
             }
         }
         else super.onActivityResult(requestCode, resultCode, data);
