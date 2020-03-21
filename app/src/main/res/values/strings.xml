@@ -154,4 +154,5 @@
     <string name="display_line">Line</string>
     <string name="dialog_text">Sorry, Carnet has crashed. Please, send a report to the developers.</string>
     <string name="dialog_comment">You can add a comment here</string>
+    <string name="display_more">Display more</string>
 </resources>

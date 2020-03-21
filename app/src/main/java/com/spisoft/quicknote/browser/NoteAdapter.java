@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -45,6 +46,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 /**
  * Created by alexandre on 03/02/16.
  */
@@ -63,6 +67,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
     private final Handler mHandler;
     private final String mLoadingText;
     private final Resources.Theme mTheme;
+    private final float mMaxHeight;
     protected List<Object> mNotes;
     private ArrayList<Object> mSelelectedNotes;
     private boolean mIsInline;
@@ -76,6 +81,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         mBigText = mContext.getResources().getDimension(R.dimen.big_text);
         mMediumText = mContext.getResources().getDimension(R.dimen.medium_text);
         mSmallText = mContext.getResources().getDimension(R.dimen.small_text);
+        mMaxHeight = Utils.convertDpToPixel(300, mContext);
         mNoteInfoRetriever = new NoteInfoRetriever(this, context);
         mNoteThumbnailEngine = new NoteThumbnailEngine(context);
         mLoadingText = context.getResources().getString(R.string.loading);
@@ -217,19 +223,31 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         private final View mCard;
         private final LinearLayout mUrlContainer;
         private final LinearLayout mAudioContainer;
+        private final Button mDisplayMore;
+        private final LinearLayout mTodoListContainer;
         private Note mNote;
 
         public NoteViewHolder(View itemView) {
             super(itemView);
             mMainView = itemView.findViewById(R.id.cardview);
             mCard = itemView.findViewById(R.id.rootcardview);
-            mTitleView = (TextView) itemView.findViewById(R.id.name_tv);
-            mTextView = (TextView) itemView.findViewById(R.id.text_tv);
-            mMarkView = (TextView) itemView.findViewById(R.id.mark_tv);
-            mPreview1= (ImageView) itemView.findViewById(R.id.preview1);
-            mPreview2 = (ImageView) itemView.findViewById(R.id.preview2);
-            mUrlContainer = (LinearLayout) itemView.findViewById(R.id.url_container);
-            mAudioContainer = (LinearLayout) itemView.findViewById(R.id.audio_container);
+            mTitleView = itemView.findViewById(R.id.name_tv);
+            mTextView = itemView.findViewById(R.id.text_tv);
+            mMarkView = itemView.findViewById(R.id.mark_tv);
+            mPreview1= itemView.findViewById(R.id.preview1);
+            mPreview2 = itemView.findViewById(R.id.preview2);
+            mUrlContainer = itemView.findViewById(R.id.url_container);
+            mAudioContainer = itemView.findViewById(R.id.audio_container);
+            mDisplayMore = itemView.findViewById(R.id.display_more);
+            mTodoListContainer = mMainView.findViewById(R.id.todolist_items_container);
+
+            mDisplayMore.setOnClickListener(v -> {
+                ViewGroup.LayoutParams params = mTodoListContainer.getLayoutParams();
+                params.height = WRAP_CONTENT;
+                params.width = MATCH_PARENT;
+                mTodoListContainer.setLayoutParams(params);
+                mDisplayMore.setVisibility(View.GONE);
+            });
         }
 
         public void setName(String title) {
@@ -336,11 +354,10 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         }
 
         private void setTodoLists(List<Note.TodoList> todolists) {
-            ViewGroup container = mMainView.findViewById(R.id.todolist_items_container);
-            container.removeAllViews();
+            mTodoListContainer.removeAllViews();
             for(final Note.TodoList todoList:todolists){
                 for(final String item : todoList.todo){
-                    final RelativeLayout cblayout = (RelativeLayout) LayoutInflater.from(mContext).inflate(R.layout.todolist_item, container, false);
+                    final RelativeLayout cblayout = (RelativeLayout) LayoutInflater.from(mContext).inflate(R.layout.todolist_item, mTodoListContainer, false);
                     final CheckBox checkBox = cblayout.findViewById(R.id.checkbox);
                     final TextView tv = cblayout.findViewById(R.id.textview);
                     tv.setText(item);
@@ -358,10 +375,25 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                             });
                         }
                     });
-                    container.addView(cblayout);
+                    mTodoListContainer.addView(cblayout);
 
                 }
             }
+            mTodoListContainer.measure(0,0);
+            if(mTodoListContainer.getMeasuredHeight()>mMaxHeight){
+                ViewGroup.LayoutParams params = mTodoListContainer.getLayoutParams();
+                params.height = (int) mMaxHeight;
+                params.width = MATCH_PARENT;
+                mTodoListContainer.setLayoutParams(params);
+                mDisplayMore.setVisibility(View.VISIBLE);
+            } else {
+                ViewGroup.LayoutParams params = mTodoListContainer.getLayoutParams();
+                params.height = WRAP_CONTENT;
+                params.width = MATCH_PARENT;
+                mTodoListContainer.setLayoutParams(params);
+                mDisplayMore.setVisibility(View.GONE);
+            }
+
         }
 
         public void setBackground(String color) {

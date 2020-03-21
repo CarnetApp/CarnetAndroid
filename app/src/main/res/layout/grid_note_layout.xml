@@ -81,7 +81,15 @@
                     android:animateLayoutChanges="true"
                     android:orientation="vertical"
                     android:id="@+id/todolist_items_container"></LinearLayout>
-
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/display_more"
+                    android:layout_below="@id/todolist_items_container"
+                    android:textAllCaps="false"
+                    android:background="@drawable/transparent_ripple"
+                    android:id="@+id/display_more"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -91,7 +99,7 @@
                     android:id="@+id/date_tv"
                     android:alpha="0.5"
                     android:paddingTop="5dp"
-                    android:layout_below="@id/todolist_items_container"
+                    android:layout_below="@id/display_more"
                     android:textColor="?attr/MainNoteTextColor"
                     android:layout_gravity="bottom" />
 
