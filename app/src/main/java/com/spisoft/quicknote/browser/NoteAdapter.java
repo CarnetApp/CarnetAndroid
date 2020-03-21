@@ -243,10 +243,14 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
 
             mDisplayMore.setOnClickListener(v -> {
                 ViewGroup.LayoutParams params = mTodoListContainer.getLayoutParams();
-                params.height = WRAP_CONTENT;
-                params.width = MATCH_PARENT;
+                if(params.height == WRAP_CONTENT){
+                    params.height = (int) mMaxHeight;
+                    mDisplayMore.setText(R.string.display_more);
+                } else {
+                    params.height = WRAP_CONTENT;
+                    mDisplayMore.setText(R.string.display_less);
+                }
                 mTodoListContainer.setLayoutParams(params);
-                mDisplayMore.setVisibility(View.GONE);
             });
         }
 
