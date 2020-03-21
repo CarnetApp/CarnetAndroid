@@ -10,7 +10,7 @@
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:layout_margin="3dp"
         card_view:cardElevation="?attr/CardElevation"
-        card_view:cardCornerRadius="5dp"
+        card_view:cardCornerRadius="10dp"
         android:id="@+id/rootcardview"
 
         >
@@ -18,7 +18,9 @@
             android:id="@+id/border_layout"
             android:background="@drawable/card_border"
             android:layout_width="match_parent"
+            android:orientation="vertical"
             android:layout_height="match_parent"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,6 +32,7 @@
                 android:orientation="vertical"
                 android:layout_margin="?attr/CardInsideMargin"
                 android:padding="5dp"
+                android:paddingBottom="0dp"
                 android:layout_width="match_parent" android:layout_height="match_parent"
                 >
 
@@ -44,7 +47,6 @@
                     android:paddingTop="5dp"
                     android:paddingRight="5dp"
                     android:visibility="gone"
-                    android:paddingLeft="5dp"
                     />
 
                 <ImageButton
@@ -65,7 +67,6 @@
                     android:layout_below="@+id/name_tv"
                     android:maxLines="10"
                     android:paddingBottom="5dp"
-                    android:paddingLeft="5dp"
                     android:paddingRight="20dp"
                     android:visibility="gone"
                     android:paddingTop="5dp"
@@ -80,17 +81,7 @@
                     android:animateLayoutChanges="true"
                     android:orientation="vertical"
                     android:id="@+id/todolist_items_container"></LinearLayout>
-                <com.google.android.flexbox.FlexboxLayout
-                    android:id="@+id/keywords"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/todolist_items_container"
-                    app:flexWrap="wrap"
-                    app:alignItems="stretch"
-                    app:alignContent="stretch" >
 
-                </com.google.android.flexbox.FlexboxLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -98,8 +89,10 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="Small Text"
                     android:id="@+id/date_tv"
+                    android:alpha="0.5"
+                    android:paddingTop="5dp"
+                    android:layout_below="@id/todolist_items_container"
                     android:textColor="?attr/MainNoteTextColor"
-                    android:layout_below="@id/keywords"
                     android:layout_gravity="bottom" />
 
                 <TextView
@@ -109,8 +102,20 @@
                     android:layout_toLeftOf="@id/optionsButton"
                     android:textColor="?attr/MainNoteTextColor"
                     android:text="Small Tfdfext"
-                    android:layout_below="@id/keywords"
+                    android:layout_above="@id/keywords"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/keywords"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:paddingTop="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/date_tv"
+                    app:flexWrap="wrap"
+                    app:alignItems="stretch"
+                    app:alignContent="stretch" >
+
+                </com.google.android.flexbox.FlexboxLayout>
 
             </RelativeLayout>
             <LinearLayout
@@ -129,7 +134,6 @@
                 android:id="@+id/preview1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/date_tv"
                 android:adjustViewBounds="true"
                 android:background="@color/blue_400"
                 android:src="@drawable/camera_shot"
@@ -140,9 +144,6 @@
                 android:id="@+id/preview2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/preview1"
-                android:background="@color/blue_400"
-                android:adjustViewBounds="true"
                 android:src="@drawable/camera_shot"
                 android:maxHeight="1000px"
                 android:scaleType="centerCrop" />

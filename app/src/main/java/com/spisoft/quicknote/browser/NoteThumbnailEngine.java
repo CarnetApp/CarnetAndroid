@@ -124,8 +124,8 @@ public class NoteThumbnailEngine {
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    finalNoteAndVG.viewHolder.setPreview1(finalB1);
-                                    finalNoteAndVG.viewHolder.setPreview2(finalB2);
+                                    finalNoteAndVG.viewHolder.setPreview(finalNoteAndVG.viewHolder.mPreview1, finalB1, finalB2==null);
+                                    finalNoteAndVG.viewHolder.setPreview(finalNoteAndVG.viewHolder.mPreview2, finalB2, true);
                                 }
                             });
 
@@ -164,8 +164,8 @@ public class NoteThumbnailEngine {
                             mHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    finalNoteAndVG.viewHolder.setPreview1(finalB1);
-                                    finalNoteAndVG.viewHolder.setPreview2(finalB2);
+                                    finalNoteAndVG.viewHolder.setPreview(finalNoteAndVG.viewHolder.mPreview1, finalB1, finalB2==null);
+                                    finalNoteAndVG.viewHolder.setPreview(finalNoteAndVG.viewHolder.mPreview2, finalB2, true);
                                 }
                             });
                         }

@@ -4,18 +4,23 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Outline;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.os.Build;
 import android.os.Handler;
 import androidx.annotation.ColorInt;
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -27,6 +32,7 @@ import com.spisoft.quicknote.AudioService;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.NoteManager;
+import com.spisoft.quicknote.utils.Utils;
 import com.spisoft.sync.Log;
 import com.spisoft.sync.utils.FileUtils;
 
@@ -206,8 +212,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         private final TextView mTitleView;
         private final TextView mTextView;
         private final TextView mMarkView;
-        private final ImageView mPreview1;
-        private final ImageView mPreview2;
+        public final ImageView mPreview1;
+        public final ImageView mPreview2;
         private final View mCard;
         private final LinearLayout mUrlContainer;
         private final LinearLayout mAudioContainer;
@@ -238,8 +244,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         public void setNote(final Note note) {
             if(!note.equals(getNote())){
                 //reset preview
-                setPreview1(null);
-                setPreview2(null);
+                setPreview(mPreview1, null, false);
+                setPreview(mPreview2, null, false);
             }
             mNote = note;
             mMainView.setOnClickListener(new View.OnClickListener() {
@@ -277,6 +283,10 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
 
         private void setMedia(final ArrayList<String> medias) {
             mAudioContainer.removeAllViews();
+            if(medias.size()>0)
+                mAudioContainer.setVisibility(View.VISIBLE);
+            else
+                mAudioContainer.setVisibility(View.GONE);
             for(final String media : medias){
                 if(FileUtils.isAudioFile(media)){
                     View cont = LayoutInflater.from(mContext).inflate(R.layout.audio_layout, mUrlContainer, false);
@@ -307,6 +317,10 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
 
         private void setUrls(List<String> urls){
             mUrlContainer.removeAllViews();
+            if(urls.size()>0)
+                mUrlContainer.setVisibility(View.VISIBLE);
+            else
+                mUrlContainer.setVisibility(View.GONE);
             for(final String url : urls){
                 View cont = LayoutInflater.from(mContext).inflate(R.layout.url_layout, mUrlContainer, false);
                 TextView tv = cont.findViewById(R.id.textview);
@@ -434,20 +448,32 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
 
         }
 
-        public void setPreview1(Bitmap bitmap) {
-            if(bitmap == null)
-                mPreview1.setVisibility(View.GONE);
-            else
-                mPreview1.setVisibility(View.VISIBLE);
-            mPreview1.setImageBitmap(bitmap);
-        }
 
-        public void setPreview2(Bitmap bitmap) {
-            if(bitmap == null)
-                mPreview2.setVisibility(View.GONE);
-            else
-                mPreview2.setVisibility(View.VISIBLE);
-            mPreview2.setImageBitmap(bitmap);
+
+        public void setPreview(ImageView view, Bitmap bitmap, boolean setRound) {
+            float pixels= 30;
+            if(bitmap == null) {
+                view.setVisibility(View.GONE);
+                view.setImageBitmap(null);
+            }
+            else {
+                view.setImageBitmap(bitmap);
+                if(Build.VERSION.SDK_INT>=22){
+                    if(setRound) {
+                        view.setOutlineProvider(new ViewOutlineProvider() {
+                            public void getOutline(View view, Outline outline) {
+                                outline.setRoundRect(0, -(int) pixels, view.getWidth(), view.getHeight(), pixels);
+                            }
+                        });
+                        view.setClipToOutline(true);
+                    } else
+                        view.setOutlineProvider(null);
+                }
+                view.setVisibility(View.VISIBLE);
+
+            }
+
+
         }
 
         public void setText(String s) {
@@ -558,7 +584,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                 try {
                     Bitmap b2 = BitmapFactory.decodeStream(mContext.getAssets().open(note.previews.get(0)));
                     b2.setDensity(Bitmap.DENSITY_NONE);
-                    viewHolder.setPreview1(b2);
+                    viewHolder.setPreview(viewHolder.mPreview1, b2, true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
