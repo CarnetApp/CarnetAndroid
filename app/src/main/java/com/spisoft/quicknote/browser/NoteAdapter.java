@@ -68,6 +68,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
     private final String mLoadingText;
     private final Resources.Theme mTheme;
     private final float mMaxHeight;
+    private final float mRadiusPixels;
     protected List<Object> mNotes;
     private ArrayList<Object> mSelelectedNotes;
     private boolean mIsInline;
@@ -86,7 +87,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
         mNoteThumbnailEngine = new NoteThumbnailEngine(context);
         mLoadingText = context.getResources().getString(R.string.loading);
         mTheme = context.getTheme();
-
+        mRadiusPixels = Utils.convertDpToPixel(10, mContext);
     }
 
     public void setNotes(List<Object> notes) {
@@ -487,7 +488,6 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
 
 
         public void setPreview(ImageView view, Bitmap bitmap, boolean setRound) {
-            float pixels= 30;
             if(bitmap == null) {
                 view.setVisibility(View.GONE);
                 view.setImageBitmap(null);
@@ -498,7 +498,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                     if(setRound) {
                         view.setOutlineProvider(new ViewOutlineProvider() {
                             public void getOutline(View view, Outline outline) {
-                                outline.setRoundRect(0, -(int) pixels, view.getWidth(), view.getHeight(), pixels);
+                                outline.setRoundRect(0, -(int) mRadiusPixels, view.getWidth(), view.getHeight(), mRadiusPixels);
                             }
                         });
                         view.setClipToOutline(true);
