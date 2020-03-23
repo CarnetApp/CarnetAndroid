@@ -331,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     private boolean handleNewIntent() {
         if(mNewIntent == null)
             return false;
-        if(!(mNewIntent.getAction().equals(ACTION_OPEN_NOTE) || mNewIntent.getAction().equals(Intent.ACTION_SEND)))
+        if(mNewIntent.getAction()==null||!(mNewIntent.getAction().equals(ACTION_OPEN_NOTE) || mNewIntent.getAction().equals(Intent.ACTION_SEND)))
             return false;
         ArrayList<EditorView.Action> actions = new ArrayList<>();
         String path = mNewIntent.getStringExtra(PATH);
