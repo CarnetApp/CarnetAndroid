@@ -11,12 +11,12 @@
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:layout_margin="6dp"
         card_view:cardElevation="5dp"
+        card_view:cardCornerRadius="10dp"
         card_view:cardBackgroundColor="?attr/MainNoteBackground"
 
        >
         <LinearLayout
             android:orientation="vertical"
-            card_view:cardCornerRadius="4dp"
             android:id="@+id/cardview"
             android:background="@drawable/transparent_ripple"
             android:padding="5dp"
@@ -33,6 +33,8 @@
                     android:layout_height="match_parent"
                     android:id="@+id/imageView"
                     android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:src="@drawable/directory" />
 
                 <TextView
