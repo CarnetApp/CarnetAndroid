@@ -1,26 +1,16 @@
 package com.spisoft.quicknote.intro;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.spisoft.quicknote.PreferenceHelper;
+import androidx.fragment.app.Fragment;
+
 import com.spisoft.quicknote.R;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
 
 
 public class DisableOptimizationFragment extends Fragment {
@@ -40,9 +30,12 @@ public class DisableOptimizationFragment extends Fragment {
         v.findViewById(R.id.disable_optimization).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent();
-                myIntent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-                startActivity(myIntent);
+                Intent intent = new Intent();
+                String packageName = getActivity().getPackageName();
+                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                intent.setData(Uri.parse("package:" + packageName));
+                startActivity(intent);
+
             }
         });
         v.findViewById(R.id.more_help).setOnClickListener(new View.OnClickListener() {
