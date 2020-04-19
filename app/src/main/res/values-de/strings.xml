@@ -152,4 +152,6 @@
     <string name="display_line">Reihe</string>
     <string name="dialog_text">Tut mir leid, Carnet ist abgestürzt. Bitte senden Sie einen Bericht an die Entwickler.</string>
     <string name="dialog_comment">Hier können Sie einen Kommentar hinzufügen</string>
+<string name="display_more">Mehr anzeigen</string>
+    <string name="display_less">Weniger anzeigen</string>
 </resources>
