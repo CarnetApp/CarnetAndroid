@@ -146,4 +146,15 @@
     <string name="battery_optimization_subtitle2">Sur l\'écran suivant, autorisez Carnet à ignorer les optimisations</string>
     <string name="battery_optimization_help">Besoin d\'aide \? Cliquez ici</string>
     <string name="disable_optimization">Désactiver optimisations</string>
+<string name="unable_to_rename_invalid_name">La note contient des caractères incompatibles</string>
+    <string name="audio_player">Lecteur audio</string>
+    <string name="pause">Pause</string>
+    <string name="black">Noir</string>
+    <string name="create_home_shortcut">Créer un raccourci</string>
+    <string name="display_grid">Grille</string>
+    <string name="display_line">Ligne</string>
+    <string name="dialog_text">Pardon, Carnet a planté. S\'il vous plaît, envoyez un rapport d\'erreurs aux développeurs.</string>
+    <string name="dialog_comment">Vous pouvez ajouter un commentaire ici</string>
+    <string name="display_more">Afficher plus</string>
+    <string name="display_less">Afficher moins</string>
 </resources>
