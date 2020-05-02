@@ -86,5 +86,11 @@
     "delete_todolist_confirmation": "This operation is irreversible, are you sure you want to delete this ToDo-List ?",
     "something_went_wrong_please_reload": "Something went wrong… Please, reload",
     "note_color": "Note color",
-    "new_todolist": "New Todo-List"
+    "new_todolist": "New Todo-List",
+    "remove_todo_list": "Remove ToDo-List",
+    "add_item": "Add item",
+    "completed": "Completed",
+    "todo": "To do",
+    "display_more": "Display more",
+    "display_less": "Display less"
 }

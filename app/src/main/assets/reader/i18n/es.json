@@ -80,5 +80,15 @@
     "sunday": "Domingo",
     "time": "Hora",
     "date": "Fecha",
-    "beta_warning_reminders": "Los \"recordatorios\" son por el momento caracteristicaa beta que solo funcionarán en Android"
+    "beta_warning_reminders": "Los \"recordatorios\" son por el momento caracteristicaa beta que solo funcionarán en Android",
+    "more-options": "Más opciones",
+    "start_with_browser_view": "Empezar con la vista de navegador",
+    "delete_todolist_confirmation": "Esta operación es irreversible, ¿estás seguro de que quieres borrar esta ToDo-List?",
+    "something_went_wrong_please_reload": "Algo falló... Por favor, recarga",
+    "note_color": "Color de nota",
+    "new_todolist": "Nueva ToDo-List",
+    "remove_todo_list": "Borra ToDo-List",
+    "add_item": "Añade artículo",
+    "completed": "Completado",
+    "todo": "Para hacer"
 }

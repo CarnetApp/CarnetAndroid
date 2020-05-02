@@ -48,7 +48,7 @@ function (_RequestBuilder) {
           } catch (e) {}
         }
 
-        callback(err, data);
+        if (!RequestBuilder.sRequestBuilder.isCanceled(requestId)) callback(err, data);
       });
     }
   }, {
@@ -62,7 +62,7 @@ function (_RequestBuilder) {
           } catch (e) {}
         }
 
-        callback(err, data);
+        if (!RequestBuilder.sRequestBuilder.isCanceled(requestId)) callback(err, data);
       });
     }
   }, {
@@ -83,7 +83,7 @@ function (_RequestBuilder) {
               } catch (e) {}
             }
 
-            callback(err, data);
+            if (!RequestBuilder.sRequestBuilder.isCanceled(requestId)) callback(err, data);
           });
           return;
         }
@@ -116,7 +116,7 @@ function (_RequestBuilder) {
           } catch (e) {}
         }
 
-        callback(err, data);
+        if (!RequestBuilder.sRequestBuilder.isCanceled(requestId)) callback(err, data);
       });
     }
   }, {

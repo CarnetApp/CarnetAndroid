@@ -181,23 +181,12 @@ function refreshKeywords() {
   });
 }
 
-function searchInNotes(searching) {
-  resetGrid(false);
-  notes = [];
-  document.getElementById("note-loading-view").style.display = "inline";
-  RequestBuilder.sRequestBuilder.get("/notes/search?path=." + "&query=" + encodeURIComponent(searching), function (error, data) {
-    if (!error) {
-      list("search://", true);
-    }
-  });
-}
-
 function resetGrid(discret) {
   var grid = document.getElementById("page-content");
   var scroll = 0;
   if (discret) scroll = document.getElementById("grid-container").scrollTop;
   grid.innerHTML = "";
-  noteCardViewGrid = new NoteCardViewGrid(grid, discret, onDragEnd);
+  noteCardViewGrid = new NoteCardViewGrid(grid, UISettingsHelper.getInstance().get("in_line"), discret, onDragEnd);
   this.noteCardViewGrid = noteCardViewGrid;
   noteCardViewGrid.onFolderClick(function (folder) {
     list(folder.path);
@@ -422,6 +411,7 @@ function (_ContextualDialog2) {
 var mNoteContextualDialog = new NoteContextualDialog();
 var mNewFolderDialog = new NewFolderDialog();
 var refreshTimeout = undefined;
+var lastListingRequestId = undefined;
 
 function sortBy(sortBy, reversed, discret) {
   notePath = [];
@@ -475,8 +465,10 @@ function sortBy(sortBy, reversed, discret) {
   currentTask.startList();
 }
 
-function onListEnd(pathToList, files, metadatas, discret) {
-  if (!_.isEqual(files, oldFiles)) {
+function onListEnd(pathToList, files, metadatas, discret, force) {
+  lastListingRequestId = undefined;
+
+  if (!_.isEqual(files, oldFiles) || force) {
     var scroll = resetGrid(discret);
     oldFiles = files;
     var noteCardViewGrid = this.noteCardViewGrid;
@@ -495,7 +487,13 @@ function onListEnd(pathToList, files, metadatas, discret) {
 
         if (filename.endsWith(".sqd")) {
           var metadata = metadatas != undefined ? metadatas[file.path] : undefined;
-          var noteTestTxt = new Note(Utils.cleanNoteName(filename), metadata != undefined ? metadata.shorttext : "", file.path, metadata != undefined ? metadata.metadata : undefined, metadata != undefined ? metadata.previews : undefined, metadata == undefined, metadata != undefined ? metadata.media : undefined);
+          var needsRefresh = metadata == undefined;
+
+          if (metadata == undefined) {
+            metadata = cachedMetadata[file.path];
+          }
+
+          var noteTestTxt = new Note(Utils.cleanNoteName(filename), metadata != undefined ? metadata.shorttext : "", file.path, metadata != undefined ? metadata.metadata : undefined, metadata != undefined ? metadata.previews : undefined, needsRefresh, metadata != undefined ? metadata.media : undefined);
           noteTestTxt.isPinned = file.isPinned;
           noteTestTxt.originalIndex = i;
           notes.push(noteTestTxt);
@@ -595,6 +593,11 @@ var notes = [];
 
 function list(pathToList, discret) {
   if (refreshTimeout !== undefined) clearTimeout(refreshTimeout);
+
+  if (lastListingRequestId != undefined) {
+    RequestBuilder.sRequestBuilder.cancelRequest(lastListingRequestId);
+  }
+
   if (pathToList == undefined) pathToList = currentPath;
   console.log("listing path " + pathToList);
   var hasPathChanged = currentPath !== pathToList;
@@ -617,7 +620,7 @@ function list(pathToList, discret) {
   }
 
   var fb = new FileBrowser(pathToList);
-  fb.list(function (error, files, endOfSearch, metadatas) {
+  lastListingRequestId = fb.list(function (error, files, endOfSearch, metadatas) {
     if (error || endOfSearch || files.length > 0) {
       document.getElementById("page-content").style.display = "block";
       document.getElementById("note-loading-view").style.display = "none";
@@ -698,12 +701,6 @@ document.getElementById("add-directory-button").onclick = function () {
   mNewFolderDialog.show();
 };
 
-document.getElementById("search-input").onkeydown = function (event) {
-  if (event.key === 'Enter') {
-    searchInNotes(this.value);
-  }
-};
-
 document.getElementById("back_arrow").addEventListener("click", function () {
   list(FileUtils.getParentFolderFromPath(currentPath));
 });
@@ -734,12 +731,7 @@ var dias = document.getElementsByClassName("mdl-dialog");
 
 for (var i = 0; i < dias.length; i++) {
   dialogPolyfill.registerDialog(dias[i]);
-}
-
-document.getElementById("search-button").onclick = function () {
-  var value = document.getElementById("search-input").value;
-  if (value.length > 0) searchInNotes(value);
-}; //nav buttons
+} //nav buttons
 
 
 document.getElementById("browser-button").onclick = function () {
@@ -875,24 +867,49 @@ registerWriterEvent("loaded", function () {
   }
 });
 registerWriterEvent("error", function () {
-  cancelLoad();
+  hideEditor();
 });
 
 function setDraggable(draggable) {
   if (draggable) $(document.getElementsByClassName("mdl-layout__header")[0]).css("-webkit-app-region", "drag");else $(document.getElementsByClassName("mdl-layout__header")[0]).css("-webkit-app-region", "unset");
 }
 
-function cancelLoad() {
+function hideEditor() {
   isLoadCanceled = true;
   $(loadingView).fadeOut();
   $(writerFrame).fadeOut();
   $("#editor-container").hide();
   $("#drag-bar").show();
   setDraggable(true);
+} // line / grid switch
+
+
+function setInLineButton(isInLine) {
+  document.getElementById("line-grid-switch-button").getElementsByClassName("material-icons")[0].innerHTML = !isInLine ? "view_headline" : "view_module";
 }
 
+function setInLine(isInLine) {
+  UISettingsHelper.getInstance().set("in_line", isInLine);
+  UISettingsHelper.getInstance().postSettings();
+  setInLineButton(isInLine);
+  onListEnd(currentPath, oldFiles, cachedMetadata, true, true);
+}
+
+function toggleInLine() {
+  setInLine(!UISettingsHelper.getInstance().get("in_line"));
+}
+
+document.getElementById("line-grid-switch-button").onclick = function () {
+  toggleInLine();
+};
+
 document.getElementById("cancel-load-button").onclick = function () {
-  cancelLoad();
+  hideEditor();
+  return false;
+};
+
+document.getElementById("editor-container").onclick = function () {
+  hideEditor();
   return false;
 };
 
@@ -1000,6 +1017,7 @@ UISettingsHelper.getInstance().loadSettings(function (settings, fromCache) {
     initPath = "/";
   }
 
+  setInLineButton(settings['in_line']);
   $("input[name='sort-by'][value='" + settings['sort_by'] + "']").parent().addClass("is-checked");
   $("input[name='sort-by'][value='" + settings['sort_by'] + "']").attr('checked', 'checked');
   document.getElementById("reversed-order").checked = settings['reversed'];

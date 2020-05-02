@@ -4,11 +4,11 @@
 <head>
 	<script src="<!ROOTPATH>requests/request_builder.js"></script>
 	<script src="<!ROOTPATH>compatibility/electron/request_builder.js"></script>
+	<script src="<!ROOTPATH>libs/jquery.min.js"></script>
 	<script src="<!ROOTPATH>compatibility/compatibility.js"></script>
 	<script src="<!ROOTPATH>compatibility/compatibility-editor.js"></script>
 	<script src="<!ROOTPATH>compatibility/android/android_recorder.js"></script>
 
-	<script src="<!ROOTPATH>libs/jquery.min.js"></script>
 	<script src="<!ROOTPATH>libs/polyfill.js"></script>
 	<script src="<!ROOTPATH>libs/dialog-polyfill.js"></script>
 	<link rel="stylesheet" href="<!ROOTPATH>libs/polyfill.css">
@@ -347,9 +347,7 @@
 					</button>
 					<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" id="more-menu"
 						for="more-button">
-						<li class="mdl-menu__item" id="add-file-button" data-i18n="file_photo">File/Photo</li>
-						<li class="mdl-menu__item" id="add-recording-button" data-i18n="recording">Recording
-						</li>
+
 						<li class="mdl-menu__item" id="button-add-keyword" data-i18n="keywords">Labels</li>
 						<li class="mdl-menu__item" id="note-color-button" data-i18n="note_color">Note Color
 						</li>
@@ -357,9 +355,7 @@
 							data-i18n="reminders">
 							Reminders</li>
 
-						<li id="todolist-button" class="mdl-menu__item in-toolbar-button" data-i18n="new_todolist">
-							Todo-List
-						</li>
+
 
 						<li class="mdl-menu__item in-toolbar-button" href="" id="options-button"
 							data-i18n="more-options">
@@ -367,7 +363,21 @@
 
 					</ul>
 
+					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button first" -
+						id="add-media-button">
+						<i class=" material-icons">image</i> <b>/</b> <i class="material-icons">mic</i>
+					</button>
+					<ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" id="add-media-menu" -
+						for="add-media-button">
+						<li class="mdl-menu__item" id="add-file-button" data-i18n="file_photo">File/Photo</li>
+						<li class="mdl-menu__item" id="add-recording-button" data-i18n="recording">Recording
+						</li>
+					</ul>
 
+					<button id="todolist-button" -
+						class="mdl-button mdl-js-button headerbar-button in-toolbar-button first">
+						<i class="material-icons">check_circle_outline</i>
+					</button>
 
 					<button class="mdl-button mdl-js-button headerbar-button in-toolbar-button first" id="bold">
 						<i class="material-icons">format_bold</i>
@@ -586,4 +596,4 @@
 	</span>
 
 </body>
-</html>
+</head>

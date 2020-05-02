@@ -18,10 +18,20 @@ function () {
     this.isAndroid = (typeof app === "undefined" ? "undefined" : _typeof(app)) === "object";
     this.isGtk = false;
     console.log("is electron ?" + this.isElectron);
+    console.log("is isAndroid ?" + this.isAndroid);
 
     if (this.isElectron) {
       RequestBuilder = ElectronRequestBuilder;
       console.log("set resquest builder");
+    }
+
+    if (this.isAndroid) {
+      $(document).on('ajaxSend', function (elm, xhr, settings) {
+        if (settings.crossDomain === false) {
+          xhr.setRequestHeader('requesttoken', app.getRequestToken());
+          xhr.setRequestHeader('OCS-APIREQUEST', 'true');
+        }
+      });
     }
   }
 

@@ -14,7 +14,7 @@ FileBrowser.prototype.list = function (callback) {
   if (this.path == "recentdb://") {
     console.log("getting recent");
     var db = RecentDBManager.getInstance();
-    db.getFlatenDB(function (err, flaten, pin, metadata) {
+    return db.getFlatenDB(function (err, flaten, pin, metadata) {
       if (err) return callback(true);
       console.log(JSON.stringify(flaten));
       var files = [];
@@ -80,7 +80,7 @@ FileBrowser.prototype.list = function (callback) {
     console.log("getting keyword");
     var keywordsDBManager = new KeywordsDBManager();
     var filebrowser = this;
-    keywordsDBManager.getFlatenDB(function (error, data) {
+    return keywordsDBManager.getFlatenDB(function (error, data) {
       var files = [];
       console.log("keyword " + filebrowser.path.substring("keyword://".length));
       var _iteratorNormalCompletion3 = true;
@@ -115,7 +115,7 @@ FileBrowser.prototype.list = function (callback) {
     });
   } else {
     var fbrowser = this;
-    RequestBuilder.sRequestBuilder.get(this.path.startsWith("search://") ? "/notes/getSearchCache" : "/browser/list?path=" + encodeURIComponent(this.path), function (error, data) {
+    return RequestBuilder.sRequestBuilder.get(this.path.startsWith("search://") ? "/notes/getSearchCache" : "/browser/list?path=" + encodeURIComponent(this.path), function (error, data) {
       if (error) {
         callback(error);
         return;

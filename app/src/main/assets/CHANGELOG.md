@@ -1,3 +1,16 @@
+# Version 0.21.0
+
+Translation:
+
+Piotr Jezusek (Polish), Mac Guffin (Russian), Christian Scholz (German), Alberto Cañete (Spanish)
+Design improvement based on Xananax suggestions
+Display as list
+Minimize/maximize todolist in overview
+Note shortcut on launcher
+Crash report
+Disable cache
+
+
 # Version 0.20.0
 
 New black theme

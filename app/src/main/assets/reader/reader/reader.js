@@ -1156,11 +1156,15 @@ Writer.prototype.displayCountDialog = function () {
 };
 
 Writer.prototype.increaseFontSize = function () {
-  this.formatDoc("increaseFontSize", undefined);
+  console.log("increaseFontSize");
+  if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) this.formatDoc("increaseFontSize", undefined);else {
+    console.log("surrong");
+    this.surroundSelection(document.createElement('big'));
+  }
 };
 
 Writer.prototype.decreaseFontSize = function () {
-  this.formatDoc("decreaseFontSize", undefined);
+  if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) this.formatDoc("decreaseFontSize", undefined);else this.surroundSelection(document.createElement('small'));
 };
 
 Writer.prototype.surroundSelection = function (element) {
@@ -1168,10 +1172,10 @@ Writer.prototype.surroundSelection = function (element) {
     var sel = window.getSelection();
 
     if (sel.rangeCount) {
-      var range = sel.getRangeAt(0).cloneRange();
-      range.surroundContents(element);
-      sel.removeAllRanges();
-      sel.addRange(range);
+      var selection = window.getSelection().getRangeAt(0);
+      var selectedText = selection.extractContents();
+      element.appendChild(selectedText);
+      selection.insertNode(element);
     }
   }
 }; //var KeywordsDBManager = require(rootpath + "keywords/keywords_db_manager").KeywordsDBManager;

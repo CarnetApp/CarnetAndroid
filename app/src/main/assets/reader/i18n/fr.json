@@ -82,5 +82,15 @@
     "date": "Date",
     "beta_warning_reminders": "Les \"Rappels\" sont toujours une fonctionnalité en test et ne fonctionneront que sur Android",
     "more-options": "Options supplémentaires",
-    "delete_todolist_confirmation": "Voulez-vous supprimer cette liste ? Cette opération est irréversible."
+    "delete_todolist_confirmation": "Voulez-vous supprimer cette liste ? Cette opération est irréversible.",
+    "start_with_browser_view": "Démarrer en mode \"explorateur\"",
+    "note_color": "Couleur de la note",
+    "new_todolist": "Nouvelle Todo-Liste",
+    "remove_todo_list": "Supprimer la ToDo-List",
+    "add_item": "Ajouter un élément",
+    "completed": "Terminés",
+    "todo": "À faire",
+    "something_went_wrong_please_reload": "Une erreur est survenue... S'il vous plaît, rechargez la page.",
+    "display_more": "Afficher plus",
+    "display_less": "Afficher moins"
 }

@@ -4,11 +4,11 @@ var KeywordsDBManager = function KeywordsDBManager(path) {};
 
 KeywordsDBManager.prototype.getFullDB = function (callback) {
   console.log("getFullDB");
-  RequestBuilder.sRequestBuilder.get("/keywordsdb", callback);
+  return RequestBuilder.sRequestBuilder.get("/keywordsdb", callback);
 };
 
 KeywordsDBManager.prototype.getFlatenDB = function (callback) {
-  this.getFullDB(function (err, data) {
+  return this.getFullDB(function (err, data) {
     console.log(data);
     var fullDB = data["data"];
     var flaten = {};

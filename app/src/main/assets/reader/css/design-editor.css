@@ -650,7 +650,7 @@ div#container-button::-webkit-scrollbar {
 .keyword-in-text{
 	padding-left: 10px;
 	padding-right: 10px;
-	border: 1px rgba(119, 119, 119, 0.5) solid;
+	border: 1px rgba(119, 119, 119, 0.6) solid;
 	cursor: pointer;
 	padding-top: 3px;
 	padding-bottom: 3px;
@@ -702,4 +702,9 @@ div#container-button::-webkit-scrollbar {
 
 .mdl-layout {
 	overflow-y: hidden;
+}
+
+
+.mdl-button {
+	min-width: unset;
 }

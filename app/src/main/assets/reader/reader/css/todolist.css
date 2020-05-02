@@ -35,6 +35,8 @@
     bottom:50px;
     right:80px;
     z-index:200;
+    background: var(--body-bg);
+    opacity: 0.8;
 }
 
 .remove-todo-list{

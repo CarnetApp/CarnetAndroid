@@ -86,6 +86,16 @@ Utils.srt = function (desc) {
   return function (a, b) {
     return desc ? ~~(a < b) : ~~(a > b);
   };
+}; //from https://stackoverflow.com/questions/7467840/nl2br-equivalent-in-javascript
+
+
+Utils.nl2br = function (str, is_xhtml) {
+  if (typeof str === 'undefined' || str === null) {
+    return '';
+  }
+
+  var breakTag = is_xhtml || typeof is_xhtml === 'undefined' ? '<br />' : '<br>';
+  return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
 };
 
 Utils.applyCss = function (url, onloaded) {

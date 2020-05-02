@@ -1,6 +1,6 @@
 .demo-card-wide.mdl-card {
     min-height: 0px;
-    margin: 5px;
+    margin: 10px;
     cursor: pointer;
 }
 
@@ -118,26 +118,22 @@ body {
     -webkit-app-region: no-drag;
 }
 
-.folder-icon {
-    width: 50px;
-}
-
 .card-more-button {
+    top:5px;
     right: 0px;
     background: inherit !important;
     position: absolute !important;
 }
 
-.keywords{
-    margin-bottom:16px;
-}
-
 .keyword {
-    margin-right: 3px;
+    margin-right: 10px;
     margin-top: 3px;
     padding: 3px;
-    background: rgba(210, 210, 210, 0.555);
+    padding-left: 10px;
+    padding-right: 10px;
     display: inline-block;
+    border: 1px rgba(119, 119, 119, 0.6) solid;
+    border-radius: 5px;
 }
 
 .card-rating {

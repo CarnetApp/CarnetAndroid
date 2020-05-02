@@ -1,7 +1,8 @@
 "use strict";
 
-var NoteCardView = function NoteCardView(elem, onTodoListChange) {
+var NoteCardView = function NoteCardView(elem, onTodoListChange, masonry) {
   this.elem = elem;
+  this.masonry = masonry;
   this.init();
   this.onTodoListChange = onTodoListChange;
 };
@@ -57,6 +58,22 @@ NoteCardView.prototype.refreshTodoList = function () {
   }
 };
 
+NoteCardView.prototype.setIsAppend = function (isAppend) {
+  this.isAppend = isAppend;
+  if (isAppend) this.toggleDisplayMore();
+};
+
+NoteCardView.prototype.toggleDisplayMore = function () {
+  console.log("todolist height " + $(this.cardTodoLists).height());
+
+  if ($(this.cardMedias).height() >= 300) {
+    this.displayMore.classList.add("display-more-media");
+    this.displayMore.style.display = "block";
+  } else if ($(this.cardTodoLists).height() >= 300) {
+    this.displayMore.style.display = "block";
+  }
+};
+
 NoteCardView.prototype.setNote = function (note) {
   var _this = this;
 
@@ -71,7 +88,13 @@ NoteCardView.prototype.setNote = function (note) {
     this.oldColor = this.note.metadata.color;
   }
 
-  if (note.title.indexOf("untitled") == 0) this.cardTitleText.innerHTML = "";else this.cardTitleText.innerHTML = note.title;
+  if (note.metadata != undefined && note.metadata.title != undefined && note.metadata.title != "") {
+    this.cardTitleText.innerHTML = note.metadata.title;
+  } else if (note.title.indexOf("untitled") == 0) {
+    this.cardTitleText.innerHTML = "";
+    this.cardTitleText.style.display = "none";
+  } else this.cardTitleText.innerHTML = note.title;
+
   var dateStamp = note.metadata.custom_date;
   if (dateStamp == undefined) dateStamp = note.metadata.last_modification_date;
   var date = new Date(dateStamp).toLocaleDateString();
@@ -96,35 +119,37 @@ NoteCardView.prototype.setNote = function (note) {
   if (note.metadata.rating > 0) this.cardRating.innerHTML = note.metadata.rating + "★";
   this.cardKeywords.innerHTML = "";
 
-  if (typeof note.metadata.keywords[Symbol.iterator] === 'function') {
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
+  if (note.metadata.keywords.length > 0) {
+    if (typeof note.metadata.keywords[Symbol.iterator] === 'function') {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
-    try {
-      for (var _iterator = note.metadata.keywords[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var keyword = _step.value;
-        console.log("keyword " + keyword);
-        keywordSpan = document.createElement('span');
-        keywordSpan.innerHTML = keyword;
-        keywordSpan.classList.add("keyword");
-        this.cardKeywords.appendChild(keywordSpan);
-      }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
       try {
-        if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-          _iterator["return"]();
+        for (var _iterator = note.metadata.keywords[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var keyword = _step.value;
+          console.log("keyword " + keyword);
+          keywordSpan = document.createElement('span');
+          keywordSpan.innerHTML = keyword;
+          keywordSpan.classList.add("keyword");
+          this.cardKeywords.appendChild(keywordSpan);
         }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
       } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
         }
       }
     }
-  }
+  } else this.cardKeywords.style.display = "none";
 
   this.cardMedias.innerHTML = "";
 
@@ -291,6 +316,7 @@ NoteCardView.prototype.setNote = function (note) {
 
 NoteCardView.prototype.init = function () {
   this.elem.classList.add("mdl-card");
+  this.elem.classList.add("small-view");
   this.elem.classList.add("note-card-view");
   this.menuButton = document.createElement('button');
   this.menuButton.classList.add("mdl-button");
@@ -308,11 +334,34 @@ NoteCardView.prototype.init = function () {
   this.cardText = document.createElement('div');
   this.cardText.classList.add("card-text");
   this.cardTodoLists = document.createElement('div');
+  this.cardTodoLists.classList.add("todo-lists");
   this.cardTitleText = document.createElement('h2');
   this.cardTitleText.classList.add("card-title");
   this.cardContent.appendChild(this.cardTitleText);
   this.cardContent.appendChild(this.cardText);
   this.cardContent.appendChild(this.cardTodoLists);
+  this.displayMore = document.createElement('div');
+  this.displayMore.classList.add("display-more");
+  this.displayMore.innerHTML = $.i18n("display_more");
+  var self = this;
+
+  this.displayMore.onclick = function () {
+    self.elem.classList.add("noclick");
+
+    if (self.elem.classList.contains("small-view")) {
+      self.elem.classList.remove("small-view");
+      self.masonry.layout();
+      self.displayMore.innerHTML = $.i18n("display_less");
+    } else {
+      self.elem.classList.add("small-view");
+      self.masonry.layout();
+      self.displayMore.innerHTML = $.i18n("display_more");
+    }
+
+    return false;
+  };
+
+  this.cardContent.appendChild(this.displayMore);
   this.audioList = document.createElement('table');
   this.audioList.classList.add("card-audio-list");
   this.cardContent.appendChild(this.audioList);
@@ -332,40 +381,56 @@ NoteCardView.prototype.init = function () {
   this.cardMedias.classList.add("card-medias");
   this.cardContent.appendChild(this.cardMedias);
   this.elem.appendChild(this.cardContent);
-}; //var Masonry = require('masonry-layout');
+};
 
+var MasonryWrapper = function MasonryWrapper(elem) {
+  this.elem = elem;
+  this.options = {};
+};
 
-var NoteCardViewGrid = function NoteCardViewGrid(elem, discret, dragCallback) {
+MasonryWrapper.prototype.appended = function () {};
+
+MasonryWrapper.prototype.layout = function () {};
+
+var NoteCardViewGrid = function NoteCardViewGrid(elem, inLine, discret, dragCallback) {
   this.elem = elem;
   this.discret = discret;
-  this.init();
+  this.init(inLine);
   this.dragCallback = dragCallback;
 };
 
-NoteCardViewGrid.prototype.init = function () {
+NoteCardViewGrid.prototype.init = function (inLine) {
   this.noteCards = [];
   this.lastAdded = 0;
   this.notes = [];
-  var grid = this; //calculating card width
+  this.setInLine(inLine);
+};
 
-  this.width = 200;
+NoteCardViewGrid.prototype.setInLine = function (isInLine) {
+  this.isInLine = isInLine;
 
-  if (document.body.clientWidth / 2 - 10 < 200) {
-    if (document.body.clientWidth > 300) this.width = document.body.clientWidth / 2 - 13;else this.width = document.body.clientWidth - 10;
-  }
+  if (!isInLine) {
+    var grid = this; //calculating card width
 
-  var Masonry = compatibility.getMasonry();
-  this.msnry = new Masonry(this.elem, {
-    // options
-    itemSelector: '.demo-card-wide.mdl-card',
-    fitWidth: true,
-    columnWidth: this.width + 10,
-    transitionDuration: grid.discret ? 0 : "0.6s",
-    animationOptions: {
-      queue: false,
-      isAnimated: false
+    this.width = 200;
+
+    if (document.body.clientWidth / 2 - 10 < 200) {
+      if (document.body.clientWidth > 300) this.width = document.body.clientWidth / 2 - 13;else this.width = document.body.clientWidth - 10;
     }
-  });
+
+    var Masonry = compatibility.getMasonry();
+    this.msnry = new Masonry(this.elem, {
+      // options
+      itemSelector: '.demo-card-wide.mdl-card',
+      fitWidth: true,
+      columnWidth: this.width + 20,
+      transitionDuration: grid.discret ? 0 : "0.6s",
+      animationOptions: {
+        queue: false,
+        isAnimated: false
+      }
+    });
+  } else [this.msnry = new MasonryWrapper(this.elem)];
 };
 
 NoteCardViewGrid.prototype.onFolderClick = function (callback) {
@@ -412,13 +477,15 @@ NoteCardViewGrid.prototype.addNext = function (num) {
       var noteElem = document.createElement("div");
       noteElem.classList.add("demo-card-wide");
       noteElem.classList.add("isotope-item");
+      if (this.isInLine) noteElem.classList.add("in-line-item");
       noteElem.style.width = this.width + "px";
-      var noteCard = new NoteCardView(noteElem, this.onTodoListChange);
+      var noteCard = new NoteCardView(noteElem, this.onTodoListChange, this.msnry);
       noteCard.setNote(note);
       noteElem.note = note;
       this.noteCards.push(noteCard);
       this.elem.appendChild(noteElem);
       this.msnry.appended(noteElem);
+      noteCard.setIsAppend(true);
       $(noteElem).bind('click', {
         note: note,
         callback: this.onNoteClick

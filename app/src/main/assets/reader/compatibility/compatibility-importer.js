@@ -4,6 +4,10 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
@@ -32,6 +36,22 @@ function (_Compatibility) {
 
     return _possibleConstructorReturn(this, _getPrototypeOf(CompatibilityImporter).call(this));
   }
+
+  _createClass(CompatibilityImporter, [{
+    key: "exit",
+    value: function exit() {
+      if (this.isGtk) {
+        window.parent.document.title = "msgtopython:::exit";
+        parent.postMessage("exit", "*");
+      } else if (this.isElectron) {
+        var _require = require('electron'),
+            ipcRenderer = _require.ipcRenderer;
+
+        ipcRenderer.sendToHost('exit', "");
+      } else if (this.isAndroid) app.postMessage("exit", "*");else if (window.self !== window.top) //in iframe
+        parent.postMessage("exit", "*");
+    }
+  }]);
 
   return CompatibilityImporter;
 }(Compatibility);

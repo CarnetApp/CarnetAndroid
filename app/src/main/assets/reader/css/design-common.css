@@ -12,17 +12,42 @@
     --label-text-color: rgb(63, 81, 181);
     --fab-button-bg: #fafafa;
     --fab-button-hover-bg: rgba(158, 158, 158, .6);
+    --scroll-bar-bg: rgba(17, 0, 0, 0);
+    --scroll-bar-fg:#757575;
 
 }
  
+::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+    background: var(--scroll-bar-bg);
+}
+
+@media (max-width: 700px) {
+    ::-webkit-scrollbar {
+        height: 3px;
+        
+    }
+}
+
+
+::-webkit-scrollbar-thumb {
+    background: var(--scroll-bar-fg);
+}
+
+::-webkit-scrollbar-corner {
+    background: #000;
+}
+
 @font-face {
     font-family: 'Ubuntu';
     src: url(../fonts/ubuntu.woff2) format('woff2');
 }
 
 body{
-    font-family: Ubuntu;
+    font-family: "Roboto", Ubuntu;
     background: var(--body-bg);
+    scrollbar-color: var(--scroll-bar-fg) var(--scroll-bar-bg);
 }
 
 .mdl-layout__header-row, .mdl-layout__header {
