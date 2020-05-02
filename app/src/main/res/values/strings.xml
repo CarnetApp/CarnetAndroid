@@ -20,7 +20,7 @@
     <string name="add_folder">Add folder</string>
     <string name="name">Name</string>
     <string name="new_folder_name">New folder</string>
-    <string name="storage_preference_details"/>
+    <string name="storage_preference_details" />
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="general_header">General</string>
     <string name="paiement_header">Payment</string>

@@ -12,14 +12,20 @@
         android:layout_margin="6dp"
         card_view:cardElevation="5dp"
         card_view:cardCornerRadius="10dp"
-        card_view:cardBackgroundColor="?attr/MainNoteBackground"
 
        >
+        <FrameLayout
+            android:id="@+id/border_layout"
+            android:background="@drawable/card_border"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent"/>
         <LinearLayout
             android:orientation="vertical"
             android:id="@+id/cardview"
-            android:background="@drawable/transparent_ripple"
+            android:background="@drawable/card_background"
             android:padding="5dp"
+            android:layout_margin="2dp"
             android:layout_width="match_parent" android:layout_height="match_parent"
             >
             <LinearLayout
