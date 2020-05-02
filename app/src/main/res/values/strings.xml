@@ -156,4 +156,5 @@
     <string name="dialog_comment">You can add a comment here</string>
     <string name="display_more">Display more</string>
     <string name="display_less">Display less</string>
+    <string name="importer">Import</string>
 </resources>

@@ -10,6 +10,7 @@ import com.spisoft.sync.utils.FileLocker;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -293,5 +294,17 @@ public class FileUtils {
             e.printStackTrace();
         }
 
+    }
+
+    public static boolean move(String from, String to) {
+        try {
+            copy(new FileInputStream(from), new FileOutputStream(to));
+            return new File(from).delete();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

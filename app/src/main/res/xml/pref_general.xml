@@ -44,6 +44,10 @@
         android:entries="@array/theme_entries"
         android:entryValues="@array/theme_values" />
     <Preference
+        android:key="pref_import"
+        android:title="@string/importer"
+        />
+    <Preference
         android:key="pref_desktop_version"
         android:title="@string/desktop_version"
         />

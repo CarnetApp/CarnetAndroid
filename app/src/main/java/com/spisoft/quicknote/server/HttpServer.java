@@ -10,6 +10,7 @@ import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
+import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.utils.FileUtils;
@@ -161,6 +162,34 @@ public class HttpServer extends NanoHTTPD {
                 }
                 else if(Method.POST.equals(method)){
                     switch (subpath) {
+                        case "note/import":
+                            String relativeNotePath = (post.get("path").get(0) == null || post.get("path").get(0) == "" ? "" :
+                                    (post.get("path").get(0) + "/")) + post.get("media[]").get(0);
+
+                            String tmpPath = files.get("media[]");
+                            File noteFile = new File(PreferenceHelper.getRootPath(mContext)+"/"+relativeNotePath);
+                            boolean success = FileUtils.move(tmpPath, PreferenceHelper.getRootPath(mContext)+"/"+relativeNotePath);
+
+                            if(success){
+                                try {
+                                    JSONObject metadata = new JSONObject(post.get("metadata").get(0));
+                                    JSONArray keywords = metadata.getJSONArray("keywords");
+                                    for (int i = 0; i<keywords.length(); i++){
+                                        KeywordsHelper.getInstance(mContext).addKeyword(keywords.getString(i), new Note(noteFile.getAbsolutePath()));
+                                    }
+                                    if(post.get("add_to_recent").get(0).equals("true")){
+                                        Note note = new Note(noteFile.getAbsolutePath());
+                                        RecentHelper.getInstance(mContext).addNote(note);
+                                        if(post.get("is_pinned").get(0).equals("true"))
+                                            RecentHelper.getInstance(mContext).pin(note);
+
+                                    }
+                                    success = true;
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            return success?NanoHTTPD.newFixedLengthResponse("Saved !"):NanoHTTPD.newFixedLengthResponse(Response.Status.INTERNAL_ERROR,"","");
                         case "notes/move":
                             String from = post.get("from").get(0);
                             String to = post.get("to").get(0);
