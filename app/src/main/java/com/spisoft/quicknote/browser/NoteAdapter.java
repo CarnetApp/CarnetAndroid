@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.spisoft.quicknote.AudioService;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.R;
@@ -556,6 +557,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements NoteInfoRetriev
                 View keyview = inflater.inflate(R.layout.keyword_item, null);
                 ((TextView) keyview.findViewById(R.id.textView)).setText(keyword);
                 keywordsView.addView(keyview);
+                ((FlexboxLayout.LayoutParams)keyview.getLayoutParams()).rightMargin = 10;
 
             }
         }
