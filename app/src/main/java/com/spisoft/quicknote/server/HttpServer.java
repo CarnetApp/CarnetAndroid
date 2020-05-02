@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.util.ServerRunner;
@@ -49,7 +50,7 @@ public class HttpServer extends NanoHTTPD {
     private final Context mContext;
     private final String extractedNotePath;
     private String mCurrentNotePath;
-
+    private List<String> mAuthorizedID;
     /**
      * logger to log to.
      */
@@ -59,6 +60,7 @@ public class HttpServer extends NanoHTTPD {
 
     public HttpServer(Context ct) {
         super(0);
+        mAuthorizedID = new ArrayList<>();
         ServerRunner.executeInstance(this);
         try {
             start();
@@ -108,7 +110,12 @@ public class HttpServer extends NanoHTTPD {
             Log.d("pathdebug","path: "+path);
 
             if(path.startsWith("/api/")){
+                if(!(session.getHeaders().get("requesttoken")!=null && mAuthorizedID.contains(session.getHeaders().get("requesttoken")) || path.contains("getMedia")))
+                    return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
+                mAuthorizedID.remove(session.getHeaders().get("requesttoken"));
                 String subpath = path.substring("/api/".length());
+
+
                 if(Method.GET.equals(method)) {
                     switch (subpath) {
                         case "note/open":
@@ -527,5 +534,11 @@ public class HttpServer extends NanoHTTPD {
         String url = "http://localhost:"+port+path;
         Log.d(TAG, url);
         return url;
+    }
+
+    public String generateID(){
+        String id = UUID.randomUUID().toString();
+        mAuthorizedID.add(id);
+        return id;
     }
 }

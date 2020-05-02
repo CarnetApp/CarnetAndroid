@@ -516,6 +516,11 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         }
 
         @JavascriptInterface
+        public String getRequestToken(){
+            return mServer2.generateID();
+        }
+
+        @JavascriptInterface
         public void selectFile(String callback) {
             mSelectFileCallback = callback;
             mWebView.post(new Runnable() {
