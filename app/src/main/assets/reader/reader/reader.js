@@ -1491,7 +1491,7 @@ RenameNoteTask.prototype.run = function (callback) {
     var name = FileUtils.stripExtensionFromName(FileUtils.getFilename(task.writer.note.path));
     nameInput.value = name.startsWith("untitled") ? "" : name;
     var data = {
-      message: 'Note couldn\'t be renamed',
+      message: $.i18n("unable_rename_note"),
       timeout: 2000
     };
     task.writer.displaySnack(data);

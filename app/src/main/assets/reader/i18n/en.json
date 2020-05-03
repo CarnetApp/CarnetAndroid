@@ -92,5 +92,6 @@
     "completed": "Completed",
     "todo": "To do",
     "display_more": "Display more",
-    "display_less": "Display less"
+    "display_less": "Display less",
+    "unable_rename_note": "Note couldn't be renamed"
 }
