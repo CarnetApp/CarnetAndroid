@@ -110,9 +110,12 @@ public class HttpServer extends NanoHTTPD {
             Log.d("pathdebug","path: "+path);
 
             if(path.startsWith("/api/")){
-                if(!(session.getHeaders().get("requesttoken")!=null && mAuthorizedID.contains(session.getHeaders().get("requesttoken")) || path.contains("getMedia")))
+                if(!(session.getHeaders().get("requesttoken")!=null && mAuthorizedID.contains(session.getHeaders().get("requesttoken")) || parms.get("requesttoken").get(0)!=null && mAuthorizedID.contains(parms.get("requesttoken").get(0))))
                     return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
-                mAuthorizedID.remove(session.getHeaders().get("requesttoken"));
+                if(session.getHeaders().get("requesttoken")!=null)
+                    mAuthorizedID.remove(session.getHeaders().get("requesttoken"));
+                else
+                    mAuthorizedID.remove(parms.get("requesttoken").get(0));
                 String subpath = path.substring("/api/".length());
 
 
