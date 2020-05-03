@@ -2,6 +2,7 @@ package com.spisoft.quicknote.databases;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -121,7 +122,7 @@ public class NoteManager
     }
 
     public static String moveNote(Context context,Note note, String to){
-        if(!isNoteNameValid(to.split("/notes/")[1]))
+        if(!isNoteNameValid(Uri.parse(to).getLastPathSegment()))
             return null;
 
         File notFile = new File(note.path);
