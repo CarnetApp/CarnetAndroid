@@ -24,7 +24,7 @@ Writer.prototype.displayMediaFullscreen = function (index) {
   var imgContainer = document.createElement("div");
   imgContainer.setAttribute("id", "fullimg_container");
   var img = document.createElement("img");
-  img.src = this.fullscreenableMedia[index];
+  img.src = compatibility.addRequestToken(this.fullscreenableMedia[index]);
   $(img).on('load', function () {
     img.style.marginTop = "-" + $(this).height() / 2 + "px";
     img.style.marginLeft = "-" + $(this).width() / 2 + "px";
@@ -170,7 +170,7 @@ Writer.prototype.setMediaList = function (list) {
     if (FileUtils.isFileImage(filePath)) {
       if (!filePath.startsWith("preview_")) {
         img = document.createElement("img");
-        img.src = filePath;
+        img.src = compatibility.addRequestToken(filePath);
         el.appendChild(img);
         el.classList.add("image-media");
         writer.fullscreenableMedia.push(filePath);

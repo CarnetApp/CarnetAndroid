@@ -283,7 +283,7 @@ CarnetRecorder.prototype.setAudioUrl = function (url, name) {
     document.getElementById("waveform").style.display = "none";
     var audioplayer = this.audioplayer;
     var carnetRecorder = this;
-    this.audioplayer.src = url;
+    this.audioplayer.src = compatibility.addRequestToken(url);
 
     this.audioplayer.oncanplay = function () {
       document.getElementById("recorder-loading").style.display = "none";
@@ -291,7 +291,7 @@ CarnetRecorder.prototype.setAudioUrl = function (url, name) {
       if (audioplayer.duration == "Infinity" || true) {
         // bromite has issues getting metadata, we do it ourselves
         var req = new XMLHttpRequest();
-        req.open('GET', url, true);
+        req.open('GET', compatibility.addRequestToken(url), true);
         req.responseType = 'arraybuffer';
 
         req.onload = function () {

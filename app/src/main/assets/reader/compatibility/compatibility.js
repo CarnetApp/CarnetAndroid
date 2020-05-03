@@ -18,7 +18,6 @@ function () {
     this.isAndroid = (typeof app === "undefined" ? "undefined" : _typeof(app)) === "object";
     this.isGtk = false;
     console.log("is electron ?" + this.isElectron);
-    console.log("is isAndroid ?" + this.isAndroid);
 
     if (this.isElectron) {
       RequestBuilder = ElectronRequestBuilder;
@@ -36,6 +35,16 @@ function () {
   }
 
   _createClass(Compatibility, [{
+    key: "addRequestToken",
+    value: function addRequestToken(url) {
+      if (this.isAndroid) {
+        if (url.indexOf("?") > -1) url += "&";else url += "?";
+        url += "requesttoken=" + app.getRequestToken();
+      }
+
+      return url;
+    }
+  }, {
     key: "openUrl",
     value: function openUrl(url) {
       if (compatibility.isElectron) {
