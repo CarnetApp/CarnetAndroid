@@ -144,6 +144,7 @@ public class CacheManager {
 
     public synchronized Note get(String path) {
         Log.d(TAG, "getting "+path);
+        loadCache();
         return cache.get(path);
     }
 
