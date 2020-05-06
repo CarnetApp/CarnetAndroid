@@ -157,4 +157,7 @@
     <string name="display_more">Display more</string>
     <string name="display_less">Display less</string>
     <string name="importer">Import</string>
+    <string name="importer_beta">Import (Beta)</string>
+    <string name="use_it_with_caution">Use it with caution</string>
+
 </resources>

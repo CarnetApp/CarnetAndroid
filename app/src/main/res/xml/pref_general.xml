@@ -45,7 +45,8 @@
         android:entryValues="@array/theme_values" />
     <Preference
         android:key="pref_import"
-        android:title="@string/importer"
+        android:title="@string/importer_beta"
+        android:summary="@string/use_it_with_caution"
         />
     <Preference
         android:key="pref_desktop_version"
