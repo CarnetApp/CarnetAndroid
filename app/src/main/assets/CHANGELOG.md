@@ -2,7 +2,7 @@
 
 Translation:
 
-Piotr Jezusek (Polish), Mac Guffin (Russian), Christian Scholz (German), Alberto Cañete (Spanish)
+Piotr Jezusek (Polish), Mac Guffin (Russian), Christian Scholz (German), Alberto Cañete (Spanish), Raphaël Legouix (Hebrew)
 Design improvement based on Xananax suggestions
 Display as list
 Minimize/maximize todolist in overview
