@@ -31,6 +31,7 @@ import com.spisoft.quicknote.browser.RecentNoteListFragment;
 import com.spisoft.quicknote.browser.SearchFragment;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
+import com.spisoft.quicknote.utils.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -213,6 +214,8 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
             public void run() {
                 new Thread(){
                     public void run(){
+                        if(Utils.isMainLiss(getContext()))
+                            return;
                         HttpsURLConnection urlConnection = null;
                         try {
 

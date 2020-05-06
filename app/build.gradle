@@ -8,7 +8,7 @@ static def getDate() {
     def date = new Date().getTime() / 1000L - 1472637600L
     return (int) (date / 1000L)
 }
-version = "0.20.0"
+version = "0.21.0"
 static def getFormattedDate() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMdd.HHmm')
@@ -16,7 +16,7 @@ static def getFormattedDate() {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion '28.0.3'
     dexOptions {
         javaMaxHeapSize "4g"
@@ -24,7 +24,7 @@ android {
     defaultConfig {
         applicationId "com.spisoft.quicknote"
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode getDate()
         versionName version+"-" + getFormattedDate()
         multiDexEnabled true
@@ -59,8 +59,8 @@ android {
     productFlavors {
         fdroid {
             dimension "version"
-            versionCode 200
-            versionName "0.20.0"
+            versionCode 210
+            versionName "0.21.0"
         }
         google {
             dimension "version"
@@ -77,9 +77,9 @@ dependencies {
     implementation 'com.github.ACRA.acra:acra-mail:acra-5.2.1'
     implementation 'com.github.ACRA.acra:acra-notification:acra-5.2.1'
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'org.jsoup:jsoup:1.8.3'
+    implementation 'org.jsoup:jsoup:1.11.2'
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.soundcloud.android:android-crop:1.0.1@aar'

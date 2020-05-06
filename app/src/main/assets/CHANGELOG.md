@@ -9,7 +9,9 @@ Minimize/maximize todolist in overview
 Note shortcut on launcher
 Crash report
 Disable cache
-
+Fix note renaming issue
+Security improvement
+Beta google keep importer
 
 # Version 0.20.0
 
