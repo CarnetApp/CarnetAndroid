@@ -59,6 +59,7 @@
             </div>
         </header>
         <div class="centered-container" id="select-folder">
+            Be aware that this is still a beta feature. <br />
             Google provides a way to export all of your Google Keep notes.
             <br />
             <a onclick="compatibility.openUrl('https://takeout.google.com/settings/takeout'); return false;"
@@ -72,7 +73,7 @@
             <br />
             <input type="radio" checked name="archive-type" value="0">
             Google Keep <br>
-            <input type="radio" name="archive-type" value="1">
+            <input type="hidden" name="archive-type" value="1">
             Carnet<br>
             <br>
             <button class="mdl-button mdl-js-button mdl-button--raised" id="select-folder-button">

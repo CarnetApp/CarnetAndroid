@@ -201,6 +201,12 @@ body{
         width: calc(100% - 90px);
         max-width: 300px;
     }
+    .editor {
+        border: unset;
+    }
+    #loading-view{
+        border: unset;
+    }
     #drag-bar{
         display: none;
     }
@@ -341,20 +347,18 @@ body{
 }
 
 .mdl-card__supporting-text [class^="card"], .folder-card-view .mdl-card__supporting-text, .mdl-card__supporting-text .keywords, .mdl-card__supporting-text .todo-list {
-    margin-top: .5rem;
+    margin-top: .6rem;
 }
 
-.folder-card-view .card-title{
-    word-break: break-all;
-}
 
 .folder-card-view{
     padding-bottom: 5px;
 }
 
 .mdl-card__supporting-text [class^="card"],.folder-card-view .mdl-card__supporting-text {
-    padding-right: 1rem;
+    padding-right: 2rem;
     padding-left: .9rem;
+    word-break: break-word;
 }
 .mdl-card__supporting-text .keywords, .mdl-card__supporting-text .todo-list {
     padding-right: 1rem;
@@ -366,6 +370,9 @@ body{
     margin-left: -.2rem;
 }
 
+.folder-card-view .card-title{
+    word-break: break-all;
+}
 
 .note-audio {
     border-top: 0 transparent !important;

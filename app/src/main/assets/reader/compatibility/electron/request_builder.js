@@ -39,6 +39,7 @@ function (_RequestBuilder) {
   _createClass(ElectronRequestBuilder, [{
     key: "get",
     value: function get(path, callback) {
+      var requestId = Utils.generateUID();
       path = this.buildUrl(this.cleanPath(path));
       console.log("getting " + path);
       this.main.sendRequestToServer("GET", path, undefined, function (err, data) {
@@ -50,10 +51,12 @@ function (_RequestBuilder) {
 
         if (!RequestBuilder.sRequestBuilder.isCanceled(requestId)) callback(err, data);
       });
+      return requestId;
     }
   }, {
     key: "post",
     value: function post(path, data, callback) {
+      var requestId = Utils.generateUID();
       path = this.buildUrl(this.cleanPath(path));
       this.main.sendRequestToServer("POST", path, data, function (err, data) {
         if (data != undefined) {
@@ -64,10 +67,12 @@ function (_RequestBuilder) {
 
         if (!RequestBuilder.sRequestBuilder.isCanceled(requestId)) callback(err, data);
       });
+      return requestId;
     }
   }, {
     key: "postFiles",
     value: function postFiles(path, data, files, callback) {
+      var requestId = Utils.generateUID();
       path = this.buildUrl(this.cleanPath(path));
       if (data == undefined) data = {};
       data.files = [];
@@ -104,10 +109,12 @@ function (_RequestBuilder) {
       }
 
       readNext();
+      return requestId;
     }
   }, {
     key: "delete",
     value: function _delete(path, callback) {
+      var requestId = Utils.generateUID();
       path = this.buildUrl(this.cleanPath(path));
       this.main.sendRequestToServer("DELETE", path, undefined, function (err, data) {
         if (data != undefined) {
@@ -118,6 +125,7 @@ function (_RequestBuilder) {
 
         if (!RequestBuilder.sRequestBuilder.isCanceled(requestId)) callback(err, data);
       });
+      return requestId;
     }
   }, {
     key: "buildUrl",
