@@ -120,4 +120,33 @@
     <string name="twelve_hours">12 hodin</string>
     <string name="values_below_15_battery">Nastavení pod 15 minut může vybíjet baterii</string>
     <string name="sync_frequency">Četnost synchronizace</string>
-    </resources>
+    <string name="unable_to_rename_invalid_name">Poznámka obsahuje neplatné znaky</string>
+    <string name="sync_intro_gdrive_text">Jednoduché, většina již má gmailový účet, ale není OpenSource</string>
+    <string name="sync_select_nextcloud_text">Carnet je kompatibilní s každým poskytovatelem NextCloudu. Najděte si prosím poskytovatele a zaregistrujte se u něj (někteří jsou zadarmo)</string>
+    <string name="sync_intro_text_carnet_instance">"Carnet může automaticky zálohovat vaše poznámky online.
+\nVyberte si poskytovatele Carnetu, abyste mohli upravovat poznámky vašem prohlížeči, mobilu a počítači. "</string>
+    <string name="doesnt_accept_new_users">Neakceptuje nové uživatele</string>
+    <string name="donation_ask">Tato aplikace byla vytvořena zadarmo. Zvažte prosím finanční příspěvek</string>
+    <string name="sync">Synchronizovat</string>
+    <string name="system_header">Systém</string>
+    <string name="warning_sync_cloud">Nevybírejte složku, ve které jsou soubory, které nenáleží Carnetu. Pokud vyberete kořenovou složku NextCloudu/ownCloudu, bude celý váš cloud synchronizován do vašeho telefonu.</string>
+    <string name="battery_optimization">Optimalizace baterie</string>
+    <string name="battery_optimization_subtitle">Abyste mohli synchronizovat na pozadí, musíte pro Carnet zakázat optimalizaci baterie</string>
+    <string name="battery_optimization_subtitle2">Na další obrazovce povolte Carnetu ignorovat optimalizaci</string>
+    <string name="battery_optimization_help">Potřebujete pomoc\? Klikněte sem</string>
+    <string name="disable_optimization">Zakázat optimalizaci</string>
+    <string name="audio_player">Audio přehrávač</string>
+    <string name="pause">Pauza</string>
+    <string name="black">Černý</string>
+    <string name="create_home_shortcut">Přidat na domovskou obrazovku</string>
+    <string name="display_grid">Mřížka</string>
+    <string name="display_line">Pod sebou</string>
+    <string name="dialog_text">Omlouváme se, ale Carnet spadnul. Pošlete prosím zprávu vývojářům.</string>
+    <string name="dialog_comment">Sem můžete napsat váš komentář</string>
+    <string name="display_more">Zobrazit více</string>
+    <string name="display_less">Zobrazit méně</string>
+    <string name="importer">Importovat</string>
+    <string name="importer_beta">Importovat (Beta)</string>
+    <string name="use_it_with_caution">Používejte opatrně</string>
+
+</resources>
