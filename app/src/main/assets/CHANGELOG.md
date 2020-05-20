@@ -1,3 +1,7 @@
+# Version 0.21.1
+
+conflict notification must be dismissable
+
 # Version 0.21.0
 
 Translation:
