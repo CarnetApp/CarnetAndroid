@@ -2,8 +2,7 @@ package com.spisoft.quicknote;
 
 import android.content.Context;
 import android.os.Environment;
-import android.preference.PreferenceManager;
-
+import androidx.preference.PreferenceManager;
 import com.spisoft.quicknote.databases.NoteManager;
 
 import java.io.File;

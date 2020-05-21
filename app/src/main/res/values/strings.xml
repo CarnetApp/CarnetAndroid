@@ -159,5 +159,6 @@
     <string name="importer">Import</string>
     <string name="importer_beta">Import (Beta)</string>
     <string name="use_it_with_caution">Use it with caution</string>
+    <string name="multiple_accounts_warning">Having multiple cloud accounts can lead to conflicts, please use only one main cloud account and delete others !\nSorry for the inconvenience...</string>
 
 </resources>

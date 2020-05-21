@@ -1,6 +1,5 @@
 package com.spisoft.quicknote;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,21 +8,20 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.spisoft.quicknote.browser.PermissionChecker;
-import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.intro.HelpActivity;
 import com.spisoft.quicknote.utils.PinView;
 import com.spisoft.quicknote.utils.WebActivity;
 import com.spisoft.quicknote.utils.WebFragment;
+import com.spisoft.sync.Configuration;
 import com.spisoft.sync.account.AccountListActivity;
 import com.spisoft.sync.account.DBAccountHelper;
 
@@ -120,8 +118,15 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
                 intent.putExtra(HelpActivity.SYNC_ONLY, true);
                 startActivity(intent);
             }
-            else
-                startActivity(new Intent(getActivity(),AccountListActivity.class));
+            else if( cursor.getCount() > 1){
+                startActivity(new Intent(getActivity(), AccountListActivity.class));
+
+            } else {
+                cursor.moveToPosition(0);
+                Configuration.sOnAccountSelectedListener.onAccountSelected(
+                        cursor.getInt(cursor.getColumnIndex(DBAccountHelper.KEY_ACCOUNT_ID)),
+                        cursor.getInt(cursor.getColumnIndex(DBAccountHelper.KEY_ACCOUNT_TYPE)));
+            }
             return true;
         }else if(preference==findPreference("pref_desktop_version")){
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/PhieF/CarnetDocumentation/blob/master/README.md"));

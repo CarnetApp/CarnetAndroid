@@ -12,12 +12,15 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -167,7 +170,19 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
     private void onUpdateDone() {
 
-
+        Cursor cursor = DBAccountHelper.getInstance(this).getCursor();
+        if(cursor != null && cursor.getCount() > 1 && !PreferenceManager.getDefaultSharedPreferences(this).getBoolean("has_warn_multiple_accounts",false)){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.multiple_accounts_warning);
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(MainActivity.this, AccountListActivity.class));
+                }
+            });
+            builder.show();
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("has_warn_multiple_accounts",true).commit();
+        }
 
         if(!DBMergerService.isJobScheduledOrRunning(this)){
             DBMergerService.scheduleJob(this,true, DBMergerService.ALL_DATABASES);
