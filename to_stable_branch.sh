@@ -5,7 +5,7 @@
 #git checkout -b stable-$(grep -o "versionName\s\+.*" app/build.gradle | tail -1 | awk '{ print $2 }' | tr -d \''"\')
 #git push origin stable-$(grep -o "versionName\s\+.*" app/build.gradle | tail -1 | awk '{ print $2 }' | tr -d \''"\')
 
-git branch -d stable
+git branch -D stable
 git push origin --delete stable
 git checkout master
 git checkout -b stable
