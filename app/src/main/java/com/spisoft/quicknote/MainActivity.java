@@ -41,11 +41,14 @@ import com.spisoft.quicknote.editor.EditorActivity;
 import com.spisoft.quicknote.intro.HelpActivity;
 import com.spisoft.quicknote.updater.UpdaterActivity;
 import com.spisoft.quicknote.utils.PinView;
+import com.spisoft.quicknote.utils.Utils;
 import com.spisoft.sync.Configuration;
+import com.spisoft.sync.account.AccountListActivity;
 import com.spisoft.sync.account.DBAccountHelper;
 import com.spisoft.sync.synchro.SynchroService;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements PinView.PasswordListener, NoteManager.UpdaterListener, Configuration.SyncStatusListener, EditorActivity {
     public static final String ACTION_RELOAD_KEYWORDS = "action_reload_keywords";
