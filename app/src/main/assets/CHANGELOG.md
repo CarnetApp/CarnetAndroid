@@ -3,6 +3,11 @@
 Better handle right to left languages
 Don't allow multiple cloud accounts to avoid conflicts
 
+Translation:
+
+Raphaël Legouix (Hebrew), Leschek (Czech), Christian Scholz (German)
+
+
 # Version 0.21.1
 
 conflict notification must be dismissable
