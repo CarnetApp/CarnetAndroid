@@ -1,3 +1,8 @@
+# Version 0.22.0
+
+Better handle right to left languages
+Don't allow multiple cloud accounts to avoid conflicts
+
 # Version 0.21.1
 
 conflict notification must be dismissable

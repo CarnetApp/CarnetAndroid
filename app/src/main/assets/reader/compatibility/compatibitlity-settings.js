@@ -55,26 +55,7 @@ function (_Compatibility) {
         };
 
         document.getElementById("connect").onclick = function () {
-          var _require = require('electron'),
-              remote = _require.remote;
-
-          var BrowserWindow = remote.BrowserWindow;
-          var win = new BrowserWindow({
-            width: 500,
-            height: 500,
-            frame: true
-          });
-
-          var url = require('url');
-
-          var path = require('path');
-
-          win.loadURL(url.format({
-            pathname: path.join(__dirname, 'settings/webdav_dialog.html'),
-            protocol: 'file:',
-            slashes: true
-          }));
-          win.setMenu(null);
+          compatibility.openElectronSyncDialog();
         };
 
         if (settingsHelper.getRemoteWebdavAddr() == undefined) {

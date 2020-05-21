@@ -37,10 +37,8 @@ var Importer = function Importer(destPath) {
       $("#note-selection-view").show();
     }
   });
-  console.log("set onchange");
 
   document.getElementById("input_file").onchange = function () {
-    console.log("archive selected");
     importer.onArchiveSelected(this.files[0]);
   };
 };

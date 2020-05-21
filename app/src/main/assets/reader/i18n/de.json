@@ -1,7 +1,7 @@
 {
     "search": "Suchen",
     "recent": "Neueste",
-    "browser": "Explorer",
+    "browser": "Browser",
     "settings": "Einstellungen",
     "keywords": "Schlüsselwörter",
     "welcome": "Willkommen",
@@ -92,5 +92,6 @@
     "completed": "Abgeschlossen",
     "todo": "Zu erledigen",
     "display_more": "Mehr anzeigen",
-    "display_less": "Weniger anzeigen"
+    "display_less": "Weniger anzeigen",
+    "unable_rename_note": "Notiz konnte nicht umbenannt werden"
 }
