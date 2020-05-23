@@ -155,4 +155,7 @@
 <string name="display_more">Mehr anzeigen</string>
     <string name="display_less">Weniger anzeigen</string>
 <string name="importer">Importieren</string>
+<string name="importer_beta">Importieren (Beta)</string>
+    <string name="use_it_with_caution">Mit Vorsicht zu benutzen</string>
+
 </resources>
