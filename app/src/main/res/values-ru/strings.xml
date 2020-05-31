@@ -6,9 +6,9 @@
     <string name="floating">Floating note</string>
     <string name="rename">Переименовать</string>
     <string name="delete">Удалить</string>
-    <string name="remove_recent">Убрать из Последних</string>
+    <string name="remove_recent">Убрать из Текущих</string>
     <string name="storage_preference">Главное хранилище</string>
-    <string name="recent">Последние</string>
+    <string name="recent">Текущие</string>
     <string name="browser">Обзор</string>
     <string name="parent_folder">На уровень выше</string>
     <string name="toast_on_minimize">Нажмите для увеличения</string>
@@ -19,7 +19,7 @@
     <string name="new_folder_name">Новая папка</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="general_header">Основные</string>
-    <string name="paiement_header">Вознаграждение</string>
+    <string name="paiement_header">Поддержать разработку</string>
     <string name="donate_liberapay">Пожертвовать (Liberapay)</string>
     <string name="donate_paypal">Пожертвовать (PayPal)</string>
     <string name="donate">Пожертвовать</string>
@@ -109,7 +109,7 @@
     <string name="fake_note_todo_item_1">Попробовать Carnet</string>
     <string name="fake_note_todo_item_2">Рассказать о Carnet</string>
     <string name="changelog">Список изменений</string>
-    <string name="restore_recent">Вернуть в Последние</string>
+    <string name="restore_recent">Вернуть в Текущие</string>
     <string name="sort_reversed">Обратный порядок</string>
     <string name="sort_default">по-умолчанию</string>
     <string name="sort_creation_date">по дате создания</string>
@@ -135,11 +135,27 @@
     <string name="once_a_day">Раз в день</string>
     <string name="disabled">Отключено</string>
     <string name="twelve_hours">12 часов</string>
-    <string name="values_below_15_battery">Значения менее 15 могут израсходовать заряд</string>
+    <string name="values_below_15_battery">Значения менее 15 мин. могут израсходовать заряд</string>
     <string name="sync_frequency">Частота синхронизации</string>
     <string name="battery_optimization">Оптимизация энергопотребления</string>
     <string name="battery_optimization_subtitle">Для синхронизации в фоновом режиме необходимо отключить экономию заряда для приложения Carnet</string>
     <string name="battery_optimization_subtitle2">В следующем окне разрешите Carnet игнорировать настройки энергосбережения</string>
     <string name="battery_optimization_help">Требуется помощь\? Нажмите здесь</string>
     <string name="disable_optimization">Отключить экономию заряда</string>
+<string name="unable_to_rename_invalid_name">Запись содержит недопустимые символы</string>
+    <string name="audio_player">Аудиоплеер</string>
+    <string name="pause">Пауза</string>
+    <string name="black">Черная</string>
+    <string name="create_home_shortcut">На домашний экран</string>
+    <string name="display_grid">Плитки</string>
+    <string name="display_line">Список</string>
+    <string name="dialog_text">Извините, работа Carnet внезапно прервалась. Пожалуйста, отправьте отчет об ошибке разработчику.</string>
+    <string name="dialog_comment">Добавить комментарий</string>
+    <string name="display_more">Показать больше</string>
+    <string name="display_less">Показать меньше</string>
+    <string name="importer">Импорт</string>
+    <string name="importer_beta">Импорт (Beta)</string>
+    <string name="use_it_with_caution">Используйте с осторожностью</string>
+    <string name="multiple_accounts_warning">Эксплуатация нескольких облачных аккаунтов может привести к конфликтам. Пожалуйста, используйте единственный аккаунт и удалите прочие. Приносим свои извинения...</string>
+
 </resources>
