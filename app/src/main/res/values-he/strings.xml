@@ -32,13 +32,13 @@
     <string name="old_password">הסיסמה הנוכחית</string>
     <string name="empty_message">לא ניתנה שום הערה, נא צור הערה חדשה עם הלחצן +</string>
     <string name="drawer_open">פתח</string>
-    <string name="drawer_close">פתח את XX הניווט</string>
+    <string name="drawer_close">פתח את מגירת הניווט</string>
     <string name="title_activity_help_authorize_floating_window">אשר חלון צפה</string>
     <string name="authorize">אשר</string>
     <string name="authorize_description">Carnet צריך אישור מיוחד להציג כחלון. כדי לאשר, נא אפשר סופרפוזיציה לפני אפליקציות אחרות</string>
     <string name="authorisation_issue">בעיית אישור</string>
     <string name="error">שגיאה</string>
-    <string name="error_permission_storage">בגלל מערבת הרשאות חדשה מ-Android, האפליקציה צריכה הרשאה של שמירה כדי לשמור הערות בהתקן (ההרשאה ישומשת כדי לשמור טקסטים גם באחסון הפנימי וגם בכרטיס SD).</string>
+    <string name="error_permission_storage">בגלל מערבת הרשאות חדשה מ-Android, האפליקציה צריכה הרשאה של שמירה כדי לשמור הערות בהתקן (ההרשאה תשומש כדי לשמור טקסטים גם באחסון הפנימי וגם בכרטיס SD).</string>
     <string name="allow">אשר</string>
     <string name="exit">צא</string>
     <string name="unable_to_rename_use">לא יכול לשנות שם של מסמך נמצא בשימוש</string>
@@ -52,7 +52,7 @@
     <string name="move">העבר</string>
     <string name="paste">הדבק</string>
     <string name="paste_how_to">עיין לתיקייה שאתה רוצה להעביר ובחר \"הבדק\"</string>
-    <string name="file_operation_in_progress">פעולת הקובץ</string>
+    <string name="file_operation_in_progress">פעולה על הקובץ</string>
     <string name="please_wait">נא חכה</string>
     <string name="new_keyword">מלית מפתח חדשה</string>
     <string name="title_activity_account_config">תצורת חשבון</string>
@@ -70,13 +70,13 @@
     <string name="app_restart">האפליקציה תופעל מחדש</string>
     <string name="pin">הצמד</string>
     <string name="unpin">בטל הצמדה</string>
-    <string name="say_hi">להגיד שלום!</string>
-    <string name="say_hi_subtitle">תן לי לדעת המספר של משתמשי האפליקציה בלחיצת הלחצן \"להגיד שלום!\"</string>
+    <string name="say_hi">הגד שלום!</string>
+    <string name="say_hi_subtitle">תן לי לדעת את המספר של משתמשי האפליקציה בלחיצת הלחצן \"הגד שלום!\" :)</string>
     <string name="say_hi_subtitle2">זה יתן לי לדעת שהאפליקציה הורדה פעם נוספת (לא חובה, אלא מועיל).</string>
     <string name="not_available_on_fdroid">לא זמין ב-fdroid</string>
     <string name="desktop_version">גירסת שולחן העבודה</string>
     <string name="sync_intro_text_carnet_instance">Carnet יכול לגבות את הערותך און ליין באופן אוטומטי. בחר ספק ל-Carnet ותוכל לערוך אותן בדפדפן, של גם מובייל וגם מחשב</string>
-    <string name="doesnt_accept_new_users">לא מסכים למשתמשים נוספים</string>
+    <string name="doesnt_accept_new_users">אינם מקובלים משתמשים נוספים</string>
     <string name="open_for_registrations">פתוח לרישומים</string>
     <string name="reliability">אמינות</string>
     <string name="updating">עדכון</string>
@@ -85,9 +85,9 @@
     <string name="dark">כהה</string>
     <string name="donation_ask">אפליקציה זו נוצרה חינם, בבקשה שקול תרומה</string>
     <string name="rate_ask">בבקשה, אם תאהוב את האפליקציה, תן לנו 5 כוכבים :)</string>
-    <string name="rate">דרג</string>
+    <string name="rate">דרג את האפליקציה</string>
     <string name="first_start">החלתה ראשונה, נא לחכות</string>
-    <string name="sync">לסנכרן</string>
+    <string name="sync">סנכרון</string>
     <string name="change_credentials">שנה את התעודות</string>
     <string name="carnet_doesnt_spy">"Carnet לא מרגל אותך אינו מכיל פרסומות "</string>
     <string name="carnet_open">Carnet ללא תשלום וקוד פתוח</string>
@@ -132,4 +132,28 @@
     <string name="sync_frequency">תרד הסנכרון</string>
     <string name="battery_optimization">מיטוב הסוללה</string>
     <string name="battery_optimization_subtitle">יש להשבית את מיטוב הסוללה ל-Carnet כדי לסנכרן ברקע</string>
-    </resources>
+    <string name="title_activity_settings">הגדרות</string>
+    <string name="password_on_minimize">הגן עם קוד PIN</string>
+    <string name="title_activity_help">עזרה</string>
+    <string name="carnet_note_taking_app">Carnet מאפשרת לרשום הערות בתוך אפליקציה מגוונת</string>
+    <string name="changelog">יומן רישום השינויים</string>
+    <string name="battery_optimization_subtitle2">"על המסך הבא, אפשר את האפליקציה להתעלם ממיטוב "</string>
+    <string name="battery_optimization_help">צריך עזרה\? לחץ כאן</string>
+    <string name="disable_optimization">השבת את המיטוב</string>
+    <string name="audio_player">נגן שמע</string>
+    <string name="pause">הפסקה</string>
+    <string name="black">שחור</string>
+    <string name="create_home_shortcut">צור קיצור דרך</string>
+    <string name="display_grid">רשת</string>
+    <string name="display_line">קו</string>
+    <string name="dialog_text">סליחה, האפליקציה קרסה, נא שלח דוח שגיאות למפתחים.</string>
+    <string name="dialog_comment">הוסף תגובה כאן</string>
+    <string name="display_more">להציג יותר</string>
+    <string name="display_less">להציג פחות</string>
+    <string name="importer">ייבוא</string>
+    <string name="importer_beta">ייבוא (ביתא)</string>
+    <string name="use_it_with_caution">"נא להשתמש בזהירות "</string>
+    <string name="multiple_accounts_warning">שימוש רב חשבוני ענן יכול להביא התנגשויות, נא תשתמש בחשבון ענן עיקרי אחד, ובטל את האחרים! 
+\nמצטערים על אי הנוחות...</string>
+
+</resources>
