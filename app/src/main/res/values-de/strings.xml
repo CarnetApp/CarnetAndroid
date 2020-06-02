@@ -156,7 +156,7 @@
     <string name="display_less">Weniger anzeigen</string>
 <string name="importer">Importieren</string>
 <string name="importer_beta">Importieren (Beta)</string>
-    <string name="use_it_with_caution">Mit Vorsicht zu benutzen</string>
+    <string name="use_it_with_caution">Mit Vorsicht verwenden</string>
 
 <string name="multiple_accounts_warning">Mehrere Cloud-Accounts können zu Konflikten führen, bitte nur einen Haupt-Account verwenden und die anderen löschen!
 \nEntschuldigung für die Unannehmlichkeiten ...</string>
