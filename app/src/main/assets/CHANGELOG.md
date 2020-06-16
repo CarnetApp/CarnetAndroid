@@ -1,3 +1,12 @@
+# Version 0.22.1
+
+Fix:
+
+- Issue in sync process
+- Recording or picture button from browser
+
+translations: gLsSAQNcUA9PgW (chinese), Raphaël Legouix (Hebrew), Christian Scholz (German), Mac Guffin (Russian)
+
 # Version 0.22.0
 
 Better handle right to left languages
