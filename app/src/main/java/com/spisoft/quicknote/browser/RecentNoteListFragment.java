@@ -105,6 +105,11 @@ public class RecentNoteListFragment extends NoteListFragment implements Configur
             menu.add(0, R.string.pin, 0,R.string.pin);
     }
 
+    @Override
+    public String getCurrentPath() {
+        return PreferenceHelper.getRootPath(getActivity());
+    }
+
     ItemTouchHelper.Callback mSimpleItemTouchHelperCallback = new ItemTouchHelper.Callback (){
 
 

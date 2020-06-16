@@ -59,6 +59,7 @@ import static com.spisoft.quicknote.databases.NoteManager.PREVIEW_WIDTH;
 
 public class ImageActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
+    public static final String ROOT_PATH = "root_path";
     private CameraView mCameraView;
     private View mShootButton;
     private File mTmpDir;
@@ -410,7 +411,7 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
                         try {
                             FileUtils.copy(new FileInputStream(new File(mTmpDir, "index.html")),new FileOutputStream(new File(noteFolder, "index.html")));
                             FileUtils.copy(new FileInputStream(new File(mTmpDir, "metadata.json")),new FileOutputStream(new File(noteFolder, "metadata.json")));
-                            Note note = NoteManager.createNewNote(PreferenceHelper.getRootPath(this));
+                            Note note = NoteManager.createNewNote(getIntent().getStringExtra(ROOT_PATH));
                             ZipUtils.zipFolder(noteFolder, note.path,new ArrayList<String>());
                             RecentHelper.getInstance(this).addNote(note);
                             for(String keyword : keywords) {
@@ -425,7 +426,7 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
             else{
-                Note note = NoteManager.createNewNote(PreferenceHelper.getRootPath(this));
+                Note note = NoteManager.createNewNote(getIntent().getStringExtra(ROOT_PATH));
                 ZipUtils.zipFolder(mTmpDir, note.path,new ArrayList<String>());
                 RecentHelper.getInstance(this).addNote(note);
                 for(String keyword : keywords) {

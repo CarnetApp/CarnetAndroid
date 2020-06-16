@@ -10,6 +10,7 @@ import android.view.View;
 import com.spisoft.quicknote.FloatingService;
 import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.Note;
+import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.NoteManager;
 
@@ -106,6 +107,12 @@ public class SearchFragment extends NoteListFragment implements BrowserAdapter.O
             dialog.show(getFragmentManager(), "rename");
         }
     }
+
+    @Override
+    public String getCurrentPath() {
+        return PreferenceHelper.getRootPath(getContext());
+    }
+
     public  NoteAdapter getAdapter(){
         BrowserAdapter adapter = new BrowserAdapter(getActivity(),new ArrayList<Object>());
         adapter.setOnFolderClickListener(this);

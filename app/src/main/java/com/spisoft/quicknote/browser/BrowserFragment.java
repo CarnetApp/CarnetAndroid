@@ -150,9 +150,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
     }
     @Override
     public void onClick(View view) {
-        if(view == mRoot.findViewById(R.id.add_note_button)){
-            createAndOpenNewNote(mPath);
-        }else if(view == mRoot.findViewById(R.id.add_folder_button)){
+        if(view == mRoot.findViewById(R.id.add_folder_button)){
             RenameDialog dialog = new RenameDialog();
             dialog.setHint(getString(R.string.new_folder_name));
             dialog.setRenameListener(new RenameDialog.OnRenameListener() {
@@ -169,8 +167,14 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
                 }
             });
             dialog.show(getFragmentManager(), "rename");
-        }
+        } else super.onClick(view);
     }
+
+    @Override
+    public String getCurrentPath() {
+        return mPath;
+    }
+
     public  NoteAdapter getAdapter(){
         BrowserAdapter adapter = new BrowserAdapter(getActivity(),new ArrayList<Object>());
         adapter.setOnFolderClickListener(this);

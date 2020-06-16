@@ -661,17 +661,22 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     @Override
     public void onClick(View view) {
         if(view==mRoot.findViewById(R.id.add_note_button)) {
-              createAndOpenNewNote(PreferenceHelper.getRootPath(getActivity()));
+              createAndOpenNewNote(getCurrentPath());
         } else if (view == mRoot.findViewById(R.id.add_photos_button)){
-            startActivityForResult(new Intent(getActivity(), ImageActivity.class), 1002);
+            Intent i = new Intent(getActivity(), ImageActivity.class);
+            i.putExtra(ImageActivity.ROOT_PATH, getCurrentPath());
+            startActivityForResult(i, 1002);
+
         } else if (view == mRoot.findViewById(R.id.add_record_button)){
             ArrayList<EditorView.Action> actions = new ArrayList<>();
             EditorView.Action record = new EditorView.Action();
             record.type = "record-audio";
             actions.add(record);
-            createAndOpenNewNote(PreferenceHelper.getRootPath(getActivity()),actions);
+            createAndOpenNewNote(getCurrentPath(),actions);
         }
     }
+
+    public abstract String getCurrentPath();
 
     @Override
     public void onSyncFailure(String errorMessage){

@@ -71,6 +71,11 @@ public class KeywordNotesFragment extends NoteListFragment {
     }
 
     @Override
+    public String getCurrentPath() {
+        return PreferenceHelper.getRootPath(getActivity());
+    }
+
+    @Override
     public void onLongClick(Note note, View v) {
 
     }
