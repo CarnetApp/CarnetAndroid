@@ -18,8 +18,6 @@ import android.webkit.WebView
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.github.squti.androidwaverecorder.WaveRecorder
-import com.spisoft.quicknote.AudioService
-import com.spisoft.quicknote.AudioService.sMedia
 import com.spisoft.quicknote.R
 import com.spisoft.quicknote.server.HttpServer
 import com.spisoft.sync.Log
