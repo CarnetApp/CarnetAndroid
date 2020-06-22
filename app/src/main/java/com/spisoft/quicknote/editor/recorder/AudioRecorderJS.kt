@@ -17,14 +17,12 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.github.piasy.rxandroidaudio.AudioRecorder
 import com.github.squti.androidwaverecorder.WaveRecorder
 import com.spisoft.quicknote.AudioService
 import com.spisoft.quicknote.AudioService.sMedia
 import com.spisoft.quicknote.R
 import com.spisoft.quicknote.server.HttpServer
 import com.spisoft.sync.Log
-import omrecorder.*
 import org.apache.commons.lang3.StringEscapeUtils
 import top.oply.opuslib.OpusConverter
 import top.oply.opuslib.OpusEvent
