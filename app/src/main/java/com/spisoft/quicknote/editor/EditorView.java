@@ -8,9 +8,11 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.print.PageRange;
@@ -291,6 +294,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         mRenameListener = listener;
     }
 
+
     private void init() {
         // Inflate the layout for this fragment
         sEditorView = this;
@@ -389,10 +393,33 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         mHasLoaded = false;
         mRootPath = getContext().getFilesDir().getAbsolutePath();
         mServer2 = new HttpServer(getContext());
-        mAudioRecorder = new AudioRecorderJS((Activity)getContext(), mServer2, mWebView);
-        mWebView.addJavascriptInterface(mAudioRecorder, "AndroidRecorderJava");
+        Log.d("AudioRecorderJS", "try to start");
+        Intent audioIntent = new Intent( getContext(), AudioRecorderJS.class);
+        getContext().startService(audioIntent);
+        getContext().bindService(audioIntent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mAudioRecorder = ((AudioRecorderJS.LocalBinder)service).getService();
+                Log.d("AudioRecorderJS", "bound");
 
-        mWebView.loadUrl(mServer2.getUrl(getUrl()));
+                mAudioRecorder.set((Activity)getContext(), mServer2, mWebView);
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.addJavascriptInterface(mAudioRecorder.getJs(), "AndroidRecorderJava");
+                        mWebView.loadUrl(mServer2.getUrl(getUrl()));
+                    }
+                });
+
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                mAudioRecorder = null;
+            }
+        }, Context.BIND_AUTO_CREATE);
+
+
         //prepare Reader
         //extract
 

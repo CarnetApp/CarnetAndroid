@@ -11,6 +11,7 @@ import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
+import com.spisoft.quicknote.editor.recorder.AudioRecorderJS;
 import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.utils.FileUtils;
@@ -123,6 +124,14 @@ public class HttpServer extends NanoHTTPD {
                     switch (subpath) {
                         case "note/open":
                             return openNote(parms.get("path").get(0));
+                        case "note/open/tmpwave":
+
+                            try {
+                                return NanoHTTPD.newChunkedResponse(Response.Status.OK,  MimeTypeMap.getSingleton().getMimeTypeFromExtension("wav"),new FileInputStream(new File(AudioRecorderJS.TMP_WAV_PATH)));
+                            } catch (FileNotFoundException e) {
+                                return NanoHTTPD.newFixedLengthResponse(Response.Status.NOT_FOUND, "", "not found");
+                            }
+
                         case "keywordsdb":
                             return getKeywordDB();
                       /*  case "recentdb":
@@ -412,7 +421,7 @@ public class HttpServer extends NanoHTTPD {
 
 
     }
-    private Response saveNote(String relativePath) {
+    public Response saveNote(String relativePath) {
         File noteFile = new File(PreferenceHelper.getRootPath(mContext),relativePath);
         Note note = CacheManager.getInstance(mContext).get(noteFile.getAbsolutePath());
         if(note == null){
@@ -421,7 +430,7 @@ public class HttpServer extends NanoHTTPD {
         return saveNote(note);
     }
 
-    private Response saveNote(Note note) {
+    public Response saveNote(Note note) {
         List <String> except = new ArrayList<>();
         except.add(extractedNotePath+"/reader.html");
         File file = new File(note.path);
@@ -543,5 +552,9 @@ public class HttpServer extends NanoHTTPD {
         String id = UUID.randomUUID().toString();
         mAuthorizedID.add(id);
         return id;
+    }
+
+    public String getCurrentPath(){
+        return mCurrentNotePath;
     }
 }

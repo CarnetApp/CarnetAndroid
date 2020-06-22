@@ -45,6 +45,7 @@
         </service>
         <service android:name=".FileManagerService" />
         <service android:name=".AudioService" />
+        <service android:name=".editor.recorder.AudioRecorderJS" />
 
         <activity
             android:name=".MainActivity"

@@ -25,7 +25,7 @@ FileUtils.isFileImage = function (filePath) {
 
 FileUtils.isFileAudio = function (filePath) {
   filePath = filePath.toLowerCase();
-  return filePath.endsWith(".opus") || filePath.endsWith(".mp3") || filePath.endsWith(".ogg") || filePath.endsWith(".flac") || filePath.endsWith(".wav");
+  return filePath.endsWith(".opus") || filePath.endsWith(".mp3") || filePath.endsWith(".ogg") || filePath.endsWith(".flac") || filePath.endsWith(".wav") || filePath.endsWith(".m4a") || filePath.endsWith(".webm");
 };
 
 FileUtils.getExtensionFromMimetype = function (mimetype) {

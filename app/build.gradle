@@ -91,11 +91,11 @@ dependencies {
     implementation project(':Sync')
     compile 'top.oply.opuslib:opuslib:1.0.2'
    // implementation project(':OpusAndroid')
-    compile 'com.kailashdabhi:om-recorder:1.1.5'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     googleImplementation 'com.google.android.gms:play-services-drive:16.0.0'
     googleImplementation 'com.google.android.gms:play-services-auth:16.0.1'
     googleImplementation project(':GoogleSync')
     implementation 'com.github.google:cameraview:3eaeac09a7f'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.github.squti:Android-Wave-Recorder:1.4.0'
 }
