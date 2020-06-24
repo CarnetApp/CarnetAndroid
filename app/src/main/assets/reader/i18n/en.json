@@ -93,5 +93,6 @@
     "todo": "To do",
     "display_more": "Display more",
     "display_less": "Display less",
-    "unable_rename_note": "Note couldn't be renamed"
+    "unable_rename_note": "Note couldn't be renamed",
+    "delete_recording_confirmation": "Are you sure you want to delete this recording ? This action is irreversible."
 }

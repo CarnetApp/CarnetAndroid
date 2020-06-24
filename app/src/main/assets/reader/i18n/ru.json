@@ -1,6 +1,6 @@
 {
     "search": "Найти",
-    "recent": "Последние",
+    "recent": "Текущие",
     "browser": "Обзор",
     "settings": "Настройки",
     "keywords": "Ключевые слова",
@@ -86,5 +86,12 @@
     "delete_todolist_confirmation": "Данное действие необратимо! Вы уверены, что хотите удалить этот список задач?",
     "something_went_wrong_please_reload": "Что-то пошло не так... Пожалуйста, загрузите снова",
     "note_color": "Цвет заметки",
-    "new_todolist": "Новый список задач"
+    "new_todolist": "Новый список задач",
+    "remove_todo_list": "Убрать",
+    "add_item": "Доб. пункт",
+    "completed": "Выполнено",
+    "todo": "Задачи",
+    "display_more": "Показать больше",
+    "display_less": "Показать меньше",
+    "unable_rename_note": "Заметка не может быть переименована"
 }

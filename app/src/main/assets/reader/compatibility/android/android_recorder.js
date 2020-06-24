@@ -15,6 +15,7 @@ function () {
     AndroidRecorder.instance = this;
     this.options = options;
     this.state = "none";
+    this.cantPause = true;
   }
 
   _createClass(AndroidRecorder, [{
@@ -32,7 +33,7 @@ function () {
   }, {
     key: "stop",
     value: function stop() {
-      this.state = "none";
+      this.setState("none");
       AndroidRecorderJava.stop();
     }
   }, {

@@ -1,3 +1,9 @@
+# Version 0.22.2
+
+- Recording as service to avoid multiple issues
+
+
+
 # Version 0.22.1
 
 Fix:
