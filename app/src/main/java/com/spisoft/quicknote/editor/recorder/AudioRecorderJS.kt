@@ -243,6 +243,7 @@ public class AudioRecorderJS: Service() {
         OpusConverter.getInstance().encode( audioFile!!.absolutePath,  out.absolutePath, "")
         webview.post {
             webview.loadUrl("javascript:AndroidRecorder.instance.onstop()")
+            webview.loadUrl("javascript:AndroidRecorder.instance.setState('none')")
             webview.loadUrl("javascript:AndroidRecorder.instance.onEncodingStart()")
         }
 
