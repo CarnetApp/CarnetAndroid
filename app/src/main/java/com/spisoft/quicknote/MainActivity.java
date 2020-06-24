@@ -172,21 +172,23 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     }
 
     private void onUpdateDone() {
-
-        Cursor cursor = DBAccountHelper.getInstance(this).getCursor();
-        if(cursor != null && cursor.getCount() > 1 && !PreferenceManager.getDefaultSharedPreferences(this).getBoolean("has_warn_multiple_accounts",false)){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.multiple_accounts_warning);
-            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(MainActivity.this, AccountListActivity.class));
-                }
-            });
-            builder.show();
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("has_warn_multiple_accounts",true).commit();
+        try {
+            Cursor cursor = DBAccountHelper.getInstance(this).getCursor();
+            if (cursor != null && cursor.getCount() > 1 && !PreferenceManager.getDefaultSharedPreferences(this).getBoolean("has_warn_multiple_accounts", false)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(R.string.multiple_accounts_warning);
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(MainActivity.this, AccountListActivity.class));
+                    }
+                });
+                builder.show();
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("has_warn_multiple_accounts", true).commit();
+            }
+        } catch(Exception e){
+            Log.e("MainActivity","error on update", e);
         }
-
         if(!DBMergerService.isJobScheduledOrRunning(this)){
             DBMergerService.scheduleJob(this,true, DBMergerService.ALL_DATABASES);
         }

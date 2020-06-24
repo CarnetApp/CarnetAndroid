@@ -208,9 +208,11 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         super.onCreateView(inflater, container, savedInstanceState);
-        if(mRoot!=null)
+        if(mRoot!=null) {
+            ((ViewGroup)mRoot.getParent()).removeView(mRoot);
             return mRoot;
-        mRoot = inflater.inflate(R.layout.note_recycler_layout, null);
+        }
+        mRoot = inflater.inflate(R.layout.note_recycler_layout, container, false);
         mSwipeLayout = (SwipeRefreshLayout) mRoot.findViewById(R.id.swipe_container);
         Field field = null;
         try {
