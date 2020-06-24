@@ -403,13 +403,11 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
                 Log.d("AudioRecorderJS", "bound");
 
                 mAudioRecorder.set((Activity)getContext(), mServer2, mWebView);
-                mWebView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mWebView.addJavascriptInterface(mAudioRecorder.getJs(), "AndroidRecorderJava");
-                        mWebView.loadUrl(mServer2.getUrl(getUrl()));
-                    }
-                });
+                mWebView.addJavascriptInterface(mAudioRecorder.getJs(), "AndroidRecorderJava");
+                mWebView.loadUrl(mServer2.getUrl(getUrl()));
+
+
+
 
             }
 
