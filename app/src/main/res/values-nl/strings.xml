@@ -1,9 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="hello_world">Hallo wereld!</string>
     <string name="action_settings">Instellingen</string>
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hallo blanco fragment</string>
     <string name="floating">Zwevende notitie</string>
@@ -54,7 +52,6 @@
     <string name="please_wait_update">Moment, notities worden bijgewerkt</string>
     <string name="write_error">Fout bij opslaan van tekst</string>
     <string name="sync_cloud_preference">Synchroniseren met cloud</string>
-
     <string name="title_activity_help">Hulp</string>
     <string name="move">Verplaatsen</string>
     <string name="paste">Plakken</string>
@@ -100,7 +97,7 @@
     <string name="carnet_note_taking_app">Carnet is een veelzijdige app</string>
     <string name="nextcloud_connect">Koppelen met Nextcloud</string>
     <string name="other_sync_options">Overige synchronisatie-opties</string>
-<string name="rate_ask">Geef ons de 5 sterren beoordeling om ons te helpen :)</string>
+    <string name="rate_ask">Geef ons de 5 sterren beoordeling om ons te helpen :)</string>
     <string name="rate">Beoordeel</string>
     <string name="fake_note_1">Deze voorbeeld notitie zal verschijnen als je een nieuwe notitie maakt met de knop rechts onder</string>
     <string name="fake_note_2">Kies kleuren en voeg trefwoorden toe</string>
@@ -125,7 +122,7 @@
     <string name="create_note">Nieuwe notitie</string>
     <string name="beta_feature">Let op: dit is nog een beta functie</string>
     <string name="warning_sync_cloud">Selecteer een folder die speciaal voor Carnet is gemaakt. Selecteer nooit de NextCloud/ownCloud root voor deze functie.</string>
-<string name="start_with_browser_view">Begin met browserweergave</string>
+    <string name="start_with_browser_view">Begin met browserweergave</string>
     <string name="one_minute">1 minuut</string>
     <string name="two_minutes">2 minuten</string>
     <string name="five_minutes">5 minuten</string>
@@ -145,4 +142,20 @@
     <string name="battery_optimization_subtitle2">Op de volgende scherm, geef Carnet toestemming om optimalisering te negeren</string>
     <string name="battery_optimization_help">Hulp nodig\? Klik hier</string>
     <string name="disable_optimization">Optimalisering uitschakelen</string>
+    <string name="multiple_accounts_warning">Het hebben van meerdere cloudaccounts kan tot conflicten leiden, gebruik slechts één hoofdcloudaccount en verwijder andere!
+\nExcuses voor het ongemak...</string>
+    <string name="use_it_with_caution">Wees voorzichtig</string>
+    <string name="importer_beta">Importeren (Beta)</string>
+    <string name="importer">Importeren</string>
+    <string name="display_less">Minder weergeven</string>
+    <string name="display_more">Meer weergeven</string>
+    <string name="dialog_comment">Hier kunt u een opmerking toevoegen</string>
+    <string name="dialog_text">Sorry, Carnet is vastgelopen. Stuur alstublieft een rapport naar de ontwikkelaars.</string>
+    <string name="display_line">Regel</string>
+    <string name="display_grid">Raster</string>
+    <string name="create_home_shortcut">Maak een homescreen koppeling</string>
+    <string name="black">Zwart</string>
+    <string name="pause">Pauzeer</string>
+    <string name="audio_player">Geluidsspeler</string>
+    <string name="unable_to_rename_invalid_name">Notitie bevat ongeldige tekens</string>
 </resources>
