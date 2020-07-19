@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="hello_world">Ahoj světe!</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_world">Ahoj světe!</string>
     <string name="action_settings">Nastavení</string>
-
     <string name="rename">Přejmenovat</string>
     <string name="delete">Smazat</string>
     <string name="remove_recent">Odstranit z posledních</string>
@@ -44,7 +44,6 @@
     <string name="unable_to_delete_use">Otevřený dokument nelze smazat</string>
     <string name="please_wait_update">Počkejte prosím, dokud nebudou vaše poznámky aktualizovány</string>
     <string name="sync_cloud_preference">Synchronizovat s cloudovým úložištěm</string>
-
     <string name="sync_intro_title">Synchronizujte Carnet</string>
     <string name="sync_intro_text">Carnet podporuje synchronizaci s NextCloudem, nezapomeňte si stáhnout verzi pro počítač, abyste měli vaše poznámky i na vašem PC. Carnet má také online verzi, kterou naleznete v NextCloud obchodě s aplikacemi.</string>
     <string name="skip">Přeskočit</string>
@@ -96,11 +95,11 @@
     <string name="toast_on_minimize">Klikněte na mě pro zvětšení</string>
     <string name="paiement_header">Finanční dary</string>
     <string name="add_screenshot">Přidat do poznámky snímek obrazovky\?</string>
-<string name="floating">Plovoucí poznámka</string>
+    <string name="floating">Plovoucí poznámka</string>
     <string name="authorisation_issue">Problém s oprávněním</string>
     <string name="debug_log">Povolit zaznamenávání chyb</string>
     <string name="faster_editor_load">Rychlejší načítání editoru (experimentální)</string>
-<string name="add_note">Přidat poznámku</string>
+    <string name="add_note">Přidat poznámku</string>
     <string name="add_folder">Přidat složku</string>
     <string name="reminder">Upozornění</string>
     <string name="create_note">Vytvořit poznámku</string>
@@ -148,5 +147,6 @@
     <string name="importer">Importovat</string>
     <string name="importer_beta">Importovat (Beta)</string>
     <string name="use_it_with_caution">Používejte opatrně</string>
-
+    <string name="multiple_accounts_warning">Více cloudových účtů může vést ke konfliktům. Použijte, prosím, jen jeden hlavní cloudový účet a ty ostatní smažte!
+\nOmlouváme se za nepříjemnost...</string>
 </resources>
