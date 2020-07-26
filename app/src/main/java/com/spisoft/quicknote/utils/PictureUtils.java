@@ -47,6 +47,15 @@ public class PictureUtils {
         FileOutputStream fo = new FileOutputStream(f);
         fo.write(bytes.toByteArray());
         fo.close();
+
+        // https://stackoverflow.com/questions/13596500/android-image-resizing-and-preserving-exif-data-orientation-rotation-etc/13596501#13596501
+        ExifInterface oldExif = new ExifInterface(input);
+        ExifInterface newExif = new ExifInterface(output);
+        String exifOrientation = oldExif.getAttribute(ExifInterface.TAG_ORIENTATION);
+        if (exifOrientation != null) {
+            newExif.setAttribute(ExifInterface.TAG_ORIENTATION, exifOrientation);
+            newExif.saveAttributes();
+        }
     }
 
     public static boolean isPicture(String name) {
