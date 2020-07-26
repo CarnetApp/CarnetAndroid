@@ -36,17 +36,14 @@
             android:enabled="false"
             android:layout_marginTop="15dp"
             android:layout_alignParentRight="true"/>
-        <com.google.android.cameraview.CameraView
-            android:id="@+id/camera"
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/viewFinder"
             android:layout_below="@+id/image_list_scrollview"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
             android:keepScreenOn="true"
             android:adjustViewBounds="true"
-            app:autoFocus="true"
-            app:aspectRatio="4:3"
-            app:facing="back"
-            app:flash="auto"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
         <ImageButton
             android:backgroundTint="#aaffffff"
             android:id="@+id/shoot_button"
@@ -54,14 +51,14 @@
             android:layout_height="wrap_content"
             android:src="@drawable/camera_shot"
             android:layout_marginBottom="20dp"
-            android:layout_alignBottom="@+id/camera"
+            android:layout_alignBottom="@+id/viewFinder"
             android:layout_centerHorizontal="true" />
 
         <ImageButton
             android:id="@+id/flash_button"
             android:layout_width="50dp"
             android:layout_height="60dp"
-            android:layout_alignTop="@+id/camera"
+            android:layout_alignTop="@+id/viewFinder"
             android:layout_alignParentRight="true"
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
@@ -74,7 +71,7 @@
             android:id="@+id/external_camera_button"
             android:layout_width="50dp"
             android:layout_height="60dp"
-            android:layout_alignTop="@+id/camera"
+            android:layout_alignTop="@+id/viewFinder"
             android:layout_toLeftOf="@+id/flash_button"
             android:layout_marginTop="10dp"
             android:adjustViewBounds="true"

@@ -2,6 +2,7 @@ package com.spisoft.quicknote.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
