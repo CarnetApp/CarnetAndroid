@@ -1,9 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="hello_world">Hola mundo!</string>
     <string name="action_settings">Opciones</string>
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">•Lista de tareas: Eliminar o cambiar el texto del marcador de posición•</string>
     <string name="floating">Nota flotante</string>
@@ -54,7 +52,6 @@
     <string name="please_wait_update">Por favor espere mientras se actualizan sus notas</string>
     <string name="write_error">Error mientras se guardaba</string>
     <string name="sync_cloud_preference">Sincronizar con almacenamiento en la nube</string>
-
     <string name="title_activity_help">HelpActivity</string>
     <string name="move">Mover</string>
     <string name="paste">Pegar</string>
@@ -93,7 +90,7 @@
     <string name="dark">Oscuro</string>
     <string name="donation_ask">Esta aplicación fue creada gratis, por favor, considere hacer una donación</string>
     <string name="first_start">Primer uso, por favor espere</string>
-<string name="rate_ask">Por favor, si te gusta esta App, danos 5 estrellas :)</string>
+    <string name="rate_ask">Por favor, si te gusta esta App, danos 5 estrellas :)</string>
     <string name="rate">Califícalo</string>
     <string name="sync">Sincronizar</string>
     <string name="change_credentials">Cambiar contraseña</string>
@@ -107,7 +104,7 @@
     <string name="fake_note_todo_item_2">Comparte Carnet</string>
     <string name="changelog">Historial de cambios</string>
     <string name="restore_recent">Restaurar a la última</string>
-<string name="fake_note_1">Estas notas de demostración desaparecerán cuando sea creada una nueva nota pulsando el boton derecho</string>
+    <string name="fake_note_1">Estas notas de demostración desaparecerán cuando sea creada una nueva nota pulsando el boton derecho</string>
     <string name="fake_note_2">Seleccionar nota/color, añadir palabras clave</string>
     <string name="fake_note_3">Clasificar tus notas y textos</string>
     <string name="fake_note_5">Formatear tus notas y documentos, añadir imágenes y grabaciones de audio</string>
@@ -121,7 +118,7 @@
     <string name="system_header">Sistema</string>
     <string name="debug_log">Activar el registro de depuración</string>
     <string name="faster_editor_load">Carga rápida del editor (experimental)</string>
-<string name="reminder">Recordatorio</string>
+    <string name="reminder">Recordatorio</string>
     <string name="create_note">Crear nota</string>
     <string name="unable_to_rename_invalid_name">La nota contiene carácteres inválidos</string>
     <string name="beta_feature">Esta sigue siendo una característica beta y tiene que ser usada cuidadosamente</string>
@@ -154,4 +151,11 @@
     <string name="display_line">Línea</string>
     <string name="dialog_text">Lo siento, Carnet se ha colgado. Por favor, envía un informe a los desarrolladores.</string>
     <string name="dialog_comment">Puedes añadir un comentario aquí</string>
+    <string name="multiple_accounts_warning">Tener varias cuentas en la nube puede generar conflictos, por favor ¡utiliza una sola cuenta y borra las demás! 
+\nDisculpa por los inconvenientes...</string>
+    <string name="use_it_with_caution">Utilizar con precaución</string>
+    <string name="importer_beta">Importar (beta)</string>
+    <string name="importer">Importar</string>
+    <string name="display_less">Resumir</string>
+    <string name="display_more">Expandir</string>
 </resources>
