@@ -36,9 +36,9 @@
     <string name="old_password">Contraseña actual</string>
     <string name="empty_message">No se han encontrado notas \n
     Por favor, crea una nota usando el botón +</string>
-    <string name="drawer_open">Abrir navegador??</string>
-    <string name="drawer_close">Cerrar navegador??</string>
-    <string name="title_activity_help_authorize_floating_window">HelpAuthorizeFloatingWindowActivity</string>
+    <string name="drawer_open">Abrir navegador</string>
+    <string name="drawer_close">Cerrar navegador</string>
+    <string name="title_activity_help_authorize_floating_window">ActividadVentanaAyudaAutorizacionEmergente</string>
     <string name="authorize">Autorizar</string>
     <string name="authorize_description">Carnet necesita autorización especial para mostrarse como una ventana. Por favor, hazlo activando \"Sobreponer frente a otras apps\"</string>
     <string name="authorisation_issue">Fallo de autorización</string>
@@ -52,7 +52,7 @@
     <string name="please_wait_update">Por favor espere mientras se actualizan sus notas</string>
     <string name="write_error">Error mientras se guardaba</string>
     <string name="sync_cloud_preference">Sincronizar con almacenamiento en la nube</string>
-    <string name="title_activity_help">HelpActivity</string>
+    <string name="title_activity_help">ActivitidadAyuda</string>
     <string name="move">Mover</string>
     <string name="paste">Pegar</string>
     <string name="paste_how_to">Navega hasta la carpeta donde quieras moverlo, luego selecciona pegar</string>
@@ -75,7 +75,8 @@
     <string name="pin">Pin</string>
     <string name="unpin">Quitar pin</string>
     <string name="say_hi">Decir hola!</string>
-    <string name="say_hi_subtitle">Puede ayudarme a saber cuanta gente está usando la aplicación presionando el botón \"Decir hola!\" :)</string>
+    <string name="say_hi_subtitle">Puede ayudarme a saber cuanta gente está usando la aplicación presionando el botón \"Decir hola!\"
+\n:)</string>
     <string name="say_hi_subtitle2">Entenderé que la aplicación se descargó más de una vez (No obligatorio del todo pero de ayuda).</string>
     <string name="not_available_on_fdroid">No disponible en fdroid</string>
     <string name="desktop_version">Versión de escritorio</string>
