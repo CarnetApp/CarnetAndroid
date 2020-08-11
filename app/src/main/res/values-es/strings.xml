@@ -97,7 +97,7 @@
     <string name="change_credentials">Cambiar contraseña</string>
     <string name="carnet_doesnt_spy">Carnet no te espía y no contiene publicidad</string>
     <string name="carnet_open">Carnet es libre y de código abierto</string>
-    <string name="carnet_note_taking_app">Carnet es un aplicación versátil de notas</string>
+    <string name="carnet_note_taking_app">Carnet es una versátil aplicación para tomar notas</string>
     <string name="nextcloud_connect">Conectar con Nextcloud</string>
     <string name="other_sync_options">Otras opciones de Sincronizar</string>
     <string name="fake_note_4">Sincroniza con tus dispositivos</string>
@@ -120,7 +120,7 @@
     <string name="debug_log">Activar el registro de depuración</string>
     <string name="faster_editor_load">Carga rápida del editor (experimental)</string>
     <string name="reminder">Recordatorio</string>
-    <string name="create_note">Crear nota</string>
+    <string name="create_note">Crear una nota</string>
     <string name="unable_to_rename_invalid_name">La nota contiene carácteres inválidos</string>
     <string name="beta_feature">Esta sigue siendo una característica beta y tiene que ser usada cuidadosamente</string>
     <string name="warning_sync_cloud">No seleccione ninguna carpeta con archivos que no sean de Carnet. Seleccionando la carpeta raiz de NextCloud/ownCloud se sincronizará toda la nube en tu teléfono.</string>
