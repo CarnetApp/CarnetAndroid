@@ -88,7 +88,7 @@
     <string name="carnet_note_taking_app">Carnet est une application de prise de notes polyvalente</string>
     <string name="say_hi_subtitle">Cliquer sur « Me prévenir » m\'aidera à déterminer combien d\'utilisateur·ice·s ont téléchargé Carnet… mais ce n\'est bien sûr pas obligatoire !
 \n:)</string>
-    <string name="say_hi_subtitle2">""</string>
+    <string name="say_hi_subtitle2">" Je comprendrai que l\'application a été téléchargée une fois de plus ( Ce n’est pas du tout obligatoire mais utile )."</string>
     <string name="nextcloud_connect">Se connecter avec Nextcloud</string>
     <string name="other_sync_options">Autres options</string>
     <string name="hello_blank_fragment">Salut fragment vide</string>
