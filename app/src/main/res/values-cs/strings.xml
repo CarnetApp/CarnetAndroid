@@ -149,4 +149,6 @@
     <string name="use_it_with_caution">Používejte opatrně</string>
     <string name="multiple_accounts_warning">Více cloudových účtů může vést ke konfliktům. Použijte, prosím, jen jeden hlavní cloudový účet a ty ostatní smažte!
 \nOmlouváme se za nepříjemnost...</string>
+    <string name="drawer_close">Zavřít panel s nastavením</string>
+    <string name="drawer_open">Otevřít panel s nastavením</string>
 </resources>
