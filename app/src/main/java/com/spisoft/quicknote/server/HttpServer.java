@@ -131,7 +131,11 @@ public class HttpServer extends NanoHTTPD {
                             } catch (FileNotFoundException e) {
                                 return NanoHTTPD.newFixedLengthResponse(Response.Status.NOT_FOUND, "", "not found");
                             }
+                        case "note/get_note":
+                            Log.d(TAG, "note/get_note");
+                            Log.d(TAG, "note/get_note"+parms.get("path").get(0));
 
+                            return getNote(parms.get("path").get(0));
                         case "keywordsdb":
                             return getKeywordDB();
                       /*  case "recentdb":
@@ -494,7 +498,25 @@ public class HttpServer extends NanoHTTPD {
         return NanoHTTPD.newFixedLengthResponse(Response.Status.NOT_FOUND,"","");
     }
 
+    private Response getNote(String path) {
+        Log.d("getnotedebug","getNote");
+        if (!mCurrentNotePath.equals(path)) {
+            return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN, "", "");
+        }
+        Log.d("getnotedebug","getNote "+path);
 
+        path = new File(PreferenceHelper.getRootPath(mContext), path).getAbsolutePath();
+        try {
+            Log.d("getnotedebug","getNote return"+path);
+
+            return  NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/zip", new FileInputStream(path));
+        } catch (FileNotFoundException e) {
+            Log.d("getnotedebug","getNote ext"+path);
+
+            e.printStackTrace();
+        }
+        return NanoHTTPD.newFixedLengthResponse(Response.Status.NOT_FOUND,"","");
+    }
     private Response openNote(String path) {
 
         if(!mCurrentNotePath.equals(path)){

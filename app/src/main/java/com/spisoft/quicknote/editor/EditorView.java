@@ -138,6 +138,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
     private FileWriter mLargeTmpFileWriter;
     private File mLargeTmpFile;
     private OutputStream mLargeFileOutput;
+    private boolean mShareAfterDownload;
 
     public static class Action implements Serializable{
         public String type;
@@ -610,8 +611,24 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         }
 
         @JavascriptInterface
-        public void startLargeDownload(String filename, String mimetype){
-            openDocumentToWrite(DOWNLOAD_REQUEST_CODE, filename, mimetype);
+        public void startLargeDownload(String filename, String mimetype, boolean shareAfterDownload){
+            mShareAfterDownload = shareAfterDownload;
+            if(mShareAfterDownload){
+                mLargeTmpFile = new File(getContext().getCacheDir(), "tmpfile");
+                try {
+                    mLargeTmpFileWriter = new FileWriter(mLargeTmpFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadUrl("javascript:compatibility.sendNextLargeDownload()");
+                    }
+                });
+            }
+            else
+                openDocumentToWrite(DOWNLOAD_REQUEST_CODE, filename, mimetype);
 
         }
 
@@ -620,8 +637,20 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
             try {
                 mLargeTmpFileWriter.flush();
                 mLargeTmpFileWriter.close();
-                InputStream st = new FileInputStream(mLargeTmpFile);
-                FileUtils.copy(st, mLargeFileOutput);
+                if(!mShareAfterDownload) {
+                    InputStream st = new FileInputStream(mLargeTmpFile);
+                    FileUtils.copy(st, mLargeFileOutput);
+                } else {
+                    mWebView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                            sharingIntent.setType("text/plain");
+                            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, NoteManager.getShortText(FileUtils.readFile(mLargeTmpFile.getAbsolutePath()), -1));
+                            getContext().startActivity(Intent.createChooser(sharingIntent, "Share using"));
+                        }
+                    });
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
