@@ -70,12 +70,12 @@ public class NoteManager
     }
 
     public static String getShortText(String html, int length){
-        String txt  = Jsoup.parse(html.replaceAll("<br>", "mybr2n").replaceAll("[<](/)?div[^>]*[>]", "mybr2n")).text();
+        String txt  = Jsoup.parse(html.replaceAll("<br>", "mybr2n").replaceAll("[<](/)?div[^>]*[>]", "mybr2n").replaceAll("[<](/)?h3[^>]*[>]", "mybr2n")).text();
         txt = txt.replaceAll("mybr2n", "\n")
         .replaceAll("\\n+", "\n")
         .trim(); //trim
         //src https://stackoverflow.com/questions/15494780/remove-all-whitespaces-from-string-but-keep-one-newline
-        if(txt.length()>length)
+        if(txt.length()>length && length >=0)
             txt = txt.substring(0, length);
         return txt;
     }
