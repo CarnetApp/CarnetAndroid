@@ -48,9 +48,10 @@
     "select_all": "Sélectionner tout",
     "todo_list": "Todo-List",
     "print": "Imprimer",
-    "print_title": "Imprimer le titre",
-    "print_modification_date": "Imprimer la date de modification",
-    "print_creation_date": "Imprimer la date de création",
+    "print_title": "Inclure le titre",
+    "print_modification_date": "Inclure la date de modification",
+    "print_creation_date": "Inclure la date de création",
+    "print_photos": "Inclure les images",
     "error_save": "Une erreur est survenue, sauvegardez votre texte manuellement et vérifiez s'il n'est pas ouvert ailleurs",
     "not_yet_implemented": "Pas encore implémenté",
     "open": "Ouvrir",
@@ -92,5 +93,11 @@
     "todo": "À faire",
     "something_went_wrong_please_reload": "Une erreur est survenue... S'il vous plaît, rechargez la page.",
     "display_more": "Afficher plus",
-    "display_less": "Afficher moins"
+    "display_less": "Afficher moins",
+    "delete_recording_confirmation": "Êtes vous certain⋅e de vouloir supprimer cet enregistrement ? Cette action sera définitive",
+    "created": "Créée",
+    "modified": "Modifiée",
+    "download": "Télécharger",
+    "send": "Envoyer",
+    "send_export_print": "Envoyer/Exporter"
 }

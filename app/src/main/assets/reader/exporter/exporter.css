@@ -1,0 +1,23 @@
+body {}
+
+#inside {
+    background: white;
+    padding: 20px;
+
+}
+
+#button-container {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+}
+
+#loading{
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    display: none;
+}

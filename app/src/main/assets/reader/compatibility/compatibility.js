@@ -17,7 +17,7 @@ function () {
     this.isElectron = typeof require === "function";
     this.isAndroid = (typeof app === "undefined" ? "undefined" : _typeof(app)) === "object";
     this.isGtk = false;
-    console.log("is electron ?" + this.isElectron);
+    console.log("isAndroid" + this.isAndroid);
 
     if (this.isElectron) {
       RequestBuilder = ElectronRequestBuilder;
@@ -49,7 +49,9 @@ function () {
     value: function openUrl(url) {
       if (compatibility.isElectron) {
         var _require = require('electron'),
-            shell = _require.shell;
+            shell = _require.shell,
+            app = _require.app,
+            app = _require.app;
 
         shell.openExternal(url);
       } else if (compatibility.isAndroid) {
@@ -100,6 +102,28 @@ function () {
         slashes: true
       }));
       win.setMenu(null);
+    }
+  }, {
+    key: "sendNextLargeDownload",
+    value: function sendNextLargeDownload() {
+      if (this.largeDownload == undefined) {
+        if (currentFrame != undefined) {
+          currentFrame.contentWindow.compatibility.sendNextLargeDownload();
+          return;
+        }
+
+        return;
+      }
+
+      if (this.largeDownload.length <= 0) {
+        app.onLargeDownloadEnd();
+        this.largeDownload = undefined;
+      } else {
+        var nextSize = this.largeDownload.length > 200000 ? 200000 : this.largeDownload.length;
+        var next = this.largeDownload.substring(0, nextSize);
+        this.largeDownload = this.largeDownload.substring(nextSize);
+        app.onNextLargeDownload(next);
+      }
     }
   }]);
 

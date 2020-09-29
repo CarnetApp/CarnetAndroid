@@ -163,8 +163,9 @@ NoteCardView.prototype.setNote = function (note) {
   } else this.cardKeywords.style.display = "none";
 
   this.cardMedias.innerHTML = "";
+  var noteView = this;
 
-  if (note.previews != undefined) {
+  if (note.previews != undefined && !note.fromCache) {
     var _iteratorNormalCompletion2 = true;
     var _didIteratorError2 = false;
     var _iteratorError2 = undefined;
@@ -175,6 +176,12 @@ NoteCardView.prototype.setNote = function (note) {
         var img = document.createElement('img');
         if (!preview.startsWith("data:") && note.path != "untitleddonotedit.sqd") //fake notes don't need api
           img.src = compatibility.addRequestToken(api_url + preview);else img.src = preview;
+
+        img.onload = function () {
+          browser.noteCardViewGrid.msnry.layout();
+          noteView.toggleDisplayMore();
+        };
+
         this.cardMedias.appendChild(img);
       }
     } catch (err) {

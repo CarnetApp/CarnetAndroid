@@ -7,6 +7,18 @@ GoogleConverter.prototype.convertNoteToSQD = function (currentZip, keepNotePath,
   if (fileName.endsWith(".json")) this.JsonConvertNoteToSQD(currentZip, keepNotePath, destFolder, callback);else this.XMLConvertNoteToSQD(currentZip, keepNotePath, destFolder, callback);
 };
 
+GoogleConverter.prototype.convertToBlob = function (zip, metadata, fileName, isPinned, callback) {
+  zip.generateAsync({
+    type: "blob"
+  }).then(function (blob) {
+    callback(blob, metadata, fileName, isPinned, "/Keep");
+  });
+};
+
+GoogleConverter.prototype.getDestPath = function () {
+  return "/Keep";
+};
+
 GoogleConverter.prototype.extractDateFromXML = function (dateDiv) {
   console.log(dateDiv.innerText.trim());
   console.log(escape(dateDiv.innerText.trim()).replace("%E0%20", ""));
@@ -176,7 +188,7 @@ GoogleConverter.prototype.XMLConvertNoteToSQD = function (currentZip, keepNotePa
       }
     }
 
-    callback(zip, metadata, fileName);
+    importer.convertToBlob(zip, metadata, fileName, undefined, callback);
   });
 };
 
@@ -303,7 +315,7 @@ GoogleConverter.prototype.onDateAvailable = function (date, json, zip, filename,
   zip.file("metadata.json", JSON.stringify(metadata));
   importer.importNoteAttachments(currentZip, zip, json['attachments'], function () {
     console.log("json['isPinned'] " + json['isPinned']);
-    callback(zip, JSON.stringify(metadata), filename, json['isPinned']);
+    importer.convertToBlob(zip, JSON.stringify(metadata), filename, json['isPinned'], callback);
   });
 };
 

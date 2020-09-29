@@ -28,79 +28,35 @@ String.prototype.startsWith = function (suffix) {
   return this.indexOf(suffix) === 0;
 };
 
-var CompatibilityEditor =
+var CompatibilityExporter =
 /*#__PURE__*/
 function (_Compatibility) {
-  _inherits(CompatibilityEditor, _Compatibility);
+  _inherits(CompatibilityExporter, _Compatibility);
 
-  function CompatibilityEditor() {
-    var _this;
+  function CompatibilityExporter() {
+    _classCallCheck(this, CompatibilityExporter);
 
-    _classCallCheck(this, CompatibilityEditor);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(CompatibilityEditor).call(this));
-
-    if (_this.isElectron) {
-      module.paths.push(rootpath + 'node_modules');
-
-      var ipcRenderer = require('electron').ipcRenderer;
-
-      ipcRenderer.on('loadnote', function (event, path) {
-        loadPath(path);
-      });
-      ipcRenderer.on('action', function (event, action) {
-        writer.handleAction(action);
-      });
-    } else {
-      var exports = function exports() {};
-    }
-
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(CompatibilityExporter).call(this));
   }
 
-  _createClass(CompatibilityEditor, [{
-    key: "exit",
-    value: function exit() {
-      if (this.isGtk) {
-        window.parent.document.title = "msgtopython:::exit";
-        parent.postMessage("exit", "*");
-      } else if (this.isElectron) {
-        var _require = require('electron'),
-            ipcRenderer = _require.ipcRenderer;
-
-        ipcRenderer.sendToHost('exit', "");
-      } else if (this.isAndroid) app.postMessage("exit", "*");else if (window.self !== window.top) //in iframe
-        parent.postMessage("exit", "*");
-    }
-  }, {
-    key: "getRecorder",
-    value: function getRecorder(options) {
-      if (this.isAndroid) return new AndroidRecorder(options);
-      return new Recorder(options);
-    }
-  }, {
-    key: "onNoteLoaded",
-    value: function onNoteLoaded() {
-      if (this.isGtk) {
-        document.getElementsByClassName('mdl-layout__header')[0].style.display = "none";
-        window.parent.document.title = "msgtopython:::noteloaded";
-      }
-
-      if (this.isElectron) {
-        var _require2 = require('electron'),
-            ipcRenderer = _require2.ipcRenderer;
-
-        ipcRenderer.sendToHost('loaded', "");
-      } else if (this.isAndroid) {
-        app.hideProgress();
+  _createClass(CompatibilityExporter, [{
+    key: "print",
+    value: function print(htmlElement) {
+      if (this.isAndroid) {
+        app.print(htmlElement.innerHTML);
       } else {
-        parent.postMessage("loaded", "*");
+        var ifr = document.createElement('iframe');
+        ifr.style = 'height: 0px; width: 0px; position: absolute';
+        document.body.appendChild(ifr);
+        ifr.contentDocument.body.appendChild(htmlElement);
+        ifr.contentWindow.print();
+        ifr.parentElement.removeChild(ifr);
       }
     }
   }]);
 
-  return CompatibilityEditor;
+  return CompatibilityExporter;
 }(Compatibility);
 
-var compatibility = new CompatibilityEditor();
+var compatibility = new CompatibilityExporter();
 var isElectron = compatibility.isElectron;

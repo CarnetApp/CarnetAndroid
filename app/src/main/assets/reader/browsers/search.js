@@ -37,6 +37,7 @@ function () {
             document.getElementById("note-loading-view").style.display = "none";
 
             if (data['files'].length > 0) {
+              var hasChanged = false;
               var _iteratorNormalCompletion = true;
               var _didIteratorError = false;
               var _iteratorError = undefined;
@@ -46,7 +47,39 @@ function () {
                   var node = _step.value;
                   if (node.path == "quickdoc") continue;
                   file = new File(node.path, !node.isDir, node.name);
-                  self.result.push(file);
+                  var isIn = false;
+                  var _iteratorNormalCompletion2 = true;
+                  var _didIteratorError2 = false;
+                  var _iteratorError2 = undefined;
+
+                  try {
+                    for (var _iterator2 = self.result[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                      var fileIn = _step2.value;
+
+                      if (fileIn.path == node.path) {
+                        isIn = true;
+                        break;
+                      }
+                    }
+                  } catch (err) {
+                    _didIteratorError2 = true;
+                    _iteratorError2 = err;
+                  } finally {
+                    try {
+                      if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+                        _iterator2["return"]();
+                      }
+                    } finally {
+                      if (_didIteratorError2) {
+                        throw _iteratorError2;
+                      }
+                    }
+                  }
+
+                  if (!isIn) {
+                    self.result.push(file);
+                    hasChanged = true;
+                  }
                 }
               } catch (err) {
                 _didIteratorError = true;
@@ -65,7 +98,7 @@ function () {
 
               var callbackFiles = [];
               callbackFiles = callbackFiles.concat(self.result);
-              onListEnd("search://", callbackFiles, undefined, true);
+              if (hasChanged) onListEnd("search://", callbackFiles, undefined, true);
             }
           }
 

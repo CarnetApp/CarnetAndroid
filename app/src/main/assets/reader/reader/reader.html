@@ -6,9 +6,11 @@
 	<script src="<!ROOTPATH>compatibility/electron/request_builder.js"></script>
 	<script src="<!ROOTPATH>libs/jquery.min.js"></script>
 	<script src="<!ROOTPATH>compatibility/compatibility.js"></script>
+	<script src="<!ROOTPATH>libs/html2canvas.js"></script>
+	<script src="<!ROOTPATH>libs/purify.min.js"></script>
+
 	<script src="<!ROOTPATH>compatibility/compatibility-editor.js"></script>
 	<script src="<!ROOTPATH>compatibility/android/android_recorder.js"></script>
-
 	<script src="<!ROOTPATH>libs/polyfill.js"></script>
 	<script src="<!ROOTPATH>libs/dialog-polyfill.js"></script>
 	<link rel="stylesheet" href="<!ROOTPATH>libs/polyfill.css">
@@ -44,7 +46,6 @@
 	<script src="<!ROOTPATH>reader/libs/jquery.mobile-min.js"></script>
 	-->
 	<script src="<!ROOTPATH>reader/libs/jscolor.js"></script>
-	<script src="<!ROOTPATH>libs/jszip.min.js"></script>
 	<script src="<!ROOTPATH>reader/libs/Countable.js"></script>
 	<script src="<!ROOTPATH>utils/file_utils.js"></script>
 	<script src="<!ROOTPATH>reader/libs/jquery.ui.touch-punch.min.js"></script>
@@ -69,12 +70,6 @@
 	<!-- localization -->
 	<script src="<!ROOTPATH>libs/jquery_i18n/CLDRPluralRuleParser.js"></script>
 	<script src="<!ROOTPATH>libs/jquery_i18n/jquery.i18n.js"></script>
-	<script src="<!ROOTPATH>libs/jquery_i18n/jquery.i18n.messagestore.js"></script>
-	<script src="<!ROOTPATH>libs/jquery_i18n/jquery.i18n.fallbacks.js"></script>
-	<script src="<!ROOTPATH>libs/jquery_i18n/jquery.i18n.language.js"></script>
-	<script src="<!ROOTPATH>libs/jquery_i18n/jquery.i18n.parser.js"></script>
-	<script src="<!ROOTPATH>libs/jquery_i18n/jquery.i18n.emitter.js"></script>
-	<script src="<!ROOTPATH>libs/jquery_i18n/jquery.i18n.emitter.bidi.js"></script>
 	<script src="<!ROOTPATH>libs/moment.js"></script>
 
 	<script src="<!ROOTPATH>reader/libs/rome.standalone.js"></script>
@@ -351,6 +346,9 @@
 						<li class="mdl-menu__item" id="button-add-keyword" data-i18n="keywords">Labels</li>
 						<li class="mdl-menu__item" id="note-color-button" data-i18n="note_color">Note Color
 						</li>
+						<li class="mdl-menu__item in-toolbar-button" href="" id="share-button"
+							data-i18n="send_export_print">
+							Share/Export/Print</li>
 						<li class="mdl-menu__item in-toolbar-button" href="" id="reminders-button"
 							data-i18n="reminders">
 							Reminders</li>
@@ -585,6 +583,26 @@
 			style="width:200px; height:200px; top:50%; left:50%; margin-top:-150px; margin-left:-100px;"></div>
 
 	</div>
+	<div id="whole-frame-container">
+		<div id="buttons-and-frame-container">
+			<div id="frame-loading-view">
+				<div class="mdl-spinner mdl-js-spinner is-active " style="position:absolute; top:50%; margin-top:-75px; left:50%;
+						margin-left:-75px;width:150px; height:150px; "></div>
+			</div>
+			<div id="frame-buttons-container">
+				<button id="iframe-back-button" class="mdl-button mdl-js-button mdl-button--icon">
+					<i class="material-icons">arrow_back</i>
+				</button>
+			</div>
+			<div id="frame-container">
+
+			</div>
+		</div>
+
+
+	</div>
+
+
 
 	<input type="file" id="input_file" style="display: none;" />
 

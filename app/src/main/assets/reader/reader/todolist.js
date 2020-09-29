@@ -141,9 +141,12 @@ TodoListManager.prototype.createTodolist = function (data) {
     }
   };
 
-  writer.oCenter.addEventListener("scroll", setAddItem);
-  $(window).on('resize', setAddItem);
-  setAddItem();
+  if (writer != undefined) {
+    writer.oCenter.addEventListener("scroll", setAddItem);
+    $(window).on('resize', setAddItem);
+    setAddItem();
+  }
+
   return todolist;
 };
 

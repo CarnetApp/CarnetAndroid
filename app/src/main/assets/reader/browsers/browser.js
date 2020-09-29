@@ -466,7 +466,7 @@ function sortBy(sortBy, reversed, discret) {
   currentTask.startList();
 }
 
-function onListEnd(pathToList, files, metadatas, discret, force) {
+function onListEnd(pathToList, files, metadatas, discret, force, fromCache) {
   lastListingRequestId = undefined;
 
   if (!_.isEqual(files, oldFiles) || force) {
@@ -1005,7 +1005,7 @@ console.oldlog = console.log;
 }*/
 
 function loadCachedRecentDB() {
-  if (cachedRecentDB != undefined) onListEnd("recentdb://", cachedRecentDB, cachedMetadata);
+  if (cachedRecentDB != undefined) onListEnd("recentdb://", cachedRecentDB, cachedMetadata, false, false, true);
 }
 
 UISettingsHelper.getInstance().loadSettings(function (settings, fromCache) {

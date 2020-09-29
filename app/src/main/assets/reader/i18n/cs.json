@@ -93,5 +93,6 @@
     "todo": "Seznam",
     "display_more": "Zobrazit více",
     "display_less": "Zobrazit méně",
-    "unable_rename_note": "Poznámku nelze přejmenovat"
+    "unable_rename_note": "Poznámku nelze přejmenovat",
+    "delete_recording_confirmation": "Opravdu chcete smazat tuto nahrávku? Tuto akci nelze vrátit zpět."
 }

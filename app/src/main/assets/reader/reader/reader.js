@@ -1056,6 +1056,10 @@ Writer.prototype.init = function () {
     return false;
   };
 
+  document.getElementById("share-button").onclick = function () {
+    writer.openInFrame(rootpath + "exporter/exporter.html?path=" + writer.note.path + "&api_path=" + api_url);
+  };
+
   document.getElementById("note-color-button").onclick = function () {
     document.getElementById("note-color-picker-dialog").showModal();
 
@@ -1128,6 +1132,35 @@ Writer.prototype.askToExit = function () {
   }
 
   return false;
+};
+
+var currentFrame = undefined;
+
+Writer.prototype.openInFrame = function (url) {
+  var iframeContainer = document.getElementById('frame-container');
+  var wholeFrameContainer = document.getElementById('whole-frame-container');
+  document.getElementById('frame-loading-view').style.display = "block";
+
+  var onFrameLoaded = function onFrameLoaded() {
+    document.getElementById('frame-loading-view').style.display = "none";
+  };
+
+  if (currentFrame == undefined) {
+    if (compatibility.isElectron) {} else {
+      currentFrame = document.createElement('iframe');
+      currentFrame.classList.add("frame");
+      currentFrame.onload = onFrameLoaded;
+    }
+
+    iframeContainer.appendChild(currentFrame);
+
+    document.getElementById("iframe-back-button").onclick = function () {
+      wholeFrameContainer.style.display = "none";
+    };
+  }
+
+  currentFrame.src = url;
+  wholeFrameContainer.style.display = "inline-flex";
 };
 
 Writer.prototype.copy = function () {
@@ -1241,6 +1274,7 @@ Writer.prototype.reset = function () {
   this.exitOnSaved = false;
   this.putDefaultHTML();
   this.setMediaList([]);
+  document.getElementById("whole-frame-container").style.display = "none";
   document.getElementById("toolbar").classList.remove("more");
   var dias = document.getElementsByClassName("mdl-dialog");
 
@@ -1827,3 +1861,4 @@ $(window).on('touchstart', function (e) {
 $(window).on('touchend', function () {
   writer.oCenter.style.overflowY = "auto";
 });
+var prout = "prout2";

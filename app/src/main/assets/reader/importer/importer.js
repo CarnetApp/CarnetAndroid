@@ -1,6 +1,6 @@
 "use strict";
 
-new RequestBuilder(Utils.getParameterByName("api_path"));
+new RequestBuilder(Utils.getParameterByName("api_path") != null ? Utils.getParameterByName("api_path") : undefined);
 
 var Importer = function Importer(destPath) {
   this.elem = document.getElementById("table-container");
@@ -27,7 +27,6 @@ var Importer = function Importer(destPath) {
   };
 
   this.webview.addEventListener('ipc-message', function (event) {
-    // prints "ping"
     if (event.channel == "pathSelected") {
       importer.path = event.args[0];
       console.log("event.channel " + event.args[0]);
@@ -85,27 +84,6 @@ Importer.prototype.importNotes = function () {
     $('#import-finished').show();
     $('#importing-view').hide();
     $('#import-report').html(importer.imported + " note(s) imported <br />" + importer.error.length + " failed");
-    /*console.log(importer.timeStampedNotes.length + " note(s) imported " + document.getElementById("add-to-recent-cb").checked)
-    if (document.getElementById("add-to-recent-cb").checked) {
-        importer.timeStampedNotes.sort(keysrt('time'))
-        importer.timeStampedKeywords.sort(keysrt('time'))
-        var paths = []
-        for (var er of importer.timeStampedNotes) {
-            paths.push(er.path)
-        }
-        var RecentDBManager = require("../server/recent/local_recent_db_manager").LocalRecentDBManager
-        var db = new RecentDBManager(SettingsHelper.getNotePath() + "/quickdoc/recentdb/" + SettingsHelper.getAppUid())
-        db.actionArray(importer.timeStampedNotes, function () {
-            importer.importingSpan.innerHTML = importer.timeStampedNotes.length + " note(s) imported";
-         })
-    } else {
-        importer.importingSpan.innerHTML = importer.timeStampedNotes.length + " note(s) imported";
-     }
-    var KeywordsDBManager = require("../server/keywords/keywords_db_manager").KeywordsDBManager
-    var db = new KeywordsDBManager(SettingsHelper.getNotePath() + "/quickdoc/keywords/" + SettingsHelper.getAppUid())
-    db.actionArray(importer.timeStampedKeywords, function () {
-        importer.importingSpan.innerHTML = importer.timeStampedNotes.length + " note(s) imported";
-     })*/
   });
 };
 
@@ -124,6 +102,7 @@ Importer.prototype.importNext = function (callback) {
 
 Importer.prototype.onArchiveSelected = function (archive) {
   var importer = this;
+  importer.archiveName = archive.name;
   console.log("$(input[name='archive-type']:checked).val() " + $("input[name='archive-type']:checked").val());
 
   switch (parseInt($("input[name='archive-type']:checked").val())) {
@@ -132,9 +111,10 @@ Importer.prototype.onArchiveSelected = function (archive) {
       break;
 
     default:
-      importer.converter = undefined;
+      importer.converter = new CarnetConverter(this);
   }
 
+  importer.destPath = importer.converter.getDestPath();
   JSZip.loadAsync(archive).then(function (zip) {
     importer.currentZip = zip;
     importer.converter.getListOfNotesFromZip(zip, function (list) {
@@ -348,9 +328,12 @@ function DateError() {}
 
 Importer.prototype.importNote = function (keepNotePath, destFolder, callback) {
   this.importingSpan.innerHTML = FileUtils.getFilename(keepNotePath) + " (" + this.notesToImport.length + " remaining)";
-  this.converter.convertNoteToSQD(this.currentZip, keepNotePath, destFolder, function (zip, metadata, fileName, isPinned) {
-    console.log("filename " + fileName);
-    importer.sendNote(zip, metadata, fileName, isPinned, callback);
+  this.converter.convertNoteToSQD(this.currentZip, keepNotePath, destFolder, function (zip, metadata, fileName, isPinned, path) {
+    console.log("path " + path);
+    if (zip != undefined) importer.sendNote(zip, metadata, fileName, isPinned, path, callback);else {
+      importer.error.push(keepNotePath);
+      callback();
+    }
   });
 };
 
@@ -358,32 +341,29 @@ Importer.prototype.onError = function (filename) {
   this.error.push(filename);
 };
 
-Importer.prototype.sendNote = function (zip, metadata, filename, isPinned, callback) {
+Importer.prototype.sendNote = function (blob, metadata, filename, isPinned, path, callback) {
   var self = this;
   console.log("metadata " + metadata);
-  zip.generateAsync({
-    type: "blob"
-  }).then(function (blob) {
-    var files = [];
-    blob.name = filename;
-    files.push(blob);
-    RequestBuilder.sRequestBuilder.postFiles("/note/import", {
-      add_to_recent: true,
-      path: "keep",
-      is_pinned: isPinned,
-      metadata: metadata
-    }, files, function (error, data) {
-      console.log("error " + error);
+  var files = [];
+  blob.name = filename;
+  files.push(blob);
+  console.log("document.getElementById().checked " + document.getElementById("add-to-recent-cb").checked);
+  RequestBuilder.sRequestBuilder.postFiles("/note/import", {
+    add_to_recent: document.getElementById("add-to-recent-cb").checked,
+    path: path,
+    is_pinned: isPinned,
+    metadata: metadata
+  }, files, function (error, data) {
+    console.log("error " + error);
 
-      if (error) {
-        self.onError(filename);
-        callback();
-      } else {
-        self.imported = self.imported + 1;
-        callback();
-      }
-    });
-  }, function (err) {});
+    if (error) {
+      self.onError(filename);
+      callback();
+    } else {
+      self.imported = self.imported + 1;
+      callback();
+    }
+  });
 };
 
 var importer;

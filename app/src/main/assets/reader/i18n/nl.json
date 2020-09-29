@@ -82,5 +82,17 @@
     "date": "Datum",
     "beta_warning_reminders": "\"Herinneringen\" is nog betafunctie en werkt alleen maar op Android",
     "more-options": "Meer opties",
-    "start_with_browser_view": "Begin met browserweergave"
+    "start_with_browser_view": "Begin met browserweergave",
+    "delete_recording_confirmation": "Weet je zeker dat je deze opname wilt verwijderen? Deze actie is onomkeerbaar.",
+    "unable_rename_note": "Notitie kon niet hernoemd worden",
+    "display_less": "Minder weergeven",
+    "display_more": "Meer weergeven",
+    "todo": "To Do",
+    "completed": "Voltooid",
+    "add_item": "Voeg item toe",
+    "remove_todo_list": "Verwijder ToDo-Lijst",
+    "new_todolist": "Nieuwe ToDo-Lijst",
+    "note_color": "Notitie kleur",
+    "something_went_wrong_please_reload": "Er is iets fout gegaan... Laad opnieuw",
+    "delete_todolist_confirmation": "Deze bewerking is onomkeerbaar, weet u zeker dat u deze ToDo-lijst wilt verwijderen?"
 }

@@ -93,5 +93,6 @@
     "todo": "Zu erledigen",
     "display_more": "Mehr anzeigen",
     "display_less": "Weniger anzeigen",
-    "unable_rename_note": "Notiz konnte nicht umbenannt werden"
+    "unable_rename_note": "Notiz konnte nicht umbenannt werden",
+    "delete_recording_confirmation": "Sind Sie sicher, dass Sie die Aufnahme löschen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden."
 }
