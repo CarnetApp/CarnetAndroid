@@ -48,6 +48,11 @@
         android:title="@string/importer_beta"
         android:summary="@string/use_it_with_caution"
         />
+
+    <Preference
+        android:key="pref_export"
+        android:title="@string/export"
+        />
     <Preference
         android:key="pref_desktop_version"
         android:title="@string/desktop_version"

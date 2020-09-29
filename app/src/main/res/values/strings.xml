@@ -163,5 +163,7 @@
     <string name="recording">Recording</string>
     <string name="encoding">Encoding</string>
     <string name="stop">Stop</string>
+    <string name="exporting">Exporting...\nPlease wait</string>
+    <string name="export">Export</string>
 
 </resources>
