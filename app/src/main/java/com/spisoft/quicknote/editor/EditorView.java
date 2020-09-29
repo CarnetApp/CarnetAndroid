@@ -4,6 +4,7 @@ import android.Manifest;
 import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -20,6 +21,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -34,10 +36,13 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.DownloadListener;
 import android.webkit.JavascriptInterface;
 import android.webkit.MimeTypeMap;
 import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
+import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -61,10 +66,18 @@ import com.spisoft.sync.Log;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.DOWNLOAD_SERVICE;
 import static com.spisoft.quicknote.MainActivity.ACTION_RELOAD_KEYWORDS;
 
 
@@ -78,6 +91,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
     private static final int OPEN_MEDIA_REQUEST = 343;
     private static final int REQUEST_SELECT_FILE = 344;
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 345;
+    private static final int DOWNLOAD_REQUEST_CODE = 346;
     private WebView mWebView;
     private Note mNote;
 
@@ -118,6 +132,12 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
     private List<Action> mActions;
     public static String sNextExtension;
     private AudioRecorderJS mAudioRecorder;
+    private String mDownloadData;
+    private FileWriter mLargeFileWriter;
+    private Uri mLargeUri;
+    private FileWriter mLargeTmpFileWriter;
+    private File mLargeTmpFile;
+    private OutputStream mLargeFileOutput;
 
     public static class Action implements Serializable{
         public String type;
@@ -180,6 +200,47 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
                 mUploadMessage.onReceiveValue(result);
                 mUploadMessage = null;
             }
+        }
+
+        if(requestCode == DOWNLOAD_REQUEST_CODE){
+            if( data != null) {
+                Uri uri = data.getData();
+                if (uri != null) {
+                    if (mDownloadData != null) {
+
+                        try {
+                            ParcelFileDescriptor pfd = getContext().getContentResolver().openFileDescriptor(uri, "w");
+                            if (pfd != null) {
+                                FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
+                                fileOutputStream.write(mDownloadData.getBytes());
+                                fileOutputStream.close();
+                                mDownloadData = null;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    } else {
+                        try {
+                            mLargeUri = uri;
+                            mLargeFileOutput = getContext().getContentResolver().openOutputStream(uri, "w");
+                            mLargeTmpFile = new File(getContext().getCacheDir(), "tmpfile");
+
+                            try {
+                                mLargeTmpFileWriter = new FileWriter(mLargeTmpFile);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            mWebView.loadUrl("javascript:compatibility.sendNextLargeDownload()");
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                }
+            }
+            return;
         }
     }
 
@@ -389,7 +450,44 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
                 ((Activity)getContext()).startActivityForResult(Intent.createChooser(i, "File Chooser"), OPEN_MEDIA_REQUEST);
             }
         });
+
         mWebView.addJavascriptInterface(new WebViewJavaScriptInterface(getContext()), "app");
+        mWebView.setDownloadListener(new DownloadListener() {
+            public void onDownloadStart(String url, String userAgent,
+                                        String contentDisposition, String mimetype,
+                                        long contentLength) {
+                if(url.startsWith("data:")){
+                    url = url.substring("data:".length());
+                    String[] fsplit = url.split(",");
+                    String data = fsplit[1];
+                    String[] tsplit = fsplit[0].split(";");
+                    String mtype = tsplit[0];
+                    String enc = tsplit[1];
+                    if(enc.equals("charset=utf-8")){
+                        Log.d("downloaddebug",contentDisposition);
+                        mDownloadData = Uri.decode(data);
+                        openDocumentToWrite(DOWNLOAD_REQUEST_CODE, "untitled."+MimeTypeMap.getSingleton().getExtensionFromMimeType(mtype), mtype);
+                    }
+                } else {
+                    DownloadManager.Request request = new DownloadManager.Request(
+                            Uri.parse(url));
+                    request.setMimeType(mimetype);
+                    String cookies = CookieManager.getInstance().getCookie(url);
+                    request.addRequestHeader("cookie", cookies);
+                    request.addRequestHeader("User-Agent", userAgent);
+                    request.setDescription("Downloading File...");
+                    request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimetype));
+                    request.allowScanningByMediaScanner();
+                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                    request.setDestinationInExternalPublicDir(
+                            Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(
+                                    url, contentDisposition, mimetype));
+                    DownloadManager dm = (DownloadManager) getContext().getSystemService(DOWNLOAD_SERVICE);
+                    dm.enqueue(request);
+                    Toast.makeText(getContext(), "Downloading File", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         mHasLoaded = false;
         mRootPath = getContext().getFilesDir().getAbsolutePath();
         mServer2 = new HttpServer(getContext());
@@ -405,8 +503,6 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
                 mAudioRecorder.set((Activity)getContext(), mServer2, mWebView);
                 mWebView.addJavascriptInterface(mAudioRecorder.getJs(), "AndroidRecorderJava");
                 mWebView.loadUrl(mServer2.getUrl(getUrl()));
-
-
 
 
             }
@@ -426,6 +522,14 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         }
 
 
+    }
+
+    public void openDocumentToWrite(int requestCode, String fileName, String mimetype){
+        Intent exportIntent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        exportIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        exportIntent.setType(mimetype);
+        exportIntent.putExtra(Intent.EXTRA_TITLE, fileName);
+        ((Activity)getContext()).startActivityForResult(exportIntent, requestCode);
     }
     public String getUrl(){
         return "/tmp/reader.html";
@@ -505,6 +609,40 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
             mAudioRecorder.start(channels, bitrate, sampleRate);
         }
 
+        @JavascriptInterface
+        public void startLargeDownload(String filename, String mimetype){
+            openDocumentToWrite(DOWNLOAD_REQUEST_CODE, filename, mimetype);
+
+        }
+
+        @JavascriptInterface
+        public void onLargeDownloadEnd(){
+            try {
+                mLargeTmpFileWriter.flush();
+                mLargeTmpFileWriter.close();
+                InputStream st = new FileInputStream(mLargeTmpFile);
+                FileUtils.copy(st, mLargeFileOutput);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @JavascriptInterface
+        public void onNextLargeDownload(String toWrite){
+            try {
+                mLargeTmpFileWriter.append(toWrite);
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadUrl("javascript:compatibility.sendNextLargeDownload()");
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
+
+        }
         @JavascriptInterface
         public void AudioRecorderStop(String channels, String bitrate, String sampleRate) {
             mAudioRecorder.stop();

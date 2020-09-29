@@ -25,6 +25,9 @@
         android:supportsRtl="true"
         android:theme="@style/CarnetTheme.White">
         <activity android:name=".utils.WebActivity"></activity>
+        <activity android:name=".databases.NoteExporter"
+            android:theme="@style/Theme.Transparent"
+            ></activity>
 
         <receiver
             android:name=".BootReceiver"

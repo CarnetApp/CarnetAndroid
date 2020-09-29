@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileLock;
 import java.util.List;
 import java.util.zip.CRC32;
@@ -159,47 +160,51 @@ public class ZipUtils {
         return ret;
 
     }
-
     public static boolean zipFolder(File folder,String path, List<String> execptAbsolute){
-        synchronized (FileLocker.getLockOnPath(folder.getAbsolutePath())) {
-            synchronized (FileLocker.getLockOnPath(path)) {
-                FileLock lock = null;
-                boolean ret = false;
-                Log.d("pathdebug","mkdirs"+new File(path).getParentFile().mkdirs());
-                String tmp = path;
-                try {
-
-                    FileOutputStream fos = new FileOutputStream(tmp);
-                    ZipOutputStream zos = new ZipOutputStream(fos);
-                   // zos.setMethod(ZipOutputStream.DEFLATED); // this line optional
-                    zos.setLevel(0);
-                    lock = fos.getChannel().lock();
-
-                    recursiveAddFile(folder, zos, folder.getAbsolutePath(), execptAbsolute);
-
-
-                    // Complete the entry
-
-                    zos.close();
-                    ret = true;
-                } catch (IOException e) {
-                    Log.d("TestDebug", "write error");
-                    e.printStackTrace();
-                    new File(tmp).delete();
-                } finally {
-                    if (lock != null && lock.isValid())
-                        try {
-                            lock.release();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                }
-
-                return ret;
+        synchronized (FileLocker.getLockOnPath(path)) {
+            Log.d("pathdebug","mkdirs"+new File(path).getParentFile().mkdirs());
+            try {
+                return zipFolder(folder, new FileOutputStream(path), execptAbsolute);
+            } catch (FileNotFoundException e) {
+                return false;
             }
         }
-
     }
+    public static boolean zipFolder(File folder, OutputStream stream, List<String> execptAbsolute){
+        synchronized (FileLocker.getLockOnPath(folder.getAbsolutePath())) {
+            FileLock lock = null;
+            boolean ret = false;
+            try {
+
+                ZipOutputStream zos = new ZipOutputStream(stream);
+                // zos.setMethod(ZipOutputStream.DEFLATED); // this line optional
+                zos.setLevel(0);
+                if(stream instanceof FileOutputStream)
+                    lock = ((FileOutputStream)stream).getChannel().lock();
+
+                recursiveAddFile(folder, zos, folder.getAbsolutePath(), execptAbsolute);
+
+
+                // Complete the entry
+
+                zos.close();
+                ret = true;
+            } catch (IOException e) {
+                Log.d("TestDebug", "write error");
+                e.printStackTrace();
+            } finally {
+                if (lock != null && lock.isValid())
+                    try {
+                        lock.release();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+            }
+
+            return ret;
+        }
+    }
+
 
     private static void recursiveAddFile(File file, ZipOutputStream zos, String rootFolderPathWithoutSlash, List<String> execptAbsolute) throws IOException {
         if(execptAbsolute.contains(file.getAbsolutePath()))
@@ -208,7 +213,7 @@ public class ZipUtils {
         if(file.isDirectory()){
             File [] files = file.listFiles();
             if(!file.getAbsolutePath().equals(rootFolderPathWithoutSlash))
-            zos.putNextEntry(new ZipEntry(file.getAbsolutePath().substring(rootFolderPathWithoutSlash.length()+1)));
+                zos.putNextEntry(new ZipEntry(file.getAbsolutePath().substring(rootFolderPathWithoutSlash.length()+1)));
             if(files!=null)
                 for (File child : files)
                     recursiveAddFile(child,zos, rootFolderPathWithoutSlash, execptAbsolute);

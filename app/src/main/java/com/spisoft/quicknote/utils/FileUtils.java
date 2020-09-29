@@ -298,6 +298,7 @@ public class FileUtils {
 
     public static boolean move(String from, String to) {
         try {
+            new File(to).getParentFile().mkdirs();
             copy(new FileInputStream(from), new FileOutputStream(to));
             return new File(from).delete();
         } catch (FileNotFoundException e) {

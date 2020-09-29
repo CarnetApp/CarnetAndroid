@@ -17,6 +17,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.spisoft.quicknote.browser.PermissionChecker;
+import com.spisoft.quicknote.databases.NoteExporter;
 import com.spisoft.quicknote.intro.HelpActivity;
 import com.spisoft.quicknote.utils.PinView;
 import com.spisoft.quicknote.utils.WebActivity;
@@ -52,6 +53,7 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
         findPreference("pref_desktop_version").setOnPreferenceClickListener(this);
         findPreference("pref_changelog").setOnPreferenceClickListener(this);
         findPreference("pref_import").setOnPreferenceClickListener(this);
+        findPreference("pref_export").setOnPreferenceClickListener(this);
         //getPreferenceScreen().removePreference(findPreference("pref_import"));
         ((CheckBoxPreference)findPreference("pref_debug_log")).setChecked(BuildConfig.DEBUG);
     }
@@ -149,6 +151,11 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
             Intent intent = new Intent(getActivity(), WebActivity.class);
             intent.putExtra(WebFragment.ARG_URL, "/reader/importer/importer.html?api_path=/api/");
             getActivity().startActivity(intent);
+            return true;
+
+        }
+        else if(preference==findPreference("pref_export")){
+            startActivity(new Intent(getActivity(), NoteExporter.class));
             return true;
 
         }

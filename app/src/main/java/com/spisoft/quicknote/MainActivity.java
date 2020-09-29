@@ -32,6 +32,7 @@ import com.spisoft.quicknote.browser.PasteDialog;
 import com.spisoft.quicknote.browser.PermissionChecker;
 import com.spisoft.quicknote.databases.CacheBuilderIntentService;
 import com.spisoft.quicknote.databases.DBMergerService;
+import com.spisoft.quicknote.databases.NoteExporter;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.reminders.RemindersManager;
