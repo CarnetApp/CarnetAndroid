@@ -32,6 +32,8 @@ import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import android.text.Html;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
