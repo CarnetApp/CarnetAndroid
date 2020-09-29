@@ -12,9 +12,9 @@ git checkout master
 git checkout -b stable
 git push origin stable
 git push framagit stable
-git checkout -b stable-$(version)
-git push origin stable-$(version)
-git push framagit stable-$(version)
+git checkout -b stable-$version
+git push origin stable-$version
+git push framagit stable-$version
 git checkout master
 
 cd ../Sync
@@ -25,8 +25,8 @@ git checkout master
 git checkout -b stable
 git push origin stable
 git push framagit stable
-git checkout -b stable-$(version)
-git push origin stable-$(version)
-git push framagit stable-$(version)
+git checkout -b stable-$version
+git push origin stable-$version
+git push framagit stable-$version
 git checkout master
 cd ../CarnetAndroid
