@@ -1,2 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="please_wait">Attendi</string>
+    <string name="file_operation_in_progress">Operazione sui file</string>
+    <string name="paste_how_to">Naviga fino alla cartella di destinazione, quindi seleziona Incolla</string>
+    <string name="paste">Incolla</string>
+    <string name="move">Sposta</string>
+    <string name="sync_cloud_preference">Sincronizza con il cloud</string>
+    <string name="write_error">Errore durante il salvataggio del testo</string>
+    <string name="please_wait_update">Per favore attendi mentre viene completata la sincronizzazione delle tue note</string>
+    <string name="add_screenshot">Aggiungere screenshot alla nota\?</string>
+    <string name="unable_to_delete_use">Impossibile eliminare un documento in uso</string>
+    <string name="unable_to_rename_invalid_name">La nota contiene caratteri non riconosciuti</string>
+    <string name="unable_to_rename_use">Impossibile rinominare il documento mentre è in uso</string>
+    <string name="exit">Esci</string>
+    <string name="allow">Permetti</string>
+    <string name="error_permission_storage">A causa del nuovo sistema di gestione dei permessi di Android, abbiamo bisogno dell\'autorizzazione per l\'accesso alla memoria interna. È necessaria poter salvare le note sul tuo dispositivo (sia per memoria interna che per archiviazione esterna micro-sd).</string>
+    <string name="error">Errore</string>
+    <string name="authorisation_issue">Problema con l\'autorizzazione</string>
+    <string name="authorize_description">Carnet ha bisogno di autorizzazioni speciali per visualizzare in una nuova finestra. Concedile abilitando \"Mostra sopra altre app\"</string>
+    <string name="authorize">Autorizza</string>
+    <string name="drawer_close">Chiudi menu laterale</string>
+    <string name="drawer_open">Apri menu laterale</string>
+    <string name="empty_message">Nessuna nota trovata
+\nCrea una nuova nota utilizzando il tasto +</string>
+    <string name="old_password">PIN attuale</string>
+    <string name="new_password">Nuovo PIN</string>
+    <string name="pref_set_password">Imposta PIN</string>
+    <string name="password_on_minimize">Richiedi PIN alla riapertura dell\'app</string>
+    <string name="wrong_password">PIN errato. Il pin di default è 0000</string>
+    <string name="delete_confirm">Confermi di voler procedere con l\'eliminazione\?</string>
+    <string name="report_bug_or_propose_description">Segnale un bug o suggerisci una nuova feature</string>
+    <string name="report_bug_or_propose">Bug / feature</string>
+    <string name="donate">Fai una donazione</string>
+    <string name="donate_paypal">Fai una donazione (PayPal)</string>
+    <string name="donate_liberapay">Fai una donazione (Liberapay)</string>
+    <string name="general_header">Generale</string>
+    <string name="title_activity_settings">Impostazioni</string>
+    <string name="new_folder_name">Nuova cartella</string>
+    <string name="name">Nome</string>
+    <string name="add_folder">Aggiungi cartella</string>
+    <string name="add_note">Aggiungi nota</string>
+    <string name="loading">Caricamento</string>
+    <string name="toast_on_minimize">Clicca per ingrandire</string>
+    <string name="parent_folder">Cartella precedente</string>
+    <string name="browser">Browser</string>
+    <string name="recent">Recenti</string>
+    <string name="storage_preference">Memoria principale</string>
+    <string name="remove_recent">Rimuovi dai recenti</string>
+    <string name="delete">Elimina</string>
+    <string name="rename">Rinomina</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="hello_world">Hello world!</string>
+</resources>
