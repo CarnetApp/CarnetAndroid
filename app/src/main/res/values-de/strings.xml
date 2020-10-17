@@ -161,7 +161,7 @@
     <string name="encoding">Kodierung</string>
     <string name="stop">Stopp</string>
     <string name="recording">Aufnahme</string>
-    <string name="export">Exportieren</string>
+    <string name="export">Exportieren (beta)</string>
     <string name="exporting">Exportiere ...
 \nBitte warten</string>
 </resources>
