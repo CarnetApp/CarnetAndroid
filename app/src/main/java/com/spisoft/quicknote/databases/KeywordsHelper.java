@@ -212,13 +212,22 @@ public class KeywordsHelper {
 
         return flattenDb;
     }
+    public boolean mergeDB(String otherDBPath) {
+        try {
+            KeywordsHelper otherDBHelper = new KeywordsHelper(mContext, otherDBPath);
+            JSONObject otherDBJson = otherDBHelper.getJson();
+            return mergeDB(otherDBJson);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
 
-    public boolean mergeDB(String otherDBPath){
+    }
+
+    public boolean mergeDB(JSONObject otherDBJson ){
         boolean hasChanged= false;
         try {
             JSONObject myJSON = getJson();
-            KeywordsHelper otherDBHelper = new KeywordsHelper(mContext, otherDBPath);
-            JSONObject otherDBJson = otherDBHelper.getJson();
             for(int i = 0; i<otherDBJson.getJSONArray("data").length(); i++){
                 JSONObject obj = otherDBJson.getJSONArray("data").getJSONObject(i);
                 if(!obj.has("keyword"))

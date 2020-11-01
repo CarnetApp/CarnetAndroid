@@ -34,10 +34,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.util.ServerRunner;
@@ -185,6 +188,150 @@ public class HttpServer extends NanoHTTPD {
                 }
                 else if(Method.POST.equals(method)){
                     switch (subpath) {
+                        case "note/import_archive": {
+                            /* TODO
+                                implement note folder import
+                             */
+
+                            JSONObject response = new JSONObject();
+
+                            String tmpPath = files.get("media[]");
+                            try {
+                                JSONArray renamedResponse = new JSONArray();
+                                JSONArray log = new JSONArray();
+                                try {
+                                    response.put("renamed",renamedResponse);
+                                    response.put("log", log);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                ZipFile zipFile = new ZipFile(tmpPath);
+                                ZipEntry entry = null;
+                                Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                                String prefix = "";
+                                String carnetPath = PreferenceHelper.getRootPath(mContext);
+                                while (entries.hasMoreElements()) {
+                                    entry = entries.nextElement();
+                                    int i = entry.getName().indexOf("/");
+                                    if (i <= 0) {
+                                        if (!entry.isDirectory()) {
+                                            prefix = null;
+                                        }
+                                    } else {
+                                        String curPrefix = entry.getName().substring(0, i);
+                                        if (prefix != null && prefix.isEmpty()) {
+                                            prefix = curPrefix;
+                                        } else if (!curPrefix.equals(prefix)) {
+                                            prefix = null;
+                                            break;
+                                        }
+                                    }
+                                }
+                                List<String> keywordsDB = new ArrayList<>();
+                                List<String> recentDB = new ArrayList<>();
+                                Map<String, String> renamed = new HashMap<>();
+                                entries = zipFile.entries();
+                                while (entries.hasMoreElements()) {
+                                    entry = entries.nextElement();
+                                    String relativePath = entry.getName();
+                                    if (prefix != null) {
+                                        relativePath = relativePath.substring((prefix + "/").length());
+                                    }
+                                    if (relativePath.isEmpty())
+                                        continue;
+                                    if (relativePath.endsWith(".sqd")) {
+                                        Log.d("importdebug",relativePath);
+                                        String newPath = relativePath;
+                                        if (new File(carnetPath, relativePath).exists()) {
+                                            newPath = newPath.substring(0, newPath.length() - ".sqd".length())+NoteManager.randomChar()+NoteManager.randomChar()+".sqd";
+                                            Log.d("importdebug","file already there");
+
+                                        }
+                                        if (!entry.isDirectory()) {
+                                            File out = new File(carnetPath, newPath);
+                                            out.getParentFile().mkdirs();
+                                            FileOutputStream stream = new FileOutputStream(out);
+                                            FileUtils.copy(zipFile.getInputStream(entry), stream);
+                                            if (!newPath.equals(relativePath)) {
+
+                                                String md5new = FileUtils.md5(out.getAbsolutePath());
+                                                String md5old = FileUtils.md5(new File(carnetPath, relativePath).getAbsolutePath());
+                                                if (md5new.equals(md5old)) {
+                                                    out.delete();
+                                                    Log.d("importdebug","is same file");
+
+                                                } else {
+                                                    log.put("new file (will need to rename  "+newPath);
+                                                    Log.d("importdebug","is new file");
+                                                    renamedResponse.put(newPath);
+                                                    renamed.put(relativePath, newPath);
+                                                }
+                                            } else {
+                                                log.put("new file  "+newPath);
+                                            }
+                                        }
+
+                                    } else if (relativePath.startsWith("quickdoc")) {
+                                        if (relativePath.startsWith("quickdoc/keywords/")) {
+                                            keywordsDB.add(entry.getName());
+                                        } else if (relativePath.startsWith("quickdoc/recentdb/")) {
+                                            recentDB.add(entry.getName());
+                                        }
+                                    }
+                                }
+
+
+                                for (String dbPath : keywordsDB) {
+                                    String contents = FileUtils.readInputStream(zipFile.getInputStream(zipFile.getEntry(dbPath)));
+
+                                    try {
+                                        JSONObject thisKeywordsDB = new JSONObject(contents);
+                                        for (Map.Entry<String, String> entry1 : renamed.entrySet()) {
+                                            JSONArray data = thisKeywordsDB.getJSONArray("data");
+                                            for (int i = 0; i < data.length(); i++) {
+                                                JSONObject item = data.getJSONObject(i);
+                                                if (item.getString("path").equals(entry1.getKey())) {
+                                                    item.put("path", entry1.getValue());
+                                                }
+                                            }
+                                        }
+                                        log.put("merging with "+dbPath);
+                                        log.put("has changed ? "+ KeywordsHelper.getInstance(mContext).mergeDB(thisKeywordsDB));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                                }
+                                for (String dbPath : recentDB) {
+                                    String contents = FileUtils.readInputStream(zipFile.getInputStream(zipFile.getEntry(dbPath)));
+
+                                    try {
+                                        JSONObject thisRecentDB = new JSONObject(contents);
+                                        for (Map.Entry<String, String> entry1 : renamed.entrySet()) {
+                                            JSONArray data = thisRecentDB.getJSONArray("data");
+                                            for (int i = 0; i < data.length(); i++) {
+                                                JSONObject item = data.getJSONObject(i);
+                                                if (item.getString("path").equals(entry1.getKey())) {
+                                                    item.put("path", entry1.getValue());
+                                                }
+                                            }
+                                        }
+                                        RecentHelper.getInstance(mContext).mergeDB(thisRecentDB);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                                }
+
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            return  NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/json",new ByteArrayInputStream(response.toString().getBytes()));
+                        }
                         case "note/import":
                             String relativeNotePath = (post.get("path").get(0) == null || post.get("path").get(0) == "" ? "" :
                                     (post.get("path").get(0) + "/")) + post.get("media[]").get(0);

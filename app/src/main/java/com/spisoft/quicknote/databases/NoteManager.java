@@ -109,7 +109,7 @@ public class NoteManager
         return new Note(path);
     }
 
-    private static char randomChar () {
+    public static char randomChar () {
         int rnd = (int) (Math.random() * 52);
         char base = (rnd < 26) ? 'A' : 'a';
         return (char) (base + rnd % 26);

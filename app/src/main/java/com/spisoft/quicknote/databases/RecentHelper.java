@@ -276,12 +276,12 @@ public class RecentHelper {
 
     }
 
-    public boolean mergeDB(String otherDBPath){
+    public boolean mergeDB(JSONObject otherDBJson){
+
         boolean hasChanged = false;
         try {
             JSONObject myJSON = getJson();
-            RecentHelper otherDBHelper = new RecentHelper(mContext, otherDBPath);
-            JSONObject otherDBJson = otherDBHelper.getJson();
+
             for(int i = 0; i<otherDBJson.getJSONArray("data").length(); i++){
                 JSONObject obj = otherDBJson.getJSONArray("data").getJSONObject(i);
                 String action = obj.getString("action");
@@ -345,5 +345,20 @@ public class RecentHelper {
             e.printStackTrace();
         }
         return hasChanged;
+
     }
+
+    public boolean mergeDB(String otherDBPath){
+        RecentHelper otherDBHelper = new RecentHelper(mContext, otherDBPath);
+        JSONObject otherDBJson = null;
+        try {
+            otherDBJson = otherDBHelper.getJson();
+            return mergeDB(otherDBJson);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
 }
