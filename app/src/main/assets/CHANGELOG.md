@@ -1,3 +1,26 @@
+# Version 0.23.0
+
+Features:
+Export all notes
+Import all notes
+Export individual note as html or plain text
+Share notes as plain text to other apps
+Print notes with pictures and todolist
+
+Fix photo orientation
+
+
+Translations:
+Farsi (mtashackori)
+Hebrew (Raphaël Legouix)
+Russian (Mac Guffin)
+German (Christian Scholz)
+Dutch (Wesley Frikken)
+Czech (Leschek)
+Spanish (Orestes Sánchez)
+Italian (Marco Manieri)
+French (Aznörth)
+
 # Version 0.22.2
 
 - Recording as service to avoid multiple issues
