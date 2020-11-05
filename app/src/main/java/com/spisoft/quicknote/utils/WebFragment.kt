@@ -263,9 +263,15 @@ class WebFragment : Fragment() {
     }
 }
 
-class WebViewJavaScriptInterface(context: Context?, private val server:HttpServer) {
+class WebViewJavaScriptInterface(private val context: Context?, private val server:HttpServer) {
     @JavascriptInterface
     fun getRequestToken(): String {
         return server.generateID()
+    }
+
+    @JavascriptInterface
+    fun postMessage(key:String, value:String){
+        if(key.equals("exit"))
+            (context as Activity).finish();
     }
 }
