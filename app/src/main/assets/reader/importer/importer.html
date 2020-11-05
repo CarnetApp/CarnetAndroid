@@ -27,6 +27,11 @@
 
     <script src="../recent/recent_db_manager.js"></script>
     <script src="../keywords/keywords_db_manager.js"></script>
+
+
+    <!-- localization -->
+    <script src="../libs/jquery_i18n/CLDRPluralRuleParser.js"></script>
+    <script src="../libs/jquery_i18n/jquery.i18n.js"></script>
 </head>
 
 <body>
@@ -48,6 +53,10 @@
         .mdl-data-table {
             white-space: normal;
         }
+
+        #archive-or-notes-selection {
+            display: none;
+        }
     </style>
     <div class="mdl-layout mdl-js-layout
     mdl-layout--fixed-header">
@@ -56,7 +65,7 @@
                 <button id="back_arrow" class="mdl-button mdl-js-button mdl-button--icon" style="left: -55px;">
                     <i class="material-icons">arrow_back</i>
                 </button>
-                <span class="mdl-layout-title">Importer</span>
+                <span class="mdl-layout-title" data-i18n="importer">Importer</span>
             </div>
         </header>
         <div class="centered-container" id="select-folder">
@@ -64,7 +73,7 @@
             Google provides a way to export all of your Google Keep notes.
             <br />
             <a onclick="compatibility.openUrl('https://takeout.google.com/settings/takeout'); return false;"
-                href="#">Follow
+                href="https://takeout.google.com/settings/takeout">Follow
                 this link</a>
             <br />
             <br /> Find Google Keep
@@ -77,16 +86,30 @@
             <input type="radio" name="archive-type" value="1">
             Carnet<br>
             <br>
-            <button class="mdl-button mdl-js-button mdl-button--raised" id="select-folder-button">
+            <button class="mdl-button mdl-js-button mdl-button--raised" id="select-folder-button"
+                data-i18n="select_archive">
 
                 Select archive
+            </button>
+        </div>
+        <div id="archive-or-notes-selection" class="centered-container">
+            <span data-i18n="send_whole_archive_or_select">Send the whole archive or select specific notes to
+                import.</span> <br />
+            <br />
+            <button style="margin-right:10px" class="mdl-button mdl-js-button mdl-button--raised"
+                id="send-archive-button" data-i18n="send_archive">
+                Send archive
+            </button>
+            <button class="mdl-button mdl-js-button mdl-button--raised" id="select-notes-button"
+                data-i18n="select_notes">
+                Select Notes
             </button>
         </div>
         <div id="note-selection-view">
 
             <div class="centered-container">
                 <button class="mdl-button mdl-js-button mdl-button--raised import-button" style="width:370px"
-                    id="import-button1">
+                    id="import-button1" data-i18n="import">
                     Import
                 </button>
                 <br />
@@ -94,12 +117,12 @@
                 <label id="add-to-recent" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
                     for="add-to-recent-cb">
                     <input type="checkbox" id="add-to-recent-cb" class="mdl-checkbox__input">
-                    <span class="mdl-checkbox__label">Add to recent</span>
+                    <span class="mdl-checkbox__label" data-i18n="add_to_recent">Add to recent</span>
                 </label>
             </div>
             <div class="centered-container" id="progress-view">
                 <div>
-                    <span>Loading notes list</span>
+                    <span data-i18n="loading_notes_list">Loading notes list</span>
                     <div id="p2" style="margin:auto" class="mdl-progress mdl-js-progress mdl-progress__indeterminate">
                     </div>
                 </div>
@@ -109,7 +132,7 @@
             </div>
             <div class="centered-container" style="margin-bottom:10px;">
                 <button class="mdl-button mdl-js-button mdl-button--raised import-button" style="width:370px"
-                    id="import-button2">
+                    id="import-button2" data-i18n="import">
                     Import
                 </button>
             </div>
@@ -118,8 +141,9 @@
         <div id="importing-view">
             <div class="centered-container" id="importing-progress-view">
                 <div>
-                    Importing notes
-                    <div id="p2" style="margin:auto" class="mdl-progress mdl-js-progress mdl-progress__indeterminate">
+                    <span data-i18n="importing_notes">Importing notes</span>
+                    <div id="progress-bar" style="margin:auto"
+                        class="mdl-progress mdl-js-progress mdl-progress__indeterminate">
                     </div>
                 </div>
                 <span id="importing"></span>
@@ -135,7 +159,7 @@
 
         <div id="import-finished">
             <div class="centered-container" id="import-finished-view">
-                <div>
+                <div data-i18n="import_finished">
                     Import finished
                 </div>
                 <span id="import-report"></span>
@@ -146,7 +170,7 @@
             </div>
         </div>
 
-        <input type="file" id="input_file" style="display: none;" />
+        <input type="file" id="input_file" name="archive" style="display: none;" />
     </div>
 </body>
 

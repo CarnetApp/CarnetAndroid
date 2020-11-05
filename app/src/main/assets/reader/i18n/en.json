@@ -99,5 +99,18 @@
     "created": "Created",
     "modified": "Modified",
     "send": "Send",
-    "send_export_print": "Send/Export/Print"
+    "send_export_print": "Send/Export/Print",
+    "importer": "Importer",
+    "select_archive": "Select archive",
+    "send_whole_archive_or_select": "Send the whole archive or select specific notes to import.",
+    "send_archive": "Send Archive",
+    "select_notes": "Select Notes",
+    "import": "Import",
+    "add_to_recent": "Add to recent",
+    "loading_notes_list": "Loading notes list",
+    "importing_notes": "Importing notes",
+    "import_finished": "Import finished",
+    "preload_editor": "Preload editor for faster load",
+    "import_error": "An error occurred while importing",
+    "import_success": "Import success"
 }

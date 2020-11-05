@@ -23,17 +23,24 @@ function () {
     value: function retrieveNote(callback) {
       console.log("SingleExporter retrieveNote");
       this.listener.onRetrievingNote();
-      var oReq = new XMLHttpRequest();
-      oReq.open("GET", compatibility.addRequestToken(RequestBuilder.sRequestBuilder.api_url + RequestBuilder.sRequestBuilder.cleanPath("note/get_note?path=" + encodeURIComponent(this.notepath))), true);
-      oReq.responseType = "arraybuffer";
 
-      oReq.onload = function (oEvent) {
-        var arrayBuffer = oReq.response; // Note: not oReq.responseText
+      if (!compatibility.isElectron) {
+        var oReq = new XMLHttpRequest();
+        oReq.open("GET", compatibility.addRequestToken(RequestBuilder.sRequestBuilder.api_url + RequestBuilder.sRequestBuilder.cleanPath("note/get_note?path=" + encodeURIComponent(this.notepath))), true);
+        oReq.responseType = "arraybuffer";
 
-        callback(arrayBuffer);
-      };
+        oReq.onload = function (oEvent) {
+          var arrayBuffer = oReq.response; // Note: not oReq.responseText
 
-      oReq.send(null);
+          callback(arrayBuffer, false);
+        };
+
+        oReq.send(null);
+      } else {
+        RequestBuilder.sRequestBuilder.get("note/get_note?path=" + encodeURIComponent(this.notepath), function (error, data) {
+          callback(data, true);
+        });
+      }
     }
   }, {
     key: "loadZipContent",
@@ -130,8 +137,10 @@ function () {
     value: function exportAsHtml(config, noImages, callback) {
       var exporter = this;
       exporter.listener.onExportStarts();
-      this.retrieveNote(function (data) {
-        JSZip.loadAsync(data).then(function (zip) {
+      this.retrieveNote(function (data, base64) {
+        JSZip.loadAsync(data, {
+          base64: base64
+        }).then(function (zip) {
           exporter.loadZipContent(zip, function (html, metadata, attachments) {
             var htmlElem = document.createElement("html");
             var head = document.createElement("head");
@@ -405,7 +414,8 @@ function () {
       exporterUI.exporter.exportAndDownloadAsHtml(config, true);
     };
 
-    if (!compatibility.isAndroid) {// this.sendButton.style.display = "none"
+    if (!compatibility.isAndroid) {
+      this.sendButton.style.display = "none";
     }
 
     compatibility.loadLang(function () {

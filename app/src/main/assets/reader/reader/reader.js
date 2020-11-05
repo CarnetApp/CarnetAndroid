@@ -294,9 +294,25 @@ Writer.prototype.extractNote = function (callback) {
 
     console.log(data);
     writer.saveID = data.id;
-    RequestBuilder.sRequestBuilder.get("/note/extract?path=" + encodeURIComponent(writer.note.path) + "&id=" + data.id, function (error, data) {
+
+    var onExtracted = function onExtracted() {
       writer.refreshKeywords();
       writer.refreshMedia();
+    };
+
+    RequestBuilder.sRequestBuilder.get("/note/extract?path=" + encodeURIComponent(writer.note.path) + "&id=" + data.id, function (error, data2) {
+      if (error) {
+        console.log("extraction failed...");
+        RequestBuilder.sRequestBuilder.get("/note/extract?path=" + encodeURIComponent(writer.note.path) + "&id=" + data.id, function (error, data2) {
+          if (error) {
+            writer.displaySnack({
+              message: $.i18n("error_save"),
+              timeout: 60000 * 300
+            });
+            writer.setDoNotEdit(true);
+          } else onExtracted();
+        });
+      } else onExtracted();
     });
     writer.fillWriter(data.html);
 
@@ -411,6 +427,7 @@ Writer.prototype.placeCaretAtEnd = function (el) {
     range.selectNodeContents(el);
     range.collapse(false);
     var sel = window.getSelection();
+    if (sel == null) return;
     sel.removeAllRanges();
     sel.addRange(range);
   } else if (typeof document.body.createTextRange != "undefined") {
@@ -1146,12 +1163,9 @@ Writer.prototype.openInFrame = function (url) {
   };
 
   if (currentFrame == undefined) {
-    if (compatibility.isElectron) {} else {
-      currentFrame = document.createElement('iframe');
-      currentFrame.classList.add("frame");
-      currentFrame.onload = onFrameLoaded;
-    }
-
+    currentFrame = document.createElement('iframe');
+    currentFrame.classList.add("frame");
+    currentFrame.onload = onFrameLoaded;
     iframeContainer.appendChild(currentFrame);
 
     document.getElementById("iframe-back-button").onclick = function () {
@@ -1861,4 +1875,3 @@ $(window).on('touchstart', function (e) {
 $(window).on('touchend', function () {
   writer.oCenter.style.overflowY = "auto";
 });
-var prout = "prout2";

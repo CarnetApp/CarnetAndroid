@@ -41,6 +41,8 @@ if (noteCacheStr == "undefined") noteCacheStr = "{}";
 var cachedMetadata = JSON.parse(noteCacheStr);
 var recentCacheStr = String(store.get("recent_cache"));
 var cachedRecentDB = undefined;
+var shouldPreloadEditor = false; // used to preopen editor
+
 if (recentCacheStr != "undefined") cachedRecentDB = JSON.parse(recentCacheStr);
 
 var TextGetterTask = function TextGetterTask(list) {
@@ -70,14 +72,14 @@ TextGetterTask.prototype.getNext = function () {
     //do it 20 by 20
     this.current = i + 1;
     if (!(this.list[i] instanceof Note) || !this.list[i].needsRefresh) continue;
-    paths += this.list[i].path + ",";
+    paths += "paths[]=" + encodeURIComponent(this.list[i].path) + "&";
     if (cachedMetadata[this.list[i].path] == undefined) cachedMetadata[this.list[i].path] = this.list[i];
   }
 
   var myTask = this;
 
   if (paths.length > 0) {
-    RequestBuilder.sRequestBuilder.get("/metadata?paths=" + encodeURIComponent(paths), function (error, data) {
+    RequestBuilder.sRequestBuilder.get("/metadata?" + paths, function (error, data) {
       for (var meta in data) {
         var note = new Note(Utils.cleanNoteName(getFilenameFromPath(meta)), data[meta].shorttext, meta, data[meta].metadata, data[meta].previews, false, data[meta].media);
         cachedMetadata[meta] = note;
@@ -96,41 +98,54 @@ String.prototype.replaceAll = function (search, replacement) {
   return target.replace(new RegExp(search, 'g'), replacement);
 };
 
-function openNote(notePath, action) {
-  isLoadCanceled = false;
-  currentNotePath = notePath;
-  RequestBuilder.sRequestBuilder.get("/note/open/prepare", function (error, data) {
-    console.log("opening " + data);
-    if (error) return;
+function onPrepared(error, data, notePath, action) {
+  if (error) return;
 
-    if (writerFrame.src == "") {
-      if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1 && navigator.userAgent.toLowerCase().indexOf("android") > -1) {
-        //open in new tab for firefox android
-        window.open("writer?path=" + encodeURIComponent(notePath) + (action != undefined ? "&action=" + action : ""), "_blank");
-      } else {
+  if (writerFrame.src == "") {
+    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1 && navigator.userAgent.toLowerCase().indexOf("android") > -1) {
+      //open in new tab for firefox android
+      window.open("writer?path=" + encodeURIComponent(notePath) + (action != undefined ? "&action=" + action : ""), "_blank");
+    } else {
+      writerFrame.src = data + (notePath != undefined ? "?path=" + encodeURIComponent(notePath) + (action != undefined ? "&action=" + action : "") : "");
+
+      if (notePath !== undefined) {
         $("#editor-container").show();
         $(loadingView).fadeIn(function () {
-          writerFrame.src = data + "?path=" + encodeURIComponent(notePath) + (action != undefined ? "&action=" + action : "");
           writerFrame.style.display = "inline-flex";
         });
       }
-      /*setTimeout(function () {
-          writerFrame.openDevTools()
-      }, 1000)*/
-
-    } else {
-      console.log("reuse old iframe");
-      $("#editor-container").show();
-      $(loadingView).fadeIn(function () {
-        if (compatibility.isElectron) {
-          writerFrame.send('loadnote', notePath);
-          writerFrame.send('action', action);
-        } else writerFrame.contentWindow.loadPath(notePath, action);
-
-        writerFrame.style.display = "inline-flex";
-      });
     }
-  });
+    /*setTimeout(function () {
+        writerFrame.openDevTools()
+    }, 1000)*/
+
+  } else {
+    console.log("reuse old iframe");
+    $("#editor-container").show();
+
+    if (compatibility.isElectron) {
+      writerFrame.send('loadnote', notePath);
+      writerFrame.send('action', action);
+    } else writerFrame.contentWindow.loadPath(notePath, action);
+
+    $(loadingView).fadeIn(function () {
+      writerFrame.style.display = "inline-flex";
+    });
+  }
+}
+
+function openNote(notePath, action) {
+  isLoadCanceled = false;
+  currentNotePath = notePath;
+
+  if (compatibility.isElectron) {
+    RequestBuilder.sRequestBuilder.get("/note/open/prepare", function (error, url) {
+      onPrepared(error, url, notePath, action);
+    });
+  } else {
+    //no need to call, always the same on nextcloud
+    onPrepared(undefined, "./writer", notePath, action);
+  }
 }
 
 var displaySnack = function displaySnack(data) {
@@ -487,7 +502,16 @@ function onListEnd(pathToList, files, metadatas, discret, force, fromCache) {
         var filename = getFilenameFromPath(file.path);
 
         if (filename.endsWith(".sqd")) {
-          var metadata = metadatas != undefined ? metadatas[file.path] : undefined;
+          var metadata = undefined;
+
+          if (metadatas != undefined) {
+            metadata = metadatas[file.path]; //bad fix for paths starting with / but having not metadata... Need to find out why
+
+            if (metadata == undefined && file.path.startsWith("/")) {
+              metadata = metadatas[file.path.substr(1)];
+            }
+          }
+
           var needsRefresh = metadata == undefined;
 
           if (metadata == undefined) {
@@ -587,6 +611,12 @@ function onListEnd(pathToList, files, metadatas, discret, force, fromCache) {
       document.getElementById("grid-container").scrollTop = scroll;
       console.log("scroll : " + scroll);
     }
+
+    if (!fromCache && shouldPreloadEditor) {
+      openNote(undefined, undefined);
+      console.log("preloading");
+      shouldPreloadEditor = false;
+    }
   }
 }
 
@@ -656,8 +686,6 @@ function list(pathToList, discret) {
     }
   });
 }
-
-refreshKeywords();
 
 function minimize() {
   remote.BrowserWindow.getFocusedWindow().minimize();
@@ -759,7 +787,7 @@ RequestBuilder.sRequestBuilder.get("/recentdb/merge", function (error, data) {
   if (data == true && currentPath == "recentdb://") list("recentdb://", true);
 });
 RequestBuilder.sRequestBuilder.get("/keywordsdb/merge", function (error, data) {
-  if (data == true) refreshKeywords();
+  refreshKeywords();
 });
 var isWeb = true;
 var right = document.getElementById("right-bar"); //writer frame
@@ -1010,6 +1038,7 @@ function loadCachedRecentDB() {
 
 UISettingsHelper.getInstance().loadSettings(function (settings, fromCache) {
   console.oldlog("settings from cache " + fromCache + " order " + settings["sort_by"]);
+  shouldPreloadEditor = settings['should_preload_editor'];
   if (settings['start_page'] == 'recent') initPath = "recentdb://";
 
   if (settings['start_page'] == 'browser') {

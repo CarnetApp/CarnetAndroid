@@ -326,7 +326,7 @@ CarnetRecorder.prototype.setAudioUrl = function (url, name) {
         req.onload = function () {
           var ctx = new AudioContext();
           ctx.decodeAudioData(req.response, function (buffer) {
-            console.log("duration : " + buffer.duration);
+            console.log("duraction : " + buffer.duration);
             carnetRecorder.duration = buffer.duration; // 116
 
             audioplayer.onloadedmetadata();

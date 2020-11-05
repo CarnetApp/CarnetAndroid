@@ -83,7 +83,7 @@ RequestBuilder.prototype.post = function (path, data, callback) {
   });
 };
 
-RequestBuilder.prototype.postFiles = function (path, data, files, callback) {
+RequestBuilder.prototype.postFiles = function (path, data, files, callback, uploadProgress) {
   path = this.cleanPath(path);
   var formData = new FormData();
 
@@ -103,6 +103,16 @@ RequestBuilder.prototype.postFiles = function (path, data, files, callback) {
     processData: false,
     contentType: false,
     type: "POST",
+    xhr: function xhr() {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = evt.loaded / evt.total * 100;
+          uploadProgress(percentComplete);
+        }
+      }, false);
+      return xhr;
+    },
     success: function success(data) {
       console.log("success");
       callback(null, data);

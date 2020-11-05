@@ -8,13 +8,23 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+var compatRequire = undefined;
+
 var Compatibility =
 /*#__PURE__*/
 function () {
   function Compatibility() {
     _classCallCheck(this, Compatibility);
 
-    this.isElectron = typeof require === "function";
+    this.isElectron = typeof require === "function" || typeof parent.require === "function";
+    console.log("this.isElectron  " + this.isElectron);
+
+    if (this.isElectron) {
+      if (typeof require !== "function") {
+        compatRequire = parent.require;
+      } else compatRequire = require;
+    }
+
     this.isAndroid = (typeof app === "undefined" ? "undefined" : _typeof(app)) === "object";
     this.isGtk = false;
     console.log("isAndroid" + this.isAndroid);
@@ -49,9 +59,7 @@ function () {
     value: function openUrl(url) {
       if (compatibility.isElectron) {
         var _require = require('electron'),
-            shell = _require.shell,
-            app = _require.app,
-            app = _require.app;
+            shell = _require.shell;
 
         shell.openExternal(url);
       } else if (compatibility.isAndroid) {

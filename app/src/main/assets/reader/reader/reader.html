@@ -2,23 +2,63 @@
 <html>
 
 <head>
+	<script src="<!ROOTPATH>libs/jquery.min.js"></script>
+
+	<!-- startjs-->
+
 	<script src="<!ROOTPATH>requests/request_builder.js"></script>
 	<script src="<!ROOTPATH>compatibility/electron/request_builder.js"></script>
-	<script src="<!ROOTPATH>libs/jquery.min.js"></script>
 	<script src="<!ROOTPATH>compatibility/compatibility.js"></script>
-	<script src="<!ROOTPATH>libs/html2canvas.js"></script>
-	<script src="<!ROOTPATH>libs/purify.min.js"></script>
-
 	<script src="<!ROOTPATH>compatibility/compatibility-editor.js"></script>
 	<script src="<!ROOTPATH>compatibility/android/android_recorder.js"></script>
+
 	<script src="<!ROOTPATH>libs/polyfill.js"></script>
 	<script src="<!ROOTPATH>libs/dialog-polyfill.js"></script>
+
+
+	<script src="<!ROOTPATH>utils/utils.js"></script>
+	<script src="<!ROOTPATH>browsers/note.js"></script>
+	<script src="<!ROOTPATH>browsers/file-browser.js"></script>
+	<script src="<!ROOTPATH>libs/material.js"></script>
+
+	<script src="<!ROOTPATH>reader/libs/jquery.webkitresize.js"></script>
+	<script src="<!ROOTPATH>reader/libs/jquery-ui.min.js"></script>
+
+	<script src="<!ROOTPATH>reader/libs/jscolor.js"></script>
+	<script src="<!ROOTPATH>reader/libs/Countable.js"></script>
+	<script src="<!ROOTPATH>utils/file_utils.js"></script>
+	<script src="<!ROOTPATH>reader/libs/hammer.min.js"></script>
+	<script src="<!ROOTPATH>reader/libs/jquery.hammer.js"></script>
+	<script src="<!ROOTPATH>reader/libs/jquery.mousewheel.min.js"></script>
+	<script src="<!ROOTPATH>reader/libs/imgViewer.js"></script>
+
+	<script src="<!ROOTPATH>reader/libs/recorder/recorder.min.js"></script>
+	<script src="<!ROOTPATH>reader/carnet-recorder.js"></script>
+	<script src="<!ROOTPATH>reader/reminders.js"></script>
+
+	<script src="<!ROOTPATH>reader/libs/wavesurfer.min.js"></script>
+	<script src="<!ROOTPATH>keywords/keywords_db_manager.js"></script>
+
+	<script src="<!ROOTPATH>reader/reader.js"></script>
+
+	<script src="<!ROOTPATH>reader/todolist.js"></script>
+
+	<script src="<!ROOTPATH>libs/jquery_i18n/CLDRPluralRuleParser.js"></script>
+	<script src="<!ROOTPATH>libs/jquery_i18n/jquery.i18n.js"></script>
+	<script src="<!ROOTPATH>libs/moment.js"></script>
+
+	<script src="<!ROOTPATH>reader/libs/rome.standalone.js"></script>
+	<script src="<!ROOTPATH>reader/libs/material-datetime-picker.js"></script>
+
+	<!--endjs-->
+	<!--startmin
+	<script src="<!ROOTPATH>reader/reader.min.js"></script>
+	endmin-->
 	<link rel="stylesheet" href="<!ROOTPATH>libs/polyfill.css">
 	<link rel="stylesheet" href="<!ROOTPATH>libs/dialog-polyfill.css">
-	<script>
-		var rootpath = "<!ROOTPATH>";
-		var tmppath = "tmp/";
-	</script>
+
+
+
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
 	<!-- Material Design icon font -->
@@ -36,44 +76,11 @@
 
 <body>
 
-	<script src="<!ROOTPATH>utils/utils.js"></script>
-	<script src="<!ROOTPATH>browsers/note.js"></script>
-	<script src="<!ROOTPATH>browsers/file-browser.js"></script>
-	<script src="<!ROOTPATH>libs/material.js"></script>
-	<script src="<!ROOTPATH>reader/libs/jquery.webkitresize.js"></script>
-	<script src="<!ROOTPATH>reader/libs/jquery-ui.min.js"></script>
-	<!-- jquery mobile make nextcloud bug :(
-	<script src="<!ROOTPATH>reader/libs/jquery.mobile-min.js"></script>
-	-->
-	<script src="<!ROOTPATH>reader/libs/jscolor.js"></script>
-	<script src="<!ROOTPATH>reader/libs/Countable.js"></script>
-	<script src="<!ROOTPATH>utils/file_utils.js"></script>
-	<script src="<!ROOTPATH>reader/libs/jquery.ui.touch-punch.min.js"></script>
+
 
 	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/jquery-ui.css" media="screen">
-	<script src="<!ROOTPATH>reader/libs/hammer.min.js"></script>
-	<script src="<!ROOTPATH>reader/libs/jquery.hammer.js"></script>
-	<script src="<!ROOTPATH>reader/libs/jquery.mousewheel.min.js"></script>
-	<script src="<!ROOTPATH>reader/libs/imgViewer.js"></script>
 
-	<script src="<!ROOTPATH>reader/libs/recorder/recorder.min.js"></script>
-	<script src="<!ROOTPATH>reader/carnet-recorder.js"></script>
-	<script src="<!ROOTPATH>reader/reminders.js"></script>
-
-	<script src="<!ROOTPATH>reader/libs/wavesurfer.min.js"></script>
-	<script src="<!ROOTPATH>keywords/keywords_db_manager.js"></script>
-
-	<script src="<!ROOTPATH>reader/reader.js"></script>
 	<link rel="stylesheet" href="<!ROOTPATH>reader/css/todolist.css">
-	<script src="<!ROOTPATH>reader/todolist.js"></script>
-
-	<!-- localization -->
-	<script src="<!ROOTPATH>libs/jquery_i18n/CLDRPluralRuleParser.js"></script>
-	<script src="<!ROOTPATH>libs/jquery_i18n/jquery.i18n.js"></script>
-	<script src="<!ROOTPATH>libs/moment.js"></script>
-
-	<script src="<!ROOTPATH>reader/libs/rome.standalone.js"></script>
-	<script src="<!ROOTPATH>reader/libs/material-datetime-picker.js"></script>
 
 	<!-- dialogs declaration -->
 

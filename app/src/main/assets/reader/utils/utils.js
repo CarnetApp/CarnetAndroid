@@ -16,43 +16,6 @@ Utils.sortByDefault = function (a, b) {
   return a.originalIndex < b.originalIndex ? -1 : 1;
 };
 
-Utils.getJs = function (url, callback) {
-  if (this.asyncJs == undefined) {
-    this.asyncJs = {};
-  }
-
-  if (this.asyncJs[url] == undefined) {
-    this.asyncJs[url] = [];
-    this.asyncJs[url].callbacks = [];
-  }
-
-  if (this.asyncJs[url].isLoaded) {
-    callback();
-    return;
-  }
-
-  this.asyncJs[url].callbacks.push(callback);
-  var utils = this;
-
-  if (!this.asyncJs[url].isLoading) {
-    this.asyncJs[url].isLoading = true;
-    var head = document.head;
-    var script = "<script src=\"" + url + "\" defer nonce=\"" + document.getElementById("token").innerHTML + "\"></script>";
-    /* script.src = url;
-     script.nonce = document.getElementById("token").innerHTML
-     script.defer = true;
-     script.type = "text/javascript";
-     script.onload = function () {
-         utils.asyncJs[url].isLoaded = true;
-         for (var cb of utils.asyncJs[url].callbacks) {
-             cb()
-         }
-     };*/
-
-    head.innerHTML = head.innerHTML + script;
-  }
-};
-
 Utils.sortByCreationDate = function (a, b) {
   if (a.metadata == undefined || b.metadata == undefined) return a.originalIndex < b.originalIndex ? -1 : 1;
   var dateA = a.metadata.last_modification_date;

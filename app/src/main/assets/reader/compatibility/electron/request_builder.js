@@ -29,9 +29,7 @@ function (_RequestBuilder) {
     _classCallCheck(this, ElectronRequestBuilder);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ElectronRequestBuilder).call(this, "./"));
-
-    var remote = require('electron').remote;
-
+    var remote = compatRequire('electron').remote;
     _this.main = remote.require("./main.js");
     return _this;
   }
