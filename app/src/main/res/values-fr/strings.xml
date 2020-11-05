@@ -26,7 +26,7 @@
     <string name="report_bug_or_propose">Bogue / Idée</string>
     <string name="report_bug_or_propose_description">Reporter un bogue ou demander une fonctionnalité</string>
     <string name="delete_confirm">Action non réversible : confirmez-vous la suppression \?</string>
-    <string name="wrong_password">Code pin erroné: par défaut 0000</string>
+    <string name="wrong_password">Code pin erroné : par défaut 0000</string>
     <string name="checking_password">Vérification...</string>
     <string name="password_on_minimize">Protéger par code pin</string>
     <string name="pref_set_password">Code pin</string>
@@ -88,7 +88,7 @@
     <string name="carnet_note_taking_app">Carnet est une application de prise de notes polyvalente</string>
     <string name="say_hi_subtitle">Cliquer sur « Me prévenir » m\'aidera à déterminer combien d\'utilisateur·ice·s ont téléchargé Carnet… mais ce n\'est bien sûr pas obligatoire !
 \n:)</string>
-    <string name="say_hi_subtitle2">" Je comprendrai que l\'application a été téléchargée une fois de plus ( Ce n’est pas du tout obligatoire mais utile )."</string>
+    <string name="say_hi_subtitle2">Je comprendrai que l\'application a été téléchargée une fois de plus ( Ce n’est pas du tout obligatoire mais utile ).</string>
     <string name="nextcloud_connect">Se connecter avec Nextcloud</string>
     <string name="other_sync_options">Autres options</string>
     <string name="hello_blank_fragment">Salut fragment vide</string>
@@ -157,4 +157,10 @@
     <string name="display_less">Afficher moins</string>
     <string name="importer_beta">Importer (Bêta)</string>
     <string name="importer">Importer</string>
+    <string name="export">Exporter (bêta)</string>
+    <string name="exporting">Exportation…
+\nVeuillez patienter</string>
+    <string name="multiple_accounts_warning">Avoir plusieurs comptes dans le cloud peut mener à des conflits… s’il vous plaît, n’utilisez qu’un compte principal et supprimez les autres !
+\nNavré du désagrément…</string>
+    <string name="use_it_with_caution">Utilisez cela avec précaution !</string>
 </resources>
