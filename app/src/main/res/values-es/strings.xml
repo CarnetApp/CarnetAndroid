@@ -159,4 +159,10 @@
     <string name="importer">Importar</string>
     <string name="display_less">Resumir</string>
     <string name="display_more">Expandir</string>
+    <string name="export">Exportación (beta)</string>
+    <string name="exporting">Exportar… 
+\nEspera un momento</string>
+    <string name="stop">Dejar</string>
+    <string name="encoding">Codificación</string>
+    <string name="recording">Grabación</string>
 </resources>
