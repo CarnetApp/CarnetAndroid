@@ -63,7 +63,7 @@
     <string name="remote_folder">Externe map</string>
     <string name="keywords">Trefwoorden</string>
     <string name="sync_intro_title">Synchroniseren</string>
-    <string name="sync_intro_text">Carnet ondersteunt synchronisatie met NextCloud. Vergeet niet de app te downloaden op je computer als je je notities ook daar wilt beheren. Carnet is tevens beschikbaar in de NextCloud App Store.</string>
+    <string name="sync_intro_text">Carnet ondersteunt synchronisatie met NextCloud, vergeet niet om Desktop versie te downloaden om uw notities terug te vinden op uw computer. Carnet is ook online beschikbaar op de NextCloud App Store.</string>
     <string name="google_drive">Google Drive</string>
     <string name="sync_intro_gdrive_text">Eenvoudig te gebruiken met je Gmail-adres hebben, maar niet open source</string>
     <string name="sync_select_nextcloud_text">Carnet is compatibel met elke NextCloud aanbieder. Zoek een aanbieder en registreer je (sommige zijn gratis beschikbaar)</string>
@@ -105,7 +105,7 @@
     <string name="fake_note_4">Synchroniseer</string>
     <string name="fake_note_5">Maak notities op en voeg media toe</string>
     <string name="fake_notes_warning">Voorbeeldnotities kunnen niet worden gewijzigd</string>
-    <string name="fake_note_6">"Voeg ToDo  en URL\'s toe"</string>
+    <string name="fake_note_6">ToDo-lijsten en URL \' s toevoegen</string>
     <string name="fake_note_todo_item_1">Probeer Carnet</string>
     <string name="fake_note_todo_item_2">Deel Carnet</string>
     <string name="changelog">Wijzigingen</string>
@@ -158,4 +158,10 @@
     <string name="pause">Pauzeer</string>
     <string name="audio_player">Geluidsspeler</string>
     <string name="unable_to_rename_invalid_name">Notitie bevat ongeldige tekens</string>
+    <string name="export">Uitvoer (beta)</string>
+    <string name="exporting">Exporterend… 
+\nGeduld</string>
+    <string name="stop">Stoppen</string>
+    <string name="encoding">Codering</string>
+    <string name="recording">Opname</string>
 </resources>
