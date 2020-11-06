@@ -35,9 +35,7 @@
     <string name="empty_message">Aucun document trouvé\nCréez un nouveau document avec le bouton +</string>
     <string name="drawer_open">Ouvrir le tiroir de navigation</string>
     <string name="drawer_close">Fermer le tiroir de navigation</string>
-    <string name="title_activity_help_authorize_floating_window">
-        HelpAuthorizeFloatingWindowActivity
-    </string>
+    <string name="title_activity_help_authorize_floating_window">AideAutoriserL\'ActivitéDesFenêtresFlottantes</string>
     <string name="authorize">Autoriser</string>
     <string name="authorize_description">Carnet requiert une permission spéciale pour s\'afficher en fenêtre. Veuiller activer l\'option "se superposer à d\'autres applications"</string>
     <string name="authorisation_issue">Problème d\'autorisation</string>
@@ -89,7 +87,7 @@
     <string name="say_hi_subtitle">Cliquer sur « Me prévenir » m\'aidera à déterminer combien d\'utilisateur·ice·s ont téléchargé Carnet… mais ce n\'est bien sûr pas obligatoire !
 \n:)</string>
     <string name="say_hi_subtitle2">Je comprendrai que l\'application a été téléchargée une fois de plus ( Ce n’est pas du tout obligatoire mais utile ).</string>
-    <string name="nextcloud_connect">Se connecter avec Nextcloud</string>
+    <string name="nextcloud_connect">Connectez-vous avec NextCloud</string>
     <string name="other_sync_options">Autres options</string>
     <string name="hello_blank_fragment">Salut fragment vide</string>
     <string name="fake_note_1">Ces fausses notes disparaîtront sitôt que vous créerez une nouvelle note en sélectionnant le bouton en bas à droite</string>
@@ -163,4 +161,7 @@
     <string name="multiple_accounts_warning">Avoir plusieurs comptes dans le cloud peut mener à des conflits… s’il vous plaît, n’utilisez qu’un compte principal et supprimez les autres !
 \nNavré du désagrément…</string>
     <string name="use_it_with_caution">Utilisez cela avec précaution !</string>
+    <string name="stop">Arrêter</string>
+    <string name="encoding">Encodage</string>
+    <string name="recording">Enregistrement</string>
 </resources>
