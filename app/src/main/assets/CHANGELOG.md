@@ -1,4 +1,4 @@
-# Version 0.23.0
+# Version 0.23.1
 
 Features:
 Export all notes
@@ -6,6 +6,8 @@ Import all notes
 Export individual note as html or plain text
 Share notes as plain text to other apps
 Print notes with pictures and todolist
+Option to resize photos when taken through photo shortcut
+Removing donation from Google release
 
 Fix photo orientation
 
