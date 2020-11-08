@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="hello_world">Ola Mundo!</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_world">Ola Mundo!</string>
     <string name="action_settings">Axustes</string>
-
     <string name="hello_blank_fragment">Fragmeto de benvida en branco</string>
     <string name="floating">Nota flotante</string>
     <string name="rename">Mudar nome</string>
@@ -50,7 +50,6 @@
     <string name="please_wait_update">Agarde por favor mentras se actualizan as notas</string>
     <string name="write_error">Fallo ao gardar o texto</string>
     <string name="sync_cloud_preference">Sincr. co almacenamento na nube</string>
-
     <string name="title_activity_help">HelpActivity</string>
     <string name="move">Mover</string>
     <string name="paste">Pegar</string>
@@ -122,4 +121,46 @@
     <string name="create_note">Crear unha nota</string>
     <string name="beta_feature">Esta é unha característica beta que debe utilizar con precaución</string>
     <string name="warning_sync_cloud">Non escolla un cartafol sen ficheiros Carnet. Escollendo o cartafol raíz de NextCloud/OwnCloud sincronizará toda a súa nube no móbil.</string>
+    <string name="export">Exportar (beta)</string>
+    <string name="exporting">Exportando...
+\nAgarda</string>
+    <string name="stop">Deter</string>
+    <string name="encoding">Codificando</string>
+    <string name="recording">Gravando</string>
+    <string name="multiple_accounts_warning">Ter varias contas na nube pode producir conflitos, usa unha conta principal na nube e elimina as outras!
+\nLamentamos as inconveniencias...</string>
+    <string name="use_it_with_caution">Utilízaa con tino</string>
+    <string name="importer_beta">Importar (Beta)</string>
+    <string name="importer">Importar</string>
+    <string name="display_less">Mostrar menos</string>
+    <string name="display_more">Mostrar máis</string>
+    <string name="dialog_comment">Podes engadir aquí un comentario</string>
+    <string name="dialog_text">Lamentámolo, Carnet fallou. Envíanos un informe ás desenvolvedoras.</string>
+    <string name="display_line">Liña</string>
+    <string name="display_grid">Grella</string>
+    <string name="create_home_shortcut">Crear atallo no Inicio</string>
+    <string name="black">Negro</string>
+    <string name="pause">Pausa</string>
+    <string name="audio_player">Reprodutor Audio</string>
+    <string name="disable_optimization">Desactivar optimización</string>
+    <string name="battery_optimization_help">Precisas máis axuda\? Preme aquí</string>
+    <string name="battery_optimization_subtitle2">Na seguinte pantalla, ignora as optimizacións para Carnet</string>
+    <string name="battery_optimization_subtitle">Para poder sincronizar en segundo plano, hai que desactivar as optimizacións de batería para Carnet</string>
+    <string name="battery_optimization">Optimización da batería</string>
+    <string name="sync_frequency">Frecuencia de Sincr</string>
+    <string name="values_below_15_battery">Valores inferiores a 15 poderían esgotar a batería</string>
+    <string name="twelve_hours">12 horas</string>
+    <string name="disabled">Desactivado</string>
+    <string name="once_a_day">Diariamente</string>
+    <string name="six_hours">6 horas</string>
+    <string name="two_hours">2 horas</string>
+    <string name="one_hour">1 hora</string>
+    <string name="thirty_minutes">30 minutos</string>
+    <string name="fifteen_minutes">15 minutos</string>
+    <string name="ten_minutes">10 minutos</string>
+    <string name="five_minutes">5 minutos</string>
+    <string name="two_minutes">2 minutos</string>
+    <string name="one_minute">1 minuto</string>
+    <string name="start_with_browser_view">Iniciar na vista navegador</string>
+    <string name="unable_to_rename_invalid_name">A nota contén caracteres non válidos</string>
 </resources>
