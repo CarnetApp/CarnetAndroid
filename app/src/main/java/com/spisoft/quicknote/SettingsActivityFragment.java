@@ -48,8 +48,6 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
         findPreference("pref_password_on_minimize").setOnPreferenceChangeListener(this);
         findPreference("pref_set_password").setOnPreferenceClickListener(this);
         findPreference("pref_report_bug").setOnPreferenceClickListener(this);
-        findPreference("pref_remove_ad_pay").setOnPreferenceClickListener(this);
-        findPreference("pref_paypal").setOnPreferenceClickListener(this);
         findPreference("pref_desktop_version").setOnPreferenceClickListener(this);
         findPreference("pref_changelog").setOnPreferenceClickListener(this);
         findPreference("pref_import").setOnPreferenceClickListener(this);

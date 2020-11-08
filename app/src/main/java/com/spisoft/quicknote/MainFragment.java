@@ -204,54 +204,65 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
                 .addToBackStack(null).commit();
     }
 
-
+    private boolean shouldAskDonations(){
+        if(Utils.isGoogle(getActivity())){
+            int count = androidx.preference.PreferenceManager.getDefaultSharedPreferences(getContext()).getInt(PreferenceHelper.LAUNCH_COUNT, 1);
+            if(count>10)
+                return true;
+            return false;
+        } else return true;
+    }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view,savedInstanceState);
         mDrawerToggle.syncState();
-        mDrawerLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                new Thread(){
-                    public void run(){
-                        if(Utils.isMainLiss(getContext()))
-                            return;
-                        HttpsURLConnection urlConnection = null;
-                        try {
+        if(shouldAskDonations()) {
+            mDrawerLayout.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new Thread() {
+                        public void run() {
+                            if (Utils.isMainLiss(getContext()))
+                                return;
+                            HttpsURLConnection urlConnection = null;
+                            try {
 
-                            URL url = new URL("https://donation.carnet.live/table_calc.php?needed=1");
-                            urlConnection = (HttpsURLConnection) url.openConnection();
+                                URL url = new URL("https://donation.carnet.live/table_calc.php?needed=1");
+                                urlConnection = (HttpsURLConnection) url.openConnection();
 
-                            BufferedReader in = new BufferedReader(
-                                    new InputStreamReader(urlConnection.getInputStream()));
-                            String inputLine;
-                            final StringBuffer response = new StringBuffer();
+                                BufferedReader in = new BufferedReader(
+                                        new InputStreamReader(urlConnection.getInputStream()));
+                                String inputLine;
+                                final StringBuffer response = new StringBuffer();
 
-                            while ((inputLine = in.readLine()) != null) {
-                                response.append(inputLine);
-                            }
-                            in.close();
-                            mDrawerLayout.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (getActivity() != null){
-                                        ((Button)mDrawerLayout.findViewById(R.id.donate_button))
-                                                .setText(((Button)mDrawerLayout.findViewById(R.id.donate_button)).getText()+"\n"+response.toString());
-                                    }
+                                while ((inputLine = in.readLine()) != null) {
+                                    response.append(inputLine);
                                 }
-                            });
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } finally {
-                            if(urlConnection!=null)
-                                urlConnection.disconnect();
+                                in.close();
+                                mDrawerLayout.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (getActivity() != null) {
+                                            ((Button) mDrawerLayout.findViewById(R.id.donate_button))
+                                                    .setText(((Button) mDrawerLayout.findViewById(R.id.donate_button)).getText() + "\n" + response.toString());
+                                        }
+                                    }
+                                });
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } finally {
+                                if (urlConnection != null)
+                                    urlConnection.disconnect();
+                            }
                         }
-                    }
-                }.start();
-            }
-        }, 4000);
+                    }.start();
+                }
+            }, 4000);
+        } else {
+            mDrawerLayout.findViewById(R.id.donate_button).setVisibility(View.GONE);
+        }
     }
 
     @Override

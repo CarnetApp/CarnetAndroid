@@ -6,6 +6,10 @@ import android.content.pm.ResolveInfo;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import androidx.fragment.app.FragmentActivity;
+
+import com.spisoft.quicknote.R;
+
 import java.util.List;
 
 /**
@@ -33,5 +37,9 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public static boolean isGoogle(Context context) {
+        return context.getResources().getBoolean(R.bool.is_google);
     }
 }

@@ -61,9 +61,12 @@ android {
             dimension "version"
             versionCode 230
             versionName "0.23.0"
+            resValue "bool", "is_google", "false"
+
         }
         google {
             dimension "version"
+            resValue "bool", "is_google", "true"
         }
     }
 }

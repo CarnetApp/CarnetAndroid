@@ -58,20 +58,6 @@
         android:title="@string/desktop_version"
         />
     <PreferenceCategory
-        android:key="paiement_header"
-        android:title="@string/paiement_header">
-
-        <Preference
-            android:key="pref_remove_ad_pay"
-            android:title="@string/donate_liberapay"
-            />
-        <Preference
-            android:key="pref_paypal"
-            android:title="@string/donate_paypal"
-            />
-
-    </PreferenceCategory>
-    <PreferenceCategory
         android:key="system_header"
         android:title="@string/system_header">
 
