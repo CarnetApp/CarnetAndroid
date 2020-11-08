@@ -153,6 +153,10 @@ class ImageActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.
             e.printStackTrace()
         }
         refreshAvailableKeywords()
+        val lastQuality = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).getInt("last_photo_quality", -1);
+        val qualityValues = resources.getIntArray(R.array.photo_qualities_values)
+        findViewById<Spinner>(R.id.quality_selector).setSelection(qualityValues.indexOf(lastQuality))
+
     }
 
     private fun refreshAvailableKeywords() {
@@ -336,6 +340,8 @@ class ImageActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.
             val qualityValues = resources.getIntArray(R.array.photo_qualities_values)
             val quality = findViewById<Spinner>(R.id.quality_selector).selectedItemPosition
             val qualityValue = qualityValues[quality]
+            androidx.preference.PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("last_photo_quality", qualityValue).apply()
+
             if(qualityValue != -1){
                 val images = File(mTmpDir, "data/").listFiles()
                 Log.d("ResizeDebug","resizing to "+qualityValue)
