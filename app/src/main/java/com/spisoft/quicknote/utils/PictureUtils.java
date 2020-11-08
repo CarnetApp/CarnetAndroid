@@ -17,6 +17,9 @@ import java.util.List;
 
 public class PictureUtils {
     public static void resize(String input, String output, int maxWidth, int maxHeight) throws IOException {
+        resize(input, output, maxWidth, maxHeight, 70);
+    }
+    public static void resize(String input, String output, int maxWidth, int maxHeight, int quality) throws IOException {
         BitmapFactory.Options option = new BitmapFactory.Options();
         option.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap photo = BitmapFactory.decodeFile(input);
@@ -41,7 +44,7 @@ public class PictureUtils {
         }
         photo = Bitmap.createScaledBitmap(photo, width, height, false);
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+        photo.compress(Bitmap.CompressFormat.JPEG, quality, bytes);
         File f = new File(output);
         f.createNewFile();
         FileOutputStream fo = new FileOutputStream(f);

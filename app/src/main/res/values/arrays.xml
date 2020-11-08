@@ -50,4 +50,15 @@
         <item>720</item>
         <item>1440</item>
     </string-array>
+    <string-array name="photo_qualities" >
+        <item>@string/medium_quality</item>
+        <item>@string/small_quality</item>
+        <item>@string/original_quality</item>
+    </string-array>
+
+    <integer-array name="photo_qualities_values" >
+        <item>2048</item>
+        <item>1024</item>
+        <item>-1</item>
+    </integer-array>
 </resources>

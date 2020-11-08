@@ -103,23 +103,37 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:ems="10"
-                android:hint="Note title" />
+                android:hint="Note title"
+                android:layout_marginBottom="20dp"/>
 
         </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/quality_selector_text"
+            android:layout_below="@id/title_text_input_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:text="@string/photo_quality" />
+        <Spinner
+            android:id="@+id/quality_selector"
+            android:layout_below="@id/title_text_input_layout"
+            android:layout_toEndOf="@+id/quality_selector_text"
+            android:layout_marginStart="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/photo_qualities"></Spinner>
 
         <CheckBox
-            android:layout_marginTop="20dp"
+
 
             android:id="@+id/one_note_per_photo_cb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title_text_input_layout"
+            android:layout_below="@id/quality_selector"
             android:text="One note per photo"/>
         <LinearLayout
             android:layout_below="@id/one_note_per_photo_cb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"

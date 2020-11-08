@@ -163,4 +163,8 @@
     <string name="exporting">Exporting…
 \nPlease wait</string>
     <string name="export">Export (beta)</string>
+    <string name="small_quality">Small</string>
+    <string name="medium_quality">Medium</string>
+    <string name="original_quality">Original</string>
+    <string name="photo_quality">Photo quality</string>
 </resources>

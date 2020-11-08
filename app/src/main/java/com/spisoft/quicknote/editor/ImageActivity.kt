@@ -332,6 +332,24 @@ class ImageActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.
             metadata.keywords.addAll(keywords)
             FileUtils.writeToFile(File(mTmpDir, "metadata.json").absolutePath, metadata.toJsonObject().toString())
             FileUtils.writeToFile(File(mTmpDir, "index.html").absolutePath, NoteManager.getDefaultHTML())
+            //reduce quality when needed
+            val qualityValues = resources.getIntArray(R.array.photo_qualities_values)
+            val quality = findViewById<Spinner>(R.id.quality_selector).selectedItemPosition
+            val qualityValue = qualityValues[quality]
+            if(qualityValue != -1){
+                val images = File(mTmpDir, "data/").listFiles()
+                Log.d("ResizeDebug","resizing to "+qualityValue)
+                if (images != null) {
+                    for (image in images) {
+                        if (image.name.startsWith("preview_")) continue
+                        val tmpImage = File(image.parentFile, "tmp.jpg")
+                        PictureUtils.resize(image.absolutePath, tmpImage.absolutePath, qualityValue, qualityValue, 90);
+                        image.delete()
+                        tmpImage.renameTo(image)
+                    }
+                }
+
+            }
             if ((findViewById<View>(R.id.one_note_per_photo_cb) as CheckBox).isChecked) {
                 val images = File(mTmpDir, "data/").listFiles()
                 if (images != null) {
