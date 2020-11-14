@@ -1,14 +1,14 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="hello_world">世界，你好！</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_world">世界，你好！</string>
     <string name="action_settings">设置</string>
-
     <string name="hello_blank_fragment">空白片段，你好</string>
     <string name="floating">浮动笔记</string>
     <string name="rename">重命名</string>
     <string name="delete">删除</string>
     <string name="remove_recent">删除最新笔记</string>
     <string name="storage_preference">存储位置</string>
-    <string name="recent">Latest</string>
+    <string name="recent">最新</string>
     <string name="browser">浏览</string>
     <string name="parent_folder">上级文件夹</string>
     <string name="toast_on_minimize">点击我最大化</string>
@@ -37,9 +37,9 @@
 \n请用+按钮创建新笔记</string>
     <string name="drawer_open">打开导航抽屉</string>
     <string name="drawer_close">关闭导航抽屉</string>
-    <string name="title_activity_help_authorize_floating_window">HelpAuthorizeFloatingWindowActivity</string>
+    <string name="title_activity_help_authorize_floating_window">帮助授权浮动窗口活动</string>
     <string name="authorize">授权</string>
-    <string name="authorize_description">Carnet需要特殊授权才能作为窗口显示。请通过在其他应用程序前面启用叠加的方式提供。</string>
+    <string name="authorize_description">Carnet需要特殊授权才能作为窗口显示。请通过允许其叠加在其他应用程序前面来提供它</string>
     <string name="authorisation_issue">授权问题</string>
     <string name="error">错误</string>
     <string name="error_permission_storage">由于采用了新的android权限系统，我们需要具有存储权限才能在您的设备上保存笔记（这将用于在内部存储和sdcard中保存文本）。</string>
@@ -52,7 +52,6 @@
     <string name="please_wait_update">请稍候，您的笔记正在更新中</string>
     <string name="write_error">保存文本时出错</string>
     <string name="sync_cloud_preference">与云存储同步</string>
-
     <string name="move">移动</string>
     <string name="paste">粘贴</string>
     <string name="paste_how_to">浏览到要移动到的文件夹，然后选择粘贴</string>
@@ -80,7 +79,7 @@
     <string name="rate_ask">如果您喜欢这个程序，给我们5星:)</string>
     <string name="sync">同步</string>
     <string name="change_credentials">变更凭证</string>
-    <string name="fake_note_1">通过选择右下角的按钮创建新便笺后，这些假便笺将消失。</string>
+    <string name="fake_note_1">当你通过选择右下角的按钮创建一篇新的笔记时，这些假笔记就会消失</string>
     <string name="fake_note_4">与您的设备同步</string>
     <string name="create_note">创建笔记</string>
     <string name="beta_feature">这仍然是测试版功能，必须谨慎使用</string>
@@ -88,4 +87,4 @@
     <string name="sync_frequency">同步频率</string>
     <string name="battery_optimization">电池优化</string>
     <string name="battery_optimization_help">需要更多帮助吗？ 点击这里</string>
-    </resources>
+</resources>
