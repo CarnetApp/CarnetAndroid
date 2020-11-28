@@ -167,4 +167,5 @@
     <string name="medium_quality">Medium</string>
     <string name="original_quality">Original</string>
     <string name="photo_quality">Photo quality</string>
+    <string name="create_note_as_folder">Create notes as folder (beta, don\'t use it)</string>
 </resources>

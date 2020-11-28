@@ -76,6 +76,12 @@
             android:defaultValue="false"
             android:title="@string/faster_editor_load"
             />
+
+        <CheckBoxPreference
+            android:key="pref_create_note_as_folder"
+            android:defaultValue="false"
+            android:title="@string/create_note_as_folder"
+            />
     </PreferenceCategory>
 
 
