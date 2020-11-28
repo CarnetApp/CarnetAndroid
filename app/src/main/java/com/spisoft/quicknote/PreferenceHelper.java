@@ -47,6 +47,14 @@ public class PreferenceHelper {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(SORT_REVERSED, reversed).apply();
     }
 
+    public static boolean createNoteAsFolder(Context context) {
+        return  PreferenceManager.getDefaultSharedPreferences(context).getBoolean("create_note_as_folder",false);
+    }
+
+    public static boolean createNoteAsFolder(Context context, boolean b) {
+         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("create_note_as_folder",b).commit();
+    }
+
     public void addOnRootPathChangedListener(RootPathChangeListener sRootPathListener) {
         mRootPathChangeListener.add(sRootPathListener);
     }

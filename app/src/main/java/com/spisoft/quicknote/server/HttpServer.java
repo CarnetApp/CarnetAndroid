@@ -554,14 +554,17 @@ public class HttpServer extends NanoHTTPD {
         }
 
         File file = new File(note.path);
-        if(!file.exists() || file.isFile()) {
+        boolean asFolder = PreferenceHelper.createNoteAsFolder(mContext);
+        if(!file.exists() && !asFolder || file.isFile()) {
             saveNote(note);
             return false;
         }
         else{
             for(String filePath :files){
                 try {
-                    FileUtils.copy(new FileInputStream(new File(extractedNotePath, filePath)), new FileOutputStream(new File(note.path, filePath)));
+                    File out = new File(note.path, filePath);
+                    out.getParentFile().mkdirs();
+                    FileUtils.copy(new FileInputStream(new File(extractedNotePath, filePath)), new FileOutputStream(out));
                 } catch (IOException e) {
                    throw new NoteSaveException();
                 }
@@ -585,7 +588,8 @@ public class HttpServer extends NanoHTTPD {
         List <String> except = new ArrayList<>();
         except.add(extractedNotePath+"/reader.html");
         File file = new File(note.path);
-        if(!file.exists() || file.isFile())
+        boolean asFolder = PreferenceHelper.createNoteAsFolder(mContext);
+        if(!file.exists() && !asFolder || file.isFile())
             ZipUtils.zipFolder(new File(extractedNotePath), note.path, except);
         else
             FileUtils.copyDirectoryOneLocationToAnotherLocation(new File(extractedNotePath),file);
