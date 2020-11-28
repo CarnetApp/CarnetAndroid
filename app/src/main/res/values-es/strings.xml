@@ -165,4 +165,8 @@
     <string name="stop">Dejar</string>
     <string name="encoding">Codificación</string>
     <string name="recording">Grabación</string>
+    <string name="original_quality">Original</string>
+    <string name="photo_quality">Calidad de foto</string>
+    <string name="small_quality">Baja</string>
+    <string name="medium_quality">Media</string>
 </resources>
