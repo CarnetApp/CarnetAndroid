@@ -51,7 +51,7 @@ public class PreferenceHelper {
         return  PreferenceManager.getDefaultSharedPreferences(context).getBoolean("create_note_as_folder",false);
     }
 
-    public static boolean createNoteAsFolder(Context context, boolean b) {
+    public static void createNoteAsFolder(Context context, boolean b) {
          PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("create_note_as_folder",b).commit();
     }
 
