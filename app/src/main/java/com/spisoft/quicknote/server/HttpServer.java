@@ -427,8 +427,29 @@ public class HttpServer extends NanoHTTPD {
                 new File(f.getParentFile(), "preview_" + f.getName() + ".jpg").delete();
             }
         }
-        saveNote(path);
+
+        String absolutePath = getFullNotePath(path);
+
+        if(isFileNote(absolutePath))
+            saveNote(path);
+        else {
+            f = new File(absolutePath+"/data/"+media);
+            if(f.delete()){
+                if(PictureUtils.isPicture(f.getName())) {
+                    new File(f.getParentFile(), "preview_" + f.getName() + ".jpg").delete();
+                }
+            }
+        }
         return listOpenMedia();
+    }
+
+    private boolean isFileNote(String path){
+        File file = new File(path);
+        boolean asFolder = PreferenceHelper.createNoteAsFolder(mContext);
+        if(!file.exists() && !asFolder || file.isFile()) {
+            return true;
+        }
+        return false;
     }
 
     public void setCurrentNotePath(String path){
@@ -469,19 +490,38 @@ public class HttpServer extends NanoHTTPD {
                 name = System.currentTimeMillis()+"."+EditorView.sNextExtension;
 
             }
+            List files = new ArrayList();
+            files.add(new File("data",name).getAbsolutePath());
+
             File newF = new File(data, name);
 
             newF.getParentFile().mkdirs();
             Log.d(TAG, "rename "+tmpPath+ " to "+newF.getAbsolutePath()+": "+ in.renameTo(newF));
             if(PictureUtils.isPicture(name)) {
                 File preview = new File(data, "preview_" + name +".jpg");
+                files.add(new File("data","preview_" + name +".jpg").getAbsolutePath());
+
                 try {
                     PictureUtils.resize(newF.getAbsolutePath(), preview.getAbsolutePath(), PREVIEW_WIDTH, PREVIEW_HEIGHT);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            saveNote(path);
+
+            String absolutePath = getFullNotePath(path);
+            if(isFileNote(absolutePath))
+                saveNote(path);
+            else {
+
+                try {
+                    Log.d(TAG, "is folder");
+                    Note note = new Note(absolutePath);
+                    saveFilesToNote(files, note, null);
+                } catch (NoteSaveException e) {
+                    e.printStackTrace();
+                    return NanoHTTPD.newFixedLengthResponse(Response.Status.INTERNAL_ERROR,"",e.getMessage());
+                }
+            }
         }
         return listOpenMedia();
     }
@@ -555,13 +595,14 @@ public class HttpServer extends NanoHTTPD {
 
         File file = new File(note.path);
         boolean asFolder = PreferenceHelper.createNoteAsFolder(mContext);
-        if(!file.exists() && !asFolder || file.isFile()) {
+        if(isFileNote(note.path)) {
             saveNote(note);
             return false;
         }
         else{
             for(String filePath :files){
                 try {
+
                     File out = new File(note.path, filePath);
                     out.getParentFile().mkdirs();
                     FileUtils.copy(new FileInputStream(new File(extractedNotePath, filePath)), new FileOutputStream(out));
@@ -575,8 +616,14 @@ public class HttpServer extends NanoHTTPD {
 
 
     }
-    public Response saveNote(String relativePath) {
+
+    private String getFullNotePath(String relativePath){
         File noteFile = new File(PreferenceHelper.getRootPath(mContext),relativePath);
+        return noteFile.getAbsolutePath();
+    }
+
+    public Response saveNote(String relativePath) {
+        File noteFile = new File(getFullNotePath(relativePath));
         Note note = CacheManager.getInstance(mContext).get(noteFile.getAbsolutePath());
         if(note == null){
             note = new Note(noteFile.getAbsolutePath());
