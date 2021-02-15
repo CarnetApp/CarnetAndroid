@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="hello_world">Привет мир!</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_world">Привет мир!</string>
     <string name="action_settings">Настройки</string>
-
     <string name="hello_blank_fragment">Начни, это пустая строчка</string>
     <string name="floating">Floating note</string>
     <string name="rename">Переименовать</string>
@@ -50,14 +50,13 @@
     <string name="please_wait_update">Пожалуйста, подождите, пока Ваши заметки загрузятся</string>
     <string name="write_error">Ошибка при сохранении текста</string>
     <string name="sync_cloud_preference">Синхронизация с облаком</string>
-
     <string name="title_activity_help">Помощь</string>
     <string name="move">Переместить</string>
     <string name="paste">Вставить</string>
     <string name="paste_how_to">Перейдите к папке, в которую хотите переместить, затем выберите \"Вставить\"</string>
     <string name="file_operation_in_progress">Файловая операция</string>
     <string name="please_wait">Пожалуйста, подождите</string>
-    <string name="new_keyword">Новое ключевое слово</string>
+    <string name="new_keyword">Новое Ключевое слово</string>
     <string name="title_activity_account_config">Настройки аккаунта</string>
     <string name="remote_folder">Облачная папка</string>
     <string name="keywords">Ключевые слова</string>
@@ -80,7 +79,7 @@
     <string name="not_available_on_fdroid">Недоступно в F-Droid</string>
     <string name="desktop_version">Приложение для компьютера</string>
     <string name="sync_intro_text_carnet_instance">Carnet может автоматически создавать резервные копии Ваших заметок онлайн. 
-\nВыберите провайдера Carnet, чтобы получить возможность редактировать их в веб-браузере на Вашем телефоне или компьютере</string>
+\nВыберите провайдера Carnet, чтобы иметь возможность редактировать их в веб-браузере на своем телефоне или компьютере</string>
     <string name="doesnt_accept_new_users">Не принимает новых пользователей</string>
     <string name="open_for_registrations">Открыт для регистрации</string>
     <string name="reliability">Надежность</string>
@@ -107,7 +106,7 @@
     <string name="fake_notes_warning">Демонстрационные заметки нельзя изменить</string>
     <string name="fake_note_6">Добавляйте списки дел и ссылки</string>
     <string name="fake_note_todo_item_1">Попробовать Carnet</string>
-    <string name="fake_note_todo_item_2">Рассказать о Carnet</string>
+    <string name="fake_note_todo_item_2">Посоветовать Carnet</string>
     <string name="changelog">Список изменений</string>
     <string name="restore_recent">Вернуть в Текущие</string>
     <string name="sort_reversed">Обратный порядок</string>
@@ -115,14 +114,14 @@
     <string name="sort_creation_date">по дате создания</string>
     <string name="sort_modification_date">по дате изменения</string>
     <string name="sort_custom_date">по внутренней дате</string>
-<string name="system_header">Система</string>
+    <string name="system_header">Система</string>
     <string name="debug_log">Включить журнал отладки</string>
     <string name="faster_editor_load">Ускоренная загрузка редактора (экспериментальное)</string>
     <string name="reminder">Оповещение</string>
     <string name="create_note">Создать запись</string>
     <string name="beta_feature">Это экспериментальная функция – будьте осторожны</string>
     <string name="warning_sync_cloud">Не следует выбирать папку, если она не принадлежит к Carnet. Выбор корневого каталога NextCloud/ownCloud приведет к синхронизации со всем содержимым Вашего облака целиком.</string>
-<string name="start_with_browser_view">Запускать в режиме \"Обзор\"</string>
+    <string name="start_with_browser_view">Запускать в режиме \"Обзор\"</string>
     <string name="one_minute">1 минута</string>
     <string name="two_minutes">2 минуты</string>
     <string name="five_minutes">5 минут</string>
@@ -142,7 +141,7 @@
     <string name="battery_optimization_subtitle2">В следующем окне разрешите Carnet игнорировать настройки энергосбережения</string>
     <string name="battery_optimization_help">Требуется помощь\? Нажмите здесь</string>
     <string name="disable_optimization">Отключить экономию заряда</string>
-<string name="unable_to_rename_invalid_name">Запись содержит недопустимые символы</string>
+    <string name="unable_to_rename_invalid_name">Запись содержит недопустимые символы</string>
     <string name="audio_player">Аудиоплеер</string>
     <string name="pause">Пауза</string>
     <string name="black">Черная</string>
@@ -157,5 +156,10 @@
     <string name="importer_beta">Импорт (Beta)</string>
     <string name="use_it_with_caution">Используйте с осторожностью</string>
     <string name="multiple_accounts_warning">Эксплуатация нескольких облачных аккаунтов может привести к конфликтам. Пожалуйста, используйте единственный аккаунт и удалите прочие. Приносим свои извинения...</string>
-
+    <string name="recording">Запись</string>
+    <string name="encoding">Кодирование</string>
+    <string name="stop">Стоп</string>
+    <string name="exporting">Экспортируется… 
+\nПожалуйста, подождите</string>
+    <string name="export">Экспорт (Beta)</string>
 </resources>
