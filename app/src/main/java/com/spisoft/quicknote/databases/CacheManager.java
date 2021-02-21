@@ -200,4 +200,13 @@ public class CacheManager {
             e.printStackTrace();
         }
     }
+
+    public void onNoteMoved(String path, String to) {
+        Note note = cache.get(path);
+        if(note != null){
+            cache.remove(path);
+            note.path = to;
+            cache.put(path, note);
+        }
+    }
 }
