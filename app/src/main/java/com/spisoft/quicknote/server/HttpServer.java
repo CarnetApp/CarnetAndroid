@@ -5,26 +5,23 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.KeywordsHelper;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
+import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.editor.recorder.AudioRecorderJS;
 import com.spisoft.quicknote.reminders.RemindersManager;
-import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.PictureUtils;
 import com.spisoft.quicknote.utils.ZipUtils;
-import com.spisoft.sync.utils.FileLocker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document.OutputSettings;
-import org.jsoup.safety.Whitelist;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -536,7 +533,7 @@ public class HttpServer extends NanoHTTPD {
             return NanoHTTPD.newFixedLengthResponse(Response.Status.INTERNAL_ERROR,"",e.getMessage());
         }
 
-
+        MainActivity.notifyAppWidgets(this.mContext);
         return NanoHTTPD.newFixedLengthResponse("Saved !");
     }
 

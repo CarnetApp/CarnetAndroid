@@ -6,16 +6,20 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
-import com.spisoft.sync.utils.FileLocker;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.ZipUtils;
+import com.spisoft.sync.utils.FileLocker;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -80,7 +84,52 @@ public class NoteManager
         return txt;
     }
 
+    public static JSONObject getNoteContent(Note note, Context context) {
+        File noteFile = new File(note.path);
+        String extractedNotePath = context.getCacheDir().getAbsolutePath();
+        JSONObject object = new JSONObject();
 
+        try {
+            object.put("id","0");
+            if(noteFile.exists()) {
+                if(noteFile.isFile()) {
+                    ZipUtils.unzip(note.path, extractedNotePath);
+                }
+                else
+                    FileUtils.copyDirectoryOneLocationToAnotherLocation(noteFile, new File(extractedNotePath))
+                            ;
+                File f = new File(extractedNotePath, "index.html");
+                String index2 = FileUtils.readFile(f.getAbsolutePath());
+                if (f.exists()) {
+                    String index = FileUtils.readFile(f.getAbsolutePath());
+                    object.put("html",index);
+                }
+                f = new File(extractedNotePath, "metadata.json");
+                if (f.exists()) {
+                    String meta = FileUtils.readFile(f.getAbsolutePath());
+                    object.put("metadata",new JSONObject(meta));
+                }
+            }
+            return object;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
+
+    public static ArrayList<Note> getNotes(Context context) {
+        File[] files = new File(PreferenceHelper.getRootPath(context)).listFiles();
+        ArrayList<Note> notes = new ArrayList<>();
+        for (File file : files) {
+            if (file.getName().endsWith(".sqd")) {
+                notes.add(new Note(file.getPath()));
+            }
+        }
+
+        return notes;
+    }
 
     public static Note createNewNote(String rootPath){
         File rootFile = new File(rootPath);
@@ -132,6 +181,7 @@ public class NoteManager
             notFile.renameTo(toFile);
             RecentHelper.getInstance(context).moveNote(note,toFile.getAbsolutePath());
             KeywordsHelper.getInstance(context).moveNote(note, toFile.getAbsolutePath());
+            MainActivity.notifyAppWidgets(context);
             note.setPath(toFile.getAbsolutePath());
             return toFile.getAbsolutePath();
         }
@@ -154,6 +204,7 @@ public class NoteManager
         FileUtils.deleteRecursive(new File(note.path));
         RecentHelper.getInstance(context).removeRecent(note);
         KeywordsHelper.getInstance(context).deleteNote(note);
+        MainActivity.notifyAppWidgets(context);
     }
 
     public interface UpdaterListener{
