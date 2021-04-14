@@ -25,7 +25,7 @@
     <string name="donate_paypal">Faire un don (PayPal)</string>
     <string name="report_bug_or_propose">Bogue / Idée</string>
     <string name="report_bug_or_propose_description">Reporter un bogue ou demander une fonctionnalité</string>
-    <string name="delete_confirm">Action non réversible : confirmez-vous la suppression \?</string>
+    <string name="delete_confirm">Action non-réversible : êtes-vous sûr·e de vouloir supprimer cela \?</string>
     <string name="wrong_password">Code pin erroné : par défaut 0000</string>
     <string name="checking_password">Vérification...</string>
     <string name="password_on_minimize">Protéger par code pin</string>
@@ -70,7 +70,7 @@
     <string name="not_available_on_fdroid">Indisponible sur Fdroid</string>
     <string name="desktop_version">Version ordinateur</string>
     <string name="sync_intro_text_carnet_instance">Carnet peut synchroniser vos notes automatiquement.
-\nChoisissez un fournisseur pour accéder à vos notes dans votre navigateur web, que ce soit depuis votre ordiphone ou bien votre ordinateur.</string>
+\nChoisissez un fournisseur pour accéder à vos notes dans votre navigateur web, que ce soit depuis votre ordiphone ou votre ordinateur.</string>
     <string name="doesnt_accept_new_users">N\'accepte pas de nouveaux utilisateurs</string>
     <string name="open_for_registrations">Inscriptions autorisées</string>
     <string name="reliability">Fiabilité</string>
@@ -87,16 +87,16 @@
     <string name="say_hi_subtitle">Cliquer sur « Me prévenir » m\'aidera à déterminer combien d\'utilisateur·ice·s ont téléchargé Carnet… mais ce n\'est bien sûr pas obligatoire !
 \n:)</string>
     <string name="say_hi_subtitle2">Je comprendrai que l\'application a été téléchargée une fois de plus ( Ce n’est pas du tout obligatoire mais utile ).</string>
-    <string name="nextcloud_connect">Connectez-vous avec NextCloud</string>
+    <string name="nextcloud_connect">Se connecter avec NextCloud</string>
     <string name="other_sync_options">Autres options</string>
     <string name="hello_blank_fragment">Salut fragment vide</string>
     <string name="fake_note_1">Ces fausses notes disparaîtront sitôt que vous créerez une nouvelle note en sélectionnant le bouton en bas à droite</string>
-    <string name="fake_note_2">Choisissez la couleur de vos notes, ajoutez des mots-clefs.</string>
+    <string name="fake_note_2">Choisissez la couleur du texte et de vos notes, ajoutez des mots-clefs…</string>
     <string name="fake_note_3">Attribuez une note à vos notes et textes</string>
-    <string name="fake_note_4">Synchronisez vos appareils</string>
+    <string name="fake_note_4">Synchronisez avec vos appareils</string>
     <string name="fake_note_5">Mettez en forme vos notes et documents, ajoutez des images et enregistrements audio</string>
     <string name="fake_notes_warning">Les fausses notes ne peuvent être modifiées</string>
-    <string name="fake_note_6">Ajoutez des ToDo-Listes et des liens</string>
+    <string name="fake_note_6">Ajoutez des listes de choses à faire et des liens</string>
     <string name="fake_note_todo_item_1">Essayer Carnet</string>
     <string name="fake_note_todo_item_2">Partager Carnet</string>
     <string name="title_activity_account_config">Configuration du compte</string>
@@ -160,8 +160,13 @@
 \nVeuillez patienter</string>
     <string name="multiple_accounts_warning">Avoir plusieurs comptes dans le cloud peut mener à des conflits… s’il vous plaît, n’utilisez qu’un compte principal et supprimez les autres !
 \nNavré du désagrément…</string>
-    <string name="use_it_with_caution">Utilisez cela avec précaution !</string>
+    <string name="use_it_with_caution">À utiliser avec précaution !</string>
     <string name="stop">Arrêter</string>
     <string name="encoding">Encodage</string>
     <string name="recording">Enregistrement</string>
+    <string name="create_note_as_folder">Créer des notes en tant que dossier (en bêta. Ne. l’utilisez. pas.)</string>
+    <string name="photo_quality">Qualité de la photo</string>
+    <string name="original_quality">Qualité originelle</string>
+    <string name="medium_quality">Moyenne qualité</string>
+    <string name="small_quality">Faible qualité</string>
 </resources>
