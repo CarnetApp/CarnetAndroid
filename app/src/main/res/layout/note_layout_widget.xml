@@ -17,7 +17,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/bg_card"
     android:paddingBottom="2dp">
 
@@ -68,7 +68,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
-                android:maxLines="2"
                 android:textAppearance="@style/Widget.MaterialComponents.TextView"
                 android:textColor="@color/dark_300"
                 android:textSize="14dp"/>
