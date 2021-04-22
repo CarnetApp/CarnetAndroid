@@ -26,6 +26,8 @@ import com.spisoft.quicknote.MainActivity
 import com.spisoft.quicknote.Note
 import com.spisoft.quicknote.R
 import com.spisoft.quicknote.databases.NoteManager
+import com.spisoft.quicknote.notes_lister.LatestNotesLister
+import com.spisoft.quicknote.notes_lister.PathNotesLister
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,15 +36,21 @@ class ListRemoteViewsFactory(app: Application, intent: Intent) : RemoteViewsServ
     private val HEIGHT = 80
     private val app = app
     private val appWidgetId: Int
-    private var notes: List<Note>? = null
-
+    private var notes: List<Any>? = null
+    private val path:String ?= null
 
     override fun onCreate() {
-        notes = NoteManager.getNotes(app.applicationContext)
+        if(path != null)
+            notes = PathNotesLister(path, app).getNotes()
+        else
+            notes = LatestNotesLister(app).getNotes()
     }
 
     override fun onDataSetChanged() {
-        notes = NoteManager.getNotes(app.applicationContext)
+        if(path != null)
+            notes = PathNotesLister(path, app).getNotes()
+        else
+            notes = LatestNotesLister(app).getNotes()
     }
 
     override fun onDestroy() {
@@ -53,12 +61,10 @@ class ListRemoteViewsFactory(app: Application, intent: Intent) : RemoteViewsServ
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        val note: Note = notes!![position]
-        val noteContent = NoteManager.getNoteContent(note, app.applicationContext)
-        val noteText = Html.fromHtml(noteContent.get("html").toString())
-        val noteMetadataJSON = noteContent.getJSONObject("metadata")
-        val noteCreationDate: Long = noteMetadataJSON.get("creation_date") as Long
-        val noteLastModificationDate: Long = noteMetadataJSON.get("last_modification_date") as Long
+        val note: Note = notes!![position] as Note
+        val noteText = note.shortText
+        val noteCreationDate: Long = note.mMetadata.creation_date
+        val noteLastModificationDate: Long = note.mMetadata.last_modification_date
 
         var date = "";
 

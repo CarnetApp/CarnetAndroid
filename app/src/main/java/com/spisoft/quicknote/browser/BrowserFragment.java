@@ -20,6 +20,7 @@ import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.RecentHelper;
+import com.spisoft.quicknote.notes_lister.PathNotesLister;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.sync.Configuration;
 
@@ -111,34 +112,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
 
     @Override
     protected List<Object> getNotes() {
-        boolean avoidDbFolder = mPath.equals(PreferenceHelper.getRootPath(getActivity()));
-        File file = new File(mPath);
-        List<Object> ret = new ArrayList<>();
-        List<Object> dir = new ArrayList<>();
-        List<Object> notes = new ArrayList<>();
-        if(file.exists()){
-            File[] files = file.listFiles();
-            if(files!=null){
-                for(File file1 : files){
-                    if(file1.getName().startsWith(".")||avoidDbFolder&&file1.getName().equals("quickdoc"))
-                        continue;
-                    if(file1.getName().endsWith(".sqd")){
-                        Note note = CacheManager.getInstance(getActivity()).get(file1.getAbsolutePath());
-                        if(note == null){
-                            note = new Note(file1.getAbsolutePath());
-                        }
-                        notes.add(note);
-                    }
-                    else if(file1.isDirectory())
-                        dir.add(file1);
-
-
-                }
-            }
-            ret.addAll(dir);
-            ret.addAll(notes);
-        }
-        return ret;
+        return new PathNotesLister(mPath, getActivity()).getNotes();
     }
     public void onViewCreated(View v, Bundle save) {
         super.onViewCreated(v, save);
