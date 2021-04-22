@@ -82,9 +82,9 @@ class ListRemoteViewsFactory(app: Application, intent: Intent) : RemoteViewsServ
 
         val row = RemoteViews(app.packageName, R.layout.note_layout_widget)
         row.setOnClickFillInIntent(R.id.root, intentDetail)
-
+        var title = if(note.title.startsWith("untitled")) "" else note.title
         row.setTextViewText(R.id.note_content, noteText)
-        row.setTextViewText(R.id.note_title, note.title)
+        row.setTextViewText(R.id.note_title, title)
         row.setTextViewText(R.id.note_date, date)
 
         return row
