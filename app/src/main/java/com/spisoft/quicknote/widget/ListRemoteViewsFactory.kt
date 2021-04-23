@@ -84,12 +84,30 @@ class ListRemoteViewsFactory(app: Application, intent: Intent) : RemoteViewsServ
         intentDetail.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
         val row = RemoteViews(app.packageName, R.layout.note_layout_widget)
+
         row.setOnClickFillInIntent(R.id.root, intentDetail)
         var title = if(note.title.startsWith("untitled")) "" else note.title
         row.setTextViewText(R.id.note_content, noteText)
         row.setTextViewText(R.id.note_title, title)
+        if(title.isEmpty())
+            row.setViewVisibility(R.id.note_title, View.GONE)
+        else{
+            row.setViewVisibility(R.id.note_title, View.VISIBLE)
+        }
         row.setTextViewText(R.id.note_date, date)
+        var todo = "";
+        note.mMetadata.todolists.map {
+            it.todo.map {
+                todo += "☐ "+it+"\n"
+            }
+        }
 
+        if(todo.isEmpty())
+            row.setViewVisibility(R.id.note_todo, View.GONE)
+        else{
+            row.setTextViewText(R.id.note_todo, todo)
+            row.setViewVisibility(R.id.note_todo, View.VISIBLE)
+        }
         return row
     }
 

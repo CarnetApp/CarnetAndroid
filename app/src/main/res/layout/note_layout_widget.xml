@@ -19,7 +19,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_card"
-    android:paddingBottom="2dp">
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
 
     <LinearLayout
         android:id="@+id/card_layout"
@@ -67,6 +68,17 @@
                 android:id="@+id/note_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="bottom|end"
+                android:textAppearance="@style/Widget.MaterialComponents.TextView"
+                android:textColor="@color/dark_300"
+                android:textSize="14dp"/>
+
+            <TextView
+                android:id="@+id/note_todo"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:textAppearance="@style/Widget.MaterialComponents.TextView"
                 android:textColor="@color/dark_300"
@@ -77,6 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"
+                android:layout_marginTop="5dp"
                 android:alpha="0.5"
                 android:singleLine="true"
                 android:textAppearance="@style/Widget.MaterialComponents.TextView"
