@@ -79,6 +79,9 @@ class ListRemoteViewsFactory(app: Application, intent: Intent) : RemoteViewsServ
         val intentDetail = Intent(app.applicationContext, MainActivity::class.java)
         intentDetail.action = Companion.ACTION_OPEN_NOTE
         intentDetail.putExtra("note_path", note.path)
+        intentDetail.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intentDetail.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intentDetail.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
         val row = RemoteViews(app.packageName, R.layout.note_layout_widget)
         row.setOnClickFillInIntent(R.id.root, intentDetail)

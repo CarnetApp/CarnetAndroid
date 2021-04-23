@@ -44,6 +44,10 @@ abstract class WidgetProvider : AppWidgetProvider() {
         val intentAdd = Intent(Utils.context, MainActivity::class.java)
         intentAdd.action = ACTION_WIDGET
         intentAdd.putExtra("widget_id", appWidgetId)
+        intentAdd.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intentAdd.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intentAdd.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+
         val pendingIntentAdd = PendingIntent
                 .getActivity(Utils.context, appWidgetId, intentAdd, FLAG_ACTIVITY_NEW_TASK)
 
