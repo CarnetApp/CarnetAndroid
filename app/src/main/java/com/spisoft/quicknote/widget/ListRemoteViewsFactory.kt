@@ -38,17 +38,16 @@ class ListRemoteViewsFactory(app: Application, intent: Intent) : RemoteViewsServ
     private val appWidgetId: Int
     private var notes: List<Any>? = null
     private val path:String ?= null
-
     override fun onCreate() {
         if(path != null)
-            notes = PathNotesLister(path, app).getNotes()
+            notes = PathNotesLister(path, app, false).getNotes()
         else
             notes = LatestNotesLister(app).getNotes()
     }
 
     override fun onDataSetChanged() {
         if(path != null)
-            notes = PathNotesLister(path, app).getNotes()
+            notes = PathNotesLister(path, app, false).getNotes()
         else
             notes = LatestNotesLister(app).getNotes()
     }

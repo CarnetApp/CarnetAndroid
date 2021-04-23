@@ -112,7 +112,7 @@ public class BrowserFragment extends NoteListFragment implements BrowserAdapter.
 
     @Override
     protected List<Object> getNotes() {
-        return new PathNotesLister(mPath, getActivity()).getNotes();
+        return new PathNotesLister(mPath, getActivity(), true).getNotes();
     }
     public void onViewCreated(View v, Bundle save) {
         super.onViewCreated(v, save);
