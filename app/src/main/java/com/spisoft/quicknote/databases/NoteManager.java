@@ -131,12 +131,15 @@ public class NoteManager
         File toFile = new File(to);
         Log.d(TAG,"renaming to "+to+" "+toFile.exists());
         if(!toFile.exists()){
-            notFile.renameTo(toFile);
-            RecentHelper.getInstance(context).moveNote(note,toFile.getAbsolutePath());
-            KeywordsHelper.getInstance(context).moveNote(note, toFile.getAbsolutePath());
-            MainActivity.notifyAppWidgets(context);
-            note.setPath(toFile.getAbsolutePath());
-            return toFile.getAbsolutePath();
+            if(notFile.renameTo(toFile)) {
+                RecentHelper.getInstance(context).moveNote(note, toFile.getAbsolutePath());
+                KeywordsHelper.getInstance(context).moveNote(note, toFile.getAbsolutePath());
+                MainActivity.notifyAppWidgets(context);
+                note.setPath(toFile.getAbsolutePath());
+                CacheManager.getInstance(context).onNoteMoved(note.path, to);
+                CacheManager.getInstance(context).writeCache();
+                return toFile.getAbsolutePath();
+            }
         }
         return null;
     }
@@ -158,6 +161,8 @@ public class NoteManager
         RecentHelper.getInstance(context).removeRecent(note);
         KeywordsHelper.getInstance(context).deleteNote(note);
         MainActivity.notifyAppWidgets(context);
+        CacheManager.getInstance(context).removeFromCache(note.path);
+        CacheManager.getInstance(context).writeCache();
     }
 
     public interface UpdaterListener{
