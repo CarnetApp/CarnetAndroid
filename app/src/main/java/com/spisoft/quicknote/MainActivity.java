@@ -1,6 +1,8 @@
 package com.spisoft.quicknote;
 
+import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,15 +14,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,28 +21,37 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.spisoft.quicknote.browser.PasteDialog;
 import com.spisoft.quicknote.browser.PermissionChecker;
 import com.spisoft.quicknote.databases.CacheBuilderIntentService;
 import com.spisoft.quicknote.databases.DBMergerService;
-import com.spisoft.quicknote.databases.NoteExporter;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
-import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.quicknote.editor.BlankFragment;
-import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.editor.EditorActivity;
+import com.spisoft.quicknote.editor.EditorView;
 import com.spisoft.quicknote.intro.HelpActivity;
+import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.quicknote.updater.UpdaterActivity;
 import com.spisoft.quicknote.utils.PinView;
-import com.spisoft.quicknote.utils.Utils;
+import com.spisoft.quicknote.widget.ListWidgetProvider;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.account.AccountListActivity;
 import com.spisoft.sync.account.DBAccountHelper;
 import com.spisoft.sync.synchro.SynchroService;
 
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.List;
+
+import static com.spisoft.quicknote.editor.BlankFragment.ACTIONS;
 
 public class MainActivity extends AppCompatActivity implements PinView.PasswordListener, NoteManager.UpdaterListener, Configuration.SyncStatusListener, EditorActivity {
     public static final String ACTION_RELOAD_KEYWORDS = "action_reload_keywords";
@@ -70,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     private Fragment mFragmentToPut;
     private Bundle mSavedInstanceState;
     public static final String ACTION_OPEN_NOTE = "open_note";
+    public static final String ACTION_WIDGET = "action_widget";
+    public static final String ACTION_WIDGET_RECORD =  "action_widget_record";
     public static final String PATH = "note_path";
 
     private boolean mIsUpdateDone;
@@ -342,7 +346,6 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
     @Override
     protected void onNewIntent(Intent intent) {
-
         super.onNewIntent(intent);
         mNewIntent = intent;
         if(mIsUpdateDone)
@@ -352,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     private boolean handleNewIntent() {
         if(mNewIntent == null)
             return false;
-        if(mNewIntent.getAction()==null||!(mNewIntent.getAction().equals(ACTION_OPEN_NOTE) || mNewIntent.getAction().equals(Intent.ACTION_SEND)))
+        if(mNewIntent.getAction()==null||!(mNewIntent.getAction().equals(ACTION_OPEN_NOTE) || mNewIntent.getAction().equals(Intent.ACTION_SEND) || mNewIntent.getAction().equals(ACTION_WIDGET) || mNewIntent.getAction().equals(ACTION_WIDGET_RECORD)))
             return false;
         ArrayList<EditorView.Action> actions = new ArrayList<>();
         String path = mNewIntent.getStringExtra(PATH);
@@ -370,6 +373,9 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
             fillText.type = "prefill";
             fillText.value = title + text;
             actions.add(fillText);
+            if(mNewIntent.getSerializableExtra(ACTIONS) != null)
+                for(EditorView.Action action : (List<EditorView.Action>)mNewIntent.getSerializableExtra(ACTIONS))
+                    actions.add(action);
         }
         setFragment(BlankFragment.newInstance(note, actions));
         mNewIntent = null;
@@ -538,5 +544,14 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
         }
         this.fragment  = getSupportFragmentManager().getFragments().get(0);
+    }
+
+    /**
+     * Notifies App Widgets about data changes so they can update themselves
+     */
+    public static void notifyAppWidgets(Context context) {
+        AppWidgetManager mgr = AppWidgetManager.getInstance(context);
+        int[] ids = mgr.getAppWidgetIds(new ComponentName(context, ListWidgetProvider.class));
+        mgr.notifyAppWidgetViewDataChanged(ids, R.id.widget_list);
     }
 }

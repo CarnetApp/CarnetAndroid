@@ -6,16 +6,20 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.spisoft.quicknote.MainActivity;
 import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.PreferenceHelper;
-import com.spisoft.sync.utils.FileLocker;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.ZipUtils;
+import com.spisoft.sync.utils.FileLocker;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -80,8 +84,6 @@ public class NoteManager
         return txt;
     }
 
-
-
     public static Note createNewNote(String rootPath){
         File rootFile = new File(rootPath);
         String name  = "untitled";
@@ -132,6 +134,7 @@ public class NoteManager
             if(notFile.renameTo(toFile)) {
                 RecentHelper.getInstance(context).moveNote(note, toFile.getAbsolutePath());
                 KeywordsHelper.getInstance(context).moveNote(note, toFile.getAbsolutePath());
+                MainActivity.notifyAppWidgets(context);
                 note.setPath(toFile.getAbsolutePath());
                 CacheManager.getInstance(context).onNoteMoved(note.path, to);
                 CacheManager.getInstance(context).writeCache();
@@ -157,6 +160,7 @@ public class NoteManager
         FileUtils.deleteRecursive(new File(note.path));
         RecentHelper.getInstance(context).removeRecent(note);
         KeywordsHelper.getInstance(context).deleteNote(note);
+        MainActivity.notifyAppWidgets(context);
         CacheManager.getInstance(context).removeFromCache(note.path);
         CacheManager.getInstance(context).writeCache();
     }

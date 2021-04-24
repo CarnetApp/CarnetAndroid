@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="AmbilWarnaPreference">
-        <attr name="supportsAlpha"
-              format="boolean"/>
+        <attr name="supportsAlpha" format="boolean" />
     </declare-styleable>
     <attr name="PinButton" format="reference" />
     <attr name="MainViewBackground" format="reference|color" />
@@ -33,12 +32,12 @@
     <attr name="AddPhotoIcon" format="reference" />
     <attr name="AddRecordIcon" format="reference" />
     <attr name="DotsIcon" format="reference" />
-    <attr name="SyncIcon" format="reference"/>
-    <attr name="SyncDisabled" format="reference"/>
-    <attr name="SortIcon" format="reference"/>
-    <attr name="DisplayLineIcon" format="reference"/>
+    <attr name="SyncIcon" format="reference" />
+    <attr name="SyncDisabled" format="reference" />
+    <attr name="SortIcon" format="reference" />
+    <attr name="DisplayLineIcon" format="reference" />
 
-    <attr name="UrlColor" format="reference|color"/>
+    <attr name="UrlColor" format="reference|color" />
     <attr name="PlayIcon" format="reference" />
     <attr name="PauseIcon" format="reference" />
     <attr name="HeaderBarIconColor" format="reference|color"/>

@@ -15,6 +15,7 @@ import com.spisoft.quicknote.databases.CacheManager;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
 import com.spisoft.quicknote.editor.BlankFragment;
+import com.spisoft.quicknote.notes_lister.LatestNotesLister;
 import com.spisoft.quicknote.utils.SpiDebugUtils;
 import com.spisoft.sync.Configuration;
 
@@ -67,16 +68,7 @@ public class RecentNoteListFragment extends NoteListFragment implements Configur
     }
     @Override
     protected List<Object> getNotes() {
-        List<Note> latest = RecentHelper.getInstance(getActivity()).getCachedLatestNotes();
-        for(int i = 0; i < latest.size(); i++){
-            Note curNote = latest.get(i);
-            Note note = CacheManager.getInstance(getContext()).get(curNote.path);
-            if(note != null) {
-                note.isPinned = curNote.isPinned;
-                latest.set(i, note);
-            }
-        }
-        return  new ArrayList<Object>(latest);
+        return new LatestNotesLister(getContext()).getNotes();
     }
 
     @Override
