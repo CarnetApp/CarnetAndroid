@@ -40,6 +40,9 @@ abstract class WidgetProvider : AppWidgetProvider() {
     private fun setLayout(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
         // Create an Intent to launch MainActivity
         val intentList = Intent(context, MainActivity::class.java)
+        intentList.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intentList.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intentList.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         val pendingIntentList: PendingIntent = PendingIntent
                 .getActivity(Utils.context, appWidgetId, intentList, FLAG_ACTIVITY_NEW_TASK)
 
