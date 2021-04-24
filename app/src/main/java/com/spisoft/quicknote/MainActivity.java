@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     private Bundle mSavedInstanceState;
     public static final String ACTION_OPEN_NOTE = "open_note";
     public static final String ACTION_WIDGET = "action_widget";
+    public static final String ACTION_WIDGET_RECORD =  "action_widget_record";
     public static final String PATH = "note_path";
 
     private boolean mIsUpdateDone;
@@ -354,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     private boolean handleNewIntent() {
         if(mNewIntent == null)
             return false;
-        if(mNewIntent.getAction()==null||!(mNewIntent.getAction().equals(ACTION_OPEN_NOTE) || mNewIntent.getAction().equals(Intent.ACTION_SEND) || mNewIntent.getAction().equals(ACTION_WIDGET)))
+        if(mNewIntent.getAction()==null||!(mNewIntent.getAction().equals(ACTION_OPEN_NOTE) || mNewIntent.getAction().equals(Intent.ACTION_SEND) || mNewIntent.getAction().equals(ACTION_WIDGET) || mNewIntent.getAction().equals(ACTION_WIDGET_RECORD)))
             return false;
         ArrayList<EditorView.Action> actions = new ArrayList<>();
         String path = mNewIntent.getStringExtra(PATH);

@@ -10,6 +10,7 @@ import android.util.SparseArray
 import android.widget.RemoteViews
 import com.spisoft.quicknote.MainActivity
 import com.spisoft.quicknote.MainActivity.ACTION_WIDGET
+import com.spisoft.quicknote.MainActivity.ACTION_WIDGET_RECORD
 import com.spisoft.quicknote.R
 import com.spisoft.quicknote.editor.BlankFragment
 import com.spisoft.quicknote.editor.EditorView
@@ -54,7 +55,7 @@ abstract class WidgetProvider : AppWidgetProvider() {
                 .getActivity(Utils.context, appWidgetId, intentAdd, FLAG_ACTIVITY_NEW_TASK)
 
         val intentRecord = Intent(Utils.context, MainActivity::class.java)
-        intentRecord.action = ACTION_WIDGET
+        intentRecord.action = ACTION_WIDGET_RECORD
         intentRecord.putExtra("widget_id", appWidgetId)
         intentRecord.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intentRecord.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
