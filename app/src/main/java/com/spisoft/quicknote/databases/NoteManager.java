@@ -84,53 +84,6 @@ public class NoteManager
         return txt;
     }
 
-    public static JSONObject getNoteContent(Note note, Context context) {
-        File noteFile = new File(note.path);
-        String extractedNotePath = context.getCacheDir().getAbsolutePath();
-        JSONObject object = new JSONObject();
-
-        try {
-            object.put("id","0");
-            if(noteFile.exists()) {
-                if(noteFile.isFile()) {
-                    ZipUtils.unzip(note.path, extractedNotePath);
-                }
-                else
-                    FileUtils.copyDirectoryOneLocationToAnotherLocation(noteFile, new File(extractedNotePath))
-                            ;
-                File f = new File(extractedNotePath, "index.html");
-                String index2 = FileUtils.readFile(f.getAbsolutePath());
-                if (f.exists()) {
-                    String index = FileUtils.readFile(f.getAbsolutePath());
-                    object.put("html",index);
-                }
-                f = new File(extractedNotePath, "metadata.json");
-                if (f.exists()) {
-                    String meta = FileUtils.readFile(f.getAbsolutePath());
-                    object.put("metadata",new JSONObject(meta));
-                }
-            }
-            return object;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return object;
-    }
-
-    public static ArrayList<Note> getNotes(Context context) {
-        File[] files = new File(PreferenceHelper.getRootPath(context)).listFiles();
-        ArrayList<Note> notes = new ArrayList<>();
-        for (File file : files) {
-            if (file.getName().endsWith(".sqd")) {
-                notes.add(new Note(file.getPath()));
-            }
-        }
-
-        return notes;
-    }
-
     public static Note createNewNote(String rootPath){
         File rootFile = new File(rootPath);
         String name  = "untitled";
