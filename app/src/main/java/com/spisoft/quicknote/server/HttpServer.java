@@ -111,9 +111,9 @@ public class HttpServer extends NanoHTTPD {
             Log.d("pathdebug","path: "+path);
 
             if(path.startsWith("/api/")){
-                if(!(session.getHeaders().get("requesttoken")!=null && mAuthorizedID.contains(session.getHeaders().get("requesttoken")) || parms.get("requesttoken").get(0)!=null && mAuthorizedID.contains(parms.get("requesttoken").get(0))))
+                if(!(session.getHeaders()!=null && session.getHeaders().get("requesttoken")!=null && mAuthorizedID.contains(session.getHeaders().get("requesttoken")) || parms.get("requesttoken")!=null && parms.get("requesttoken").get(0)!=null && mAuthorizedID.contains(parms.get("requesttoken").get(0))))
                     return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
-                if(session.getHeaders().get("requesttoken")!=null)
+                if(session.getHeaders() != null && session.getHeaders().get("requesttoken")!=null)
                     mAuthorizedID.remove(session.getHeaders().get("requesttoken"));
                 else
                     mAuthorizedID.remove(parms.get("requesttoken").get(0));
