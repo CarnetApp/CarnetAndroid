@@ -34,6 +34,7 @@ class ListWidgetProvider : WidgetProvider() {
         val views = RemoteViews(context?.packageName, R.layout.widget_layout_list)
         views.setOnClickPendingIntent(R.id.list, pendingIntentsMap.get(R.id.list))
         views.setOnClickPendingIntent(R.id.add, pendingIntentsMap.get(R.id.add))
+        views.setOnClickPendingIntent(R.id.record, pendingIntentsMap.get(R.id.record))
 
         // Set up the intent that starts the ListViewService, which will
         // provide the views for this collection.

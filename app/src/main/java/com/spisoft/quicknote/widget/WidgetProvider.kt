@@ -11,6 +11,8 @@ import android.widget.RemoteViews
 import com.spisoft.quicknote.MainActivity
 import com.spisoft.quicknote.MainActivity.ACTION_WIDGET
 import com.spisoft.quicknote.R
+import com.spisoft.quicknote.editor.BlankFragment
+import com.spisoft.quicknote.editor.EditorView
 import com.spisoft.sync.utils.Utils
 
 
@@ -51,10 +53,25 @@ abstract class WidgetProvider : AppWidgetProvider() {
         val pendingIntentAdd = PendingIntent
                 .getActivity(Utils.context, appWidgetId, intentAdd, FLAG_ACTIVITY_NEW_TASK)
 
+        val intentRecord = Intent(Utils.context, MainActivity::class.java)
+        intentRecord.action = ACTION_WIDGET
+        intentRecord.putExtra("widget_id", appWidgetId)
+        intentRecord.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intentRecord.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intentRecord.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        var actions = ArrayList<EditorView.Action>()
+        val record = EditorView.Action()
+        record.type = "record-audio"
+        actions.add(record)
+        intentRecord.putExtra(BlankFragment.ACTIONS, actions)
+        val pendingIntentRecord = PendingIntent
+                .getActivity(Utils.context, appWidgetId, intentRecord, FLAG_ACTIVITY_NEW_TASK)
+
         // Creation of a map to associate PendingIntent(s) to views
         val map: SparseArray<PendingIntent> = SparseArray()
         map.put(R.id.list, pendingIntentList)
         map.put(R.id.add, pendingIntentAdd)
+        map.put(R.id.record, pendingIntentRecord)
 
         val views = getRemoteViews(context, appWidgetId, map);
 

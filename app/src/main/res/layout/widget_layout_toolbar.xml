@@ -40,5 +40,15 @@
         android:background="@drawable/card_background"
         android:gravity="center"
         android:padding="10dp"
-        android:src="@drawable/ic_note_add_black" />
+        android:src="@drawable/ic_note_add_white" />
+    <ImageView
+        android:id="@+id/record"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/card_background"
+        android:gravity="center"
+        android:padding="10dp"
+        android:src="@drawable/mic_white" />
+
 </LinearLayout>
