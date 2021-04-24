@@ -31,7 +31,15 @@ public class CacheBuilderIntentService extends IntentService {
         CacheManager.getInstance(this).loadCache();
         File file = new File(PreferenceHelper.getRootPath(this));
         explore(file);
+        checkDeletedFiles();
         CacheManager.getInstance(this).writeCache();
+    }
+
+    private void checkDeletedFiles() {
+        for(String path: CacheManager.getInstance(this).getCache().keySet()){
+            if(!new File(path).exists())
+                CacheManager.getInstance(this).removeFromCache(path);
+        }
     }
 
     private void explore(File file) {
