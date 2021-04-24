@@ -49,6 +49,9 @@ import com.spisoft.sync.account.DBAccountHelper;
 import com.spisoft.sync.synchro.SynchroService;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.spisoft.quicknote.editor.BlankFragment.ACTIONS;
 
 public class MainActivity extends AppCompatActivity implements PinView.PasswordListener, NoteManager.UpdaterListener, Configuration.SyncStatusListener, EditorActivity {
     public static final String ACTION_RELOAD_KEYWORDS = "action_reload_keywords";
@@ -369,6 +372,9 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
             fillText.type = "prefill";
             fillText.value = title + text;
             actions.add(fillText);
+            if(mNewIntent.getSerializableExtra(ACTIONS) != null)
+                for(EditorView.Action action : (List<EditorView.Action>)mNewIntent.getSerializableExtra(ACTIONS))
+                    actions.add(action);
         }
         setFragment(BlankFragment.newInstance(note, actions));
         mNewIntent = null;

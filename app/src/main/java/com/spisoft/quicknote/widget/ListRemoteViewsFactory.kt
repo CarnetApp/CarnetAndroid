@@ -19,13 +19,12 @@ package com.spisoft.quicknote.widget
 import android.app.Application
 import android.appwidget.AppWidgetManager
 import android.content.Intent
-import android.text.Html
+import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.spisoft.quicknote.MainActivity
 import com.spisoft.quicknote.Note
 import com.spisoft.quicknote.R
-import com.spisoft.quicknote.databases.NoteManager
 import com.spisoft.quicknote.notes_lister.LatestNotesLister
 import com.spisoft.quicknote.notes_lister.PathNotesLister
 import java.text.SimpleDateFormat
@@ -107,6 +106,10 @@ class ListRemoteViewsFactory(app: Application, intent: Intent) : RemoteViewsServ
             row.setTextViewText(R.id.note_todo, todo)
             row.setViewVisibility(R.id.note_todo, View.VISIBLE)
         }
+        if(todo.isEmpty() && title.isEmpty() && note.shortText.isEmpty())
+            row.setViewVisibility(R.id.root, View.GONE)
+        else
+            row.setViewVisibility(R.id.root, View.VISIBLE)
         return row
     }
 
