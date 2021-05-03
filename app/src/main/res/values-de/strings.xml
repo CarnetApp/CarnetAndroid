@@ -169,4 +169,5 @@
     <string name="medium_quality">Mittel</string>
     <string name="small_quality">Klein</string>
     <string name="create_note_as_folder">Notiz als Ordner anlegen (Beta, nicht benutzen)</string>
+    <string name="add_widget">Widget hinzufügen</string>
 </resources>
