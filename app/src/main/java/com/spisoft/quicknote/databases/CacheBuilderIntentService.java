@@ -9,6 +9,7 @@ import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.sync.Log;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class CacheBuilderIntentService extends IntentService {
     private static final String TAG = "CacheBuilderIntentService";
@@ -28,15 +29,18 @@ public class CacheBuilderIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d("cachedebug","asking to write");
+
         CacheManager.getInstance(this).loadCache();
         File file = new File(PreferenceHelper.getRootPath(this));
         explore(file);
         checkDeletedFiles();
         CacheManager.getInstance(this).writeCache();
+
     }
 
     private void checkDeletedFiles() {
-        for(String path: CacheManager.getInstance(this).getCache().keySet()){
+        for(String path: new ArrayList<>(CacheManager.getInstance(this).getCache().keySet())){
             if(!new File(path).exists())
                 CacheManager.getInstance(this).removeFromCache(path);
         }

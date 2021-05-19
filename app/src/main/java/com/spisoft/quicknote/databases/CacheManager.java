@@ -30,7 +30,7 @@ public class CacheManager {
     File cacheFile = null;
     private HashMap<String, Note> cache;
 
-    public static CacheManager getInstance(Context ct){
+    public static synchronized CacheManager getInstance(Context ct){
         if(sCacheManager == null){
             sCacheManager = new CacheManager(ct);
         }
