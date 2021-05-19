@@ -8,7 +8,7 @@ static def getDate() {
     def date = new Date().getTime() / 1000L - 1472637600L
     return (int) (date / 1000L)
 }
-version = "0.23.1"
+version = "0.24.0"
 static def getFormattedDate() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMdd.HHmm')
@@ -59,8 +59,8 @@ android {
     productFlavors {
         fdroid {
             dimension "version"
-            versionCode 231
-            versionName "0.23.1"
+            versionCode 240
+            versionName "0.24.0"
             resValue "bool", "is_google", "false"
 
         }
