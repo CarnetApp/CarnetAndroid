@@ -1,3 +1,20 @@
+# Version 0.24
+
+Better support for notes as folder
+Widget ! Thanks to Thardev
+Fixes:
+Audio recorder
+Cache when a note is deleted
+
+Translations:
+Galician (Xosé M)
+German (Christien Scholz)
+Polish (Przemek Poland)
+Spanish (Maira Belmonte)
+Chinese (Lurenjia)
+Russian (Mac Guffin)
+French (Aznörth)
+
 # Version 0.23.1
 
 Features:
