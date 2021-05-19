@@ -26,7 +26,7 @@ git clone git@github.com:PhieF/CarnetAndroid.git
 git clone git@github.com:PhieF/Sync.git
 git clone git@github.com:PhieF/GoogleSync.git
 cd CarnetAndroid
-bash build.gradle
+gradle build
 ```
 
 
