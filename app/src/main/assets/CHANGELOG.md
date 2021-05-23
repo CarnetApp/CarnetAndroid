@@ -2,6 +2,8 @@
 
 Better support for notes as folder
 Widget ! Thanks to Thardev
+Import todolist from google keep (thanks to yohan-b)
+
 Fixes:
 Audio recorder
 Cache when a note is deleted
