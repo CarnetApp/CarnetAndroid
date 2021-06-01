@@ -8,7 +8,7 @@
     <string name="delete">Supprimer</string>
     <string name="remove_recent">Archiver</string>
     <string name="storage_preference">Stockage principal</string>
-    <string name="recent">Récent</string>
+    <string name="recent">Dernier</string>
     <string name="browser">Explorateur</string>
     <string name="parent_folder">Dossier parent</string>
     <string name="toast_on_minimize">Cliquez ici pour agrandir</string>
@@ -56,7 +56,7 @@
     <string name="please_wait">Attendez s\'il vous plaît</string>
     <string name="new_keyword">Nouveau mot-clef</string>
     <string name="remote_folder">Dossier distant</string>
-    <string name="keywords">Mots-clefs</string>
+    <string name="keywords">Étiquettes</string>
     <string name="sync_intro_title">Synchroniser Carnet</string>
     <string name="sync_intro_text">Carnet peut se synchroniser avec NextCloud. N\'hésitez pas à télécharger le client pour ordinateur pour y retrouver toutes vos notes. Carnet est aussi disponible en ligne sur le magasin d\'applications de NextCloud.</string>
     <string name="sync_intro_gdrive_text">Facile, la plupart d\'entre vous ont une adresse Gmail, pas OpenSource</string>
@@ -65,7 +65,7 @@
     <string name="welcome_subtitle">Laissez-vous guider pour paramétrer Carnet</string>
     <string name="next">Suivant</string>
     <string name="app_restart">L\'application va maintenant redémarrer</string>
-    <string name="pin">Attacher</string>
+    <string name="pin">Épingler</string>
     <string name="unpin">Détacher</string>
     <string name="not_available_on_fdroid">Indisponible sur Fdroid</string>
     <string name="desktop_version">Version ordinateur</string>
