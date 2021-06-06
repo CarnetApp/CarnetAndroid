@@ -20,6 +20,10 @@ before_script:
   - set +o pipefail
   - yes | android-sdk-linux/tools/bin/sdkmanager --licenses
   - set -o pipefail
+  - cd ../
+  - git clone https://github.com/CarnetApp/Sync
+  - git clone https://github.com/phief/GoogleSync
+  - cd CarnetAndroid
 
 stages:
   - build
