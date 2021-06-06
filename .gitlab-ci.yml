@@ -47,7 +47,7 @@ assembleDebug:
   stage: build
   script:
     - ./gradlew assembleGoogleDebug
-    - scp app/build/outputs/apk/google/debug/app-google-debug.apk /home/ovh2/quicknote/binaries/android/commit_build_google_debug.apk
+    - scp app/build/outputs/apk/google/debug/app-google-debug.apk phie@ovh3.phie.ovh:/home/ovh2/quicknote/binaries/android/commit_build_google_debug.apk
   artifacts:
     paths:
     - app/build/outputs/
