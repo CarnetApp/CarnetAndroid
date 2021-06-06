@@ -24,7 +24,12 @@ before_script:
   - git clone https://github.com/CarnetApp/Sync
   - git clone https://github.com/phief/GoogleSync
   - cd CarnetAndroid
-
+after_script:
+  - cd ..
+  - rm Sync -R
+  - rm GoogleSync -R
+  - cd CarnetAndroid
+  
 stages:
   - build
   - test
