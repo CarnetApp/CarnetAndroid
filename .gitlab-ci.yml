@@ -39,7 +39,7 @@ pushToGithub:
     - git clone ssh://git@gitlab.lostpod.me:8022/carnetapp/CarnetAndroid.git carnetgit
     - cd carnetgit
     - git remote add github git@github.com:CarnetApp/CarnetAndroid.git
-    - for b in `git branch -r | grep -v -- '->'`; do git checkout $b; git push github $b; done
+    - for b in `git branch -r | grep -v -- '->' | sed 's/origin\///'`; do git checkout $b; git push github $b; done
     - cd ../
     - rm carnetgit -R
 
