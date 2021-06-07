@@ -43,7 +43,7 @@ mirrorGithub:
     - git fetch gitlab
     - git push --all gitlab
 
-assemble:
+.assemble:
   stage: build
   before-script:
     - wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_TOOLS}.zip
