@@ -48,6 +48,7 @@ stages:
 mirrorGithub:
   stage: build
   script:
+    - rm carnetGithub -R || true
     - git clone https://github.com/CarnetApp/CarnetAndroid carnetGithub
     - cd carnetGithub
     - git remote add gitlab ssh://git@gitlab.lostpod.me:8022/carnetapp/CarnetAndroid.git
