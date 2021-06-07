@@ -29,6 +29,8 @@ before_script:
   - yes | android-sdk-linux/tools/bin/sdkmanager --licenses
   - set -o pipefail
   - cd ../
+  - rm Sync -R || true
+  - rm GoogleSync -R || true
   - git clone https://github.com/CarnetApp/Sync
   - git clone https://github.com/phief/GoogleSync
   - cd CarnetAndroid
