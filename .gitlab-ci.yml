@@ -41,13 +41,13 @@ mirrorGithub:
     - cd carnetgit
     - git remote add gitlab ssh://git@gitlab.lostpod.me:8022/carnetapp/CarnetAndroid.git
     - git fetch gitlab
-    - git push --all gitlab || true
+    - git push --all gitlab > /dev/null 2>&1 || true
     - cd ../
     - rm carnetgit -R
     - git clone ssh://git@gitlab.lostpod.me:8022/carnetapp/CarnetAndroid.git carnetgit
     - cd carnetgit
     - git remote add github git@github.com:CarnetApp/CarnetAndroid.git
-    - git push --all github || true
+    - git push --all github > /dev/null 2>&1 ||  true
     - cd ../
     - rm carnetgit -R
     - git clone https://github.com/CarnetApp/CarnetAndroid carnetgit
