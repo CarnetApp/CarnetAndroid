@@ -35,13 +35,34 @@ stages:
 
 mirrorGithub:
   stage: build
-  script:
-    - rm carnetGithub -R || true
-    - git clone https://github.com/CarnetApp/CarnetAndroid carnetGithub
-    - cd carnetGithub
+  script: #separated folders for repo to be sure to push everything
+    - rm carnetgit -R || true
+    - git clone https://github.com/CarnetApp/CarnetAndroid carnetgit
+    - cd carnetgit
+    - git remote add gitlab ssh://git@gitlab.lostpod.me:8022/carnetapp/CarnetAndroid.git
+    - git fetch gitlab
+    - git push --all gitlab || true
+    - cd ../
+    - rm carnetgit -R
+    - git clone ssh://git@gitlab.lostpod.me:8022/carnetapp/CarnetAndroid.git carnetgit
+    - cd carnetgit
+    - git remote add github git@github.com:CarnetApp/CarnetAndroid.git
+    - git push --all github || true
+    - cd ../
+    - rm carnetgit -R
+    - git clone https://github.com/CarnetApp/CarnetAndroid carnetgit
+    - cd carnetgit
     - git remote add gitlab ssh://git@gitlab.lostpod.me:8022/carnetapp/CarnetAndroid.git
     - git fetch gitlab
     - git push --all gitlab
+    - cd ../
+    - rm carnetgit -R
+    - git clone ssh://git@gitlab.lostpod.me:8022/carnetapp/CarnetAndroid.git carnetgit
+    - cd carnetgit
+    - git remote add github git@github.com:CarnetApp/CarnetAndroid.git
+    - git push --all github
+    - cd ../
+    - rm carnetgit -R
 
 .assemble:
   stage: build
