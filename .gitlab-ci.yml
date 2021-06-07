@@ -36,8 +36,6 @@ stages:
 mirrorGithub:
   stage: build
   script:
-    - ssh-keygen -R gitlab.lostpod.me
-    - ssh-keyscan -t rsa gitlab.lostpod.me -p 8022 >> ~/.ssh/known_hosts
     - rm carnetGithub -R || true
     - git clone https://github.com/CarnetApp/CarnetAndroid carnetGithub
     - cd carnetGithub
