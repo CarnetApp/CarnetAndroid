@@ -41,12 +41,10 @@ after_script:
 stages:
   - build
   - test
-  - mirror
-
 
 
 mirrorGithub:
-  stage: mirror
+  stage: build
   script:
     - git clone https://github.com/CarnetApp/CarnetAndroid carnetGithub
     - cd carnetGithub
