@@ -58,19 +58,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="14dp"
                 android:text="Small Text"
                 android:id="@+id/register_tv"
                 android:layout_below="@id/description_tv"
+                android:layout_toStartOf="@+id/reliability_tv"
+                android:layout_alignParentLeft="true"
                 android:layout_gravity="bottom" />
 
             <TextView
                 android:id="@+id/reliability_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:text="Small Tfdfext"
                 android:layout_below="@id/description_tv"
+                android:layout_alignParentRight="true"
+                android:textSize="14dp"
+                android:text="Small Tfdfext"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
         </RelativeLayout>
