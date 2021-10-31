@@ -82,7 +82,28 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String theme = PreferenceManager.getDefaultSharedPreferences(this).getString("theme","carnet");
+
+        mSavedInstanceState = savedInstanceState;
+
+        String theme = PreferenceManager.getDefaultSharedPreferences(this).getString("theme","auto");
+        Log.d("themedebug", "string "+theme);
+        if(theme.equals("auto")) {
+            int nightModeFlags =
+                    getResources().getConfiguration().uiMode &
+                            android.content.res.Configuration.UI_MODE_NIGHT_MASK;
+            Log.d("themedebug", "nightModeFlags "+nightModeFlags);
+            switch (nightModeFlags) {
+                case android.content.res.Configuration.UI_MODE_NIGHT_YES:
+                    theme = "black";
+                    break;
+
+                case android.content.res.Configuration.UI_MODE_NIGHT_NO:
+                    theme = "carnet";
+                    break;
+            }
+        }
+        Log.d("themedebug", "theme "+theme);
+
         switch(theme){
             case "dark":
                 setTheme(R.style.CarnetTheme_Dark);
@@ -92,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
                 break;
 
         }
-        mSavedInstanceState = savedInstanceState;
+
         if(PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.NOTE_VERSION_PREF, -1)==-1){
             //not set but already start  : V1
             PreferenceHelper.setCurrentNoteVersion(getApplicationContext(),1);
@@ -324,6 +345,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
                     onPasswordOk();
             }
         }
+
         Configuration.addSyncStatusListener(this);
     }
     protected void  onPause(){

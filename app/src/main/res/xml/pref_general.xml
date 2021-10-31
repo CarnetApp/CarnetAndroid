@@ -40,7 +40,7 @@
     <ListPreference
         android:title="@string/theme"
         android:key="theme"
-        android:defaultValue="carnet"
+        android:defaultValue="auto"
         android:entries="@array/theme_entries"
         android:entryValues="@array/theme_values" />
     <Preference
