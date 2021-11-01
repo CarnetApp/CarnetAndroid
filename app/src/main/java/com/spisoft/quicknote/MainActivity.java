@@ -42,6 +42,7 @@ import com.spisoft.quicknote.intro.HelpActivity;
 import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.quicknote.updater.UpdaterActivity;
 import com.spisoft.quicknote.utils.PinView;
+import com.spisoft.quicknote.utils.Utils;
 import com.spisoft.quicknote.widget.ListWidgetProvider;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.account.AccountListActivity;
@@ -85,25 +86,7 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
         mSavedInstanceState = savedInstanceState;
 
-        String theme = PreferenceManager.getDefaultSharedPreferences(this).getString("theme","auto");
-        Log.d("themedebug", "string "+theme);
-        if(theme.equals("auto")) {
-            int nightModeFlags =
-                    getResources().getConfiguration().uiMode &
-                            android.content.res.Configuration.UI_MODE_NIGHT_MASK;
-            Log.d("themedebug", "nightModeFlags "+nightModeFlags);
-            switch (nightModeFlags) {
-                case android.content.res.Configuration.UI_MODE_NIGHT_YES:
-                    theme = "black";
-                    break;
-
-                case android.content.res.Configuration.UI_MODE_NIGHT_NO:
-                    theme = "carnet";
-                    break;
-            }
-        }
-        Log.d("themedebug", "theme "+theme);
-
+        String theme = Utils.getCurrentTheme(this);
         switch(theme){
             case "dark":
                 setTheme(R.style.CarnetTheme_Dark);

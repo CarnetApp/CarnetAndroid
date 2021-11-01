@@ -7,6 +7,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.preference.PreferenceManager;
 
 import com.spisoft.quicknote.R;
 
@@ -41,5 +42,24 @@ public class Utils {
 
     public static boolean isGoogle(Context context) {
         return context.getResources().getBoolean(R.bool.is_google);
+    }
+
+    public static String getCurrentTheme(Context mContext) {
+        String theme = PreferenceManager.getDefaultSharedPreferences(mContext).getString("theme","auto");
+        if(theme.equals("auto")) {
+            int nightModeFlags =
+                    mContext.getResources().getConfiguration().uiMode &
+                            android.content.res.Configuration.UI_MODE_NIGHT_MASK;
+            switch (nightModeFlags) {
+                case android.content.res.Configuration.UI_MODE_NIGHT_YES:
+                    theme = "black";
+                    break;
+
+                case android.content.res.Configuration.UI_MODE_NIGHT_NO:
+                    theme = "carnet";
+                    break;
+            }
+        }
+        return theme;
     }
 }

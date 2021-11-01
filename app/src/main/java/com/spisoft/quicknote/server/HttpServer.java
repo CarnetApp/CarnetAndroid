@@ -17,6 +17,7 @@ import com.spisoft.quicknote.editor.recorder.AudioRecorderJS;
 import com.spisoft.quicknote.reminders.RemindersManager;
 import com.spisoft.quicknote.utils.FileUtils;
 import com.spisoft.quicknote.utils.PictureUtils;
+import com.spisoft.quicknote.utils.Utils;
 import com.spisoft.quicknote.utils.ZipUtils;
 
 import org.json.JSONArray;
@@ -147,7 +148,7 @@ public class HttpServer extends NanoHTTPD {
                                 e.printStackTrace();
                             }*/
                         case "settings/editor_css":
-                            String theme = PreferenceManager.getDefaultSharedPreferences(mContext).getString("theme","carnet");
+                            String theme = Utils.getCurrentTheme(mContext);
                             String metadata = FileUtils.readFile(mContext.getFilesDir().getAbsolutePath() +"/reader/css/"+theme+"/metadata.json");
                             try {
                                 JSONObject metadatajson = new JSONObject(metadata);
