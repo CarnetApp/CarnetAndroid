@@ -92,23 +92,29 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
         ((MainActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerLayout = (DrawerLayout)mRoot.findViewById(R.id.drawer_layout);
         mKeywordsLayout = mRoot.findViewById(R.id.keywords);
-        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout,
-                R.string.drawer_open, R.string.drawer_close) {
+        if(mDrawerLayout != null) {
+            mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout,
+                    R.string.drawer_open, R.string.drawer_close) {
 
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                getActivity().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
+                /**
+                 * Called when a drawer has settled in a completely open state.
+                 */
+                public void onDrawerOpened(View drawerView) {
+                    getActivity().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                }
 
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                getActivity().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
+                /**
+                 * Called when a drawer has settled in a completely closed state.
+                 */
+                public void onDrawerClosed(View view) {
+                    getActivity().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                }
 
-        };
+            };
 
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+            mDrawerToggle.setDrawerIndicatorEnabled(true);
+            mDrawerLayout.setDrawerListener(mDrawerToggle);
+        }
         mBrowserButton = mRoot.findViewById(R.id.browser_button);
         mBrowserButton.setOnClickListener(this);
         mRecentButton = mRoot.findViewById(R.id.recent_button);
@@ -215,9 +221,10 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view,savedInstanceState);
+        if(mDrawerLayout != null)
         mDrawerToggle.syncState();
         if(shouldAskDonations()) {
-            mDrawerLayout.postDelayed(new Runnable() {
+            view.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     new Thread() {
@@ -297,16 +304,19 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
             //getSupportFragmentManager().back
             Fragment fragment = RecentNoteListFragment.newInstance();
             setFragment(fragment);
-            mDrawerLayout.closeDrawers();
+            if(mDrawerLayout != null)
+                mDrawerLayout.closeDrawers();
         }else if(view==mBrowserButton){
             clearBackstack();
             Fragment fragment = BrowserFragment.newInstance(PreferenceHelper.getRootPath(getActivity()));
             setFragment(fragment);
-            mDrawerLayout.closeDrawers();
+            if(mDrawerLayout != null)
+                mDrawerLayout.closeDrawers();
         }
         else if(mSettingsButton==view){
             startActivity(new Intent(getActivity(), SettingsActivity.class));
-            mDrawerLayout.closeDrawers();
+            if(mDrawerLayout != null)
+                mDrawerLayout.closeDrawers();
         }
     }
 
@@ -322,16 +332,19 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
         clearBackstack();
         Fragment fragment = KeywordNotesFragment.newInstance(keyword);
         setFragment(fragment);
-        mDrawerLayout.closeDrawers();
+        if(mDrawerLayout != null)
+            mDrawerLayout.closeDrawers();
 
     }
 
     public void lockDrawer(){
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        if(mDrawerLayout != null)
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     public void unlockDrawer(){
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        if(mDrawerLayout != null)
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     public boolean onBackPressed() {
