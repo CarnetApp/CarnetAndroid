@@ -1,6 +1,12 @@
 "use strict";
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 var rootpath = undefined;
 var api_url = undefined;
@@ -253,28 +259,18 @@ Writer.prototype.addMedia = function () {
 };
 
 Writer.prototype.setDoNotEdit = function (b) {
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
+  var _iterator = _createForOfIteratorHelper(document.getElementsByClassName("edit-zone")),
+      _step;
 
   try {
-    for (var _iterator = document.getElementsByClassName("edit-zone")[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
       var edit = _step.value;
       edit.contentEditable = !b;
     }
   } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
+    _iterator.e(err);
   } finally {
-    try {
-      if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-        _iterator["return"]();
-      }
-    } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
-      }
-    }
+    _iterator.f();
   }
 
   document.getElementById("name-input").disabled = b;
@@ -285,6 +281,7 @@ Writer.prototype.displayErrorLarge = function (error) {};
 Writer.prototype.extractNote = function (callback) {
   console.log("Writer.prototype.extractNote");
   var writer = this;
+  $("#media-loading").show();
   RequestBuilder.sRequestBuilder.get("/note/open?path=" + encodeURIComponent(this.note.path), function (error, data) {
     if (error) {
       writer.setDoNotEdit(true);
@@ -296,6 +293,7 @@ Writer.prototype.extractNote = function (callback) {
     writer.saveID = data.id;
 
     var onExtracted = function onExtracted() {
+      $("#media-loading").fadeOut();
       writer.refreshKeywords();
       writer.refreshMedia();
     };
@@ -467,55 +465,35 @@ Writer.prototype.fillWriter = function (extractedHTML) {
     this.createEditableZone().innerHTML = toCopy;
   }
 
-  var _iteratorNormalCompletion2 = true;
-  var _didIteratorError2 = false;
-  var _iteratorError2 = undefined;
+  var _iterator2 = _createForOfIteratorHelper(this.oDoc.getElementsByClassName("edit-zone")),
+      _step2;
 
   try {
-    for (var _iterator2 = this.oDoc.getElementsByClassName("edit-zone")[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
       var editable = _step2.value;
 
       editable.onclick = function (event) {
         writer.onEditableClick(event);
       };
 
-      var _iteratorNormalCompletion3 = true;
-      var _didIteratorError3 = false;
-      var _iteratorError3 = undefined;
+      var _iterator3 = _createForOfIteratorHelper(editable.getElementsByTagName("div")),
+          _step3;
 
       try {
-        for (var _iterator3 = editable.getElementsByTagName("div")[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
           var insideDiv = _step3.value;
           insideDiv.dir = "auto";
         }
       } catch (err) {
-        _didIteratorError3 = true;
-        _iteratorError3 = err;
+        _iterator3.e(err);
       } finally {
-        try {
-          if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
-            _iterator3["return"]();
-          }
-        } finally {
-          if (_didIteratorError3) {
-            throw _iteratorError3;
-          }
-        }
+        _iterator3.f();
       }
     }
   } catch (err) {
-    _didIteratorError2 = true;
-    _iteratorError2 = err;
+    _iterator2.e(err);
   } finally {
-    try {
-      if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
-        _iterator2["return"]();
-      }
-    } finally {
-      if (_didIteratorError2) {
-        throw _iteratorError2;
-      }
-    }
+    _iterator2.f();
   }
 
   this.oDoc.onclick = function (event) {
@@ -761,12 +739,11 @@ Writer.prototype.updateKeywordsListSelector = function () {
     console.log(e);
   }
 
-  var _iteratorNormalCompletion4 = true;
-  var _didIteratorError4 = false;
-  var _iteratorError4 = undefined;
+  var _iterator4 = _createForOfIteratorHelper(writer.keywordsList.getElementsByClassName('mdl-checkbox__input')),
+      _step4;
 
   try {
-    for (var _iterator4 = writer.keywordsList.getElementsByClassName('mdl-checkbox__input')[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+    for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
       var checkbox = _step4.value;
 
       checkbox.onchange = function (event) {
@@ -777,18 +754,9 @@ Writer.prototype.updateKeywordsListSelector = function () {
       };
     }
   } catch (err) {
-    _didIteratorError4 = true;
-    _iteratorError4 = err;
+    _iterator4.e(err);
   } finally {
-    try {
-      if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
-        _iterator4["return"]();
-      }
-    } finally {
-      if (_didIteratorError4) {
-        throw _iteratorError4;
-      }
-    }
+    _iterator4.f();
   }
 };
 
@@ -1484,28 +1452,19 @@ Writer.prototype.handleAction = function (type, value) {
 
 Writer.prototype.handleActions = function (actions) {
   if (actions === undefined) return;
-  var _iteratorNormalCompletion5 = true;
-  var _didIteratorError5 = false;
-  var _iteratorError5 = undefined;
+
+  var _iterator5 = _createForOfIteratorHelper(actions),
+      _step5;
 
   try {
-    for (var _iterator5 = actions[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+    for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
       var action = _step5.value;
       this.handleAction(action.type, action.value);
     }
   } catch (err) {
-    _didIteratorError5 = true;
-    _iteratorError5 = err;
+    _iterator5.e(err);
   } finally {
-    try {
-      if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
-        _iterator5["return"]();
-      }
-    } finally {
-      if (_didIteratorError5) {
-        throw _iteratorError5;
-      }
-    }
+    _iterator5.f();
   }
 };
 
@@ -1578,12 +1537,11 @@ RenameNoteTask.prototype.run = function (callback) {
     return;
   }
 
-  var _iteratorNormalCompletion6 = true;
-  var _didIteratorError6 = false;
-  var _iteratorError6 = undefined;
+  var _iterator6 = _createForOfIteratorHelper(nameInput.value.split("/")),
+      _step6;
 
   try {
-    for (var _iterator6 = nameInput.value.split("/")[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+    for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
       var part = _step6.value;
 
       if (part == ".." && !hasOrigin) {
@@ -1594,18 +1552,9 @@ RenameNoteTask.prototype.run = function (callback) {
       }
     }
   } catch (err) {
-    _didIteratorError6 = true;
-    _iteratorError6 = err;
+    _iterator6.e(err);
   } finally {
-    try {
-      if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
-        _iterator6["return"]();
-      }
-    } finally {
-      if (_didIteratorError6) {
-        throw _iteratorError6;
-      }
-    }
+    _iterator6.f();
   }
 
   path += ".sqd";
@@ -1691,28 +1640,19 @@ SaveNoteTask.prototype.trySave = function (onEnd, trial) {
   }
 
   var currentUrls = Object.keys(this.writer.note.metadata.urls);
-  var _iteratorNormalCompletion7 = true;
-  var _didIteratorError7 = false;
-  var _iteratorError7 = undefined;
+
+  var _iterator7 = _createForOfIteratorHelper(urls),
+      _step7;
 
   try {
-    for (var _iterator7 = urls[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+    for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
       var url = _step7.value;
       if (currentUrls.indexOf(url) < 0) this.writer.note.metadata.urls[url] = {};
     }
   } catch (err) {
-    _didIteratorError7 = true;
-    _iteratorError7 = err;
+    _iterator7.e(err);
   } finally {
-    try {
-      if (!_iteratorNormalCompletion7 && _iterator7["return"] != null) {
-        _iterator7["return"]();
-      }
-    } finally {
-      if (_didIteratorError7) {
-        throw _iteratorError7;
-      }
-    }
+    _iterator7.f();
   }
 
   for (var _i3 = 0, _currentUrls = currentUrls; _i3 < _currentUrls.length; _i3++) {
@@ -1808,29 +1748,20 @@ $(document).ready(function () {
   RequestBuilder.sRequestBuilder.get("/settings/editor_css", function (error, data) {
     if (!error && data != null && data != undefined) {
       console.log("data " + data);
-      var _iteratorNormalCompletion8 = true;
-      var _didIteratorError8 = false;
-      var _iteratorError8 = undefined;
+
+      var _iterator8 = _createForOfIteratorHelper(data),
+          _step8;
 
       try {
-        for (var _iterator8 = data[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+        for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
           var sheet = _step8.value;
           console.log("sheet " + sheet);
           Utils.applyCss(sheet);
         }
       } catch (err) {
-        _didIteratorError8 = true;
-        _iteratorError8 = err;
+        _iterator8.e(err);
       } finally {
-        try {
-          if (!_iteratorNormalCompletion8 && _iterator8["return"] != null) {
-            _iterator8["return"]();
-          }
-        } finally {
-          if (_didIteratorError8) {
-            throw _iteratorError8;
-          }
-        }
+        _iterator8.f();
       }
     }
   });

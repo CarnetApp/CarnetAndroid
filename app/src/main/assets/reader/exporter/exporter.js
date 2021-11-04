@@ -1,5 +1,11 @@
 "use strict";
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -8,9 +14,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 var writer = undefined;
 
-var SingleExporter =
-/*#__PURE__*/
-function () {
+var SingleExporter = /*#__PURE__*/function () {
   function SingleExporter(notepath, listener) {
     _classCallCheck(this, SingleExporter);
 
@@ -167,12 +171,11 @@ function () {
                   mediaList.id = "full-media-list";
                 }
 
-                var _iteratorNormalCompletion = true;
-                var _didIteratorError = false;
-                var _iteratorError = undefined;
+                var _iterator = _createForOfIteratorHelper(attachments),
+                    _step;
 
                 try {
-                  for (var _iterator = attachments[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                  for (_iterator.s(); !(_step = _iterator.n()).done;) {
                     var attachment = _step.value;
                     var a = document.createElement("a");
                     var base64ref = "data:" + FileUtils.geMimetypeFromExtension(FileUtils.getExtensionFromPath(attachment.name)) + ";base64," + attachment.data;
@@ -189,18 +192,9 @@ function () {
                     mediaList.appendChild(a);
                   }
                 } catch (err) {
-                  _didIteratorError = true;
-                  _iteratorError = err;
+                  _iterator.e(err);
                 } finally {
-                  try {
-                    if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-                      _iterator["return"]();
-                    }
-                  } finally {
-                    if (_didIteratorError) {
-                      throw _iteratorError;
-                    }
-                  }
+                  _iterator.f();
                 }
 
                 body.appendChild(mediaList);
@@ -215,12 +209,12 @@ function () {
             var text = document.createElement("div");
             text.id = "whole-text";
             text.innerHTML = "<br /><br />" + html;
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
+
+            var _iterator2 = _createForOfIteratorHelper(metadata.todolists),
+                _step2;
 
             try {
-              for (var _iterator2 = metadata.todolists[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
                 var todolist = _step2.value;
                 var todolistContainer = text.querySelector("#" + todolist.id);
 
@@ -230,68 +224,41 @@ function () {
                 }
 
                 todolistContainer.innerHTML += "<h3>" + $.i18n('todo') + "</h3>";
-                var _iteratorNormalCompletion3 = true;
-                var _didIteratorError3 = false;
-                var _iteratorError3 = undefined;
+
+                var _iterator3 = _createForOfIteratorHelper(todolist.todo),
+                    _step3;
 
                 try {
-                  for (var _iterator3 = todolist.todo[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                  for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
                     var todo = _step3.value;
                     todolistContainer.innerHTML += "☐ " + todo + "<br />";
                   }
                 } catch (err) {
-                  _didIteratorError3 = true;
-                  _iteratorError3 = err;
+                  _iterator3.e(err);
                 } finally {
-                  try {
-                    if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
-                      _iterator3["return"]();
-                    }
-                  } finally {
-                    if (_didIteratorError3) {
-                      throw _iteratorError3;
-                    }
-                  }
+                  _iterator3.f();
                 }
 
                 todolistContainer.innerHTML += "<h3>" + $.i18n('completed') + "</h3>";
-                var _iteratorNormalCompletion4 = true;
-                var _didIteratorError4 = false;
-                var _iteratorError4 = undefined;
+
+                var _iterator4 = _createForOfIteratorHelper(todolist.done),
+                    _step4;
 
                 try {
-                  for (var _iterator4 = todolist.done[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                  for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
                     var done = _step4.value;
                     todolistContainer.innerHTML += "☑ " + done + "<br />";
                   }
                 } catch (err) {
-                  _didIteratorError4 = true;
-                  _iteratorError4 = err;
+                  _iterator4.e(err);
                 } finally {
-                  try {
-                    if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
-                      _iterator4["return"]();
-                    }
-                  } finally {
-                    if (_didIteratorError4) {
-                      throw _iteratorError4;
-                    }
-                  }
+                  _iterator4.f();
                 }
               }
             } catch (err) {
-              _didIteratorError2 = true;
-              _iteratorError2 = err;
+              _iterator2.e(err);
             } finally {
-              try {
-                if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
-                  _iterator2["return"]();
-                }
-              } finally {
-                if (_didIteratorError2) {
-                  throw _iteratorError2;
-                }
-              }
+              _iterator2.f();
             }
 
             body.appendChild(text);
@@ -375,9 +342,7 @@ function css2json(css) {
   return s;
 }
 
-var ExporterUI =
-/*#__PURE__*/
-function () {
+var ExporterUI = /*#__PURE__*/function () {
   function ExporterUI() {
     _classCallCheck(this, ExporterUI);
 

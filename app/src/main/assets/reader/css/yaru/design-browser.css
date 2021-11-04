@@ -13,6 +13,17 @@
     --grid-button-shadow: 0 0px 0px 2px  #893346;
 
 }
+html{
+    background: inherit;
+
+}
+
+body {
+    background: unset;
+}
+
+#browser {
+}
 
 #close-button, #minus-button, #size-button {
     color:#34343400;

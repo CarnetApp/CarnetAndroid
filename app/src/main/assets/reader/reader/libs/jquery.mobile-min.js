@@ -1,6 +1,6 @@
 "use strict";
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /*! jQuery Mobile 1.4.5 | Git HEADhash: 68e55e7 <> 2014-10-31T17:33:30Z | (c) 2010, 2014 jQuery Foundation, Inc. | jquery.org/license */
 !function (a, b, c) {
@@ -812,7 +812,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         m = a("<body>").prependTo("html"),
         n = m[0].style,
         o = ["Webkit", "Moz", "O"],
-        p = "palmGetResource" in b,
+        p = ("palmGetResource" in b),
         q = b.operamini && "[object OperaMini]" === {}.toString.call(b.operamini),
         r = b.blackberry && !e("-webkit-transform");
     a.extend(a.mobile, {
@@ -1374,7 +1374,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         K = [],
         L = !1,
         M = !1,
-        N = "addEventListener" in c,
+        N = ("addEventListener" in c),
         O = a(c),
         P = 1,
         Q = 0;

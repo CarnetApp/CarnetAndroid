@@ -296,12 +296,12 @@ CarnetRecorder.prototype.onEncodingEnd = function () {
 
 CarnetRecorder.prototype.setAudioUrl = function (url, name) {
   console.log("name " + FileUtils.getFilename(url));
-  if(compatibility.isAndroid){
-      if(url.indexOf("?")>0)
-        url+="&"
-       else url+="?"
-      url+="requesttoken=" + app.getRequestToken()
+
+  if (compatibility.isAndroid) {
+    if (url.indexOf("?") > 0) url += "&";else url += "?";
+    url += "requesttoken=" + app.getRequestToken();
   }
+
   this.name = name;
   this.currentUrl = url;
   this.hasRecorded = true;

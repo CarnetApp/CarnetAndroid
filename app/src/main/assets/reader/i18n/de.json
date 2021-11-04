@@ -99,5 +99,18 @@
     "send": "Senden",
     "modified": "Geändert",
     "created": "Erstellt",
-    "print_photos": "Fotos einschließen"
+    "print_photos": "Fotos einschließen",
+    "import_success": "Import erfolgreich",
+    "import_error": "Beim Importieren ist ein Fehler aufgetreten",
+    "preload_editor": "Editor für schnelleres Laden vorladen",
+    "import_finished": "Import abgeschlossen",
+    "importing_notes": "Notizen importieren",
+    "loading_notes_list": "Notizenliste laden",
+    "add_to_recent": "Zu den neuesten hinzufügen",
+    "import": "Importieren",
+    "select_notes": "Notiz auswählen",
+    "send_archive": "Archiv absenden",
+    "send_whole_archive_or_select": "Das gesamte Archiv oder eine bestimmte Notiz zum Importieren auswählen.",
+    "select_archive": "Archiv auswählen",
+    "importer": "Importieren"
 }

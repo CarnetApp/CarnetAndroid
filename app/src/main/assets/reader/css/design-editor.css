@@ -337,14 +337,7 @@ label.star:before {
 }
 
 #media-loading {
-	display: none;
-	height: 50px;
-	width: 50px;
-	position: absolute;
-	left: 50%;
-	margin-left: -25px;
-	top: 50%;
-	margin-top: -25px;
+	position: fixed;
 }
 
 /* hide chrome scrollbar */

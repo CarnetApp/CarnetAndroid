@@ -50,7 +50,9 @@
     background: rgba(158, 158, 158, .9);
 }
 
-
+.mdl-radio__outer-circle {
+    border: 2px solid white;
+}
 
 :root{
     --note-none: #000000;

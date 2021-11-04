@@ -389,6 +389,14 @@ TodoList.prototype.createItem = function (text, ischecked, after, scroll, itemId
   }
 
   resizeTextArea(span);
+  setTimeout(function () {
+    //when preloaded for an unknown reason we need
+    resizeTextArea(span);
+    setTimeout(function () {
+      //this is bad :(
+      resizeTextArea(span);
+    }, 1000);
+  }, 500);
   return div;
 };
 
