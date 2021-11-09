@@ -25,11 +25,12 @@ import com.spisoft.quicknote.utils.WebFragment;
 import com.spisoft.sync.Configuration;
 import com.spisoft.sync.account.AccountListActivity;
 import com.spisoft.sync.account.DBAccountHelper;
+import com.spisoft.sync.synchro.SynchroService;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class SettingsActivityFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
+public class SettingsActivityFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences.OnSharedPreferenceChangeListener changeListener;
     private PermissionChecker mPermissionChecker;
@@ -42,6 +43,8 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.pref_general);
+        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        findPreference("sync_frequency").setOnPreferenceChangeListener(this);
         findPreference("pref_root_path").setOnPreferenceClickListener(this);
         findPreference("pref_root_path").setSummary(PreferenceHelper.getRootPath(getActivity()));
         findPreference("pref_google_drive").setOnPreferenceClickListener(this);
@@ -198,7 +201,22 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
             }
             return true;
         }
-        
+
         return true;
     }
+
+
+    //will be called AFTER changing
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals("sync_frequency"))
+            SynchroService.onSyncFrequencyChange(getActivity());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+    }
+
 }

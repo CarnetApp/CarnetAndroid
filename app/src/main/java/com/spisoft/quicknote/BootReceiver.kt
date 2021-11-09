@@ -12,7 +12,7 @@ class BootReceiver : BroadcastReceiver() {
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
         RemindersManager.getInstance(context)!!.onBoot()
         try {
-            SynchroService.startOnBootIfNeeded(context)
+            SynchroService.startIfNeeded(context)
         } catch(ex:IllegalStateException){
 
         }
