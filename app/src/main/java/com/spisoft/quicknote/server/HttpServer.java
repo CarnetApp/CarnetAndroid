@@ -695,15 +695,12 @@ public class HttpServer extends NanoHTTPD {
     }
 
     private Response getNote(String path) {
-        Log.d("getnotedebug","getNote");
         if (!mCurrentNotePath.equals(path)) {
             return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN, "", "");
         }
-        Log.d("getnotedebug","getNote "+path);
         File note = new File(PreferenceHelper.getRootPath(mContext), path);
         path = note.getAbsolutePath();
         try {
-            Log.d("getnotedebug","getNote return"+path);
             if(note.isDirectory()){
                 //first, zip it.
                 File tmpExport = new File(mContext.getCacheDir(), "tmp_export.sqd");
@@ -714,8 +711,6 @@ public class HttpServer extends NanoHTTPD {
             else
                 return  NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/zip", new FileInputStream(path));
         } catch (FileNotFoundException e) {
-            Log.d("getnotedebug","getNote ext"+path);
-
             e.printStackTrace();
         }
         return NanoHTTPD.newFixedLengthResponse(Response.Status.NOT_FOUND,"","");

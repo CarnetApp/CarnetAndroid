@@ -1,24 +1,18 @@
 package com.spisoft.quicknote.browser;
 
 import android.content.Context;
-import android.util.Log;
 import android.util.Pair;
 
-import com.spisoft.quicknote.Note;
 import com.spisoft.quicknote.databases.NoteManager;
-import com.spisoft.quicknote.server.ZipReaderAndHttpProxy;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document.OutputSettings;
-import org.jsoup.safety.Whitelist;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
