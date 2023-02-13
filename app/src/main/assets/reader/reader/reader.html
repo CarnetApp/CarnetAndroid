@@ -6,49 +6,35 @@
 
 	<!-- startjs-->
 
-	<script src="<!ROOTPATH>requests/request_builder.js"></script>
-	<script src="<!ROOTPATH>compatibility/electron/request_builder.js"></script>
-	<script src="<!ROOTPATH>compatibility/compatibility.js"></script>
-	<script src="<!ROOTPATH>compatibility/compatibility-editor.js"></script>
-	<script src="<!ROOTPATH>compatibility/android/android_recorder.js"></script>
+
 
 	<script src="<!ROOTPATH>libs/polyfill.js"></script>
 	<script src="<!ROOTPATH>libs/dialog-polyfill.js"></script>
 
 
-	<script src="<!ROOTPATH>utils/utils.js"></script>
-	<script src="<!ROOTPATH>browsers/note.js"></script>
-	<script src="<!ROOTPATH>browsers/file-browser.js"></script>
+
 	<script src="<!ROOTPATH>libs/material.js"></script>
 
-	<script src="<!ROOTPATH>reader/libs/jquery.webkitresize.js"></script>
-	<script src="<!ROOTPATH>reader/libs/jquery-ui.min.js"></script>
+	<script src="<!ROOTPATH>libs/jquery.webkitresize.js"></script>
+	<script src="<!ROOTPATH>libs/jquery-ui.min.js"></script>
 
-	<script src="<!ROOTPATH>reader/libs/jscolor.js"></script>
-	<script src="<!ROOTPATH>reader/libs/Countable.js"></script>
-	<script src="<!ROOTPATH>utils/file_utils.js"></script>
-	<script src="<!ROOTPATH>reader/libs/hammer.min.js"></script>
-	<script src="<!ROOTPATH>reader/libs/jquery.hammer.js"></script>
-	<script src="<!ROOTPATH>reader/libs/jquery.mousewheel.min.js"></script>
-	<script src="<!ROOTPATH>reader/libs/imgViewer.js"></script>
-
-	<script src="<!ROOTPATH>reader/libs/recorder/recorder.min.js"></script>
-	<script src="<!ROOTPATH>reader/carnet-recorder.js"></script>
-	<script src="<!ROOTPATH>reader/reminders.js"></script>
-
-	<script src="<!ROOTPATH>reader/libs/wavesurfer.min.js"></script>
-	<script src="<!ROOTPATH>keywords/keywords_db_manager.js"></script>
-
+	<script src="<!ROOTPATH>libs/jscolor.js"></script>
+	<script src="<!ROOTPATH>libs/Countable.js"></script>
+	<script src="<!ROOTPATH>libs/hammer.min.js"></script>
+	<script src="<!ROOTPATH>libs/jquery.hammer.js"></script>
+	<script src="<!ROOTPATH>libs/jquery.mousewheel.min.js"></script>
+	<script src="<!ROOTPATH>libs/imgViewer.js"></script>
+	<script src="<!ROOTPATH>libs/recorder/recorder.min.js"></script>
+	<script src="<!ROOTPATH>libs/wavesurfer.min.js"></script>
 	<script src="<!ROOTPATH>reader/reader.js"></script>
 
-	<script src="<!ROOTPATH>reader/todolist.js"></script>
 
 	<script src="<!ROOTPATH>libs/jquery_i18n/CLDRPluralRuleParser.js"></script>
 	<script src="<!ROOTPATH>libs/jquery_i18n/jquery.i18n.js"></script>
 	<script src="<!ROOTPATH>libs/moment.js"></script>
 
-	<script src="<!ROOTPATH>reader/libs/rome.standalone.js"></script>
-	<script src="<!ROOTPATH>reader/libs/material-datetime-picker.js"></script>
+	<script src="<!ROOTPATH>libs/rome.standalone.js"></script>
+	<script src="<!ROOTPATH>libs/material-datetime-picker.js"></script>
 
 	<script src="<!ROOTPATH>libs/jquery.ui.touch-punch.min.js"></script>
 
@@ -69,10 +55,10 @@
 
 	<link rel="stylesheet" href="<!ROOTPATH>reader/css/recorder.css">
 
-	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/simplecolorpicker/simple-color-picker.css">
+	<link rel="stylesheet" href="<!ROOTPATH>libs/simplecolorpicker/simple-color-picker.css">
 	<link rel="stylesheet" href="<!ROOTPATH>css/design-common.css">
 	<link rel="stylesheet" href="<!ROOTPATH>css/design-editor.css">
-	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/material-datetime-picker.css">
+	<link rel="stylesheet" href="<!ROOTPATH>libs/material-datetime-picker.css">
 	<link rel="stylesheet" href="<!ROOTPATH>reader/css/reminders.css">
 </head>
 
@@ -80,7 +66,7 @@
 
 
 
-	<link rel="stylesheet" href="<!ROOTPATH>reader/libs/jquery-ui.css" media="screen">
+	<link rel="stylesheet" href="<!ROOTPATH>libs/jquery-ui.css" media="screen">
 
 	<link rel="stylesheet" href="<!ROOTPATH>reader/css/todolist.css">
 
@@ -493,11 +479,20 @@
 						<div style="clear:both"></div>
 
 					</div>
-					<button id="scroll-bottom" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button">
-						<i class="material-icons">
-							arrow_downward
-						</i>
-					</button>
+					<div id="right-button-container">
+						<label class="mdl-button mdl-js-button mdl-icon-toggle mdl-js-icon-toggle mdl-js-ripple-effect"
+							for="markdown-switch">
+							<input type="checkbox" id="markdown-switch" class="mdl-icon-toggle__input">
+							<i class="mdl-icon-toggle__label">MD</i>
+						</label>
+
+						<button id="scroll-bottom" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button">
+							<i class="material-icons">
+								arrow_downward
+							</i>
+						</button>
+					</div>
+
 					<div id="name-container" dir="auto">
 						<input dir="auto" class="mdl-textfield__input" type="text" name="name" id="name-input" value=""
 							placeholder="Title" data-i18n="[placeholder]note_name">

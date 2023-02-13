@@ -1,7 +1,3 @@
-"use strict";
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 /*!
  * jQuery Internationalization library
  *
@@ -16,154 +12,157 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
  * @licence GNU General Public Licence 2.0 or later
  * @licence MIT License
  */
-(function ($) {
-  'use strict';
 
-  var MessageParserEmitter = function MessageParserEmitter() {
-    this.language = $.i18n.languages[String.locale] || $.i18n.languages['default'];
-  };
+( function ( $ ) {
+	'use strict';
 
-  MessageParserEmitter.prototype = {
-    constructor: MessageParserEmitter,
+	var MessageParserEmitter = function () {
+		this.language = $.i18n.languages[ String.locale ] || $.i18n.languages[ 'default' ];
+	};
 
-    /**
-     * (We put this method definition here, and not in prototype, to make
-     * sure it's not overwritten by any magic.) Walk entire node structure,
-     * applying replacements and template functions when appropriate
-     *
-     * @param {Mixed} node abstract syntax tree (top node or subnode)
-     * @param {Array} replacements for $1, $2, ... $n
-     * @return {Mixed} single-string node or array of nodes suitable for
-     *  jQuery appending.
-     */
-    emit: function emit(node, replacements) {
-      var ret,
-          subnodes,
-          operation,
-          messageParserEmitter = this;
+	MessageParserEmitter.prototype = {
+		constructor: MessageParserEmitter,
 
-      switch (_typeof(node)) {
-        case 'string':
-        case 'number':
-          ret = node;
-          break;
+		/**
+		 * (We put this method definition here, and not in prototype, to make
+		 * sure it's not overwritten by any magic.) Walk entire node structure,
+		 * applying replacements and template functions when appropriate
+		 *
+		 * @param {Mixed} node abstract syntax tree (top node or subnode)
+		 * @param {Array} replacements for $1, $2, ... $n
+		 * @return {Mixed} single-string node or array of nodes suitable for
+		 *  jQuery appending.
+		 */
+		emit: function ( node, replacements ) {
+			var ret, subnodes, operation,
+				messageParserEmitter = this;
 
-        case 'object':
-          // node is an array of nodes
-          subnodes = $.map(node.slice(1), function (n) {
-            return messageParserEmitter.emit(n, replacements);
-          });
-          operation = node[0].toLowerCase();
+			switch ( typeof node ) {
+				case 'string':
+				case 'number':
+					ret = node;
+					break;
+				case 'object':
+				// node is an array of nodes
+					subnodes = $.map( node.slice( 1 ), function ( n ) {
+						return messageParserEmitter.emit( n, replacements );
+					} );
 
-          if (typeof messageParserEmitter[operation] === 'function') {
-            ret = messageParserEmitter[operation](subnodes, replacements);
-          } else {
-            throw new Error('unknown operation "' + operation + '"');
-          }
+					operation = node[ 0 ].toLowerCase();
 
-          break;
+					if ( typeof messageParserEmitter[ operation ] === 'function' ) {
+						ret = messageParserEmitter[ operation ]( subnodes, replacements );
+					} else {
+						throw new Error( 'unknown operation "' + operation + '"' );
+					}
 
-        case 'undefined':
-          // Parsing the empty string (as an entire expression, or as a
-          // paramExpression in a template) results in undefined
-          // Perhaps a more clever parser can detect this, and return the
-          // empty string? Or is that useful information?
-          // The logical thing is probably to return the empty string here
-          // when we encounter undefined.
-          ret = '';
-          break;
+					break;
+				case 'undefined':
+				// Parsing the empty string (as an entire expression, or as a
+				// paramExpression in a template) results in undefined
+				// Perhaps a more clever parser can detect this, and return the
+				// empty string? Or is that useful information?
+				// The logical thing is probably to return the empty string here
+				// when we encounter undefined.
+					ret = '';
+					break;
+				default:
+					throw new Error( 'unexpected type in AST: ' + typeof node );
+			}
 
-        default:
-          throw new Error('unexpected type in AST: ' + _typeof(node));
-      }
+			return ret;
+		},
 
-      return ret;
-    },
+		/**
+		 * Parsing has been applied depth-first we can assume that all nodes
+		 * here are single nodes Must return a single node to parents -- a
+		 * jQuery with synthetic span However, unwrap any other synthetic spans
+		 * in our children and pass them upwards
+		 *
+		 * @param {Array} nodes Mixed, some single nodes, some arrays of nodes.
+		 * @return {string}
+		 */
+		concat: function ( nodes ) {
+			var result = '';
 
-    /**
-     * Parsing has been applied depth-first we can assume that all nodes
-     * here are single nodes Must return a single node to parents -- a
-     * jQuery with synthetic span However, unwrap any other synthetic spans
-     * in our children and pass them upwards
-     *
-     * @param {Array} nodes Mixed, some single nodes, some arrays of nodes.
-     * @return {string}
-     */
-    concat: function concat(nodes) {
-      var result = '';
-      $.each(nodes, function (i, node) {
-        // strings, integers, anything else
-        result += node;
-      });
-      return result;
-    },
+			$.each( nodes, function ( i, node ) {
+				// strings, integers, anything else
+				result += node;
+			} );
 
-    /**
-     * Return escaped replacement of correct index, or string if
-     * unavailable. Note that we expect the parsed parameter to be
-     * zero-based. i.e. $1 should have become [ 0 ]. if the specified
-     * parameter is not found return the same string (e.g. "$99" ->
-     * parameter 98 -> not found -> return "$99" ) TODO throw error if
-     * nodes.length > 1 ?
-     *
-     * @param {Array} nodes One element, integer, n >= 0
-     * @param {Array} replacements for $1, $2, ... $n
-     * @return {string} replacement
-     */
-    replace: function replace(nodes, replacements) {
-      var index = parseInt(nodes[0], 10);
+			return result;
+		},
 
-      if (index < replacements.length) {
-        // replacement is not a string, don't touch!
-        return replacements[index];
-      } else {
-        // index not found, fallback to displaying variable
-        return '$' + (index + 1);
-      }
-    },
+		/**
+		 * Return escaped replacement of correct index, or string if
+		 * unavailable. Note that we expect the parsed parameter to be
+		 * zero-based. i.e. $1 should have become [ 0 ]. if the specified
+		 * parameter is not found return the same string (e.g. "$99" ->
+		 * parameter 98 -> not found -> return "$99" ) TODO throw error if
+		 * nodes.length > 1 ?
+		 *
+		 * @param {Array} nodes One element, integer, n >= 0
+		 * @param {Array} replacements for $1, $2, ... $n
+		 * @return {string} replacement
+		 */
+		replace: function ( nodes, replacements ) {
+			var index = parseInt( nodes[ 0 ], 10 );
 
-    /**
-     * Transform parsed structure into pluralization n.b. The first node may
-     * be a non-integer (for instance, a string representing an Arabic
-     * number). So convert it back with the current language's
-     * convertNumber.
-     *
-     * @param {Array} nodes List [ {String|Number}, {String}, {String} ... ]
-     * @return {string} selected pluralized form according to current
-     *  language.
-     */
-    plural: function plural(nodes) {
-      var count = parseFloat(this.language.convertNumber(nodes[0], 10)),
-          forms = nodes.slice(1);
-      return forms.length ? this.language.convertPlural(count, forms) : '';
-    },
+			if ( index < replacements.length ) {
+				// replacement is not a string, don't touch!
+				return replacements[ index ];
+			} else {
+				// index not found, fallback to displaying variable
+				return '$' + ( index + 1 );
+			}
+		},
 
-    /**
-     * Transform parsed structure into gender Usage
-     * {{gender:gender|masculine|feminine|neutral}}.
-     *
-     * @param {Array} nodes List [ {String}, {String}, {String} , {String} ]
-     * @return {string} selected gender form according to current language
-     */
-    gender: function gender(nodes) {
-      var gender = nodes[0],
-          forms = nodes.slice(1);
-      return this.language.gender(gender, forms);
-    },
+		/**
+		 * Transform parsed structure into pluralization n.b. The first node may
+		 * be a non-integer (for instance, a string representing an Arabic
+		 * number). So convert it back with the current language's
+		 * convertNumber.
+		 *
+		 * @param {Array} nodes List [ {String|Number}, {String}, {String} ... ]
+		 * @return {string} selected pluralized form according to current
+		 *  language.
+		 */
+		plural: function ( nodes ) {
+			var count = parseFloat( this.language.convertNumber( nodes[ 0 ], 10 ) ),
+				forms = nodes.slice( 1 );
 
-    /**
-     * Transform parsed structure into grammar conversion. Invoked by
-     * putting {{grammar:form|word}} in a message
-     *
-     * @param {Array} nodes List [{Grammar case eg: genitive}, {String word}]
-     * @return {string} selected grammatical form according to current
-     *  language.
-     */
-    grammar: function grammar(nodes) {
-      var form = nodes[0],
-          word = nodes[1];
-      return word && form && this.language.convertGrammar(word, form);
-    }
-  };
-  $.extend($.i18n.parser.emitter, new MessageParserEmitter());
-})(jQuery);
+			return forms.length ? this.language.convertPlural( count, forms ) : '';
+		},
+
+		/**
+		 * Transform parsed structure into gender Usage
+		 * {{gender:gender|masculine|feminine|neutral}}.
+		 *
+		 * @param {Array} nodes List [ {String}, {String}, {String} , {String} ]
+		 * @return {string} selected gender form according to current language
+		 */
+		gender: function ( nodes ) {
+			var gender = nodes[ 0 ],
+				forms = nodes.slice( 1 );
+
+			return this.language.gender( gender, forms );
+		},
+
+		/**
+		 * Transform parsed structure into grammar conversion. Invoked by
+		 * putting {{grammar:form|word}} in a message
+		 *
+		 * @param {Array} nodes List [{Grammar case eg: genitive}, {String word}]
+		 * @return {string} selected grammatical form according to current
+		 *  language.
+		 */
+		grammar: function ( nodes ) {
+			var form = nodes[ 0 ],
+				word = nodes[ 1 ];
+
+			return word && form && this.language.convertGrammar( word, form );
+		}
+	};
+
+	$.extend( $.i18n.parser.emitter, new MessageParserEmitter() );
+}( jQuery ) );

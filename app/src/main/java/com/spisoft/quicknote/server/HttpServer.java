@@ -371,16 +371,16 @@ public class HttpServer extends NanoHTTPD {
                                return keywordActionDB(post.get("json").get(0));
                         case "note/saveText":
                             if (post.get("path") != null && post.get("path").size() >= 0 && post.get("html") != null && post.get("html").size() >= 0 && post.get("metadata") != null && post.get("metadata").size() >= 0)
-                                return saveNote(post.get("path").get(0), post.get("html").get(0), post.get("metadata").get(0));
+                                return saveNote(post.get("path").get(0), post.get("html").get(0), post.get("metadata").get(0), post.get("isMarkdown").get(0).equals("true"));
                         case "note/open/0/addMedia":
                             if (post.get("path").size() > 0 && post.get("media[]").size() > 0 && files.containsKey("media[]"))
-                                return addMedia(post.get("path").get(0), files.get("media[]"), post.get("media[]").get(0));
+                                return addMedia(post.get("path").get(0), files.get("media[]"), post.get("media[]").get(0), post.get("isMarkdown").get(0).equals("true"));
 
                     }
                 } else if(Method.DELETE.equals(method)){
                     switch (subpath) {
                         case "note/open/0/media":
-                            return deleteMedia(parms.get("path").get(0), parms.get("media").get(0));
+                            return deleteMedia(parms.get("path").get(0), parms.get("media").get(0), post.get("isMarkdown").get(0).equals("true"));
 
                     }
 
@@ -413,7 +413,7 @@ public class HttpServer extends NanoHTTPD {
         return NanoHTTPD.newChunkedResponse(status, fileMimeType, rinput);
     }
 
-    private Response deleteMedia(String path, String media) {
+    private Response deleteMedia(String path, String media, boolean isMarkdown) {
         if(media.contains("../") || media.equals(".."))
             return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
         if(!mCurrentNotePath.equals(path)){
@@ -428,7 +428,7 @@ public class HttpServer extends NanoHTTPD {
 
         String absolutePath = getFullNotePath(path);
 
-        if(isFileNote(absolutePath))
+        if(isFileNote(absolutePath, isMarkdown))
             saveNote(path);
         else {
             f = new File(absolutePath+"/data/"+media);
@@ -441,7 +441,8 @@ public class HttpServer extends NanoHTTPD {
         return listOpenMedia();
     }
 
-    private boolean isFileNote(String path){
+    private boolean isFileNote(String path, boolean isMarkdown){
+        if(isMarkdown) return false;
         File file = new File(path);
         boolean asFolder = PreferenceHelper.createNoteAsFolder(mContext);
         if(!file.exists() && !asFolder || file.isFile()) {
@@ -470,7 +471,7 @@ public class HttpServer extends NanoHTTPD {
         return getKeywordDB();
     }
 
-    private Response addMedia(String path, String tmpPath, String name) {
+    private Response addMedia(String path, String tmpPath, String name, boolean isMarkdown) {
         if(name.contains("../") || name.equals(".."))
             return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
         if(!mCurrentNotePath.equals(path)){
@@ -507,14 +508,14 @@ public class HttpServer extends NanoHTTPD {
             }
 
             String absolutePath = getFullNotePath(path);
-            if(isFileNote(absolutePath))
+            if(isFileNote(absolutePath, isMarkdown))
                 saveNote(path);
             else {
 
                 try {
                     Log.d(TAG, "is folder");
                     Note note = new Note(absolutePath);
-                    saveFilesToNote(files, note, null);
+                    saveFilesToNote(files, note, null, isMarkdown);
                 } catch (NoteSaveException e) {
                     e.printStackTrace();
                     return NanoHTTPD.newFixedLengthResponse(Response.Status.INTERNAL_ERROR,"",e.getMessage());
@@ -549,11 +550,14 @@ public class HttpServer extends NanoHTTPD {
         return  NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/json",new ByteArrayInputStream(array.toString().getBytes()));
     }
 
-    private Response saveNote(String path, String html, String metadata) {
+    private Response saveNote(String path, String html, String metadata, boolean isMarkdown) {
         if(!mCurrentNotePath.equals(path)){
             return NanoHTTPD.newFixedLengthResponse(Response.Status.FORBIDDEN,"","");
         }
-        FileUtils.writeToFile(extractedNotePath+"/index.html", html);
+        if(!isMarkdown)
+            FileUtils.writeToFile(extractedNotePath+"/index.html", html);
+        else
+            FileUtils.writeToFile(extractedNotePath+"/note.md", html);
         FileUtils.writeToFile(extractedNotePath+"/metadata.json", metadata);
         //we update metadata cache
         File noteFile = new File(PreferenceHelper.getRootPath(mContext),path);
@@ -566,9 +570,12 @@ public class HttpServer extends NanoHTTPD {
 
         List files = new ArrayList();
         files.add("metadata.json");
-        files.add("index.html");
+        if(!isMarkdown)
+            files.add("index.html");
+        else
+            files.add("note.md");
         try {
-            saveFilesToNote(files, note, null);
+            saveFilesToNote(files, note, null, isMarkdown);
         } catch (NoteSaveException e) {
             e.printStackTrace();
             return NanoHTTPD.newFixedLengthResponse(Response.Status.INTERNAL_ERROR,"",e.getMessage());
@@ -582,7 +589,7 @@ public class HttpServer extends NanoHTTPD {
 
     }
 
-    private boolean saveFilesToNote(List<String> files, Note note, String relativePath) throws NoteSaveException{
+    private boolean saveFilesToNote(List<String> files, Note note, String relativePath, boolean isMarkdown) throws NoteSaveException{
         if(note == null){
             File noteFile = new File(PreferenceHelper.getRootPath(mContext),relativePath);
             note = CacheManager.getInstance(mContext).get(noteFile.getAbsolutePath());
@@ -593,7 +600,7 @@ public class HttpServer extends NanoHTTPD {
 
         File file = new File(note.path);
         boolean asFolder = PreferenceHelper.createNoteAsFolder(mContext);
-        if(isFileNote(note.path)) {
+        if(isFileNote(note.path, isMarkdown)) {
             saveNote(note);
             return false;
         }
@@ -736,10 +743,13 @@ public class HttpServer extends NanoHTTPD {
                 else
                     FileUtils.copyDirectoryOneLocationToAnotherLocation(noteFile, new File(extractedNotePath))
                             ;
-                File f = new File(extractedNotePath, "index.html");
-                if (f.exists()) {
+                File f;
+                boolean isMD = false;
+                if ((f = new File(extractedNotePath, "index.html")).exists()
+                        || (isMD = (f = new File(extractedNotePath, "note.md")).exists())) {
                     String index = FileUtils.readFile(f.getAbsolutePath());
                     object.put("html",index);
+                    object.put("isMarkdown",isMD);
                 }
                 f = new File(extractedNotePath, "metadata.json");
                 if (f.exists()) {
@@ -747,7 +757,10 @@ public class HttpServer extends NanoHTTPD {
                     object.put("metadata",new JSONObject(meta));
                 }
 
-            } else object.put("error","not found");
+            } else {
+                object.put("error", "not found");
+                object.put("isNew", true);
+            }
 
             return  NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/json",new ByteArrayInputStream(object.toString().getBytes()));
 

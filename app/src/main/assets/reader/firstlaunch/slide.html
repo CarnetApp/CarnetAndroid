@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="slide.css">
+    <script src="slide.js"></script>
+
+</head>
+
+<body>
+    <!-- Slideshow container -->
+    <div class="slideshow-container">
+        <!-- The dots/circles -->
+        <div style="text-align:center">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+        <!-- Full-width images with number and caption text -->
+        <div class="mySlides fade" style="text-align:center;">
+            <br />
+            <br />
+
+            <img src="../assets/images/QuickDoc.png" style="width:190px;text-align:center;" />
+            <h1>Welcome</h1>
+            Let's configure QuickDoc
+        </div>
+
+        <div class=" mySlides fade " style="text-align:center;">
+            <br />
+            <br />
+
+            <img src="../img/directory.png" style="width:190px;text-align:center;" />
+
+            <h1>Note folder</h1>
+            Choose the folder to save your notes (can be modified later)
+            <br />
+            <br />
+            <a href="#" style="color:white;" id="select_note_path_button">Select</a>
+        </div>
+
+        <div class="mySlides fade " style="text-align:center;">
+            <br />
+            <br />
+
+            <img src="../img/sync.svg" style="width:190px;text-align:center;" />
+
+            <h1>Synchronize</h1>
+            And find all your notes on your Android phone
+            <br />
+            <br />
+            <a href="#" style="color:white;" onclick="require('electron').shell.openExternal( 'https://github.com/PhieF/QuickDocDocumentation/blob/master/CloudSync.md'); return false; ">Learn
+                more</a>
+        </div>
+
+        <!-- Next and previous buttons -->
+        <a class="next " onclick="plusSlides(1)">Next</a>
+    </div>
+    <br>
+
+    <script>
+        currentSlide(1);
+        var SettingsHelper = require("../server/settings_helper").SettingsHelper;
+        var settingsHelper = new SettingsHelper();
+        var {
+            ipcRenderer,
+            remote
+        } = require('electron');
+        document.getElementById("select_note_path_button").onclick = function () {
+            var dialog = remote.dialog;
+            dialog.showOpenDialog({
+                properties: ['openDirectory']
+            }, function (path) {
+                if (path != undefined)
+                    settingsHelper.setNotePath(path)
+            })
+        }
+    </script>
+</body>
+
+</html>
