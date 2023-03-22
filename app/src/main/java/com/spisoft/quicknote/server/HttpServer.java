@@ -371,7 +371,7 @@ public class HttpServer extends NanoHTTPD {
                                return keywordActionDB(post.get("json").get(0));
                         case "note/saveText":
                             if (post.get("path") != null && post.get("path").size() >= 0 && post.get("html") != null && post.get("html").size() >= 0 && post.get("metadata") != null && post.get("metadata").size() >= 0)
-                                return saveNote(post.get("path").get(0), post.get("html").get(0), post.get("metadata").get(0), post.get("isMarkdown").get(0).equals("true"));
+                                return saveNote(post.get("path").get(0), post.get("html").get(0), post.get("metadata").get(0), post.get("isMarkdown") != null && post.get("isMarkdown").get(0).equals("true"));
                         case "note/open/0/addMedia":
                             if (post.get("path").size() > 0 && post.get("media[]").size() > 0 && files.containsKey("media[]"))
                                 return addMedia(post.get("path").get(0), files.get("media[]"), post.get("media[]").get(0), post.get("isMarkdown").get(0).equals("true"));

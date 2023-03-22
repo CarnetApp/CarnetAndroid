@@ -81,8 +81,11 @@ public class NoteInfoRetriever {
     public Note getNoteInfoFolder(String path, String toSearch, int length){
         Note note = new Note(path);
         try {
+            File noteTextFile = new File(path, NoteManager.getHtmlPath(0));
+            if(!noteTextFile.exists())
+                noteTextFile = new File(path, "note.md");
             Pair<String, Boolean> result = mNoteInfoSearchHelper
-                    .readInputStream(new FileInputStream(new File(path, NoteManager.getHtmlPath(0))),
+                    .readInputStream(new FileInputStream(noteTextFile),
                             length, 10, toSearch);
             note.setShortText(result.first);
             note.hasFound(result.second);

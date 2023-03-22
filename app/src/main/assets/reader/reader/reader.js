@@ -20609,6 +20609,7 @@ class HTMLTextEditor extends TextEditor {
     init() {
         this.oEditor = document.getElementById("editor");
         this.oCenter = document.getElementById("center");
+        document.getElementById("markdown-switch").parentElement.style.display="none"
 
 
     }
@@ -20633,7 +20634,7 @@ class HTMLTextEditor extends TextEditor {
         var name = FileUtils.stripExtensionFromName(FileUtils.getFilename(this.note.path))
         document.getElementById("name-input").value = name.startsWith("untitled") ? "" : name
         this.oCenter.addEventListener("scroll", function () {
-            lastscroll = $(writer.oCenter).scrollTop()
+            editor.writer.lastscroll = $(editor.oCenter).scrollTop()
         })
         this.oDoc = document.getElementById("text");
         this.oDoc.contentEditable = false
@@ -20828,6 +20829,7 @@ class MDTextEditor extends TextEditor {
     this.oCenter = document.getElementById("center");
     this.markdownSwitch = document.getElementById("markdown-switch")
     let editor = this
+    this.markdownSwitch.parentElement.style.display="inline-block"
     this.markdownSwitch.onchange = function () {
       console.log("onchange")
       if (editor.markdownSwitch.checked)
@@ -40100,6 +40102,7 @@ Writer.prototype.sendFiles = function (files, callback) {
     var writer = this;
     RequestBuilder.sRequestBuilder.postFiles("/note/open/" + this.saveID + "/addMedia", {
         path: this.note.path,
+        isMarkdown: this.note.isMarkdown
     }, files, function (error, data) {
         if (error) {
 
@@ -41443,6 +41446,7 @@ function init() {
     })
     if (writer == undefined) {
         writer = new Writer(document);
+        window.writer = writer
         writer.init();
     }
 

@@ -345,7 +345,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
     }
 
     public void askToExit() {
-        mWebView.loadUrl("javascript:writer.askToExit()");
+        mWebView.loadUrl("javascript:window.writer.askToExit()");
     }
 
     public interface HideListener {
@@ -738,7 +738,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
                     mProgressLayout.animate().alpha(0).setDuration(500).start();
                     if (mActions != null) {
                         for(Action action : mActions){
-                            mWebView.loadUrl("javascript:writer.handleAction('" + StringEscapeUtils.escapeEcmaScript(action.type) + "', '" + StringEscapeUtils.escapeEcmaScript(action.value) + "');");
+                            mWebView.loadUrl("javascript:window.writer.handleAction('" + StringEscapeUtils.escapeEcmaScript(action.type) + "', '" + StringEscapeUtils.escapeEcmaScript(action.value) + "');");
                         }
                         mActions = null;
                     }

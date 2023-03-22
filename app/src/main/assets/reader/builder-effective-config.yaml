@@ -1,0 +1,53 @@
+directories:
+  output: dist
+  buildResources: build
+appId: org.spisoft.carnet
+dmg:
+  contents:
+    - x: 110
+      'y': 150
+    - x: 240
+      'y': 150
+      type: link
+      path: /Applications
+mac:
+  category: public.app-category.productivity
+  target:
+    - dmg
+    - zip
+linux:
+  category: Office
+  icon: build/icon.png
+  target:
+    - target: AppImage
+      arch:
+        - ia32
+        - x64
+    - target: snap
+snap:
+  confinement: strict
+  grade: stable
+  description: |-
+    Carnet is a powerful note taking app which purpose is not only to write your   shopping list but can also be used to write longer texts, stories, etc. Carnet is available on Android and Linux, also on your web browser with full compatibility with Windows, Mac and Linux, with sync capabilities (not mandatory) 
+     
+    '''Features''' 
+
+     * Complete editor : bold/italic/underline/color/highlight 
+     * Import from Google Keep (only on desktop, then sync on mobile) 
+     * Insert images / review 
+     * Open HTML format 
+     * Organize with folders and choose root storage folder depending on your needs 
+     * Keywords 
+     * Quickly see your recent notes 
+     * Search amount your notes 
+     * Protect the app with a pin code (won't encrypt notes) on android 
+     * Statistics : words/sentences/characters 
+     * Sync with NextCloud 
+     * Record audio 
+     * Online editor as a NextCloud App
+  summary: Powerful note taking app with sync, online editor and android app
+win:
+  target: squirrel
+  icon: build/icon.ico
+files: []
+electronVersion: 22.0.3
