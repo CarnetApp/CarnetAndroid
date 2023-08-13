@@ -8,7 +8,7 @@
     <string name="delete">Supprimer</string>
     <string name="remove_recent">Archiver</string>
     <string name="storage_preference">Stockage principal</string>
-    <string name="recent">Dernier</string>
+    <string name="recent">Chronologique</string>
     <string name="browser">Explorateur</string>
     <string name="parent_folder">Dossier parent</string>
     <string name="toast_on_minimize">Cliquez ici pour agrandir</string>
