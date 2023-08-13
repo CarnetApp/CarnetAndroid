@@ -49,15 +49,29 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
         findPreference("pref_root_path").setSummary(PreferenceHelper.getRootPath(getActivity()));
         findPreference("pref_google_drive").setOnPreferenceClickListener(this);
         findPreference("pref_password_on_minimize").setOnPreferenceChangeListener(this);
+        findPreference(PreferenceHelper.USE_NEW_EDITOR).setOnPreferenceChangeListener(this);
         findPreference("pref_set_password").setOnPreferenceClickListener(this);
         findPreference("pref_report_bug").setOnPreferenceClickListener(this);
         findPreference("pref_desktop_version").setOnPreferenceClickListener(this);
         findPreference("pref_changelog").setOnPreferenceClickListener(this);
         findPreference("pref_import").setOnPreferenceClickListener(this);
         findPreference("pref_export").setOnPreferenceClickListener(this);
+        findPreference("pref_refresh_editor").setOnPreferenceClickListener(this);
         //getPreferenceScreen().removePreference(findPreference("pref_import"));
         ((CheckBoxPreference)findPreference("pref_debug_log")).setChecked(BuildConfig.DEBUG);
     }
+
+    private void restartApp(){
+        getView().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                getActivity().startActivity(intent);
+                Runtime.getRuntime().exit(0);
+            }
+        },1000);
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -66,14 +80,7 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 Log.d("prefdebug", "key "+key);
                 if(key.equals("theme") || key.equals("pref_debug_log") ) {
-                    getView().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent intent = new Intent(getActivity(), MainActivity.class);
-                            getActivity().startActivity(intent);
-                            Runtime.getRuntime().exit(0);
-                        }
-                    },1000);
+                    restartApp();
 
                 }
             }
@@ -173,6 +180,11 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
             startActivity(new Intent(getActivity(),ChangelogActivity.class));
             return true;
         }
+        else if(preference==findPreference("pref_refresh_editor")){
+            PreferenceHelper.setForceUpdate(getActivity(), true);
+            restartApp();
+            return true;
+        }
         else
         return true;
     }
@@ -200,6 +212,9 @@ public class SettingsActivityFragment extends PreferenceFragment implements Pref
                 return false;
             }
             return true;
+        } else if (preference==findPreference(PreferenceHelper.USE_NEW_EDITOR)){
+            restartApp();
+
         }
 
         return true;

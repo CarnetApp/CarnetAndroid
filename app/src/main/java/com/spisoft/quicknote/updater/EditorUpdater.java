@@ -17,18 +17,32 @@ public class EditorUpdater implements Updater{
 
     private static final String TAG = "EditorUpdater";
 
-    private void copyReader(Context ct) {
-        //copy reader to separate folder and change rootpath
+    public void prepareEditor(Context ct){
+
+        /* TODO
+            Do not copy editor in a tmp folder, this adds complexity, we can replace directly in editor folder
+         */
         String rootPath = ct.getFilesDir().getAbsolutePath();
-        Log.d(TAG, "copying reader");
-        copyFileOrDir(ct, rootPath,"reader/reader/reader.html");
+
         String reader = FileUtils.readFile(rootPath + "/reader/reader/reader.html");
         FileUtils.writeToFile(rootPath + "/tmp/reader.html", reader.replace("<!ROOTPATH>", "../reader/").replace("<!ROOTURL>", "../reader/").replace("<!APIURL>", "../api"));
+    }
+
+    private void copyReader(Context ct) {
+        //copy reader to separate folder and change rootpath, old and new editor
+        String rootPath = ct.getFilesDir().getAbsolutePath();
+        Log.d(TAG, "copying reader");
         File dir = new File(rootPath + "/reader");
         if (dir.exists())
             FileUtils.deleteRecursive(dir);
         dir.mkdirs();
+        dir = new File(rootPath + "/editor");
+        if (dir.exists())
+            FileUtils.deleteRecursive(dir);
+        dir.mkdirs();
+        copyFileOrDir(ct, rootPath,"editor");
         copyFileOrDir(ct, rootPath,"reader");
+        prepareEditor(ct);
 
     }
 

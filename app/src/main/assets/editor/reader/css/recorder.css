@@ -1,0 +1,21 @@
+#analyser {
+    height: 128px;
+    display: block;
+}
+
+#waveform {
+display: none;
+}
+
+#recorder-container {
+padding: 10px;
+width: 350px;
+max-width: calc(100% - 30px);
+}
+#recorder-file-buttons{
+    float:right;
+}
+#total-time{
+    float: right;
+    margin-top:8px;
+}

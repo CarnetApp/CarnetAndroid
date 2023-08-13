@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
+
+    <script src="../libs/jquery.min.js"></script>
+    <script src="../reader/libs/jquery-ui.min.js"></script>
+
+    <script src="../requests/request_builder.js"></script>
+
+    <script src="../compatibility/nextcloud/store.js"></script>
+    <script src="../compatibility/electron/store.js"></script>
+    <script src="../compatibility/electron/request_builder.js"></script>
+    <script src="../compatibility/compatibility.js"></script>
+    <script src="../compatibility/compatibility-exporter.js"></script>
+
+    <script src="../libs/polyfill.js"></script>
+    <script src="../libs/dialog-polyfill.js"></script>
+    <script src="../libs/material.js"></script>
+    <script src="../libs/underscore.js"></script>
+
+    <script src="../utils/utils.js"></script>
+    <script src="../utils/file_utils.js"></script>
+    <link rel="stylesheet" href="../reader/css/todolist.css">
+    <link rel="stylesheet" href="../exporter/exporter.css">
+
+    <script src="../reader/todolist.js"></script>
+    <link rel="stylesheet" href="../libs/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="../libs/polyfill.css">
+    <link rel="stylesheet" href="../libs/dialog-polyfill.css">
+    <link rel="stylesheet" href="../css/design-common.css">
+    <link rel="stylesheet" href="../css/design-browser.css">
+    <script src="../libs/jszip.min.js"></script>
+
+    <!-- Material Design icon font -->
+    <link rel="stylesheet" href="../libs/material-icons.css">
+
+
+    <!-- localization -->
+    <script src="../libs/jquery_i18n/CLDRPluralRuleParser.js"></script>
+    <script src="../libs/jquery_i18n/jquery.i18n.js"></script>
+
+</head>
+
+<body>
+    <style>
+
+    </style>
+    <div id="inside">
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="title-checkbox">
+            <input type="checkbox" id="title-checkbox" class="mdl-checkbox__input">
+            <span class="mdl-checkbox__label" data-i18n="print_title">Include title</span>
+        </label>
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="mod-checkbox">
+            <input type="checkbox" id="mod-checkbox" class="mdl-checkbox__input" checked>
+            <span class="mdl-checkbox__label" data-i18n="print_modification_date">Include modification date</span>
+        </label>
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="creation-checkbox">
+            <input type="checkbox" id="creation-checkbox" class="mdl-checkbox__input" checked>
+            <span class="mdl-checkbox__label" data-i18n="print_creation_date">Include creation date</span>
+        </label>
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="photos-checkbox">
+            <input type="checkbox" id="photos-checkbox" class="mdl-checkbox__input">
+            <span class="mdl-checkbox__label" data-i18n="print_photos">Include Photos</span>
+        </label>
+
+
+
+    </div>
+    <div id="button-container">
+        <button class="mdl-button mdl-js-button" id="download" data-i18n="download">
+            Download
+        </button>
+        <button class="mdl-button mdl-js-button" id="send" data-i18n="send">
+            Send
+        </button>
+        <button class="mdl-button mdl-js-button" id="print" data-i18n="print">
+            Print
+        </button>
+    </div>
+    <div id="loading">
+        <div class="mdl-spinner mdl-js-spinner is-active"
+            style="width:200px; height:200px; top:50%; left:50%; margin-top:-150px; margin-left:-100px;"></div>
+
+    </div>
+    <script src="../exporter/exporter.js"></script>
+
+</body>

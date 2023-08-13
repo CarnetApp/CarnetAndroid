@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <script>
+    </script>
+    <link rel="stylesheet" href="../browsers/design.css">
+    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="../reader/libs/jquery.min.js"></script>
+    
+    <script src="folder-picker.js"></script>
+
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <!-- Material Design icon font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+
+<body>
+    <style>
+        .icon {
+            width: 20px;
+            margin: 5px;
+            margin-right: 10px;
+        }
+
+        .value {
+            display: none;
+        }
+
+        .mdl-data-table {
+            width: 400px;
+        }
+
+        .settings-button {
+            cursor: pointer;
+        }
+
+        .centered-container {
+            margin-top: 15px;
+            margin-left: calc(50% - 200px);
+            width: 400px;
+        }
+    </style>
+
+    <div id="note-selection-view">
+
+        <div class="centered-container">
+            <button class="mdl-button mdl-js-button mdl-button--raised import-button" style="width:400px">
+                Pick folder
+            </button>
+        </div>
+        <div class="centered-container">
+
+            <div id="progress-view">
+                Loading notes list
+                <div id="p2" style="margin:auto" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+            </div>
+        </div>
+        <div id="table-container" class="centered-container">
+
+        </div>
+        <div class="centered-container" style="margin-bottom:10px;">
+            <button class="mdl-button mdl-js-button mdl-button--raised import-button" style="width:400px">
+                Pick folder
+            </button>
+        </div>
+
+    </div>
+    <script>
+        var {
+            remote
+        } = require('electron')
+        var folderPicker = new FolderPicker();
+        folderPicker.listPath(remote.app.getPath("home"))
+    </script>
+
+</body>
+
+</html>

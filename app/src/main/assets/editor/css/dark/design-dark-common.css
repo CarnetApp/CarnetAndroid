@@ -1,0 +1,71 @@
+:root{
+    --header-bg:#22252f;
+    --header-text-color:white;
+    --drawer-bg: #22252f;
+    --drawer-text-color:white;
+    --dialog-bg: #22252f;
+    --dialog-text-color: white;
+    --body-bg: #393c44;
+    --drawer-text-button-hover:#2f3341;
+    --scroll-bar-fg:#353535;
+}
+
+.mdl-layout__drawer {
+    border-right: 0px;
+}
+
+
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
+    color:white;
+}
+
+.mdl-button[disabled][disabled], .mdl-button.mdl-button--disabled.mdl-button--disabled{
+    color:rgb(175, 175, 175);
+}
+
+.keyword {
+    color:white;
+    background:  #4d4d4d;
+}
+
+.mdl-button{
+    color:white;
+}
+.mdl-textfield__label{
+    color: white !important;
+}
+
+.mdl-textfield__label:after {
+    background-color: white;
+}
+.mdl-dialog__content {
+    color:rgba(255, 255, 255, .54);
+}
+
+.mdl-button--fab {
+
+    background: rgba(158, 158, 158, .8);
+}
+.mdl-button--fab:hover {
+
+    background: rgba(158, 158, 158, .9);
+}
+
+.mdl-radio__outer-circle {
+    border: 2px solid white;
+}
+
+
+
+:root{
+    --note-none: #2f3341;
+    --note-red: rgb(78, 40, 40);
+    --note-orange: rgb(68, 44, 28);
+    --note-yellow: rgb(70, 59, 26);
+    --note-green: rgb(37, 59, 42);
+    --note-teal: rgb(5, 66, 63);
+    --note-blue: rgb(37, 52, 63);
+    --note-violet: rgb(65, 57, 83);
+    --note-purple: rgb(62, 43, 68);
+    --note-pink: rgb(63, 26, 47);
+  }

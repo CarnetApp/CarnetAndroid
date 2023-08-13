@@ -170,4 +170,7 @@
     <string name="create_note_as_folder">Create notes as folder (beta, don\'t use it)</string>
     <string name="add_widget">Add widget</string>
     <string name="auto">Auto</string>
+    <string name="use_new_editor">Use new markdown editor</string>
+    <string name="refresh_editor">Refresh Editor</string>
+    <string name="refresh_editor_summary">Could be useful if the editor is not loading</string>
 </resources>

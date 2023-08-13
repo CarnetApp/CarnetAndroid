@@ -68,8 +68,8 @@ public class AudioRecorderJS: Service() {
                 File(ct.cacheDir,"/tmpaudio.wav").delete()
 
                 webview.post {
-                    webview.loadUrl("javascript:AndroidRecorder.instance.onEncodingEnd()")
-                    webview.loadUrl("javascript:AndroidRecorder.instance.onFileReady('" + StringEscapeUtils.escapeEcmaScript(server.getUrl("/api/note/open/0/getMedia/"+File(msg!!).name)) + "', true)")
+                    webview.loadUrl("javascript:window.AndroidRecorder.onEncodingEnd()")
+                    webview.loadUrl("javascript:window.AndroidRecorder.onFileReady('" + StringEscapeUtils.escapeEcmaScript(server.getUrl("/api/note/open/0/getMedia/"+File(msg!!).name)) + "', true)")
                 }
                 stopForeground(true)
             }
@@ -184,9 +184,9 @@ public class AudioRecorderJS: Service() {
         waveRecorder!!.waveConfig.audioEncoding = AudioFormat.ENCODING_PCM_16BIT
         waveRecorder!!.startRecording()
         webview.post {
-            webview.loadUrl("javascript:AndroidRecorder.instance.pauseUnavailable()")
-            webview.loadUrl("javascript:AndroidRecorder.instance.setState('recording')")
-            webview.loadUrl("javascript:AndroidRecorder.instance.onstart()")
+            webview.loadUrl("javascript:window.AndroidRecorder.pauseUnavailable()")
+            webview.loadUrl("javascript:window.AndroidRecorder.setState('recording')")
+            webview.loadUrl("javascript:window.AndroidRecorder.onstart()")
         }
     }
     fun onRequestPermissionsResult(requestCode: Int,
@@ -210,8 +210,8 @@ public class AudioRecorderJS: Service() {
     public fun pause() {
         waveRecorder!!.pauseRecording();
         webview.post {
-            webview.loadUrl("javascript:AndroidRecorder.instance.setState('pause')")
-            webview.loadUrl("javascript:AndroidRecorder.instance.onpause()")
+            webview.loadUrl("javascript:window.AndroidRecorder.setState('pause')")
+            webview.loadUrl("javascript:window.AndroidRecorder.onpause()")
         }
 
 
@@ -221,8 +221,8 @@ public class AudioRecorderJS: Service() {
     public fun resume() {
         waveRecorder!!.resumeRecording();
         webview.post {
-            webview.loadUrl("javascript:AndroidRecorder.instance.setState('recording')")
-            webview.loadUrl("javascript:AndroidRecorder.instance.onresume()")
+            webview.loadUrl("javascript:window.AndroidRecorder.setState('recording')")
+            webview.loadUrl("javascript:window.AndroidRecorder.onresume()")
         }
     }
 
@@ -232,8 +232,8 @@ public class AudioRecorderJS: Service() {
         startNotification(false)
         /* when using js encoder (todo: test)
         webview.post {
-             webview.loadUrl("javascript:AndroidRecorder.instance.onstop()")
-             webview.loadUrl("javascript:AndroidRecorder.instance.onFileReady()")
+             webview.loadUrl("javascript:window.AndroidRecorder.onstop()")
+             webview.loadUrl("javascript:window.AndroidRecorder.onFileReady()")
          }*/
         Date().toLocaleString()
         OpusConverter.getInstance().setEventSender(MyEventSender())
@@ -242,9 +242,9 @@ public class AudioRecorderJS: Service() {
         out.parentFile.mkdirs()
         OpusConverter.getInstance().encode( audioFile!!.absolutePath,  out.absolutePath, "")
         webview.post {
-            webview.loadUrl("javascript:AndroidRecorder.instance.onstop()")
-            webview.loadUrl("javascript:AndroidRecorder.instance.setState('none')")
-            webview.loadUrl("javascript:AndroidRecorder.instance.onEncodingStart()")
+            webview.loadUrl("javascript:window.AndroidRecorder.onstop()")
+            webview.loadUrl("javascript:window.AndroidRecorder.setState('none')")
+            webview.loadUrl("javascript:window.AndroidRecorder.onEncodingStart()")
         }
 
     }

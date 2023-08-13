@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <script>
+        window.jQuery = window.$ = require('jquery');
+    </script>
+    <link rel="stylesheet" href="browsers/design.css">
+    <script src="libs/polyfill.js"></script>
+    <script src="libs/dialog-polyfill.js"></script>
+    <script src="libs/material.js"></script>
+    <script src="libs/jquery.min.js"></script>
+
+    <script src="reader/assets/scripts/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="libs/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="libs/polyfill.css">
+
+    <!-- Material Design icon font -->
+    <link rel="stylesheet" href="libs/material-icons.css">
+    <link rel="stylesheet" href="css/design-common.css">
+    <!-- localization -->
+    <script src="libs/jquery_i18n/CLDRPluralRuleParser.js"></script>
+    <script src="libs/jquery_i18n/jquery.i18n.js"></script>
+
+</head>
+
+<body>
+    <style>
+        .settings-button {
+            cursor: pointer;
+        }
+
+        .frame {
+            width: 100%;
+            height: 100%;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        iframe {
+            height: 100%;
+        }
+
+        #frame-container {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            background: rgba(146, 146, 146, 0.37);
+            z-index: 100;
+            /* margin auto not working..*/
+            text-align: center;
+            display: none;
+        }
+
+        .settings-box {
+            margin-top: 15px;
+            margin-left: calc(50% - 200px);
+            width: 400px;
+        }
+        
+
+        .theme-selector {
+            width: 100%;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px rgba(128, 128, 128, 0.2) solid;
+            cursor: pointer;
+        }
+
+        .theme-selector .mdl-radio {
+            width: 100%;
+        }
+
+        .theme-selector img {
+            max-width: 100%;
+            margin-top: 20px;
+
+        }
+
+        #theme-dialog {
+            margin-top: 20px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            max-height: calc(100% - 70px);
+
+        }
+
+        .mdl-checkbox.is-upgraded {
+            padding-left: 0;
+        }
+
+        .mdl-checkbox__label {
+            font-size: unset;
+            left: 0;
+        }
+
+        .mdl-checkbox__ripple-container {
+            left: unset;
+            right: -10;
+        }
+
+        .mdl-checkbox__box-outline {
+            left: unset;
+            right: 0;
+        }
+
+        .mdl-checkbox__focus-helper {
+            left: unset;
+            right: 0;
+        }
+    </style>
+
+    <!-- The drawer is always open in large screens. The header is always shown,
+      even in small screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+                mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+
+                <span class="mdl-layout-title">Settings</span>
+                <div class="mdl-layout-spacer"></div>
+                <div style="position:absolute; right:0px;" id="right-bar">
+                </div>
+
+        </header>
+        <div class="mdl-layout__drawer">
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="./" id="recent-button">Recent</a>
+                <a class="mdl-navigation__link" href="./" id="browser-button">Browser</a>
+                <a class="mdl-navigation__link">Settings</a>
+            </nav>
+        </div>
+        <main class="mdl-layout__content" id="page-container" style="text-align:center;">
+            <dialog class="mdl-dialog" id="theme-dialog">
+                <div class="content" id="theme-list">
+                </div>
+
+
+            </dialog>
+            <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp settings-box"
+                style="">
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button" id="account">
+                        My account
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button" id="select_note_path_button">
+                        Select note path
+                        <br />
+                        <span id="current_root_path"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button" id="cloudsync">
+                        Get mobile, desktop or online app
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button">
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect carnet-settings-button"
+                            for="browser_default_view">
+                            <input type="checkbox" id="browser_default_view" class="mdl-checkbox__input">
+                            <span class="mdl-checkbox__label" data-i18n="start_with_browser_view">Start with browser
+                                view</span>
+                        </label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button">
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect carnet-settings-button"
+                            for="use_md_editor">
+                            <input type="checkbox" id="use_md_editor" class="mdl-checkbox__input">
+                            <span class="mdl-checkbox__label" data-i18n="use_md_editor">Use Markdown editor (beta)</span>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button">
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect carnet-settings-button"
+                            for="preload_editor">
+                            <input type="checkbox" id="preload_editor" class="mdl-checkbox__input">
+                            <span class="mdl-checkbox__label" data-i18n="preload_editor">Preload editor</span>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button" id="theme">
+                        Theme
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button" id="connect">
+                        Cloud sync (webdav)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button" id="disconnect">
+                        Disconnect online account
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button" id="import">
+                        Import from Google Keep (Beta)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button" id="export">
+                        Export all notes
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button" id="window-frame">
+                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="window-frame-switch">
+                            <span class="mdl-switch__label" style="font-size:unset">Display window frame</span>
+                            <input type="checkbox" id="window-frame-switch" class="mdl-switch__input">
+                        </label>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button" id="liberapay">
+                        Donation - LiberaPay
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button" id="paypal">
+                        Donation - PayPal
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button" id="sources">
+                        Sources
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric carnet-settings-button" id="logout">
+                        Logout
+                    </td>
+                </tr>
+            </table>
+
+
+        </main>
+
+    </div>
+    <div id="restarting"
+        style="display:none;position: absolute; z-index:3;width:100%; height:100%; background: rgba(92, 120, 165,.9); ">
+        <div style="position: relative;top:50%;text-align:center;font-size:30px; color:white;">QuickDoc will now
+            restart</div>
+    </div>
+    <div id="frame-container">
+        <webview class="frame" id="webview" nodeintegration webpreferences="contextIsolation=false"> </webview>
+        <iframe class="frame" id="iframe" allowfullscreen></iframe>
+    </div>
+    <script src="settings/settings.js"></script>
+</body>
+
+</html>

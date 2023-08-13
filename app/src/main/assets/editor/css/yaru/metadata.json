@@ -1,0 +1,14 @@
+{
+    "name": "Yaru",
+    "browser": [
+        "design-common.css",
+        "design-browser.css"
+    ],
+    "editor": [
+        "design-common.css",
+        "design-editor.css"
+    ],
+    "settings": [
+        "design-common.css"
+    ]
+}

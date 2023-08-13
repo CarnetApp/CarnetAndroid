@@ -2,6 +2,7 @@ package com.spisoft.quicknote.server;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.util.JsonReader;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -51,6 +52,7 @@ public class HttpServer extends NanoHTTPD {
     private static final String TAG = "HttpServer";
     private final Context mContext;
     private final String extractedNotePath;
+    private final String mRootEditor;
     private String mCurrentNotePath;
     private List<String> mAuthorizedID;
     /**
@@ -71,6 +73,7 @@ public class HttpServer extends NanoHTTPD {
         }
         mContext = ct;
         extractedNotePath = mContext.getCacheDir().getAbsolutePath()+"/currentnote";
+        mRootEditor = PreferenceHelper.useNewEditor(ct)?"editor":"reader";
     }
 
     @Override
@@ -149,12 +152,15 @@ public class HttpServer extends NanoHTTPD {
                             }*/
                         case "settings/editor_css":
                             String theme = Utils.getCurrentTheme(mContext);
-                            String metadata = FileUtils.readFile(mContext.getFilesDir().getAbsolutePath() +"/reader/css/"+theme+"/metadata.json");
+                            String metadata = FileUtils.readFile(mContext.getFilesDir().getAbsolutePath() + "/" + mRootEditor+"/css/"+theme+"/metadata.json");
                             try {
                                 JSONObject metadatajson = new JSONObject(metadata);
                                 JSONArray array = metadatajson.getJSONArray("editor");
                                 for (int i = 0; i<array.length(); i++){
-                                    array.put(i, "../reader/css/"+theme+"/"+array.getString(i));
+                                    if(!PreferenceHelper.useNewEditor(mContext))
+                                        array.put(i, "../"+mRootEditor+"/css/"+theme+"/"+array.getString(i));
+                                    else
+                                        array.put(i, "../css/"+theme+"/"+array.getString(i));
                                 }
                                 Log.d(TAG, metadata);
                                 return NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/json",new ByteArrayInputStream(array.toString().getBytes()));
@@ -169,14 +175,14 @@ public class HttpServer extends NanoHTTPD {
                         case "recorder/decoderWorker.min.wasm":
                         case "recorder/encoderWorker.min.js":
                         case "recorder/decoderWorker.min.js": {
-                            File f = new File(mContext.getFilesDir(), "reader/reader/libs/" + subpath);
+                            File f = new File(mContext.getFilesDir(), mRootEditor+"/reader/libs/" + subpath);
                             return NanoHTTPD.newChunkedResponse(Response.Status.OK, subpath.endsWith("wasm") ? "application/wasm" : "application/javascript", new ByteArrayInputStream(FileUtils.readFile(f.getAbsolutePath()).getBytes()));
                         }
                         case "settings/lang/json":
                             String lang = parms.get("lang").get(0);
                             if(lang.contains("../"))
                                 return null;
-                            File f = new File(mContext.getFilesDir(), "reader/i18n/"+lang+".json");
+                            File f = new File(mContext.getFilesDir(), mRootEditor+"/i18n/"+lang+".json");
                             return NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/json",new ByteArrayInputStream(FileUtils.readFile(f.getAbsolutePath()).getBytes()));
 
                     }
@@ -392,14 +398,16 @@ public class HttpServer extends NanoHTTPD {
                     return null;
                 fileMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(path));
                 try {
-                    if(path.equals("/reader/reader/reader.html")){
-
-                    } else if (path.equals("/reader/index.html")){
+                    if (path.equals("/"+mRootEditor+"/index.html")){
                         String index = FileUtils.readFile(mContext.getFilesDir().getAbsolutePath() + path);
                         index = index.replace("!API_URL","/api/");
                         rinput = new ByteArrayInputStream(index.getBytes());
                     }
-                    else
+                    else if (path.equals("/editor/reader/reader.html")){
+                        String editor = FileUtils.readFile(mContext.getFilesDir().getAbsolutePath() + path);
+                        editor = editor.replace("<!ROOTPATH>", "../").replace("<!ROOTURL>", "../").replace("<!APIURL>", "../../api");
+                        rinput = new ByteArrayInputStream(editor.getBytes());
+                    } else
                         rinput = new FileInputStream(mContext.getFilesDir().getAbsolutePath() + path);
 
                 } catch (FileNotFoundException e) {
@@ -556,8 +564,17 @@ public class HttpServer extends NanoHTTPD {
         }
         if(!isMarkdown)
             FileUtils.writeToFile(extractedNotePath+"/index.html", html);
-        else
-            FileUtils.writeToFile(extractedNotePath+"/note.md", html);
+        else {
+            FileUtils.writeToFile(extractedNotePath + "/note.md", html);
+            try {
+                JSONObject metadataJson = new JSONObject(metadata);
+                if(!metadataJson.has(Note.Metadata.VERSION))
+                    metadataJson.put(Note.Metadata.VERSION, Note.CURRENT_VERSION);
+                metadata = metadataJson.toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         FileUtils.writeToFile(extractedNotePath+"/metadata.json", metadata);
         //we update metadata cache
         File noteFile = new File(PreferenceHelper.getRootPath(mContext),path);
@@ -772,6 +789,13 @@ public class HttpServer extends NanoHTTPD {
             e.printStackTrace();
         }
         return NanoHTTPD.newFixedLengthResponse(Response.Status.OK,"","");
+    }
+
+    public String getEditorUrl(){
+        if(PreferenceHelper.useNewEditor(mContext))
+            return getUrl("/"+mRootEditor+"/reader/reader.html");
+        else
+            return getUrl("/tmp/reader.html");
     }
 
     public String getUrl(String path){

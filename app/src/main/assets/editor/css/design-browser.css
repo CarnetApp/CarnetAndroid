@@ -1,0 +1,643 @@
+:root{
+    --grid-bg: #fafafa;
+    --header-bg: #fafafa;
+    --header-text-color:black;
+    --drag-bar-bg: rgb(63, 81, 181);
+    --grid-button-shadow: 0 0px 0px 2px  rgb(86, 99, 173);
+    --note-text-color: black;
+    --note-bg: white;
+    --note-bg-hover: white;
+    --note-border: white;
+    --note-border-hover: white;
+    --note-shadow: 0 0px 0px 2px rgba(0, 0, 0, .14);
+    --note-shadow-hover: 0 0px 0px 2px rgb(86, 99, 173);
+    --carnet-icon-view-bg:rgb(36, 46, 100);
+    --loading-view-bg:rgb(36, 46, 100);
+    --fab-color: black;
+    --editor-container-bg: rgba(0,0,0,0.5);
+    --editor-container-border-color: unset;
+    --current-note-bg-color: var(--note-bg);
+
+}   
+
+.mdl-checkbox__box-outline {
+    border: 2px solid var(--note-text-color);
+    opacity: .4;
+}
+.mdl-checkbox__label {
+    font-size: inherit;
+}
+#drag-bar{
+    background: var(--drag-bar-bg);
+    width:100%;
+    height:7px;
+    -webkit-app-region: drag;
+}
+
+.todo-list{
+    margin-top:15px;
+    max-width: 300px;
+}
+.todo-list .mdl-checkbox{
+    height: auto;
+}
+
+
+#grid-button-container{
+    background: var(--fab-button-bg);
+    box-shadow: var(--grid-button-shadow);
+    border-top-left-radius: 5px;
+    bottom:0;
+    position: fixed;
+    color: var(--fab-color)
+}
+
+body{
+    background: var(--grid-bg)
+}
+
+#carnet-icon-view{
+    background: var(--carnet-icon-view-bg);
+}
+
+
+
+#page-container {
+    background: var(--grid-bg);
+}
+.mdl-card__supporting-text{
+    color:inherit;
+    padding: 0;
+    width: 100%;
+    padding-bottom: 1em; /* add some padding to the bottom for more breathing */
+}
+
+.mdl-card{
+    color:var(--note-text-color);
+}
+
+.mdl-card{
+    line-height: 15px;
+
+    background: var(--note-bg);
+    box-shadow: var(--note-shadow);
+    -webkit-transition: background-color 250ms linear, box-shadow 250ms linear;
+    -ms-transition: background-color 250ms linear, box-shadow 250ms linear;
+    transition: background-color 250ms linear, box-shadow 250ms linear;
+}
+
+.small-view .todo-lists{
+    max-height: 300px;
+    overflow-y: hidden;
+}
+
+.small-view .card-medias{
+    max-height: 300px;
+    overflow-y: hidden;
+}
+
+
+.mdl-card:hover {
+    filter: brightness(95%);
+    cursor: pointer;
+}
+
+.mdl-card {  
+    cursor: pointer;
+}
+.card-text{
+    color:inherit;
+    margin: 0;
+}
+
+.card-title {
+    color:inherit;
+}
+
+.card-text {
+    line-height: 1.6em;
+}
+
+.medium-text{
+    line-height: 1.2em;
+}
+
+.big-text{
+    line-height: 1em;
+}
+
+#search-bar{
+    margin-left: calc(50% - 190px);
+    color: var(--header-text-color);
+}
+
+.mdl-layout__header{
+    box-shadow: unset;
+}
+
+.editor {
+    border: 2px solid var(--editor-container-border-color);
+    position:relative; 
+    top:0px; 
+    left:0px;
+    display: none; 
+    width:100%;
+    height:100%;
+    z-index:100; 
+    right:0;
+    bottom:0;
+    max-width: 910px;
+    margin: auto;
+}
+
+#editor-container{
+
+	background:var(--editor-container-bg);
+	position:fixed;
+    width:100%;
+    height:100%;
+	top:0;
+	left:0;
+	z-index:10;
+	display:none;
+	text-align: center;
+}
+
+#loading-view{
+    border: 2px solid var(--editor-container-border-color);
+
+    background: var(--loading-view-bg);
+    color:white;
+    max-width: 910px;
+    margin:auto;
+    top:0px; 
+    position:absolute; 
+    display:none; 
+    left:0px;
+    z-index:100;
+    right:0; 
+    height:100%;
+}
+
+#loading-view button{
+    color:white;
+}
+
+@media screen and (min-width: 1400px) {
+	#loading-view {
+		top: 20px;
+		height: calc(100% - 40px);
+	}
+	#editor-container{
+		padding-top:20px;
+        padding-bottom:20px;
+        height: calc( 100% - 40px);
+	}
+}
+
+@media (max-width: 910px) {
+    #search-bar{
+        margin-left: 0;
+        width: calc(100% - 90px);
+        max-width: 300px;
+    }
+    .editor {
+        border: unset;
+    }
+    #loading-view{
+        border: unset;
+    }
+    #drag-bar{
+        display: none;
+    }
+}
+
+
+@media (max-width: 550px) {
+    #search-bar{
+        margin-left: 0;
+        width: calc(100% - 90px);
+        max-width: 300px;
+    }
+    #minus-button{
+        display:none;
+    }
+    #close-button{
+        display:none;
+    }
+}
+
+#sync-button{
+    display: none;
+}
+
+
+.mdl-card.red{
+    --current-note-bg-color: var(--note-red);
+    
+    box-shadow:none;
+}
+.mdl-card.orange{
+    --current-note-bg-color: var(--note-orange);
+    box-shadow:none;
+}
+.mdl-card.yellow{
+    --current-note-bg-color: var(--note-yellow);
+    box-shadow:none;
+}
+
+.mdl-card.green{
+    --current-note-bg-color: var(--note-green);
+    box-shadow:none;
+}
+.mdl-card.teal{
+    --current-note-bg-color: var(--note-teal);
+    box-shadow:none;
+}
+.mdl-card.blue{
+    --current-note-bg-color: var(--note-blue);
+    box-shadow:none;
+}
+.mdl-card.violet{
+    --current-note-bg-color: var(--note-violet);
+    box-shadow:none;
+}
+.mdl-card.purple{
+    --current-note-bg-color: var(--note-purple);
+    box-shadow:none;
+}
+.mdl-card.pink{
+    --current-note-bg-color: var(--note-pink);
+    box-shadow:none;
+}
+
+.mdl-card:hover{
+    box-shadow: var(--note-shadow-hover);
+}
+
+.mdl-card{
+    background: var(--current-note-bg-color);
+}
+
+/* nextcloud */
+
+#search-input {
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, .12);
+    display: block;
+    font-size: 16px;
+    font-family: "Ubuntu";
+    margin: 0;
+    padding: 4px 0;
+    width: 100%;
+    background: 0 0;
+    background-color: rgba(0, 0, 0, 0);
+    text-align: left;
+    color: inherit;
+}
+
+.note-url{
+    padding-top:15px;
+    padding-bottom: 15px;
+    max-width: calc(100% - 15px);
+    border-top: #9e9d9d6e solid 1px;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.note-audio{
+
+    max-width: calc(100% - 15px);
+    border-top: #9e9d9d6e solid 1px;
+    cursor: pointer;
+    word-break: break-all;
+    overflow: hidden;
+}
+
+.note-audio button{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left:5px;
+    padding-right:5px;
+    margin-right:5px;
+}
+
+#audio-player{
+    display: none;
+}
+
+.card-date{
+    opacity: 0.5;
+    font-size: .9rem;
+}
+
+.keywords{
+    font-size: .9rem;
+    padding: .3rem .5rem !important;
+    margin-right: .3rem;
+}
+
+.keyword:last-of-type {
+    margin-right: 0;
+}
+
+.keyword {
+    color:var(--note-text-color);
+}
+
+.mdl-card__supporting-text [class^="card"], .folder-card-view .mdl-card__supporting-text, .mdl-card__supporting-text .keywords, .mdl-card__supporting-text .todo-list {
+    margin-top: .6rem;
+}
+
+
+.folder-card-view{
+    padding-bottom: 5px;
+}
+
+.mdl-card__supporting-text [class^="card"],.folder-card-view .mdl-card__supporting-text {
+    padding-right: 2rem;
+    padding-left: .9rem;
+    word-break: break-word;
+}
+.mdl-card__supporting-text .keywords, .mdl-card__supporting-text .todo-list {
+    padding-right: 1rem;
+    padding-left: .8rem;
+}
+.mdl-card__supporting-text .card-audio-list {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: -.2rem;
+}
+
+.folder-card-view .card-title{
+    word-break: break-all;
+}
+
+.note-audio {
+    border-top: 0 transparent !important;
+}
+
+/* leave some space at the top, even if there's no title */
+.card-title{
+	min-height: 1em;
+}
+
+
+/* making media take less vertical space */
+ .mdl-card__supporting-text .card-medias {
+    padding-left:0;
+    padding-right:0;
+    background: transparent;
+    /* remove black bar */
+    margin: 0 !important;
+    width: 100%;
+}
+.mdl-card__supporting-text .card-medias img {
+    width: 100%;
+    object-fit: cover;
+}
+/* making voice notes nicer */
+ .card-audio-list {
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    font-size: .9rem;
+}
+/* reversing the damage that <table>s do */
+ .card-audio-list tr, .card-audio-list td {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+}
+.card-audio-list tr > td:first-of-type {
+    width: 36px;
+}
+.card-audio-list td a {
+    color: inherit;
+    opacity: .5;
+}
+.note-audio button {
+    min-width: 36px;
+    /* countering the md1-button style*/
+    width: 36px;
+    overflow:hidden;
+    margin: 0 !important;
+    padding: 0 !important;
+    /* restoring margins*/
+    opacity: .5;
+}
+.note-audio button:hover {
+    opacity: 1
+}
+
+.note-card-view, .folder-card-view{
+    border-radius: 10px;
+}
+
+.in-line-item{
+    width: unset;
+}
+
+.display-more{
+    display: none;
+    text-align:center;
+    width:100%;
+    padding-top:10px;
+    background: var(--current-note-bg-color);
+    padding-bottom:10px;
+}
+.display-more-media{
+    position: absolute;
+    bottom:0;
+    background: var(--current-note-bg-color);
+    opacity: 0.8;
+}
+
+.demo-card-wide.mdl-card {
+    min-height: 0px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+
+.mdl-card__supporting-text {
+    padding-bottom: 0px !important;
+    box-sizing: content-box !important;
+}
+
+
+
+
+.demo-card-wide>.mdl-card__title {
+    color: black;
+}
+
+.packery-drop-placeholder {
+    outline: 3px dashed #444;
+    outline-offset: -6px;
+    /* transition position changing */
+    -webkit-transition: -webkit-transform 0.2s;
+    transition: transform 0.2s;
+}
+
+
+/* highlight drag & drop */
+
+
+/* jQuery UI Draggable adds ui-draggable-dragging */
+
+.ui-draggable-dragging,
+.is-positioning-post-drag {
+    background: #C90;
+    z-index: 20000 !important;
+    /* keep dragged item on top */
+}
+
+.demo-card-wide>.mdl-card__menu {
+    color: #fff;
+}
+
+body {
+    background: #fafafa;
+    position: relative;
+}
+
+#page-content {
+    position: relative;
+    margin: 0 auto;
+}
+
+#page-container {
+}
+
+#right-bar-text{
+    margin-right:10px;
+}
+
+#grid-container {
+    margin: 0 auto;
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 15px);
+    padding-top: 15px;
+    overflow-y: auto;
+}
+
+.big-text {
+    font-size: 40px;
+}
+
+.medium-text {
+    font-size: 25px;
+}
+
+@media (min-width: 1314px) {
+    #grid-container {
+        max-width: 1074px;
+        left: calc(50% - 537px);
+    }
+}
+
+.card-title {
+    font-size: 24px;
+    font-weight: 300;
+    line-height: normal;
+    color: black;
+    margin: 0px;
+}
+
+.card-text {
+    line-height: initial;
+    margin-bottom: 10px;
+    margin-right: 20px;
+    word-wrap: break-word;
+    color: rgba(0,0,0,.87);
+    
+}
+
+.card-title:hover {
+    background: none;
+}
+
+.card-text:hover {
+    background: none;
+}
+
+.mdl-layout__header {
+}
+
+.mdl-layout__header .mdl-layout__drawer-button,
+.mdl-layout__header button,
+.mdl-radio,
+.mdl-layout__header .mdl-textfield {
+    -webkit-app-region: no-drag;
+}
+
+.card-more-button {
+    top:5px;
+    right: 0px;
+    background: inherit !important;
+    position: absolute !important;
+}
+
+.keyword {
+    margin-right: 10px;
+    margin-top: 3px;
+    padding: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline-block;
+    border: 1px rgba(119, 119, 119, 0.6) solid;
+    border-radius: 5px;
+}
+
+.card-rating {
+    margin-right: 10px;
+    float: right;
+}
+
+.card-medias {
+    margin-left: -20px;
+    margin-right: -5px;
+    background: black;
+    border-radius: 2px;
+}
+
+.card-medias img {
+    width: 100%;
+}
+
+#contextual-dialog .mdl-button {
+    padding: 0 5px;
+}
+
+
+#firstrun {
+    display: none;
+    position: relative;
+    margin: auto;
+    top: 50%;
+    margin-top: -270px;
+    max-width: 500px;
+    max-height: 500px;
+    padding: 10px;
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+    background: rgb(63, 81, 181);
+    box-shadow: 0px 0px 10px grey;
+    overflow-y: auto;
+}
+
+
+
+@media (max-width: 600px) {
+    #firstrun {
+        top: 0;
+        margin-top: 0;
+        max-width: 100%;
+        max-height: calc(100% - 20px);
+        overflow-y: auto;
+    }
+}

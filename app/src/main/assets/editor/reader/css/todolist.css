@@ -1,0 +1,125 @@
+.todo-list .mdl-checkbox{
+    height: auto;
+}
+
+.todo-list{
+    display:block;
+    width: 100%;
+    border-top: solid 1px rgba(128, 128, 128, 0.199);
+    padding-top: 10px;
+    border-bottom: solid 1px rgba(128, 128, 128, 0.199);
+    padding-bottom: 10px;
+}
+.todo-list .todo{
+    /*margin-top:80px;*/
+}
+.todo-list h3{
+    font-size:16px;
+    margin:0px;
+    margin-top:15px;
+    margin-bottom:20px;
+    margin-left:10px
+}
+
+.todo-list .todo-item-text{
+    width: calc(100% - 30px);
+    display: block;
+    margin-left: 15px;
+    margin-top:-5px;
+    padding: 5px;
+    border: none;
+}
+.add-todolist-item{
+    position: fixed;
+    float:right;
+    bottom:50px;
+    right:80px;
+    z-index:200;
+    background: var(--body-bg);
+    opacity: 0.8;
+}
+
+.remove-todo-list{
+    float: right;
+    cursor: pointer;
+    margin-right:10px;
+
+}
+
+.todo-item-text:hover{
+    cursor: text;
+}
+
+.todo-list .mdl-checkbox {
+    width: calc(100% - 80px);
+
+}
+.move-item{
+    float: left;
+    margin-right: 7px;
+    margin-top: 1px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 15px;
+}
+
+.move-item:hover {
+    cursor: grab !important;
+}
+
+.grabbing {
+    cursor: grabbing !important;
+}
+.remove-item{
+    float: right;
+    margin-right: 7px;
+    cursor: pointer;
+    min-width:0px;
+    margin-top: -5px;
+}
+
+.done .todo-item-text {
+    text-decoration: line-through;
+    color: #888;
+  }
+.todo-item{
+    margin-bottom: 5px;
+    padding-top: 12px;
+    padding-bottom: 6px;
+    padding-left: 10px;
+    background-color: var(--background-todolist-item);
+}
+
+@media screen and (min-width: 620px) {
+    .todo-item{
+        border-radius: 10px;
+    }
+
+    .add-item{
+        right:80px;
+    }
+}
+
+
+.done .mdl-checkbox__box-outline {
+    border-color: rgba(100, 100, 100, 0.9) !important;
+}
+
+.todo-item textarea {
+    background-color: transparent;
+    color: var(--main-text-color);
+    font-family: inherit;
+}
+.todo-list input{
+    padding: 5px;
+
+}
+.todo-list-content{
+    margin:auto;
+    margin-top:0px;
+    max-width: 600px;
+    width:100%;  
+}
+.done .move-item{
+    visibility: hidden;
+}

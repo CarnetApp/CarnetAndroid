@@ -55,6 +55,7 @@ import android.widget.Toast;
 
 import com.spisoft.quicknote.FloatingFragment;
 import com.spisoft.quicknote.Note;
+import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
 import com.spisoft.quicknote.databases.NoteManager;
 import com.spisoft.quicknote.databases.RecentHelper;
@@ -505,7 +506,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
 
                 mAudioRecorder.set((Activity)getContext(), mServer2, mWebView);
                 mWebView.addJavascriptInterface(mAudioRecorder.getJs(), "AndroidRecorderJava");
-                mWebView.loadUrl(mServer2.getUrl(getUrl()));
+                mWebView.loadUrl(mServer2.getEditorUrl());
 
 
             }
@@ -534,9 +535,7 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
         exportIntent.putExtra(Intent.EXTRA_TITLE, fileName);
         ((Activity)getContext()).startActivityForResult(exportIntent, requestCode);
     }
-    public String getUrl(){
-        return "/tmp/reader.html";
-    }
+
     public void askForPermission(String origin, String permission, int requestCode) {
         Log.d("WebView", "inside askForPermission for" + origin + "with" + permission);
 

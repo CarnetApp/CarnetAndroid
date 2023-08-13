@@ -16,6 +16,7 @@ import java.util.List;
  * Created by alexandre on 01/02/16.
  */
 public class Note implements Serializable{
+    public static final int CURRENT_VERSION = 3;
     public String path;
     public String title;
     public String shortText = "";
@@ -209,6 +210,7 @@ public class Note implements Serializable{
     }
 
     public static class Metadata implements Serializable{
+        public static final String VERSION = "version";
         public long creation_date = -1;
         public long custom_date = -1;
         public long last_modification_date = -1;

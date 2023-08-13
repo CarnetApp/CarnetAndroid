@@ -29,6 +29,8 @@ public class PreferenceHelper {
     private static final String CURRENT_READER_VERSION = "current_reader_version";
     private static final String SORT_REVERSED = "sort_reversed";
     private static final String SORT_BY = "sort_by";
+    public static final String USE_NEW_EDITOR = "pref_use_new_markdown_editor";
+    private static final String FORCE_UPDATE = "force_update";
     private static PreferenceHelper sPreferenceHelper;
     private final Context mContext;
     private List<RootPathChangeListener> mRootPathChangeListener = new ArrayList<>();
@@ -53,6 +55,18 @@ public class PreferenceHelper {
 
     public static void setCreateNoteAsFolder(Context context, boolean b) {
          PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean("pref_create_note_as_folder",b).commit();
+    }
+
+    public static boolean useNewEditor(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(USE_NEW_EDITOR, false);
+    }
+
+    public static void setForceUpdate(Context context, boolean force) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(FORCE_UPDATE, force).apply();
+    }
+
+    public static boolean forceUpdate(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(FORCE_UPDATE, false);
     }
 
     public void addOnRootPathChangedListener(RootPathChangeListener sRootPathListener) {

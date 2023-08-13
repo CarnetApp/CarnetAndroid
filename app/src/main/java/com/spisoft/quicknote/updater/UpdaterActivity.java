@@ -18,6 +18,7 @@ import android.widget.Button;
 
 import com.spisoft.quicknote.PreferenceHelper;
 import com.spisoft.quicknote.R;
+import com.spisoft.quicknote.utils.Utils;
 
 import static android.view.View.GONE;
 
@@ -131,9 +132,10 @@ public class UpdaterActivity extends AppCompatActivity {
         int newVersion = getNewVersion(activity);
         Log.d(TAG, "current version "+oldVersion+" new "+newVersion);
 
-        if(newVersion != oldVersion || true){
+        if(newVersion != oldVersion || Utils.isDebug(activity) || PreferenceHelper.forceUpdate(activity)){
 
             activity.startActivityForResult(new Intent(activity, UpdaterActivity.class),requestCode);
+            PreferenceHelper.setForceUpdate(activity, false);
             return true;
         }
         return false;

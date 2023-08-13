@@ -78,9 +78,20 @@
             />
 
         <CheckBoxPreference
+            android:key="pref_use_new_markdown_editor"
+            android:defaultValue="false"
+            android:title="@string/use_new_editor"
+            />
+
+        <CheckBoxPreference
             android:key="pref_create_note_as_folder"
             android:defaultValue="false"
             android:title="@string/create_note_as_folder"
+            />
+        <Preference
+            android:key="pref_refresh_editor"
+            android:title="@string/refresh_editor"
+            android:summary="@string/refresh_editor_summary"
             />
     </PreferenceCategory>
 

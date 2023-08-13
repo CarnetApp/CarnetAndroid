@@ -1,0 +1,18 @@
+
+:root{
+    --grid-bg: #000000;
+    --note-text-color: white;
+    --note-bg: #000000;
+    --note-bg-hover: #1e212b;
+    --loading-view-bg:#000000;
+    --fab-button-bg: #000000;
+    --fab-color:white;
+    --drag-bar-bg: rgb(36, 46, 100);
+    --note-shadow: 0 0px 0px 2px #27326e;
+    --note-shadow-hover: 0 0px 0px 2px rgb(86, 99, 173);
+    --editor-container-bg: rgba(0, 0, 0, 0.5);
+    --editor-container-border: #27326e;
+    --editor-container-border-color: #27326e;
+
+
+}

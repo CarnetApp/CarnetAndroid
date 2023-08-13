@@ -1,0 +1,11 @@
+@media screen and (min-width: 1400px) {
+    #editor-container {
+        
+        height: calc( 100% - 80px) !important;
+    }
+
+}
+#editor-container {
+        
+    top:unset !important;
+}

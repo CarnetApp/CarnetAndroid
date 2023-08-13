@@ -12,7 +12,7 @@ class WebBasedView : EditorView {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
 
-    override fun getUrl(): String {
+    fun getUrl(): String {
         return "/reader/index.html"
     }
 }

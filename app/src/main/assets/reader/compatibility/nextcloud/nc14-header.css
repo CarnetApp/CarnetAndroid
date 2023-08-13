@@ -1,0 +1,24 @@
+.mdl-layout__container {
+    height: calc(100% - 50px) !important;
+}
+
+#writer-iframe {
+    top: 50px;
+    height: calc(100% - 50px) !important;
+}
+
+#editor-container {
+    top: 50px;
+    height: 100% !important;
+}
+#loading-view {
+    top: 50px !important;
+    height: calc(100% - 50px) !important;
+}
+
+@media screen and (min-width: 1400px) {
+	#loading-view {
+		top: 70px !important;
+		height: calc(100% - 90px) !important;
+	}
+}
