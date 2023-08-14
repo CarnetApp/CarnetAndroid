@@ -553,7 +553,7 @@ body {
     margin-bottom: 10px;
     margin-right: 20px;
     word-wrap: break-word;
-    color: rgba(0,0,0,.87);
+    color: var(--note-text-color);
     
 }
 

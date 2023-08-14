@@ -13035,6 +13035,7 @@ const NoteCardViewGrid = (__webpack_require__(2885)/* .NoteCardViewGrid */ .T)
 const Store = (__webpack_require__(7845)/* .NextcloudStore */ .b)
 const BrowserCompatibility = (__webpack_require__(5400)/* .BrowserCompatibility */ .e)
 const compatibility = new BrowserCompatibility()
+compatibility.setBrowserPage()
 compatibility.addNextcloudToken()
 const RecentDBManager = (__webpack_require__(4808)/* .RecentDBManager */ .L)
 const KeywordsDBManager = (__webpack_require__(9622)/* .KeywordsDBManager */ .P)
@@ -13679,7 +13680,7 @@ function getNotePath() {
 }
 
 function loadNextNotes() {
-    browser.noteCardViewGrid.addNext(15);
+    noteCardViewGrid.addNext(15);
     currentTask.stopAt += 15;
     currentTask.getNext()
 }
@@ -14342,7 +14343,7 @@ NoteCardView.prototype.setNote = function (note) {
             else
                 img.src = preview
             img.onload = function () {
-                browser.noteCardViewGrid.msnry.layout();
+                noteView.masonry.layout();
                 noteView.toggleDisplayMore()
             }
             this.cardMedias.appendChild(img);
@@ -14721,8 +14722,14 @@ const Compatibility = (__webpack_require__(155)/* .Compatibility */ .K)
 class BrowserCompatibility extends Compatibility {
     constructor() {
         super();
+    }
+
+    /* set UI and listeners, must be run only once. */
+
+    setBrowserPage(){
         var compatibility = this;
         $(document).ready(function () {
+
             if (compatibility.isGtk) {
                 document.getElementsByClassName('mdl-layout__header')[0].style.display = "none"
                 document.getElementById('grid-button-container').style.display = "none"
@@ -14855,7 +14862,6 @@ class BrowserCompatibility extends Compatibility {
 
             }
         });
-
     }
 
     onFirstrunEnds() {
@@ -14878,11 +14884,6 @@ class BrowserCompatibility extends Compatibility {
         else return Masonry;
     }
 }
-
-
-var compatibility = new BrowserCompatibility();
-
-var Store = compatibility.getStore();
 
 exports.e = BrowserCompatibility
 

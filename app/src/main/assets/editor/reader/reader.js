@@ -42186,12 +42186,13 @@ exports.U = CarnetRecorder
 /* provided dependency */ var console = __webpack_require__(5108);
 const { FileUtils } = __webpack_require__(4362);
 const { TextEditor } = __webpack_require__(2644);
-
+TodoListManager = (__webpack_require__(3714)/* .TodoListManager */ .E)
 class HTMLTextEditor extends TextEditor {
 
     constructor(writer) {
         super()
         this.writer = writer
+        
     }
 
     init() {
@@ -42212,6 +42213,13 @@ class HTMLTextEditor extends TextEditor {
     \
     </div>';
     }
+    createEditableZone () {
+        var div = document.createElement("div")
+        div.classList.add("edit-zone");
+        div.contentEditable = true
+        this.oDoc.appendChild(div)
+        return div;
+    }
 
     setNoteAndContent(note, noteContent) {
         this.note = note
@@ -42225,6 +42233,7 @@ class HTMLTextEditor extends TextEditor {
             editor.writer.lastscroll = $(editor.oCenter).scrollTop()
         })
         this.oDoc = document.getElementById("text");
+        this.todoListManager = new TodoListManager(this.oDoc)
         this.oDoc.contentEditable = false
         $(this.oDoc).on('DOMNodeInserted', function (e) {
             console.log("new element " + e.target.tagName)
@@ -42258,6 +42267,17 @@ class HTMLTextEditor extends TextEditor {
         }, false);
         //focus on last editable element  
 
+        this.oDoc.addEventListener('remove-todolist', function (e) {
+            e.previous.innerHTML += "<br />" + e.next.innerHTML
+            $(e.next).remove()
+            writer.hasTextChanged = true;
+        }, false);
+        this.oDoc.addEventListener('todolist-changed', function (e) {
+            writer.hasTextChanged = true;
+        }, false);
+        if (note.metadata.todolists != undefined)
+            this.todoListManager.fromData(note.metadata.todolists)
+
 
     }
 
@@ -42272,6 +42292,19 @@ class HTMLTextEditor extends TextEditor {
         return tmpElem.innerHTML
 
     }
+
+    getTodoListData(){
+        return this.todoListManager.toData()
+    }
+
+    createTodoList(){
+        let writer = this.writer
+        this.todoListManager.createTodolist().createItem("")
+        this.createEditableZone().onclick = function (event) {
+            writer.onEditableClick(event);
+        }
+    }
+
 
     getCleanText() {
         return this.oEditor.innerText
@@ -43019,6 +43052,10 @@ class TextEditor {
     onLoaded() { }
 
     focusAtTheEnd() { }
+
+    getTodoListData() {}
+
+    createTodoList() {}
 }
 
 exports.TextEditor = TextEditor
