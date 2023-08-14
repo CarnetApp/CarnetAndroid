@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 static def getDate() {
     // we increment version number every 1000 seconds,
@@ -8,7 +7,7 @@ static def getDate() {
     def date = new Date().getTime() / 1000L - 1472637600L
     return (int) (date / 1000L)
 }
-version = "0.24.1"
+version = "0.25.0"
 static def getFormattedDate() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMdd.HHmm')
@@ -16,15 +15,19 @@ static def getFormattedDate() {
 }
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 33
     dexOptions {
         javaMaxHeapSize "4g"
     }
+
+    buildFeatures {
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "com.spisoft.quicknote"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 33
         versionCode getDate()
         versionName version+"-" + getFormattedDate()
         multiDexEnabled true
@@ -48,9 +51,6 @@ android {
             resValue "string", "app_name", "Carnet debug"
         }
     }
-    lintOptions {
-        disable 'MissingTranslation'
-    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -69,6 +69,10 @@ android {
             resValue "bool", "is_google", "true"
         }
     }
+    lint {
+        disable 'MissingTranslation'
+    }
+    namespace 'com.spisoft.quicknote'
 }
 
 if (file("../../Internal").exists()) {
@@ -83,31 +87,30 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'org.jsoup:jsoup:1.11.2'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation "androidx.preference:preference:1.1.1"
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation "androidx.preference:preference:1.2.1"
+    implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.android:flexbox:1.1.0'
     implementation project(':Sync')
-    compile 'top.oply.opuslib:opuslib:1.0.2'
+    implementation 'top.oply.opuslib:opuslib:1.0.2'
    // implementation project(':OpusAndroid')
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    googleImplementation 'com.google.android.gms:play-services-drive:16.0.0'
-    googleImplementation 'com.google.android.gms:play-services-auth:16.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    googleImplementation 'com.google.android.gms:play-services-drive:17.0.0'
+    googleImplementation 'com.google.android.gms:play-services-auth:20.6.0'
     googleImplementation project(':GoogleSync')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
 
     implementation 'com.github.squti:Android-Wave-Recorder:1.4.0'
 
-    def camerax_version = "1.0.0-beta03"
-// CameraX core library using camera2 implementation
-    implementation "androidx.camera:camera-camera2:$camerax_version"
+
+    implementation "androidx.camera:camera-camera2:1.2.1"
 // CameraX Lifecycle Library
-    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    implementation "androidx.camera:camera-lifecycle:1.2.1"
 // CameraX View class
-    implementation "androidx.camera:camera-view:1.0.0-alpha10"
+    implementation "androidx.camera:camera-view:1.2.1"
 }

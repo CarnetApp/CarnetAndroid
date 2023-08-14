@@ -153,7 +153,7 @@ public class FloatingService extends Service implements View.OnClickListener, Ed
                     Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
                     it,
-                    0);
+                    PendingIntent.FLAG_IMMUTABLE);
             Notification.Builder builder = new Notification.Builder(this).
                     setSmallIcon(R.drawable.ic_launcher).
                     setContentTitle(getString(R.string.app_name)).

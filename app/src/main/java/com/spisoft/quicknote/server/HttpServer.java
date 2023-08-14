@@ -380,13 +380,13 @@ public class HttpServer extends NanoHTTPD {
                                 return saveNote(post.get("path").get(0), post.get("html").get(0), post.get("metadata").get(0), post.get("isMarkdown") != null && post.get("isMarkdown").get(0).equals("true"));
                         case "note/open/0/addMedia":
                             if (post.get("path").size() > 0 && post.get("media[]").size() > 0 && files.containsKey("media[]"))
-                                return addMedia(post.get("path").get(0), files.get("media[]"), post.get("media[]").get(0), post.get("isMarkdown").get(0).equals("true"));
+                                return addMedia(post.get("path").get(0), files.get("media[]"), post.get("media[]").get(0), post.get("isMarkdown") != null && post.get("isMarkdown").get(0).equals("true"));
 
                     }
                 } else if(Method.DELETE.equals(method)){
                     switch (subpath) {
                         case "note/open/0/media":
-                            return deleteMedia(parms.get("path").get(0), parms.get("media").get(0), post.get("isMarkdown").get(0).equals("true"));
+                            return deleteMedia(parms.get("path").get(0), parms.get("media").get(0), post.get("isMarkdown") != null && post.get("isMarkdown").get(0).equals("true"));
 
                     }
 

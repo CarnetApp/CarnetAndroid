@@ -102,7 +102,7 @@ public class StorageDialog extends DialogFragment implements DialogInterface.OnC
                     public void run() {
                         Intent mStartActivity = new Intent(Utils.context, MainActivity.class);
                         int mPendingIntentId = 123456;
-                        PendingIntent mPendingIntent = PendingIntent.getActivity(Utils.context, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                        PendingIntent mPendingIntent = PendingIntent.getActivity(Utils.context, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
                         AlarmManager mgr = (AlarmManager)Utils.context.getSystemService(Context.ALARM_SERVICE);
                         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
                         System.exit(0);

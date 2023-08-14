@@ -155,7 +155,7 @@ public class AudioService extends Service implements MediaPlayer.OnCompletionLis
                 .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .setContentText(sMedia)
                 .addAction(new NotificationCompat.Action.Builder(R.drawable.pause_black, getString(R.string.pause),
-                        PendingIntent.getService(this, 3, intent, PendingIntent.FLAG_UPDATE_CURRENT)).build())
+                        PendingIntent.getService(this, 3, intent, PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE)).build())
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(Notification.CATEGORY_STATUS)
                 .build();

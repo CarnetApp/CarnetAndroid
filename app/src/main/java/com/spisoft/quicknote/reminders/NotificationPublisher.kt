@@ -20,7 +20,8 @@ class NotificationPublisher : BroadcastReceiver() {
         val id = intent.getIntExtra(NOTIFICATION_ID, 4)
         if(notification != null) {
             notificationManager.notify(id, notification)
-            RemindersManager.getInstance(context)!!.onNotified(path)
+            if(path != null)
+                RemindersManager.getInstance(context)!!.onNotified(path)
         }
 
         Log.d(TAG, "notification "+(notification == null))

@@ -11,7 +11,7 @@ class WebActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_web)
-        val webFragment = WebFragment.newInstance(intent.getStringExtra(WebFragment.ARG_URL))
+        val webFragment = WebFragment.newInstance(intent.getStringExtra(WebFragment.ARG_URL)!!)
         supportFragmentManager.beginTransaction().replace(R.id.root, webFragment).commit();
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

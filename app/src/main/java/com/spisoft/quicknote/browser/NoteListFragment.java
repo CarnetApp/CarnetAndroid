@@ -209,7 +209,8 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                              Bundle savedInstanceState){
         super.onCreateView(inflater, container, savedInstanceState);
         if(mRoot!=null) {
-            ((ViewGroup)mRoot.getParent()).removeView(mRoot);
+            if(mRoot.getParent() != null)
+                ((ViewGroup)mRoot.getParent()).removeView(mRoot);
             return mRoot;
         }
         mRoot = inflater.inflate(R.layout.note_recycler_layout, container, false);
@@ -586,7 +587,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                                 Intent pinnedShortcutCallbackIntent =
                                         shortcutManager.createShortcutResultIntent(pinShortcutInfo);
                                 PendingIntent successCallback = PendingIntent.getBroadcast(getActivity(), 0,
-                                        pinnedShortcutCallbackIntent, 0);
+                                        pinnedShortcutCallbackIntent, PendingIntent.FLAG_IMMUTABLE);
 
                                 shortcutManager.requestPinShortcut(pinShortcutInfo,
                                         successCallback.getIntentSender());

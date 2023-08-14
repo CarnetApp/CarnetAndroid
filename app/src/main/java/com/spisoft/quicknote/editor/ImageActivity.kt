@@ -30,12 +30,12 @@ import com.spisoft.quicknote.R
 import com.spisoft.quicknote.databases.KeywordsHelper
 import com.spisoft.quicknote.databases.NoteManager
 import com.spisoft.quicknote.databases.RecentHelper
+import com.spisoft.quicknote.databinding.ActivityImageBinding
 import com.spisoft.quicknote.utils.CustomOrientationEventListener
 import com.spisoft.quicknote.utils.FileUtils
 import com.spisoft.quicknote.utils.PictureUtils
 import com.spisoft.quicknote.utils.ZipUtils
 import com.spisoft.sync.Log
-import kotlinx.android.synthetic.main.activity_image.*
 import org.json.JSONException
 import java.io.File
 import java.io.FileInputStream
@@ -55,16 +55,18 @@ class ImageActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.
     private lateinit var cameraExecutor: ExecutorService
     private var mShootButton: View? = null
     private var mTmpDir: File? = null
+    private lateinit var binding: ActivityImageBinding
+
 
 
     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
-        viewFinder!!.animate().alpha(0f).setDuration(100).start()
+      //  viewFinder!!.animate().alpha(0f).setDuration(100).start()
 
         imageCapture.takePicture(ContextCompat.getMainExecutor(this), object: ImageCapture.OnImageCapturedCallback() {
             override fun onCaptureSuccess(image: ImageProxy) {
-                viewFinder!!.animate().alpha(1f).setDuration(100).start()
+         //       viewFinder!!.animate().alpha(1f).setDuration(100).start()
 
                 handlePhotoBitmap(getBitmap(image))
                 image.close()
@@ -115,7 +117,9 @@ class ImageActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.
             FileUtils.deleteRecursive(mTmpDir)
         }
         mTmpDir!!.mkdirs()
-        setContentView(R.layout.activity_image)
+        binding = ActivityImageBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         mAvailableKeywords = ArrayList()
         mAvailableKeywordsLinearLayout = findViewById(R.id.available_keywords)
         mSelectedKeywordsLinearLayout = findViewById(R.id.selected_keywords)
@@ -132,7 +136,8 @@ class ImageActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.
         mExternalCameraButton = findViewById(R.id.external_camera_button)
         mExternalCameraButton?.setOnClickListener(this)
         mNextButton = findViewById(R.id.next)
-        mNextButton?.setOnClickListener(this)
+        binding.next.setOnClickListener(this)
+        //mNextButton?.setOnClickListener(this)
         mFlashButton = findViewById(R.id.flash_button)
         mFlashButton?.setOnClickListener(this)
         mShootButton = findViewById(R.id.shoot_button)
@@ -172,7 +177,7 @@ class ImageActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.
             mAvailableKeywordsLinearLayout!!.addView(createKeywordView(text))
             for (i in mAvailableKeywords!!.indices) {
                 if (mAvailableKeywordsLinearLayout!!.childCount > 5) break
-                if (mAvailableKeywords!![i].toLowerCase().startsWith(text.toLowerCase())) mAvailableKeywordsLinearLayout!!.addView(createKeywordView(mAvailableKeywords!![i]))
+                if (mAvailableKeywords!![i].lowercase().startsWith(text.lowercase())) mAvailableKeywordsLinearLayout!!.addView(createKeywordView(mAvailableKeywords!![i]))
             }
         }
     }
@@ -233,7 +238,7 @@ class ImageActivity : AppCompatActivity(), View.OnClickListener, CompoundButton.
                 camera = cameraProvider.bindToLifecycle(
                         this, cameraSelector, preview, imageCapture)
                 camera!!.cameraControl.enableTorch(PreferenceManager.getDefaultSharedPreferences(this).getInt("last_camera_flash", TorchState.ON)==TorchState.ON)
-                preview?.setSurfaceProvider(viewFinder.createSurfaceProvider(camera?.cameraInfo))
+                preview?.setSurfaceProvider(binding.viewFinder.surfaceProvider)
                 refreshFlashButton()
 
             } catch(exc: Exception) {

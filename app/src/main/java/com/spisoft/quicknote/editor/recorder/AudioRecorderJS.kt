@@ -124,7 +124,7 @@ public class AudioRecorderJS: Service() {
 
         if(record) {
             notificationBuilder.addAction(NotificationCompat.Action.Builder(R.drawable.pause_black, getString(R.string.stop),
-                    PendingIntent.getService(this, 3, intent, PendingIntent.FLAG_UPDATE_CURRENT)).build())
+                    PendingIntent.getService(this, 3, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)).build())
                     .setContentText(getString(R.string.recording))
         }
         else

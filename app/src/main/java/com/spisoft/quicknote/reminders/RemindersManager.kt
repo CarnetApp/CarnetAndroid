@@ -52,7 +52,7 @@ class RemindersManager(ct: Context){
             intent.putExtra(NotificationPublisher.NOTE_PATH, note.path);
             intent.putExtra(NotificationPublisher.CHANNEL_ID, CHANNEL_ID);
             intent.putExtra(NotificationPublisher.NOTIFICATION, getNotification(note));
-            PendingIntent.getBroadcast(ct, requestCode, intent, 0)
+            PendingIntent.getBroadcast(ct, requestCode, intent, PendingIntent.FLAG_IMMUTABLE)
         }
         alarmMgr?.set(
                 AlarmManager.RTC_WAKEUP,
@@ -66,7 +66,7 @@ class RemindersManager(ct: Context){
     private fun cancelAlarm(requestCode:Int){
         val alarmIntent = Intent(ct, NotificationPublisher::class.java).let { intent ->
 
-            PendingIntent.getBroadcast(ct, requestCode, intent, 0)
+            PendingIntent.getBroadcast(ct, requestCode, intent,  PendingIntent.FLAG_IMMUTABLE)
         }
         alarmMgr?.cancel(alarmIntent)
     }
