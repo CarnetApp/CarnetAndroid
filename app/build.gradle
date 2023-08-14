@@ -66,7 +66,7 @@ android {
         }
         google {
             dimension "version"
-            resValue "bool", "is_google", "false"
+            resValue "bool", "is_google", "true"
         }
     }
     lint {
