@@ -66,7 +66,7 @@ android {
         }
         google {
             dimension "version"
-            resValue "bool", "is_google", "true"
+            resValue "bool", "is_google", "false"
         }
     }
     lint {
@@ -99,9 +99,6 @@ dependencies {
     implementation 'top.oply.opuslib:opuslib:1.0.2'
    // implementation project(':OpusAndroid')
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    googleImplementation 'com.google.android.gms:play-services-drive:17.0.0'
-    googleImplementation 'com.google.android.gms:play-services-auth:20.6.0'
-    googleImplementation project(':GoogleSync')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
 

@@ -5,6 +5,7 @@ available for now only as an option in settings, still not complete, but will be
 Built with tiptap editor and tiptap-markdown extension from https://github.com/aguingand/tiptap-markdown
 
 
+Update dependencies
 Multiple fixes
 better packaging for the whole client
 
