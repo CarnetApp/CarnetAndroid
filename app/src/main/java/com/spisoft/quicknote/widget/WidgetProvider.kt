@@ -44,7 +44,8 @@ abstract class WidgetProvider : AppWidgetProvider() {
         intentList.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         intentList.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         val pendingIntentList: PendingIntent = PendingIntent
-                .getActivity(Utils.context, appWidgetId, intentList, FLAG_ACTIVITY_NEW_TASK)
+                .getActivity(Utils.context, appWidgetId, intentList,
+                    PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         // Create an Intent to launch BlankFragment
         val intentAdd = Intent(Utils.context, MainActivity::class.java)
@@ -55,7 +56,8 @@ abstract class WidgetProvider : AppWidgetProvider() {
         intentAdd.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 
         val pendingIntentAdd = PendingIntent
-                .getActivity(Utils.context, appWidgetId, intentAdd, FLAG_ACTIVITY_NEW_TASK)
+                .getActivity(Utils.context, appWidgetId, intentAdd,
+                    PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val intentRecord = Intent(Utils.context, MainActivity::class.java)
         intentRecord.action = ACTION_WIDGET_RECORD
@@ -69,7 +71,8 @@ abstract class WidgetProvider : AppWidgetProvider() {
         actions.add(record)
         intentRecord.putExtra(BlankFragment.ACTIONS, actions)
         val pendingIntentRecord = PendingIntent
-                .getActivity(Utils.context, appWidgetId, intentRecord, FLAG_ACTIVITY_NEW_TASK)
+                .getActivity(Utils.context, appWidgetId, intentRecord,
+                    PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         // Creation of a map to associate PendingIntent(s) to views
         val map: SparseArray<PendingIntent> = SparseArray()
