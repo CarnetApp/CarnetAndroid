@@ -22,11 +22,11 @@ What is Carnet ?
 ```
 mkdir Carnet
 cd Carnet
-git clone git@github.com:PhieF/CarnetAndroid.git
-git clone git@github.com:PhieF/Sync.git
-git clone git@github.com:PhieF/GoogleSync.git
+git clone git@github.com:CarnetApp/CarnetAndroid.git
+git clone git@github.com:CarnetApp/Sync.git
+git clone git@github.com:CarnetApp/GoogleSync.git
 cd CarnetAndroid
-gradle build
+./gradlew build
 ```
 
 
