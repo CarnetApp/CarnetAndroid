@@ -610,7 +610,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                             return true;
                         }
                         NoteManager.deleteNote(getContext(), note);
-                        reload(null, false);
+                        reload(null, true);
 
 
                     } else if (menuItem.getItemId() == R.string.rename) {
