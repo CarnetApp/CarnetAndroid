@@ -298,8 +298,11 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         filter.addAction(ACTION_RELOAD);
         filter.addAction(NoteManager.ACTION_UPDATE_END);
 
-        getActivity().registerReceiver(mReceiver, filter);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getActivity().registerReceiver(mReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            getActivity().registerReceiver(mReceiver, filter);
+        }
 
     }
 

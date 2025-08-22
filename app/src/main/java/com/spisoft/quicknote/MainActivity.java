@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -262,7 +263,11 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(FileManagerService.ACTION_COPY_ENDS);
-        registerReceiver(mReceiver, filter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mReceiver, filter, RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(mReceiver, filter);
+        }
         if(FileManagerService.sIsCopying)
             displayPasteDialog();
         mSavedInstanceState = null;

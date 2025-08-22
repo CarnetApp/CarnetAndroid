@@ -568,9 +568,10 @@ public class EditorView extends FrameLayout implements CropWrapperActivity.Crope
     public void setNote(Note note, List<Action> actions) {
         mProgressLayout.setAlpha(1);
         mActions = actions;
-        try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getContext().registerReceiver(mBroadcastReceiver, mFilter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
             getContext().registerReceiver(mBroadcastReceiver, mFilter);
-        } catch (Exception e) {
         }
         mProgressLayout.setVisibility(VISIBLE);
         mNote = note;
