@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import androidx.fragment.app.Fragment;
@@ -169,8 +170,11 @@ public class MainFragment extends Fragment implements View.OnClickListener, Sear
     public void onResume(){
         super.onResume();
         Log.d(TAG, "onResume");
-        getActivity().registerReceiver(mReceiver, mFilter);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getActivity().registerReceiver(mReceiver, mFilter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            getActivity().registerReceiver(mReceiver, mFilter);
+        }
         if(mKeywordsTask != null)
             mKeywordsTask.cancel(true);
         mKeywordsTask = new KeywordRefreshTask();

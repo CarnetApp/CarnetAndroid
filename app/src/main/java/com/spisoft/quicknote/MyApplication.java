@@ -41,7 +41,7 @@ public class MyApplication extends Application implements Configuration.PathObse
     protected void attachBaseContext(Context base) {
 
         super.attachBaseContext(base);
-        ACRA.init(this);
+        //ACRA.init(this);
         if(PreferenceManager.getDefaultSharedPreferences(this).getString(PreferenceHelper.ROOT_PATH_PREFERENCE,null) == null){
             if(PreferenceManager.getDefaultSharedPreferences(this).getInt(PreferenceHelper.LAUNCH_COUNT, 0)>1) {
                 // has already been launched, but back old root path
