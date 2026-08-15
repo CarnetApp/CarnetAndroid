@@ -60,6 +60,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -214,7 +215,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             return mRoot;
         }
         mRoot = inflater.inflate(R.layout.note_recycler_layout, container, false);
-        mSwipeLayout = (SwipeRefreshLayout) mRoot.findViewById(R.id.swipe_container);
+        mSwipeLayout = mRoot.findViewById(R.id.swipe_container);
         Field field = null;
         try {
             field = mSwipeLayout.getClass().getDeclaredField("mCircleView");
@@ -284,13 +285,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
                     } else reloadAll = true;
 
                     if(reloadAll)
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            reload(null, true);
-
-                        }
-                    }, 500);
+                    mHandler.postDelayed(() -> reload(null, true), 500);
                 }
             }
         };
@@ -299,7 +294,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         filter.addAction(NoteManager.ACTION_UPDATE_END);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            getActivity().registerReceiver(mReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+            requireActivity().registerReceiver(mReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
         } else {
             getActivity().registerReceiver(mReceiver, filter);
         }
@@ -350,41 +345,39 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     protected void reload(Note scrollTo, boolean keepCurrentScroll) {
         mNotes = getNotes();
         if(mNotes == null)
-            mNotes = new ArrayList();
-        if(mNotes!=null) {
-            hideEmptyView();
-                if(mNotes.isEmpty() && canDisplayFakeNotes()) {
-                    mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_1), new ArrayList<String>(){{
+            mNotes = new ArrayList<>();
+        hideEmptyView();
+        if(mNotes.isEmpty() && canDisplayFakeNotes()) {
+            mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_1), new ArrayList<String>(){{
 
-                    }}, "none",5, new ArrayList<String>(), new ArrayList<String>(), null));
-                    mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_6), new ArrayList<String>(){{
-                    }}, "none",-1, new ArrayList<String>(){{
-                        add("https://carnet.live");
-                    }}, new ArrayList<String>(){{
-                        add(getResources().getString(R.string.fake_note_todo_item_1));
-                        add(getResources().getString(R.string.fake_note_todo_item_2));
-                    }}, null));
+            }}, "none",5, new ArrayList<String>(), new ArrayList<String>(), null));
+            mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_6), new ArrayList<String>(){{
+            }}, "none",-1, new ArrayList<String>(){{
+                add("https://carnet.live");
+            }}, new ArrayList<String>(){{
+                add(getResources().getString(R.string.fake_note_todo_item_1));
+                add(getResources().getString(R.string.fake_note_todo_item_2));
+            }}, null));
 
-                    mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_5), new ArrayList<String>(){{
-                    }}, "red",-1, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(){{add("reader/img/bike.png");}}));
+            mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_5), new ArrayList<String>(){{
+            }}, "red",-1, new ArrayList<String>(), new ArrayList<String>(), new ArrayList<String>(){{add("reader/img/bike.png");}}));
 
-                    mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_2), new ArrayList<String>(){{
-                        add("Keyword");
-                    }}, "orange",-1, new ArrayList<String>(), new ArrayList<String>(), null));
-                    mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_3), new ArrayList<String>(){{
-                    }}, "none",3, new ArrayList<String>(), new ArrayList<String>(), null));
-                    mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_4), new ArrayList<String>(){{
-                    }}, "green",-1, new ArrayList<String>(), new ArrayList<String>(), null));
+            mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_2), new ArrayList<String>(){{
+                add("Keyword");
+            }}, "orange",-1, new ArrayList<String>(), new ArrayList<String>(), null));
+            mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_3), new ArrayList<String>(){{
+            }}, "none",3, new ArrayList<String>(), new ArrayList<String>(), null));
+            mNotes.add(createFakeNote(getResources().getString(R.string.fake_note_4), new ArrayList<String>(){{
+            }}, "green",-1, new ArrayList<String>(), new ArrayList<String>(), null));
 
-                }
-            reorderItems(false);
-
-            if(keepCurrentScroll) {
-            } else if (scrollTo != null && mNotes.indexOf(scrollTo) > 0)
-                mGridLayout.scrollToPosition(mNotes.indexOf(scrollTo));
-            else
-                mGridLayout.scrollToPosition(0);
         }
+        reorderItems(false);
+
+        if(keepCurrentScroll) {
+        } else if (scrollTo != null && mNotes.indexOf(scrollTo) > 0)
+            mGridLayout.scrollToPosition(mNotes.indexOf(scrollTo));
+        else
+            mGridLayout.scrollToPosition(0);
         onReady();
 
     }
@@ -672,7 +665,6 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             Intent i = new Intent(getActivity(), ImageActivity.class);
             i.putExtra(ImageActivity.ROOT_PATH, getCurrentPath());
             startActivityForResult(i, 1002);
-
         } else if (view == mRoot.findViewById(R.id.add_record_button)){
             ArrayList<EditorView.Action> actions = new ArrayList<>();
             EditorView.Action record = new EditorView.Action();

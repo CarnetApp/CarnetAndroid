@@ -101,7 +101,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation project(':Sync')
-    implementation 'com.github.louisyonge:opus_android:9d0eff2af4'
+    implementation 'com.github.louisyonge:opus_android:master'
     // implementation project(':OpusAndroid')
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
