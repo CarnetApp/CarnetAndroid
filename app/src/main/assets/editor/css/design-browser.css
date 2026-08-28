@@ -52,6 +52,10 @@
     color: var(--fab-color)
 }
 
+#grid-button-container button{
+    text-transform: unset;
+}
+
 body{
     background: var(--grid-bg)
 }
@@ -544,7 +548,7 @@ body {
     font-size: 24px;
     font-weight: 300;
     line-height: normal;
-    color: black;
+    color: var(--note-text-color);
     margin: 0px;
 }
 
