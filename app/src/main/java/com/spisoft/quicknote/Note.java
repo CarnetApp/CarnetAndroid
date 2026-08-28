@@ -33,6 +33,9 @@ public class Note implements Serializable{
     public boolean isFake;
     public boolean pathHasChanged;
 
+    public boolean mIsMarkdown;
+    public boolean isNew;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,12 +61,21 @@ public class Note implements Serializable{
         this.keywords = null;
         this.previews = new ArrayList<>();
         this.medias = new ArrayList<>();
-    }
-    public Note(String path, String title){
-        this.path = path;
-        this.title = title;
+        this.isNew = false;
     }
 
+    public Note(String path, boolean isNew){
+        this(path);
+        this.isNew = isNew;
+    }
+
+    public boolean isMarkdown(){
+        return mIsMarkdown;
+    }
+
+    public void setMarkdown(boolean isMD){
+        mIsMarkdown = isMD;
+    }
 
     public void setPath(String path) {
         pathHasChanged = true;

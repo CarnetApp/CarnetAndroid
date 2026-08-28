@@ -238,6 +238,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
         mEmptyView = mRoot.findViewById(R.id.empty_view);
         mEmptyViewMessage = (TextView) mRoot.findViewById(R.id.empty_message);
         mRoot.findViewById(R.id.add_note_button).setOnClickListener(this);
+        mRoot.findViewById(R.id.add_rich_note_button).setOnClickListener(this);
         mRoot.findViewById(R.id.add_photos_button).setOnClickListener(this);
         mRoot.findViewById(R.id.add_record_button).setOnClickListener(this);
         mNoteAdapter = getAdapter();
@@ -647,11 +648,12 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     protected abstract void internalCreateOptionMenu(Menu menu, Note note);
 
     protected void createAndOpenNewNote(String path){
-        createAndOpenNewNote(path, null);
+        createAndOpenNewNote(path, null, true);
     }
 
-    protected void createAndOpenNewNote(String path, ArrayList<EditorView.Action> action){
+    protected void createAndOpenNewNote(String path, ArrayList<EditorView.Action> action, boolean isMarkdown){
         Note note = NoteManager.createNewNote(path);
+        note.setMarkdown(isMarkdown);
         RecentHelper.getInstance(getContext()).addNote(note);
         mLastSelected = note;
         ((MainActivity)getActivity()).setFragment(BlankFragment.newInstance(note, action));
@@ -661,6 +663,8 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
     public void onClick(View view) {
         if(view==mRoot.findViewById(R.id.add_note_button)) {
               createAndOpenNewNote(getCurrentPath());
+        } else if (view==mRoot.findViewById(R.id.add_rich_note_button)) {
+            createAndOpenNewNote(getCurrentPath(), null, false);
         } else if (view == mRoot.findViewById(R.id.add_photos_button)){
             Intent i = new Intent(getActivity(), ImageActivity.class);
             i.putExtra(ImageActivity.ROOT_PATH, getCurrentPath());
@@ -670,7 +674,7 @@ public abstract class NoteListFragment extends Fragment implements NoteAdapter.O
             EditorView.Action record = new EditorView.Action();
             record.type = "record-audio";
             actions.add(record);
-            createAndOpenNewNote(getCurrentPath(),actions);
+            createAndOpenNewNote(getCurrentPath(),actions, true);
         }
     }
 

@@ -766,6 +766,7 @@ public class HttpServer extends NanoHTTPD {
                         || (isMD = (f = new File(extractedNotePath, "note.md")).exists())) {
                     String index = FileUtils.readFile(f.getAbsolutePath());
                     object.put("html",index);
+                    object.put("isNew", false);
                     object.put("isMarkdown",isMD);
                 }
                 f = new File(extractedNotePath, "metadata.json");
@@ -773,16 +774,11 @@ public class HttpServer extends NanoHTTPD {
                     String meta = FileUtils.readFile(f.getAbsolutePath());
                     object.put("metadata",new JSONObject(meta));
                 }
-
             } else {
                 object.put("error", "not found");
                 object.put("isNew", true);
             }
-
             return  NanoHTTPD.newChunkedResponse(Response.Status.OK, "application/json",new ByteArrayInputStream(object.toString().getBytes()));
-
-
-
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {

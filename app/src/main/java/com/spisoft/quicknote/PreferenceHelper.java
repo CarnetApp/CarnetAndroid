@@ -58,7 +58,7 @@ public class PreferenceHelper {
     }
 
     public static boolean useNewEditor(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(USE_NEW_EDITOR, false);
+        return true; //PreferenceManager.getDefaultSharedPreferences(context).getBoolean(USE_NEW_EDITOR, false);
     }
 
     public static void setForceUpdate(Context context, boolean force) {

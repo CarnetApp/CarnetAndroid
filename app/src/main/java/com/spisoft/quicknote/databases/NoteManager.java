@@ -108,7 +108,7 @@ public class NoteManager
 
 
         String path = rootPath + (!rootPath.endsWith("/")?"/":"")+name+" "+randomChar()+randomChar()+".sqd";
-        return new Note(path);
+        return new Note(path, true);
     }
 
     public static char randomChar () {
