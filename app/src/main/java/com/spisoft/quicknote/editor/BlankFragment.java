@@ -50,8 +50,6 @@ public class BlankFragment extends Fragment implements View.OnClickListener, Edi
             mNote = (Note) getArguments().getSerializable(NOTE);
             mActions = (List<EditorView.Action>) getArguments().getSerializable(ACTIONS);
         }
-        setHasOptionsMenu(true);
-
     }
     public void setNote(Note note){
         mNote = note;

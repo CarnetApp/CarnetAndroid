@@ -25,6 +25,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
@@ -84,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mSavedInstanceState = savedInstanceState;
 
         String theme = Utils.getCurrentTheme(this);
@@ -94,6 +94,9 @@ public class MainActivity extends AppCompatActivity implements PinView.PasswordL
                 break;
             case "black":
                 setTheme(R.style.CarnetTheme_Darkest);
+                break;
+            default:
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView()).setAppearanceLightStatusBars(true);
                 break;
 
         }
