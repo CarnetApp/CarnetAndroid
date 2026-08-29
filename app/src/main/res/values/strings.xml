@@ -174,4 +174,5 @@
     <string name="use_new_editor">Use new markdown editor</string>
     <string name="refresh_editor">Refresh Editor</string>
     <string name="refresh_editor_summary">Could be useful if the editor is not loading</string>
+    <string name="advanced_note">Advanced note</string>
 </resources>

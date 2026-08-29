@@ -66,9 +66,10 @@
             android:layout_weight="1"
             android:layout_height="45dip"
             android:layout_width="0dp"
-            android:text="@string/create_note"
+            android:text="@string/advanced_note"
             android:background="@drawable/transparent_ripple"
             />
+
         <ImageButton
             android:id="@+id/add_folder_button"
             android:padding="10dp"
