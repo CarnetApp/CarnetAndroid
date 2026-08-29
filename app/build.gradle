@@ -89,9 +89,9 @@ dependencies {
     implementation 'com.github.ACRA.acra:acra-mail:acra-5.2.1'
     implementation 'com.github.ACRA.acra:acra-notification:acra-5.2.1'
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
+    implementation "org.apache.commons:commons-lang3:3.20.0"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'org.jsoup:jsoup:1.23.1'
+    implementation 'org.jsoup:jsoup:1.23.2'
     implementation 'androidx.appcompat:appcompat:1.8.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.soundcloud.android:android-crop:1.0.1@aar'
@@ -109,9 +109,9 @@ dependencies {
 
     implementation 'com.github.squti:Android-Wave-Recorder:1.7.0'
 
-    implementation "androidx.camera:camera-camera2:1.6.1"
+    implementation "androidx.camera:camera-camera2:1.6.2"
 // CameraX Lifecycle Library
-    implementation "androidx.camera:camera-lifecycle:1.6.1"
+    implementation "androidx.camera:camera-lifecycle:1.6.2"
 // CameraX View class
-    implementation "androidx.camera:camera-view:1.6.1"
+    implementation "androidx.camera:camera-view:1.6.2"
 }
