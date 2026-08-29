@@ -100,6 +100,8 @@
                     android:text="Small Text"
                     android:id="@+id/date_tv"
                     android:alpha="0.5"
+                    android:textSize="14dp"
+                    android:layout_alignParentLeft="true"
                     android:paddingTop="5dp"
                     android:layout_below="@id/display_more"
                     android:textColor="?attr/MainNoteTextColor"
@@ -109,11 +111,14 @@
                     android:id="@+id/mark_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@id/optionsButton"
-                    android:textColor="?attr/MainNoteTextColor"
-                    android:text="Small Tfdfext"
                     android:layout_above="@id/keywords"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                    android:textSize="14dp"
+                    android:layout_toLeftOf="@id/optionsButton"
+                    android:text="Small Tfdfext"
+                    android:layout_alignParentRight="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?attr/MainNoteTextColor" />
+
                 <com.google.android.flexbox.FlexboxLayout
                     android:id="@+id/keywords"
                     xmlns:app="http://schemas.android.com/apk/res-auto"
